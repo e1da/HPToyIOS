@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D33A253E20BFF674008A94EF /* Number88.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDE20BEDD9D00BDC1A0 /* Number88.h */; };
+		D33A253F20BFF674008A94EF /* Number523.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDF20BEDD9D00BDC1A0 /* Number523.h */; };
+		D33A254020BFF674008A94EF /* Number923.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDD20BEDD9D00BDC1A0 /* Number923.h */; };
 		D39C3C9320BEB4FF00BDC1A0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3C9220BEB4FF00BDC1A0 /* AppDelegate.m */; };
 		D39C3C9620BEB4FF00BDC1A0 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3C9520BEB4FF00BDC1A0 /* MasterViewController.m */; };
 		D39C3C9920BEB4FF00BDC1A0 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3C9820BEB4FF00BDC1A0 /* DetailViewController.m */; };
@@ -15,6 +18,18 @@
 		D39C3CA120BEB50000BDC1A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */; };
 		D39C3CA420BEB50000BDC1A0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CA320BEB50000BDC1A0 /* main.m */; };
 		D39C3CAE20BEB50000BDC1A0 /* HiFiToyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CAD20BEB50000BDC1A0 /* HiFiToyTests.m */; };
+		D39C3CC020BEB6A500BDC1A0 /* Biquad.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CBF20BEB6A500BDC1A0 /* Biquad.m */; };
+		D39C3CC320BEB6CD00BDC1A0 /* BiquadContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CC220BEB6CD00BDC1A0 /* BiquadContainer.m */; };
+		D39C3CC620BEB6DC00BDC1A0 /* PassFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CC520BEB6DC00BDC1A0 /* PassFilter.m */; };
+		D39C3CC920BEB6FB00BDC1A0 /* Volume.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CC820BEB6FB00BDC1A0 /* Volume.m */; };
+		D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CCB20BEB70800BDC1A0 /* BassTreble.m */; };
+		D39C3CCF20BEB71200BDC1A0 /* Loudness.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CCE20BEB71200BDC1A0 /* Loudness.m */; };
+		D39C3CD220BEB71C00BDC1A0 /* Drc.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CD120BEB71C00BDC1A0 /* Drc.m */; };
+		D39C3CD920BEB8C500BDC1A0 /* XmlData.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CD520BEB8C500BDC1A0 /* XmlData.m */; };
+		D39C3CDA20BEB8C500BDC1A0 /* XmlParserWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CD720BEB8C500BDC1A0 /* XmlParserWrapper.m */; };
+		D39C3CE220BEDD9D00BDC1A0 /* Number523.c in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDC20BEDD9D00BDC1A0 /* Number523.c */; };
+		D39C3CE320BEDD9D00BDC1A0 /* Number88.c in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CE020BEDD9D00BDC1A0 /* Number88.c */; };
+		D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CE120BEDD9D00BDC1A0 /* Number923.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +58,31 @@
 		D39C3CA920BEB50000BDC1A0 /* HiFiToyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HiFiToyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39C3CAD20BEB50000BDC1A0 /* HiFiToyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HiFiToyTests.m; sourceTree = "<group>"; };
 		D39C3CAF20BEB50000BDC1A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D39C3CBE20BEB6A500BDC1A0 /* Biquad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Biquad.h; sourceTree = "<group>"; };
+		D39C3CBF20BEB6A500BDC1A0 /* Biquad.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Biquad.m; sourceTree = "<group>"; };
+		D39C3CC120BEB6CD00BDC1A0 /* BiquadContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BiquadContainer.h; sourceTree = "<group>"; };
+		D39C3CC220BEB6CD00BDC1A0 /* BiquadContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadContainer.m; sourceTree = "<group>"; };
+		D39C3CC420BEB6DC00BDC1A0 /* PassFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassFilter.h; sourceTree = "<group>"; };
+		D39C3CC520BEB6DC00BDC1A0 /* PassFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PassFilter.m; sourceTree = "<group>"; };
+		D39C3CC720BEB6FB00BDC1A0 /* Volume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Volume.h; sourceTree = "<group>"; };
+		D39C3CC820BEB6FB00BDC1A0 /* Volume.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Volume.m; sourceTree = "<group>"; };
+		D39C3CCA20BEB70800BDC1A0 /* BassTreble.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BassTreble.h; sourceTree = "<group>"; };
+		D39C3CCB20BEB70800BDC1A0 /* BassTreble.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BassTreble.m; sourceTree = "<group>"; };
+		D39C3CCD20BEB71200BDC1A0 /* Loudness.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Loudness.h; sourceTree = "<group>"; };
+		D39C3CCE20BEB71200BDC1A0 /* Loudness.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Loudness.m; sourceTree = "<group>"; };
+		D39C3CD020BEB71C00BDC1A0 /* Drc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drc.h; sourceTree = "<group>"; };
+		D39C3CD120BEB71C00BDC1A0 /* Drc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Drc.m; sourceTree = "<group>"; };
+		D39C3CD320BEB73C00BDC1A0 /* HiFiToyObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HiFiToyObject.h; sourceTree = "<group>"; };
+		D39C3CD520BEB8C500BDC1A0 /* XmlData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XmlData.m; sourceTree = "<group>"; };
+		D39C3CD620BEB8C500BDC1A0 /* XmlParserWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlParserWrapper.h; sourceTree = "<group>"; };
+		D39C3CD720BEB8C500BDC1A0 /* XmlParserWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XmlParserWrapper.m; sourceTree = "<group>"; };
+		D39C3CD820BEB8C500BDC1A0 /* XmlData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlData.h; sourceTree = "<group>"; };
+		D39C3CDC20BEDD9D00BDC1A0 /* Number523.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Number523.c; sourceTree = "<group>"; };
+		D39C3CDD20BEDD9D00BDC1A0 /* Number923.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Number923.h; sourceTree = "<group>"; };
+		D39C3CDE20BEDD9D00BDC1A0 /* Number88.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Number88.h; sourceTree = "<group>"; };
+		D39C3CDF20BEDD9D00BDC1A0 /* Number523.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Number523.h; sourceTree = "<group>"; };
+		D39C3CE020BEDD9D00BDC1A0 /* Number88.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Number88.c; sourceTree = "<group>"; };
+		D39C3CE120BEDD9D00BDC1A0 /* Number923.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Number923.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +124,7 @@
 		D39C3C9020BEB4FF00BDC1A0 /* HiFiToy */ = {
 			isa = PBXGroup;
 			children = (
+				D39C3CB820BEB5BE00BDC1A0 /* Source */,
 				D39C3C9120BEB4FF00BDC1A0 /* AppDelegate.h */,
 				D39C3C9220BEB4FF00BDC1A0 /* AppDelegate.m */,
 				D39C3C9420BEB4FF00BDC1A0 /* MasterViewController.h */,
@@ -106,6 +147,86 @@
 				D39C3CAF20BEB50000BDC1A0 /* Info.plist */,
 			);
 			path = HiFiToyTests;
+			sourceTree = "<group>";
+		};
+		D39C3CB820BEB5BE00BDC1A0 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				D39C3CD420BEB8C500BDC1A0 /* XmlWrapper */,
+				D39C3CBA20BEB65A00BDC1A0 /* HiFiToyPeripheral */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		D39C3CBA20BEB65A00BDC1A0 /* HiFiToyPeripheral */ = {
+			isa = PBXGroup;
+			children = (
+				D39C3CDB20BEDD9D00BDC1A0 /* NumberUtility */,
+				D39C3CBB20BEB65A00BDC1A0 /* HiFiToyControl */,
+				D39C3CBC20BEB65A00BDC1A0 /* HiFiToyDevice */,
+				D39C3CBD20BEB65A00BDC1A0 /* HiFiToyObjects */,
+			);
+			path = HiFiToyPeripheral;
+			sourceTree = "<group>";
+		};
+		D39C3CBB20BEB65A00BDC1A0 /* HiFiToyControl */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = HiFiToyControl;
+			sourceTree = "<group>";
+		};
+		D39C3CBC20BEB65A00BDC1A0 /* HiFiToyDevice */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = HiFiToyDevice;
+			sourceTree = "<group>";
+		};
+		D39C3CBD20BEB65A00BDC1A0 /* HiFiToyObjects */ = {
+			isa = PBXGroup;
+			children = (
+				D39C3CBE20BEB6A500BDC1A0 /* Biquad.h */,
+				D39C3CBF20BEB6A500BDC1A0 /* Biquad.m */,
+				D39C3CC120BEB6CD00BDC1A0 /* BiquadContainer.h */,
+				D39C3CC220BEB6CD00BDC1A0 /* BiquadContainer.m */,
+				D39C3CC420BEB6DC00BDC1A0 /* PassFilter.h */,
+				D39C3CC520BEB6DC00BDC1A0 /* PassFilter.m */,
+				D39C3CC720BEB6FB00BDC1A0 /* Volume.h */,
+				D39C3CC820BEB6FB00BDC1A0 /* Volume.m */,
+				D39C3CCA20BEB70800BDC1A0 /* BassTreble.h */,
+				D39C3CCB20BEB70800BDC1A0 /* BassTreble.m */,
+				D39C3CCD20BEB71200BDC1A0 /* Loudness.h */,
+				D39C3CCE20BEB71200BDC1A0 /* Loudness.m */,
+				D39C3CD020BEB71C00BDC1A0 /* Drc.h */,
+				D39C3CD120BEB71C00BDC1A0 /* Drc.m */,
+				D39C3CD320BEB73C00BDC1A0 /* HiFiToyObject.h */,
+			);
+			path = HiFiToyObjects;
+			sourceTree = "<group>";
+		};
+		D39C3CD420BEB8C500BDC1A0 /* XmlWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				D39C3CD820BEB8C500BDC1A0 /* XmlData.h */,
+				D39C3CD520BEB8C500BDC1A0 /* XmlData.m */,
+				D39C3CD620BEB8C500BDC1A0 /* XmlParserWrapper.h */,
+				D39C3CD720BEB8C500BDC1A0 /* XmlParserWrapper.m */,
+			);
+			path = XmlWrapper;
+			sourceTree = "<group>";
+		};
+		D39C3CDB20BEDD9D00BDC1A0 /* NumberUtility */ = {
+			isa = PBXGroup;
+			children = (
+				D39C3CDE20BEDD9D00BDC1A0 /* Number88.h */,
+				D39C3CE020BEDD9D00BDC1A0 /* Number88.c */,
+				D39C3CDF20BEDD9D00BDC1A0 /* Number523.h */,
+				D39C3CDC20BEDD9D00BDC1A0 /* Number523.c */,
+				D39C3CDD20BEDD9D00BDC1A0 /* Number923.h */,
+				D39C3CE120BEDD9D00BDC1A0 /* Number923.c */,
+			);
+			path = NumberUtility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,10 +329,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D33A253E20BFF674008A94EF /* Number88.h in Sources */,
+				D33A253F20BFF674008A94EF /* Number523.h in Sources */,
+				D33A254020BFF674008A94EF /* Number923.h in Sources */,
+				D39C3CD220BEB71C00BDC1A0 /* Drc.m in Sources */,
+				D39C3CCF20BEB71200BDC1A0 /* Loudness.m in Sources */,
 				D39C3C9620BEB4FF00BDC1A0 /* MasterViewController.m in Sources */,
+				D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */,
+				D39C3CD920BEB8C500BDC1A0 /* XmlData.m in Sources */,
+				D39C3CC620BEB6DC00BDC1A0 /* PassFilter.m in Sources */,
+				D39C3CDA20BEB8C500BDC1A0 /* XmlParserWrapper.m in Sources */,
 				D39C3C9320BEB4FF00BDC1A0 /* AppDelegate.m in Sources */,
+				D39C3CE220BEDD9D00BDC1A0 /* Number523.c in Sources */,
+				D39C3CC920BEB6FB00BDC1A0 /* Volume.m in Sources */,
 				D39C3CA420BEB50000BDC1A0 /* main.m in Sources */,
+				D39C3CC020BEB6A500BDC1A0 /* Biquad.m in Sources */,
 				D39C3C9920BEB4FF00BDC1A0 /* DetailViewController.m in Sources */,
+				D39C3CE320BEDD9D00BDC1A0 /* Number88.c in Sources */,
+				D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */,
+				D39C3CC320BEB6CD00BDC1A0 /* BiquadContainer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,7 +440,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -356,7 +492,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
