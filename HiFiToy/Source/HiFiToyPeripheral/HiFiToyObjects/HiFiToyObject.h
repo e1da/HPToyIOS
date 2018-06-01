@@ -9,7 +9,7 @@
 #import "XmlData.h"
 #import "XmlParserWrapper.h"
 
-#define FS 48000
+#define FS 96000
 
 typedef struct{
     uint8_t addr;     // in TAS5558 registers

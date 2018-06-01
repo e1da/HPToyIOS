@@ -356,6 +356,7 @@
     double w0 = 2 * M_PI * (float)self.freq / FS;
     double ampl;// = pow(10, dbBoost / 40);
     double gainLinear = 1;//0^(gain/20);
+    double bandwidth = 1.41;
     double alpha, a0, a1 = 0, a2 = 0, b0 = 0, b1 = 0, b2 = 0;
 
     double s = sin(w0), c = cos(w0);
@@ -398,6 +399,17 @@
                 b0 =  (1.0 - alpha) * gainLinear / a0;
                 b1 =  -2 * c * gainLinear / a0;
                 b2 =  (1.0 + alpha) * gainLinear / a0;
+                break;
+            case BIQUAD_BANDPASS:
+                //ln(2) / 2 = 0.3465735902
+                alpha = s * sinh( 0.3465735902 * bandwidth * w0 / s);
+                
+                a0 =   1 + alpha;
+                a1 =   2 * c / a0;
+                a2 =   (1 - alpha) / (-a0);
+                b0 =   alpha * gainLinear / a0;
+                b1 =   0;
+                b2 =  -alpha * gainLinear / a0;
                 break;
             case BIQUAD_DISABLED:
             default:
@@ -558,6 +570,12 @@
                 self.freq = fr;
                 self.qFac = qF;
                 break;
+            case BIQUAD_BANDPASS:
+                w0 = acos(a1 / 2 * (1 + b0 / (1 - b0)));
+                self.freq = w0 * (float)FS / (2 * M_PI);
+                //TODO set import bandwidth
+                break;
+                
             case BIQUAD_DISABLED:
             default:
                 /*b0 =  1.0f;
