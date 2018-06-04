@@ -9,7 +9,7 @@
 #import "DrcTimeConst.h"
 #import "TAS5558.h"
 
-static uint32_t reverseUint32(uint32_t num){
+uint32_t reverseUint32(uint32_t num) {
     uint32_t result;
     uint8_t * pSrc = (uint8_t *)&num;
     uint8_t * pDest = (uint8_t *)&result;

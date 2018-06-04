@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "DrcCoef.h"
 
+uint32_t reverseUint32(uint32_t num) ;
+
 @interface DrcTimeConst : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
 
 @property (nonatomic)   DrcChannel_t    channel;
