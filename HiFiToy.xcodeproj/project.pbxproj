@@ -12,6 +12,8 @@
 		D33A254020BFF674008A94EF /* Number923.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDD20BEDD9D00BDC1A0 /* Number923.h */; };
 		D33A254320C064A9008A94EF /* TAS5558.h in Sources */ = {isa = PBXBuildFile; fileRef = D33A254220C06481008A94EF /* TAS5558.h */; };
 		D33A254620C140F8008A94EF /* BassTrebleChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A254520C140F8008A94EF /* BassTrebleChannel.m */; };
+		D33A254920C15AF7008A94EF /* DrcCoef.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A254820C15AF7008A94EF /* DrcCoef.m */; };
+		D33A255220C5728E008A94EF /* DrcTimeConst.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A255120C5728E008A94EF /* DrcTimeConst.m */; };
 		D39C3C9320BEB4FF00BDC1A0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3C9220BEB4FF00BDC1A0 /* AppDelegate.m */; };
 		D39C3C9620BEB4FF00BDC1A0 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3C9520BEB4FF00BDC1A0 /* MasterViewController.m */; };
 		D39C3C9920BEB4FF00BDC1A0 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3C9820BEB4FF00BDC1A0 /* DetailViewController.m */; };
@@ -48,6 +50,10 @@
 		D33A254220C06481008A94EF /* TAS5558.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAS5558.h; sourceTree = "<group>"; };
 		D33A254420C140F8008A94EF /* BassTrebleChannel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BassTrebleChannel.h; sourceTree = "<group>"; };
 		D33A254520C140F8008A94EF /* BassTrebleChannel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BassTrebleChannel.m; sourceTree = "<group>"; };
+		D33A254720C15AF7008A94EF /* DrcCoef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcCoef.h; sourceTree = "<group>"; };
+		D33A254820C15AF7008A94EF /* DrcCoef.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcCoef.m; sourceTree = "<group>"; };
+		D33A255020C5728E008A94EF /* DrcTimeConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcTimeConst.h; sourceTree = "<group>"; };
+		D33A255120C5728E008A94EF /* DrcTimeConst.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcTimeConst.m; sourceTree = "<group>"; };
 		D39C3C8E20BEB4FF00BDC1A0 /* HiFiToy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiFiToy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39C3C9120BEB4FF00BDC1A0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D39C3C9220BEB4FF00BDC1A0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -217,6 +223,10 @@
 				D39C3CD320BEB73C00BDC1A0 /* HiFiToyObject.h */,
 				D33A254420C140F8008A94EF /* BassTrebleChannel.h */,
 				D33A254520C140F8008A94EF /* BassTrebleChannel.m */,
+				D33A254720C15AF7008A94EF /* DrcCoef.h */,
+				D33A254820C15AF7008A94EF /* DrcCoef.m */,
+				D33A255020C5728E008A94EF /* DrcTimeConst.h */,
+				D33A255120C5728E008A94EF /* DrcTimeConst.m */,
 			);
 			path = HiFiToyObjects;
 			sourceTree = "<group>";
@@ -359,6 +369,8 @@
 				D39C3CDA20BEB8C500BDC1A0 /* XmlParserWrapper.m in Sources */,
 				D39C3C9320BEB4FF00BDC1A0 /* AppDelegate.m in Sources */,
 				D39C3CE220BEDD9D00BDC1A0 /* Number523.c in Sources */,
+				D33A254920C15AF7008A94EF /* DrcCoef.m in Sources */,
+				D33A255220C5728E008A94EF /* DrcTimeConst.m in Sources */,
 				D39C3CC920BEB6FB00BDC1A0 /* Volume.m in Sources */,
 				D39C3CA420BEB50000BDC1A0 /* main.m in Sources */,
 				D39C3CC020BEB6A500BDC1A0 /* Biquad.m in Sources */,

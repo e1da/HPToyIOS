@@ -127,14 +127,13 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     if ([object class] == [self class]){
         DrcCoef * temp = object;
         if ((self.channel == temp.channel) &&
-            (self.point0.inputDb == temp.point0.inputDb) &&
-            (self.point0.outputDb == temp.point0.outputDb) &&
-            (self.point1.inputDb == temp.point1.inputDb) &&
-            (self.point1.outputDb == temp.point1.outputDb) &&
-            (self.point2.inputDb == temp.point2.inputDb) &&
-            (self.point2.outputDb == temp.point2.outputDb) &&
-            (self.point3.inputDb == temp.point3.inputDb) &&
-            (self.point3.outputDb == temp.point3.outputDb)){
+            (fabs(self.point0.inputDb - temp.point0.inputDb) < 0.02f) &&
+            (fabs(self.point0.outputDb - temp.point0.outputDb) < 0.02f) &&
+            (fabs(self.point1.inputDb - temp.point1.inputDb) < 0.02f) &&
+            (fabs(self.point1.outputDb - temp.point1.outputDb) < 0.02f) &&
+            (fabs(self.point2.inputDb - temp.point2.inputDb) < 0.02f) &&
+            (fabs(self.point2.outputDb - temp.point2.outputDb) < 0.02f) &&
+            (fabs(self.point3.inputDb - temp.point3.inputDb) < 0.02f)){
             return YES;
         }
         
