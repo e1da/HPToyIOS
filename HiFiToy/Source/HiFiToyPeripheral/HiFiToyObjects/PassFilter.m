@@ -426,6 +426,7 @@
     return YES;
 }
 
+/*---------------------------- XML export/import ----------------------------------*/
 -(XmlData *) toXmlData{
     XmlData * xmlData = [[XmlData alloc] init];
     [xmlData addElementWithName:@"MaxOrder" withIntValue:self.maxOrder];

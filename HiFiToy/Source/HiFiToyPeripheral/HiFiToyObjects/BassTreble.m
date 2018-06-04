@@ -314,6 +314,7 @@
     return importFlag;
 }
 
+/*---------------------------- XML export/import ----------------------------------*/
 -(XmlData *) toXmlData{
     XmlData * xmlData = [[XmlData alloc] init];
     

@@ -186,6 +186,7 @@
     return NO;
 }
 
+/*---------------------------- XML export/import ----------------------------------*/
 -(XmlData *) toXmlData{
     XmlData * xmlData = [[XmlData alloc] init];
     [xmlData addElementWithName:@"LG" withDoubleValue:self.LG];
