@@ -325,7 +325,10 @@
     [xmlData addXmlData:[_timeConst8 toXmlData]];
     
     XmlData * drcXmlData = [[XmlData alloc] init];
-    [drcXmlData addElementWithName:@"Drc" withXmlValue:xmlData withAttrib:nil];
+    NSDictionary * dict = [[NSDictionary alloc] initWithObjectsAndKeys:
+                           [[NSNumber numberWithInt:self.address] stringValue], @"Address", nil];
+    
+    [drcXmlData addElementWithName:@"Drc" withXmlValue:xmlData withAttrib:dict];
     
     return drcXmlData;
 }

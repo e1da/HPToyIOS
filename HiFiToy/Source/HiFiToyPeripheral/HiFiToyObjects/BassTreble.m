@@ -155,6 +155,10 @@
 -(void) setEnabledChannel:(uint8_t)channel Enabled:(float)enabled //enabled = 0.0 .. 1.0
 {
     if (channel > 7) channel = 7;
+    
+    if (enabled < 0.0) enabled = 0.0;
+    if (enabled > 1.0) enabled = 1.0;
+    
     enabledCh[channel] = enabled;
 }
 
@@ -329,7 +333,10 @@
     if (_bassTreble8) [xmlData addXmlData:[_bassTreble8 toXmlData]];
     
     XmlData * bassTrebleXmlData = [[XmlData alloc] init];
-    [bassTrebleXmlData addElementWithName:@"BassTreble" withXmlValue:xmlData withAttrib:nil];
+    NSDictionary * dict = [[NSDictionary alloc] initWithObjectsAndKeys:
+                           [[NSNumber numberWithInt:self.address] stringValue], @"Address", nil];
+    
+    [bassTrebleXmlData addElementWithName:@"BassTreble" withXmlValue:xmlData withAttrib:dict];
     
     return bassTrebleXmlData;
 }

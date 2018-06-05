@@ -197,7 +197,10 @@
     [xmlData addXmlData:[_biquad toXmlData]];
 
     XmlData * loudnessXmlData = [[XmlData alloc] init];
-    [loudnessXmlData addElementWithName:@"Loudness" withXmlValue:xmlData withAttrib:nil];
+    NSDictionary * dict = [[NSDictionary alloc] initWithObjectsAndKeys:
+                           [[NSNumber numberWithInt:self.address] stringValue], @"Address", nil];
+    
+    [loudnessXmlData addElementWithName:@"Loudness" withXmlValue:xmlData withAttrib:dict];
     
     return loudnessXmlData;
 }
