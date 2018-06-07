@@ -10,6 +10,7 @@
 #import "TAS5558.h"
 #import "Number923.h"
 #import "Number523.h"
+#import "HiFiToyControl.h"
 
 @interface Loudness(){
     int count;
@@ -132,7 +133,7 @@
     NSMutableData *data = [self getMainBinary];
     
     //send data
-    //[[DSPControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
 - (NSMutableData *) getMainBinary {

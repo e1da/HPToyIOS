@@ -7,6 +7,7 @@
 //
 
 #import "PassFilter.h"
+#import "HiFiToyControl.h"
 
 @interface PassFilter(){
     int count;
@@ -377,7 +378,7 @@
     //send data
     NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(PassFilterPacket_t)];
     
-    //[[DSPControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
 //get binary for save to dsp

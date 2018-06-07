@@ -11,12 +11,16 @@
 @interface DialogSystem : NSObject
 
 @property (nonatomic) UIAlertController * alertController;
+@property (nonatomic) UIAlertController * progressController;
 
 
 + (DialogSystem *) sharedInstance;
 
 - (BOOL) isAlertVisible;
 - (void) dismissAlert;
-- (void) showAlert:(NSString *)msgString;
+- (void) showAlert:(NSString *)msg;
 
+- (BOOL) isProgressDialogVisible;
+- (void) dismissProgressDialog;
+- (void) showProgressDialog:(NSString *)title;
 @end

@@ -32,9 +32,6 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[HiFiToyControl alloc] init];
-        // Do any other initialisation stuff here
-        
-        //sharedInstance.ProgressDialog = [[UIAlertView alloc] init];
         
     });
     return sharedInstance;
@@ -131,13 +128,10 @@
 
 - (void) sendDSPConfig:(NSData *)data
 {
-    /*if ([self isConnected] == NO) return;
+    if (![self isConnected]) return;
     
     //show progress dialog
-    self.ProgressDialog.title = NSLocalizedString(@"Save Configuration", @"");
-    self.ProgressDialog.message = @"Left ??? packets";
-    
-    [[self ProgressDialog] show];*/
+    [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Save Configuration", @"")];
 
     
     hiFiToyConfig.i2cAddr = I2C_ADDR;
@@ -291,11 +285,7 @@
 
 -(void) keyfobDidDisconnected
 {
-    /*if (self.ProgressDialog != nil){
-     if (self.ProgressDialog.visible){
-     [self.ProgressDialog dismissWithClickedButtonIndex:0 animated:YES];
-     }
-     }*/
+    [[DialogSystem sharedInstance] dismissProgressDialog]; // if visible then dismiss
     
     //show alert
     [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Disconnected!", @"")];
@@ -303,16 +293,18 @@
 
 -(void) keyfobDidWriteValue:(uint)remainPacketLength
 {
+    DialogSystem * dialog = [DialogSystem sharedInstance];
+    
     if (remainPacketLength != 0){// if queue isn`t empty
-        /*if ((ProgressDialog) && (ProgressDialog.visible)) {
-         ProgressDialog.message = [NSString stringWithFormat:@"Left %d packets.", [blePacketQueue size]];
-         }*/
+        if ([dialog isProgressDialogVisible]) {
+            dialog.progressController.message = [NSString stringWithFormat:@"Left %d packets.", remainPacketLength];
+        }
     } else {
-        /*if ((ProgressDialog) && (ProgressDialog.visible)) {
-         [ProgressDialog dismissWithClickedButtonIndex:0 animated:YES];
+        if ([dialog isProgressDialogVisible]) {
+            [dialog dismissProgressDialog];
          
-         [[NSNotificationCenter defaultCenter] postNotificationName:@"CompleteDataSendNotification" object:nil];
-         }*/
+            //[[NSNotificationCenter defaultCenter] postNotificationName:@"CompleteDataSendNotification" object:nil];
+        }
     }
 }
 
@@ -384,20 +376,6 @@
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"GetDataNotification" object:value];
     }
-}
-
-/*------------- completeDataSendNotification: implementation ------------------*/
-- (void) completeDataSendNotification
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    /*UIAlertView *Alert= [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", @"")
-                                                   message:NSLocalizedString(@"Please reboot DSP!", @"")
-                                                  delegate:self
-                                         cancelButtonTitle:@"Ok"
-                                         otherButtonTitles:nil];
-    
-    [Alert show];*/
 }
 
 @end

@@ -9,6 +9,7 @@
 #import "Drc.h"
 #import "TAS5558.h"
 #import "Number523.h"
+#import "HiFiToyControl.h"
 
 @interface Drc(){
     int count;
@@ -169,7 +170,7 @@
     NSData *data = [self getEvaluationBinary];
     
     //send data
-    //[[DSPControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
 - (void) sendEnabledForChannel:(uint8_t)channel withResponse:(BOOL)response
@@ -177,7 +178,7 @@
     NSData *data = [self getEnabledBinaryForChannel:channel];
     
     //send data
-    //[[DSPControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
 - (void) sendWithResponse:(BOOL)response

@@ -8,6 +8,7 @@
 
 #import "DrcTimeConst.h"
 #import "TAS5558.h"
+#import "HiFiToyControl.h"
 
 uint32_t reverseUint32(uint32_t num) {
     uint32_t result;
@@ -131,7 +132,7 @@ static float uint32ToTimeMS(uint32_t time) {
     NSData *data = [self getEnergyBinary];
     
     //send data
-    //[[DSPControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
 - (void) sendAttackDecayWithResponse:(BOOL)response
@@ -139,7 +140,7 @@ static float uint32ToTimeMS(uint32_t time) {
     NSData *data = [self getAttackDecayBinary];
     
     //send data
-    //[[DSPControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
 - (void) sendWithResponse:(BOOL)response

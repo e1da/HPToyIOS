@@ -37,7 +37,7 @@
     }
 }
 
-- (void) showAlert:(NSString *)msgString
+- (void) showAlert:(NSString *)msg
 {
     UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
     
@@ -48,7 +48,7 @@
     }
 
     _alertController = [UIAlertController alertControllerWithTitle:@""
-                                                           message:msgString
+                                                           message:msg
                                                     preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *closeAction = [UIAlertAction actionWithTitle:@"Close"
                                                           style:UIAlertActionStyleDestructive
@@ -58,4 +58,37 @@
     [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
 }
 
+- (BOOL) isProgressDialogVisible
+{
+    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+    
+    if ((_progressController) && ([navigation.visibleViewController isKindOfClass:[UIAlertController class]])) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void) dismissProgressDialog
+{
+    if ([self isProgressDialogVisible]) {
+        [_progressController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (void) showProgressDialog:(NSString *)title
+{
+    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+    
+    if (_progressController) {
+        
+        [self dismissProgressDialog];
+        _progressController = nil;
+    }
+    
+    _progressController = [UIAlertController alertControllerWithTitle:title
+                                                           message:@"Left ??? packets"
+                                                    preferredStyle:UIAlertControllerStyleAlert];
+    
+    [navigation.viewControllers.lastObject presentViewController:_progressController animated:YES completion:nil];
+}
 @end

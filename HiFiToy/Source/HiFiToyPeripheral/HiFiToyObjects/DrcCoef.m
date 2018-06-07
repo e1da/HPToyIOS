@@ -10,6 +10,7 @@
 #import "TAS5558.h"
 #import "Number923.h"
 #import "Number523.h"
+#import "HiFiToyControl.h"
 
 DrcPoint_t initDrcPoint(float inputDb, float outputDb) {
     DrcPoint_t p;
@@ -199,7 +200,7 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(DrcPointPacket_t)];
     
     //send data
-    //[[DSPControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
 //get binary for save to dsp

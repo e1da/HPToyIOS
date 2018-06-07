@@ -8,8 +8,10 @@
 
 #import "HiFiToyPreset.h"
 #import "HiFiToyPresetList.h"
+#import "HiFiToyControl.h"
+#import "DialogSystem.h"
 #import "TAS5558.h"
-#import <UIKit/UIKit.h>
+
 
 @interface HiFiToyPreset(){
     XmlParserWrapper * xmlParser;
@@ -160,14 +162,8 @@
     }
     
     if ([[HiFiToyPresetList sharedInstance] getPresetWithKey:newName]){
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", @"")
-                                                        message:NSLocalizedString(@"Preset is not renamed! Because preset with the same name does exists!", @"")
-                                                       delegate:self
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"Ok", nil];
-        [alert show];
-        
+        [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Preset is not renamed! Because preset with the same name does exists!", @"")];
+
         return NO;
     }
     
@@ -183,15 +179,10 @@
 //send preset to HiFiToyPeripheral, response always YES
 - (void) sendWithResponse:(BOOL)response
 {
-    /*DSPControl * dspControl = [DSPControl sharedInstance];
-    
-    if ([dspControl isConnected] == NO) return;
+    if (![[HiFiToyControl sharedInstance] isConnected]) return;
     
     //init progress dialog
-    dspControl.ProgressDialog.title = NSLocalizedString(@"Send Dsp Parameters...", @"");
-    dspControl.ProgressDialog.message = @"Left ??? packets";
-    
-    [[dspControl ProgressDialog] show];*/
+    [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Send Dsp Parameters...", @"")];
     
     if (!self.characteristics) [self initCharacteristicsPointer];
     
@@ -210,9 +201,9 @@
 //save preset
 -(void)saveToHiFiToyPeripheral
 {
-   /* DSPControl * dspControl = [DSPControl sharedInstance];
+    HiFiToyControl * hiFiToyControl = [HiFiToyControl sharedInstance];
     
-    [dspControl sendDSPConfig:[self getBinary]];*/
+    [hiFiToyControl sendDSPConfig:[self getBinary]];
 }
 
 //get binary for save to dsp
@@ -243,10 +234,8 @@
         }
     }
     
-    //import dialog close
-    /*if (ImportProgressDialog.visible){
-        [ImportProgressDialog dismissWithClickedButtonIndex:0 animated:YES];
-    }*/
+    //import progress dialog close
+    [[DialogSystem sharedInstance] dismissProgressDialog];
     
     if (importResult){
         [self updateChecksumWithParamData:data];
@@ -257,7 +246,7 @@
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"PresetImportNotification" object:self];
     } else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"PresetImportFailNotification" object:nil];
+        [[DialogSystem sharedInstance] showAlert:@"Import preset is not success!"];
     }
     
     return importResult;
@@ -387,23 +376,14 @@
 - (void) finishedParsing:(NSString *)error {
     if (error){
         NSString * errorString = [NSString stringWithFormat:@"Import preset is not success. %@", error ];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", @"")
-                                                        message:errorString
-                                                       delegate:self
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"Ok", nil];
-        [alert show];
+        [[DialogSystem sharedInstance] showAlert:errorString];
+        
     } else {
         [self updateChecksum];
         [[HiFiToyPresetList sharedInstance] updatePreset:self withKey:self.presetName];
         
-        NSString * alertMessage = [NSString stringWithFormat:@"Add %@ preset", self.presetName];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Info"
-                                                        message:alertMessage
-                                                       delegate:self
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"Ok", nil];
-        [alert show];
+        NSString * msg = [NSString stringWithFormat:@"Add %@ preset", self.presetName];
+        [[DialogSystem sharedInstance] showAlert:msg];
         
     }
 }

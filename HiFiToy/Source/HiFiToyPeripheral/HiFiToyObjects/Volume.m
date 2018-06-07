@@ -7,6 +7,7 @@
 //
 
 #import "Volume.h"
+#import "HiFiToyControl.h"
 
 #define HW_MAX_DB   18.0
 #define HW_MIN_DB   -127.0
@@ -139,7 +140,7 @@
     NSData *data = [self getBinary];
 
     //send data
-    //[[DSPControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
 //get binary for save to dsp

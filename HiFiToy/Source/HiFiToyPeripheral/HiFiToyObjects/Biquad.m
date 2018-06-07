@@ -8,6 +8,7 @@
 
 #import "Biquad.h"
 #import "Number523.h"
+#import "HiFiToyControl.h"
 
 @interface Biquad(){
     int count;
@@ -344,7 +345,7 @@
     NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(BiquadPacket_t)];
     
     //send data
-    //[[DSPControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
 /*===========================================================================

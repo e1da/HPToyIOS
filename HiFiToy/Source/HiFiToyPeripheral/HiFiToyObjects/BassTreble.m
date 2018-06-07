@@ -9,6 +9,7 @@
 #import "BassTreble.h"
 #import "TAS5558.h"
 #import "Number523.h"
+#import "HiFiToyControl.h"
 
 
 @interface BassTreble(){
@@ -180,7 +181,7 @@
     NSData *data = [self getFreqDbBinary];
     
     //send data
-    //[[DSPControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
 - (void) sendEnabledWithChannel:(uint8_t)channel withResponse:(BOOL)response
@@ -188,7 +189,7 @@
     NSData *data = [self getEnabledBinaryWithChannel:channel];
     
     //send data
-    //[[DSPControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
 -(uint8_t) dbToTAS5558Format:(int) db
