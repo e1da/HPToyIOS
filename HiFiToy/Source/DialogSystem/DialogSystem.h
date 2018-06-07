@@ -6,8 +6,17 @@
 //  Copyright © 2018 Kerosinn_OSX. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface DialogSystem : NSObject
+
+@property (nonatomic) UIAlertController * alertController;
+
+
++ (DialogSystem *) sharedInstance;
+
+- (BOOL) isAlertVisible;
+- (void) dismissAlert;
+- (void) showAlert:(NSString *)msgString;
 
 @end

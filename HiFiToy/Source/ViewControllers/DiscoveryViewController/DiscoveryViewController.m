@@ -10,6 +10,7 @@
 #import "FoundCell.h"
 #import "DemoCell.h"
 #import "HiFiToyPresetList.h"
+#import "DialogSystem.h"
 
 @interface DiscoveryViewController(){
     //UIAlertView *connectingAlert;
@@ -243,18 +244,10 @@
 {
     NSString * msgString = @"This window shows all available online iWoofer devices, which you may choose to control. Also you can rename UUID number for any simple name in the Options/Name menu.";
     
-    UIAlertController *alertController = [UIAlertController
-                                          alertControllerWithTitle:@""
-                                          message:msgString
-                                          preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *closeAction = [UIAlertAction
-                                  actionWithTitle:@"Close"
-                                  style:UIAlertActionStyleDestructive
-                                  handler:nil];
-    [alertController addAction:closeAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
+    [[DialogSystem sharedInstance] showAlert:msgString];
 }
+
+
 
 - (void) keyfobDidFound
 {

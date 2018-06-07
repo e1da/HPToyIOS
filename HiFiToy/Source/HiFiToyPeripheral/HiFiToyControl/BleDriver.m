@@ -317,11 +317,6 @@
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
     NSLog(@"Connection to peripheral with UUID : %@ successfull", peripheral.identifier.UUIDString);
     
-    //check alertdisconnected and close
-    /*if (AlertDisconnected.visible){
-        [AlertDisconnected dismissWithClickedButtonIndex:0 animated:YES];
-    }*/
-    
     _state = BLE_CONNECTED;
     
     _activePeripheral = peripheral;
@@ -333,32 +328,15 @@
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    /*UIAlertView *AlertFailToConnect= [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", @"")
-                                                                message:@"FailToConnectPeripheral"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"Ok"
-                                                      otherButtonTitles:nil];
-    [AlertFailToConnect show];*/
+    if (self.communicationDelegate){
+        [self.communicationDelegate keyfobDidFailConnect];
+    }
     
     _activePeripheral = nil;
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    //deprecated must be UIAlertController
-   /* AlertDisconnected= [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", @"")
-                                                  message:NSLocalizedString(@"Disconnected!", @"")
-                                                 delegate:self
-                                        cancelButtonTitle:@"Ok"
-                                        otherButtonTitles:nil];
-    [AlertDisconnected show];
-    
-    if (self.ProgressDialog != nil){
-        if (self.ProgressDialog.visible){
-            [self.ProgressDialog dismissWithClickedButtonIndex:0 animated:YES];
-        }
-    }*/
-    
     if (_activePeripheral){//re-connect
         [self connectPeripheral:self.activePeripheral];
         _activePeripheral = nil;

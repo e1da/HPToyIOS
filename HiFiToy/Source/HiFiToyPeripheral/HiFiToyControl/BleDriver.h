@@ -38,28 +38,12 @@ typedef enum : uint8_t {
 } PairStatus_t;
 
 /*--------------------------- TIBleCommunicationDelegate Protocol ----------------------------------------*/
-/*@protocol BleCommunicationDelegate
-
--(void) keyfobDidFound;
-
--(void) keyfobDidPaired;
--(void) keyfobPairingFail;
--(void) keyfobPairingOk;
-
--(void) keyfobFirmwareOk;
--(void) keyfobFirmwareFail;
-
--(void) keyfobReadyWithChecksum:(uint64_t)checksum;
-
--(void) keyfobDisconnected:(NSString *)causeDisconectedString;
-
-@end*/
-
 @protocol BleCommunicationDelegate
 
 -(void) keyfobDidFound;
 
 -(void) keyfobDidConnected;
+-(void) keyfobDidFailConnect;
 -(void) keyfobDidDisconnected;
 
 -(void) keyfobDidWriteValue:(uint)remainPacketLength;

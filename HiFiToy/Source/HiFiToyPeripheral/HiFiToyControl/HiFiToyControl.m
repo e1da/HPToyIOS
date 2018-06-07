@@ -9,6 +9,7 @@
 #import "HiFiToyControl.h"
 #import "TAS5558.h"
 #import "HiFiToyDeviceList.h"
+#import "DialogSystem.h"
 
 
 @implementation HiFiToyControl
@@ -258,6 +259,15 @@
 {
     NSLog(@"keyfobDidConnected");
     
+    //check alertdisconnected and close
+    DialogSystem * dialog = [DialogSystem sharedInstance];
+    if (([dialog isAlertVisible]) &&
+        ([dialog.alertController.message isEqualToString:NSLocalizedString(@"Disconnected!", @"")])){
+        
+        [[DialogSystem sharedInstance] dismissAlert];
+    }
+    
+    
     //Enable FeedBack Info notification
     [bleDriver notification:0xFFF0 characteristicUUID:0xFFF3 on:YES];
     
@@ -272,10 +282,23 @@
     [self startPairedProccess:device.pairingCode];
 }
 
+-(void) keyfobDidFailConnect
+{
+    NSLog(@"keyfobDidFailConnect");
+    [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Fail connect to peripheral!", @"")];
+    
+}
+
 -(void) keyfobDidDisconnected
 {
-    //show alert
+    /*if (self.ProgressDialog != nil){
+     if (self.ProgressDialog.visible){
+     [self.ProgressDialog dismissWithClickedButtonIndex:0 animated:YES];
+     }
+     }*/
     
+    //show alert
+    [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Disconnected!", @"")];
 }
 
 -(void) keyfobDidWriteValue:(uint)remainPacketLength
@@ -317,12 +340,9 @@
                 
             case SET_PAIR_CODE:
                 if (status) {
-                    /*FeedBackAlert = [[UIAlertView alloc] initWithTitle:@"Confirm"
-                     message:NSLocalizedString(@"Change Pairing code is successful!", @"")
-                     delegate:self
-                     cancelButtonTitle:@"Ok"
-                     otherButtonTitles:nil];
-                     [FeedBackAlert show];*/
+                    NSLog(@"SET_PAIR_CODE_SUCCESS");
+                    [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Change Pairing code is successful!", @"")];
+                    
                 } else {
                     NSLog(@"SET_PAIR_CODE_FAIL");
                 }
@@ -337,12 +357,7 @@
                 } else {
                     NSLog(@"CHECK_FIRMWARE_FAIL");
                     
-                    /*UIAlertView * FirmwarefailAlert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                                 message:NSLocalizedString(@"Dsp Firmware is corrupted! Press 'Restore Factory Seetings' for solving problem!", @"")
-                                                                                delegate:self
-                                                                       cancelButtonTitle:@"Ok"
-                                                                       otherButtonTitles:nil];
-                    [FirmwarefailAlert show];*/
+                    [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Dsp Firmware is corrupted! Press 'Restore Factory Seetings' for solving problem!", @"")];
                 }
                 break;
                 

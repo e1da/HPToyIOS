@@ -28,8 +28,6 @@
 		D33A257D20C94875008A94EF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A257C20C94875008A94EF /* MainViewController.m */; };
 		D33A258220C952CD008A94EF /* FoundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258020C952CD008A94EF /* FoundCell.m */; };
 		D33A258320C952CD008A94EF /* DemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258120C952CD008A94EF /* DemoCell.m */; };
-		D39C3C9620BEB4FF00BDC1A0 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3C9520BEB4FF00BDC1A0 /* MasterViewController.m */; };
-		D39C3C9920BEB4FF00BDC1A0 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3C9820BEB4FF00BDC1A0 /* DetailViewController.m */; };
 		D39C3C9C20BEB4FF00BDC1A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9A20BEB4FF00BDC1A0 /* Main.storyboard */; };
 		D39C3C9E20BEB50000BDC1A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */; };
 		D39C3CA120BEB50000BDC1A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */; };
@@ -96,10 +94,6 @@
 		D33A258020C952CD008A94EF /* FoundCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoundCell.m; sourceTree = "<group>"; };
 		D33A258120C952CD008A94EF /* DemoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoCell.m; sourceTree = "<group>"; };
 		D39C3C8E20BEB4FF00BDC1A0 /* HiFiToy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiFiToy.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D39C3C9420BEB4FF00BDC1A0 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
-		D39C3C9520BEB4FF00BDC1A0 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
-		D39C3C9720BEB4FF00BDC1A0 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
-		D39C3C9820BEB4FF00BDC1A0 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		D39C3C9B20BEB4FF00BDC1A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D39C3CA020BEB50000BDC1A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -223,10 +217,6 @@
 			isa = PBXGroup;
 			children = (
 				D39C3CB820BEB5BE00BDC1A0 /* Source */,
-				D39C3C9420BEB4FF00BDC1A0 /* MasterViewController.h */,
-				D39C3C9520BEB4FF00BDC1A0 /* MasterViewController.m */,
-				D39C3C9720BEB4FF00BDC1A0 /* DetailViewController.h */,
-				D39C3C9820BEB4FF00BDC1A0 /* DetailViewController.m */,
 				D39C3C9A20BEB4FF00BDC1A0 /* Main.storyboard */,
 				D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */,
 				D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */,
@@ -465,7 +455,6 @@
 				D33A258320C952CD008A94EF /* DemoCell.m in Sources */,
 				D39C3CD220BEB71C00BDC1A0 /* Drc.m in Sources */,
 				D39C3CCF20BEB71200BDC1A0 /* Loudness.m in Sources */,
-				D39C3C9620BEB4FF00BDC1A0 /* MasterViewController.m in Sources */,
 				D33A256120C6E163008A94EF /* BleDriver.m in Sources */,
 				D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */,
 				D33A256420C6E173008A94EF /* BlePacket.m in Sources */,
@@ -481,7 +470,6 @@
 				D33A255520C5D4B3008A94EF /* HiFiToyPreset.m in Sources */,
 				D39C3CA420BEB50000BDC1A0 /* main.m in Sources */,
 				D39C3CC020BEB6A500BDC1A0 /* Biquad.m in Sources */,
-				D39C3C9920BEB4FF00BDC1A0 /* DetailViewController.m in Sources */,
 				D39C3CE320BEDD9D00BDC1A0 /* Number88.c in Sources */,
 				D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */,
 				D33A256A20C6E209008A94EF /* BlePacketQueue.m in Sources */,

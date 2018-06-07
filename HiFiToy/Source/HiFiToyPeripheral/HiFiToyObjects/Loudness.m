@@ -123,7 +123,7 @@
 //info string
 -(NSString *)getInfo
 {
-    return [NSString stringWithFormat:@"Freq:%dHz Gain:%0.1f", self.biquad.freq, self.gain];
+    return [NSString stringWithFormat:@"%dHz", self.biquad.freq];
 }
 
 //send to dsp
