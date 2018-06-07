@@ -20,6 +20,14 @@
 
 + (HiFiToyControl *)sharedInstance;
 
+- (NSMutableArray *) getPeripherals;
+
+- (BOOL) isConnected;
+- (void) startDiscovery;
+- (void) stopDiscovery;
+- (void) connect:(CBPeripheral *)p;
+- (void) disconnect;
+
 - (void) sendNewPairingCode:(uint32_t) pairing_code;
 - (void) startPairedProccess:(uint32_t) pairing_code;
 - (void) sendWriteFlag:(uint8_t) write_flag;

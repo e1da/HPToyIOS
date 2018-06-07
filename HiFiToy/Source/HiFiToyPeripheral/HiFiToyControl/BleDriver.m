@@ -126,7 +126,11 @@
         return -1;
     }
     
-    _peripherals = nil;
+    if (!_peripherals){
+        _peripherals = [[NSMutableArray alloc] init];
+    } else {
+        [_peripherals removeAllObjects];
+    }
     
     nameFindingBle = name;
     _state = BLE_DISCOVERING;
@@ -170,6 +174,13 @@
 //connect to peripheral
 - (void) connectPeripheral:(CBPeripheral *)peripheral
 {
+    if ([self isConnected]) {
+        if (_activePeripheral == peripheral) {
+            return;
+        } else {
+            [self disconnectPeripheral];
+        }
+    }
     _state = BLE_CONNECTING;
     
     NSLog(@"Connecting to peripheral with UUID : %@", peripheral.identifier.UUIDString);

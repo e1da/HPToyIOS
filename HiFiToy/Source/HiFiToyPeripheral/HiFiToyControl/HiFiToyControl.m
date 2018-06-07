@@ -18,6 +18,7 @@
     self = [super init];
     if (self){
         bleDriver = [[BleDriver alloc] init];
+        [bleDriver resetCoreBleManager];
         bleDriver.communicationDelegate = self;
     }
     
@@ -38,6 +39,39 @@
     return sharedInstance;
 }
 
+- (NSMutableArray *) getPeripherals
+{
+    return bleDriver.peripherals;
+}
+
+- (BOOL) isConnected
+{
+    return [bleDriver isConnected];
+}
+
+- (void) startDiscovery
+{
+    if ([bleDriver isConnected]) {
+        [bleDriver disconnectPeripheral];
+
+    }
+    [bleDriver findBLEPeripheralsWithName:@"HiFiToy"];
+}
+
+- (void) stopDiscovery
+{
+    [bleDriver stopFindBLEPeripherals];
+}
+
+- (void) connect:(CBPeripheral *)p
+{
+    [bleDriver connectPeripheral:p];
+}
+
+- (void) disconnect
+{
+    [bleDriver disconnectPeripheral];
+}
 
 - (void) sendNewPairingCode:(uint32_t) pairing_code
 {

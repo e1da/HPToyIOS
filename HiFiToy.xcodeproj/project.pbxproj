@@ -22,7 +22,12 @@
 		D33A256420C6E173008A94EF /* BlePacket.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A256320C6E173008A94EF /* BlePacket.m */; };
 		D33A256A20C6E209008A94EF /* BlePacketQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A256920C6E209008A94EF /* BlePacketQueue.m */; };
 		D33A256D20C80C82008A94EF /* HiFiToyControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A256C20C80C82008A94EF /* HiFiToyControl.m */; };
-		D39C3C9320BEB4FF00BDC1A0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3C9220BEB4FF00BDC1A0 /* AppDelegate.m */; };
+		D33A257120C943F5008A94EF /* DialogSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A257020C943F5008A94EF /* DialogSystem.m */; };
+		D33A257420C94459008A94EF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A257320C94459008A94EF /* AppDelegate.m */; };
+		D33A257A20C94865008A94EF /* DiscoveryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A257920C94865008A94EF /* DiscoveryViewController.m */; };
+		D33A257D20C94875008A94EF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A257C20C94875008A94EF /* MainViewController.m */; };
+		D33A258220C952CD008A94EF /* FoundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258020C952CD008A94EF /* FoundCell.m */; };
+		D33A258320C952CD008A94EF /* DemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258120C952CD008A94EF /* DemoCell.m */; };
 		D39C3C9620BEB4FF00BDC1A0 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3C9520BEB4FF00BDC1A0 /* MasterViewController.m */; };
 		D39C3C9920BEB4FF00BDC1A0 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3C9820BEB4FF00BDC1A0 /* DetailViewController.m */; };
 		D39C3C9C20BEB4FF00BDC1A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9A20BEB4FF00BDC1A0 /* Main.storyboard */; };
@@ -78,9 +83,19 @@
 		D33A256920C6E209008A94EF /* BlePacketQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlePacketQueue.m; sourceTree = "<group>"; };
 		D33A256B20C80C82008A94EF /* HiFiToyControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HiFiToyControl.h; sourceTree = "<group>"; };
 		D33A256C20C80C82008A94EF /* HiFiToyControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HiFiToyControl.m; sourceTree = "<group>"; };
+		D33A256F20C943F5008A94EF /* DialogSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DialogSystem.h; sourceTree = "<group>"; };
+		D33A257020C943F5008A94EF /* DialogSystem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DialogSystem.m; sourceTree = "<group>"; };
+		D33A257220C94459008A94EF /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		D33A257320C94459008A94EF /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		D33A257820C94865008A94EF /* DiscoveryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiscoveryViewController.h; sourceTree = "<group>"; };
+		D33A257920C94865008A94EF /* DiscoveryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DiscoveryViewController.m; sourceTree = "<group>"; };
+		D33A257B20C94875008A94EF /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		D33A257C20C94875008A94EF /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		D33A257E20C952CD008A94EF /* FoundCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoundCell.h; sourceTree = "<group>"; };
+		D33A257F20C952CD008A94EF /* DemoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoCell.h; sourceTree = "<group>"; };
+		D33A258020C952CD008A94EF /* FoundCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoundCell.m; sourceTree = "<group>"; };
+		D33A258120C952CD008A94EF /* DemoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoCell.m; sourceTree = "<group>"; };
 		D39C3C8E20BEB4FF00BDC1A0 /* HiFiToy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiFiToy.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D39C3C9120BEB4FF00BDC1A0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		D39C3C9220BEB4FF00BDC1A0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		D39C3C9420BEB4FF00BDC1A0 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
 		D39C3C9520BEB4FF00BDC1A0 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
 		D39C3C9720BEB4FF00BDC1A0 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
@@ -146,6 +161,46 @@
 			path = TAS5558;
 			sourceTree = "<group>";
 		};
+		D33A256E20C943DF008A94EF /* DialogSystem */ = {
+			isa = PBXGroup;
+			children = (
+				D33A256F20C943F5008A94EF /* DialogSystem.h */,
+				D33A257020C943F5008A94EF /* DialogSystem.m */,
+			);
+			path = DialogSystem;
+			sourceTree = "<group>";
+		};
+		D33A257520C945D6008A94EF /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D33A257620C94852008A94EF /* DiscoveryViewController */,
+				D33A257720C94852008A94EF /* MainViewController */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		D33A257620C94852008A94EF /* DiscoveryViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D33A257F20C952CD008A94EF /* DemoCell.h */,
+				D33A258120C952CD008A94EF /* DemoCell.m */,
+				D33A257E20C952CD008A94EF /* FoundCell.h */,
+				D33A258020C952CD008A94EF /* FoundCell.m */,
+				D33A257820C94865008A94EF /* DiscoveryViewController.h */,
+				D33A257920C94865008A94EF /* DiscoveryViewController.m */,
+			);
+			path = DiscoveryViewController;
+			sourceTree = "<group>";
+		};
+		D33A257720C94852008A94EF /* MainViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D33A257B20C94875008A94EF /* MainViewController.h */,
+				D33A257C20C94875008A94EF /* MainViewController.m */,
+			);
+			path = MainViewController;
+			sourceTree = "<group>";
+		};
 		D39C3C8520BEB4FF00BDC1A0 = {
 			isa = PBXGroup;
 			children = (
@@ -168,8 +223,6 @@
 			isa = PBXGroup;
 			children = (
 				D39C3CB820BEB5BE00BDC1A0 /* Source */,
-				D39C3C9120BEB4FF00BDC1A0 /* AppDelegate.h */,
-				D39C3C9220BEB4FF00BDC1A0 /* AppDelegate.m */,
 				D39C3C9420BEB4FF00BDC1A0 /* MasterViewController.h */,
 				D39C3C9520BEB4FF00BDC1A0 /* MasterViewController.m */,
 				D39C3C9720BEB4FF00BDC1A0 /* DetailViewController.h */,
@@ -195,6 +248,10 @@
 		D39C3CB820BEB5BE00BDC1A0 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				D33A257220C94459008A94EF /* AppDelegate.h */,
+				D33A257320C94459008A94EF /* AppDelegate.m */,
+				D33A257520C945D6008A94EF /* ViewControllers */,
+				D33A256E20C943DF008A94EF /* DialogSystem */,
 				D39C3CD420BEB8C500BDC1A0 /* XmlWrapper */,
 				D39C3CBA20BEB65A00BDC1A0 /* HiFiToyPeripheral */,
 			);
@@ -395,12 +452,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D33A258220C952CD008A94EF /* FoundCell.m in Sources */,
 				D33A254320C064A9008A94EF /* TAS5558.h in Sources */,
 				D33A253E20BFF674008A94EF /* Number88.h in Sources */,
 				D33A255E20C6AEBB008A94EF /* HiFiToyDeviceList.m in Sources */,
 				D33A253F20BFF674008A94EF /* Number523.h in Sources */,
+				D33A257420C94459008A94EF /* AppDelegate.m in Sources */,
 				D33A254020BFF674008A94EF /* Number923.h in Sources */,
+				D33A257A20C94865008A94EF /* DiscoveryViewController.m in Sources */,
+				D33A257D20C94875008A94EF /* MainViewController.m in Sources */,
 				D33A255B20C6AEAA008A94EF /* HiFiToyDevice.m in Sources */,
+				D33A258320C952CD008A94EF /* DemoCell.m in Sources */,
 				D39C3CD220BEB71C00BDC1A0 /* Drc.m in Sources */,
 				D39C3CCF20BEB71200BDC1A0 /* Loudness.m in Sources */,
 				D39C3C9620BEB4FF00BDC1A0 /* MasterViewController.m in Sources */,
@@ -412,7 +474,6 @@
 				D39C3CD920BEB8C500BDC1A0 /* XmlData.m in Sources */,
 				D39C3CC620BEB6DC00BDC1A0 /* PassFilter.m in Sources */,
 				D39C3CDA20BEB8C500BDC1A0 /* XmlParserWrapper.m in Sources */,
-				D39C3C9320BEB4FF00BDC1A0 /* AppDelegate.m in Sources */,
 				D39C3CE220BEDD9D00BDC1A0 /* Number523.c in Sources */,
 				D33A254920C15AF7008A94EF /* DrcCoef.m in Sources */,
 				D33A255220C5728E008A94EF /* DrcTimeConst.m in Sources */,
@@ -425,6 +486,7 @@
 				D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */,
 				D33A256A20C6E209008A94EF /* BlePacketQueue.m in Sources */,
 				D33A255820C68B92008A94EF /* HiFiToyPresetList.m in Sources */,
+				D33A257120C943F5008A94EF /* DialogSystem.m in Sources */,
 				D39C3CC320BEB6CD00BDC1A0 /* BiquadContainer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
