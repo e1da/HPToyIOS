@@ -28,21 +28,23 @@ typedef enum : uint8_t {
     
 } TestCmd_t;
 
+typedef struct {
+    uint8_t cmd;
+    uint8_t data[4];
+} TestPacket_t;
+
 typedef enum : uint8_t {
     PAIR_NO, PAIR_YES
 } PairStatus_t;
 
 /*--------------------------- TIBleCommunicationDelegate Protocol ----------------------------------------*/
-@protocol BleCommunicationDelegate
+/*@protocol BleCommunicationDelegate
 
 -(void) keyfobDidFound;
 
 -(void) keyfobDidPaired;
 -(void) keyfobPairingFail;
 -(void) keyfobPairingOk;
-
--(void) keyfobDspVersionFail;
--(void) keyfobDspVersionOk;
 
 -(void) keyfobFirmwareOk;
 -(void) keyfobFirmwareFail;
@@ -51,20 +53,32 @@ typedef enum : uint8_t {
 
 -(void) keyfobDisconnected:(NSString *)causeDisconectedString;
 
+@end*/
+
+@protocol BleCommunicationDelegate
+
+-(void) keyfobDidFound;
+
+-(void) keyfobDidConnected;
+-(void) keyfobDidDisconnected;
+
+-(void) keyfobDidWriteValue:(uint)remainPacketLength;
+-(void) keyfobDidUpdateValue:(NSData *) value;
+
 @end
 
 /*----------------------------- FeedBackParamDataDelegate Protocol ---------------------------------------*/
-@protocol FeedBackParamDataDelegate
+/*@protocol FeedBackParamDataDelegate
 //nsdata length == 20
 -(void) getParamDataDelegate:(NSData *)data;
 
-@end
+@end*/
 
 /*----------------------------- BleDriver Interface -----------------------------------------------------*/
 @interface BleDriver : NSObject <CBCentralManagerDelegate, CBPeripheralDelegate>
 
 @property (nonatomic,assign) id <BleCommunicationDelegate> communicationDelegate;
-@property (nonatomic,assign) id <FeedBackParamDataDelegate> paramDataDelegate;
+//@property (nonatomic,assign) id <FeedBackParamDataDelegate> paramDataDelegate;
 
 @property (nonatomic, readonly) BleState_t state;
 

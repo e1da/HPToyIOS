@@ -354,7 +354,7 @@
     }
     
     if (self.communicationDelegate){
-        [self.communicationDelegate keyfobDisconnected:@"Disconnected!"];
+        [self.communicationDelegate keyfobDidDisconnected];
     }
 }
 
@@ -368,7 +368,7 @@
         }
         
         if (self.communicationDelegate){
-            [self.communicationDelegate keyfobDidPaired];
+            [self.communicationDelegate keyfobDidConnected];
         }
         
     }
@@ -411,98 +411,13 @@
         return;
     }
     
-    //UIAlertView * FeedBackAlert;
-    
     UInt16 characteristicUUID = [self CBUUIDToInt:characteristic.UUID];
     
-    switch(characteristicUUID){
-        case 0xFFF3:
-        {
-            uint8_t data[9];
-            [characteristic.value getBytes:&data length:9];
-            TestCmd_t feedbackMsg = data[0];
-            uint8_t status = data[1];
-            
-            switch (feedbackMsg) {
-                case ESTABLISH_PAIR:
-                    if (status == PAIR_YES) {
-                        if (self.communicationDelegate){
-                            [self.communicationDelegate keyfobPairingOk];
-                        }
-                        NSLog(@"PAIR_YES");
-                    } else {
-                        if (self.communicationDelegate){
-                            [self.communicationDelegate  keyfobPairingFail];
-                        }
-                        NSLog(@"PAIR_NO");
-                    }
-                    break;
-                    
-                case SET_PAIR_CODE:
-                    if (status) {
-                        /*FeedBackAlert = [[UIAlertView alloc] initWithTitle:@"Confirm"
-                                                                   message:NSLocalizedString(@"Change Pairing code is successful!", @"")
-                                                                  delegate:self
-                                                         cancelButtonTitle:@"Ok"
-                                                         otherButtonTitles:nil];
-                        [FeedBackAlert show];*/
-                    } else {
-                        NSLog(@"SET_PAIR_CODE_FAIL");
-                    }
-                    
-                    break;
-   
-                case GET_WRITE_FLAG:
-                    if (status) {
-                        NSLog(@"CHECK_FIRMWARE_OK");
-                        
-                        if (self.communicationDelegate){
-                            [self.communicationDelegate keyfobFirmwareOk];
-                        }
-                    } else {
-                        NSLog(@"CHECK_FIRMWARE_FAIL");
-                        
-                        if (self.communicationDelegate){
-                            [self.communicationDelegate keyfobFirmwareFail];
-                        }
-                    }
-                    break;
-                    
-                case GET_CHECKSUM:
-                    NSLog(@"GET_CHECKSUM_OK");
-                    uint16_t checksum = 0;
-                    memcpy(&checksum, data + 1, 2);
-                        
-                    if (self.communicationDelegate){
-                        [self.communicationDelegate keyfobReadyWithChecksum:checksum];
-                    }
-                    break;
-                case CLIP_DETECTION:
-                    
-                    break;
-                case OTW_DETECTION:
-                    
-                    break;
-                case PARAM_CONNECTION_ENABLED:
-                    NSLog(@"PARAM_CONNECTION_ENABLED");
-                    break;
-                default:
-                    break;
-            }
-            break;
+    if ((characteristicUUID == 0xFFF3) || (characteristicUUID == 0xFFF3)) {
+        if (self.communicationDelegate){
+            [self.communicationDelegate keyfobDidUpdateValue:characteristic.value];
         }
-        case 0xFFF4:
-        {
-            if (self.paramDataDelegate) {
-                [self.paramDataDelegate getParamDataDelegate:characteristic.value];
-            }
-            break;
-        }
-        default:
-            break;
-          
     }
-    
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
@@ -526,19 +441,13 @@
             BlePacket *packet = [blePacketQueue getFirstPacket];
             //send packet
             [self.activePeripheral writeValue:packet.data forCharacteristic:packet.characteristic type:CBCharacteristicWriteWithResponse];
-                    
-            /*if ((ProgressDialog) && (ProgressDialog.visible)) {
-                ProgressDialog.message = [NSString stringWithFormat:@"Left %d packets.", [blePacketQueue size]];
-            }*/
-            
+
         } else {
             bleBusy = NO;
-                    
-            /*if ((ProgressDialog) && (ProgressDialog.visible)) {
-                [ProgressDialog dismissWithClickedButtonIndex:0 animated:YES];
-                            
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"CompleteDataSendNotification" object:nil];
-            }*/
+        }
+        
+        if (self.communicationDelegate){
+            [self.communicationDelegate keyfobDidWriteValue:[blePacketQueue size]];
         }
         
         NSLog(@"didWriteValueForCharacteristic. packet queue = %d", [blePacketQueue size]);
