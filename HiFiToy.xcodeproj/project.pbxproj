@@ -28,6 +28,14 @@
 		D33A257D20C94875008A94EF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A257C20C94875008A94EF /* MainViewController.m */; };
 		D33A258220C952CD008A94EF /* FoundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258020C952CD008A94EF /* FoundCell.m */; };
 		D33A258320C952CD008A94EF /* DemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258120C952CD008A94EF /* DemoCell.m */; };
+		D33A258820CA8A00008A94EF /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258720CA8A00008A94EF /* OptionsViewController.m */; };
+		D33A258B20CA8A30008A94EF /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258A20CA8A30008A94EF /* NavigationController.m */; };
+		D33A259220CA8FF4008A94EF /* DeviceNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259120CA8FF4008A94EF /* DeviceNameViewController.m */; };
+		D33A259520CA9141008A94EF /* PairingCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259420CA9141008A94EF /* PairingCodeViewController.m */; };
+		D33A259820CA93B1008A94EF /* PresetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259720CA93B1008A94EF /* PresetViewController.m */; };
+		D33A259B20CA9538008A94EF /* PresetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259A20CA9537008A94EF /* PresetCell.m */; };
+		D33A259E20CA9571008A94EF /* PresetDetailButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259D20CA9571008A94EF /* PresetDetailButton.m */; };
+		D33A25A120CA9A2C008A94EF /* PresetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */; };
 		D39C3C9C20BEB4FF00BDC1A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9A20BEB4FF00BDC1A0 /* Main.storyboard */; };
 		D39C3C9E20BEB50000BDC1A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */; };
 		D39C3CA120BEB50000BDC1A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */; };
@@ -93,6 +101,22 @@
 		D33A257F20C952CD008A94EF /* DemoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoCell.h; sourceTree = "<group>"; };
 		D33A258020C952CD008A94EF /* FoundCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoundCell.m; sourceTree = "<group>"; };
 		D33A258120C952CD008A94EF /* DemoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoCell.m; sourceTree = "<group>"; };
+		D33A258620CA8A00008A94EF /* OptionsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
+		D33A258720CA8A00008A94EF /* OptionsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
+		D33A258920CA8A30008A94EF /* NavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
+		D33A258A20CA8A30008A94EF /* NavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NavigationController.m; sourceTree = "<group>"; };
+		D33A259020CA8FF4008A94EF /* DeviceNameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceNameViewController.h; sourceTree = "<group>"; };
+		D33A259120CA8FF4008A94EF /* DeviceNameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeviceNameViewController.m; sourceTree = "<group>"; };
+		D33A259320CA9141008A94EF /* PairingCodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PairingCodeViewController.h; sourceTree = "<group>"; };
+		D33A259420CA9141008A94EF /* PairingCodeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PairingCodeViewController.m; sourceTree = "<group>"; };
+		D33A259620CA93B1008A94EF /* PresetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetViewController.h; sourceTree = "<group>"; };
+		D33A259720CA93B1008A94EF /* PresetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetViewController.m; sourceTree = "<group>"; };
+		D33A259920CA9537008A94EF /* PresetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresetCell.h; sourceTree = "<group>"; };
+		D33A259A20CA9537008A94EF /* PresetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresetCell.m; sourceTree = "<group>"; };
+		D33A259C20CA9570008A94EF /* PresetDetailButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresetDetailButton.h; sourceTree = "<group>"; };
+		D33A259D20CA9571008A94EF /* PresetDetailButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresetDetailButton.m; sourceTree = "<group>"; };
+		D33A259F20CA9A2C008A94EF /* PresetDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetDetailViewController.h; sourceTree = "<group>"; };
+		D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetDetailViewController.m; sourceTree = "<group>"; };
 		D39C3C8E20BEB4FF00BDC1A0 /* HiFiToy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiFiToy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39C3C9B20BEB4FF00BDC1A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -167,6 +191,8 @@
 		D33A257520C945D6008A94EF /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				D33A258420CA89E6008A94EF /* OptionsViewController */,
+				D33A258520CA89E7008A94EF /* XOverViewController */,
 				D33A257620C94852008A94EF /* DiscoveryViewController */,
 				D33A257720C94852008A94EF /* MainViewController */,
 			);
@@ -193,6 +219,58 @@
 				D33A257C20C94875008A94EF /* MainViewController.m */,
 			);
 			path = MainViewController;
+			sourceTree = "<group>";
+		};
+		D33A258420CA89E6008A94EF /* OptionsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D33A258C20CA8FE0008A94EF /* DeviceNameViewController */,
+				D33A258D20CA8FE0008A94EF /* PairingCodeViewController */,
+				D33A258E20CA8FE0008A94EF /* PresetViewController */,
+				D33A258620CA8A00008A94EF /* OptionsViewController.h */,
+				D33A258720CA8A00008A94EF /* OptionsViewController.m */,
+			);
+			path = OptionsViewController;
+			sourceTree = "<group>";
+		};
+		D33A258520CA89E7008A94EF /* XOverViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = XOverViewController;
+			sourceTree = "<group>";
+		};
+		D33A258C20CA8FE0008A94EF /* DeviceNameViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D33A259020CA8FF4008A94EF /* DeviceNameViewController.h */,
+				D33A259120CA8FF4008A94EF /* DeviceNameViewController.m */,
+			);
+			path = DeviceNameViewController;
+			sourceTree = "<group>";
+		};
+		D33A258D20CA8FE0008A94EF /* PairingCodeViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D33A259320CA9141008A94EF /* PairingCodeViewController.h */,
+				D33A259420CA9141008A94EF /* PairingCodeViewController.m */,
+			);
+			path = PairingCodeViewController;
+			sourceTree = "<group>";
+		};
+		D33A258E20CA8FE0008A94EF /* PresetViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D33A259C20CA9570008A94EF /* PresetDetailButton.h */,
+				D33A259D20CA9571008A94EF /* PresetDetailButton.m */,
+				D33A259920CA9537008A94EF /* PresetCell.h */,
+				D33A259A20CA9537008A94EF /* PresetCell.m */,
+				D33A259620CA93B1008A94EF /* PresetViewController.h */,
+				D33A259720CA93B1008A94EF /* PresetViewController.m */,
+				D33A259F20CA9A2C008A94EF /* PresetDetailViewController.h */,
+				D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */,
+			);
+			path = PresetViewController;
 			sourceTree = "<group>";
 		};
 		D39C3C8520BEB4FF00BDC1A0 = {
@@ -240,6 +318,8 @@
 			children = (
 				D33A257220C94459008A94EF /* AppDelegate.h */,
 				D33A257320C94459008A94EF /* AppDelegate.m */,
+				D33A258920CA8A30008A94EF /* NavigationController.h */,
+				D33A258A20CA8A30008A94EF /* NavigationController.m */,
 				D33A257520C945D6008A94EF /* ViewControllers */,
 				D33A256E20C943DF008A94EF /* DialogSystem */,
 				D39C3CD420BEB8C500BDC1A0 /* XmlWrapper */,
@@ -443,6 +523,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D33A258220C952CD008A94EF /* FoundCell.m in Sources */,
+				D33A259820CA93B1008A94EF /* PresetViewController.m in Sources */,
+				D33A259B20CA9538008A94EF /* PresetCell.m in Sources */,
 				D33A254320C064A9008A94EF /* TAS5558.h in Sources */,
 				D33A253E20BFF674008A94EF /* Number88.h in Sources */,
 				D33A255E20C6AEBB008A94EF /* HiFiToyDeviceList.m in Sources */,
@@ -456,6 +538,7 @@
 				D39C3CD220BEB71C00BDC1A0 /* Drc.m in Sources */,
 				D39C3CCF20BEB71200BDC1A0 /* Loudness.m in Sources */,
 				D33A256120C6E163008A94EF /* BleDriver.m in Sources */,
+				D33A259520CA9141008A94EF /* PairingCodeViewController.m in Sources */,
 				D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */,
 				D33A256420C6E173008A94EF /* BlePacket.m in Sources */,
 				D33A254620C140F8008A94EF /* BassTrebleChannel.m in Sources */,
@@ -463,16 +546,21 @@
 				D39C3CD920BEB8C500BDC1A0 /* XmlData.m in Sources */,
 				D39C3CC620BEB6DC00BDC1A0 /* PassFilter.m in Sources */,
 				D39C3CDA20BEB8C500BDC1A0 /* XmlParserWrapper.m in Sources */,
+				D33A258B20CA8A30008A94EF /* NavigationController.m in Sources */,
 				D39C3CE220BEDD9D00BDC1A0 /* Number523.c in Sources */,
 				D33A254920C15AF7008A94EF /* DrcCoef.m in Sources */,
 				D33A255220C5728E008A94EF /* DrcTimeConst.m in Sources */,
 				D39C3CC920BEB6FB00BDC1A0 /* Volume.m in Sources */,
 				D33A255520C5D4B3008A94EF /* HiFiToyPreset.m in Sources */,
+				D33A259220CA8FF4008A94EF /* DeviceNameViewController.m in Sources */,
 				D39C3CA420BEB50000BDC1A0 /* main.m in Sources */,
+				D33A259E20CA9571008A94EF /* PresetDetailButton.m in Sources */,
+				D33A258820CA8A00008A94EF /* OptionsViewController.m in Sources */,
 				D39C3CC020BEB6A500BDC1A0 /* Biquad.m in Sources */,
 				D39C3CE320BEDD9D00BDC1A0 /* Number88.c in Sources */,
 				D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */,
 				D33A256A20C6E209008A94EF /* BlePacketQueue.m in Sources */,
+				D33A25A120CA9A2C008A94EF /* PresetDetailViewController.m in Sources */,
 				D33A255820C68B92008A94EF /* HiFiToyPresetList.m in Sources */,
 				D33A257120C943F5008A94EF /* DialogSystem.m in Sources */,
 				D39C3CC320BEB6CD00BDC1A0 /* BiquadContainer.m in Sources */,

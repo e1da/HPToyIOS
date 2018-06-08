@@ -8,6 +8,8 @@
 
 #import "MainViewController.h"
 #import "DialogSystem.h"
+#import "PresetViewController.h"
+#import "OptionsViewController.h"
 
 @implementation MainViewController
 
@@ -170,18 +172,18 @@
  -----------------------------------------------------------------------------------------*/
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    /*if ([[segue identifier] isEqualToString:@"showPresetManager"]) {
-        PresetTableViewController *destination = (PresetTableViewController * )segue.destinationViewController;
-        destination.dspDevice = self.dspDevice;
+    if ([[segue identifier] isEqualToString:@"showPresetManager"]) {
+        PresetViewController *destination = (PresetViewController * )segue.destinationViewController;
+        destination.hiFiToyDevice = hiFiToyDevice;
         
     }
     
-    if ([[segue identifier] isEqualToString:@"showCommonFunctionMenu"]) {
-        ThomasCommonFunctionViewController *destination = (ThomasCommonFunctionViewController * )segue.destinationViewController;
-        destination.dspDevice = self.dspDevice;
+    if ([[segue identifier] isEqualToString:@"showOptionsMenu"]) {
+        OptionsViewController *destination = (OptionsViewController * )segue.destinationViewController;
+        destination.hiFiToyDevice = hiFiToyDevice;
     }
     
-    if ([[segue identifier] isEqualToString:@"showXOverMenu"]) {
+    /*if ([[segue identifier] isEqualToString:@"showXOverMenu"]) {
         XOverViewController *dest = (XOverViewController * )segue.destinationViewController;
         
         dest.xOverView.maxFreq = 500;
