@@ -33,8 +33,11 @@
 - (void) sendWriteFlag:(uint8_t) write_flag;
 - (void) checkFirmareWriteFlag;
 - (void) getChecksumParamData;
+- (void) setInitDsp;
 - (void) sendDSPConfig:(NSData *)data;
 
 - (void) sendDataToDsp:(NSData *)data withResponse:(BOOL)response;
+
+- (void) getDspDataWithOffset:(uint16_t)offset;
 
 @end

@@ -86,21 +86,25 @@
 - (void) handleEnteredForeground
 {
     if (![hiFiToyControl isConnected]){
-        [hiFiToyControl startDiscovery];
         /*[dspControl.peripherals removeAllObjects];
         [self.tableView reloadData];
         
         [NSTimer scheduledTimerWithTimeInterval:(float)1.0 target:self selector:@selector(scanTimer:) userInfo:nil repeats:NO];*/
+        
+        [hiFiToyControl startDiscovery];
+        [self.tableView reloadData];
     }
 }
 
-/*- (void) scanTimer:(NSTimer *)timer {
-    [dspControl disconnectPeripheral];
+- (void) scanTimer:(NSTimer *)timer {
+    /*[dspControl disconnectPeripheral];
     [dspControl.peripherals removeAllObjects];
     
-    [dspControl findBLEPeripheralsWithName:@"HiFiToy"];
+    [dspControl findBLEPeripheralsWithName:@"HiFiToy"];*/
+    [hiFiToyControl startDiscovery];
+    [self.tableView reloadData];
     
-}*/
+}
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

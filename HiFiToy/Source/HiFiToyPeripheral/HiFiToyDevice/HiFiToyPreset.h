@@ -33,7 +33,8 @@
 
 - (BOOL)rename:(NSString *)newName;
 
--(void)saveToHiFiToyPeripheral;
+- (void) saveToHiFiToyPeripheral;
+- (void) importFromHiFiToyPeripheral;
 
 - (void) updateChecksum;
 - (void) updateChecksumWithParamData:(NSData *)data;

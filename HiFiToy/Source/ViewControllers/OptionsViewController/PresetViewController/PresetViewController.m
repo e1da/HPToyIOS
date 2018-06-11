@@ -137,7 +137,7 @@
             self.hiFiToyDevice.activeKeyPreset = newKey;
             [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
             
-            [[self.hiFiToyDevice getActivePreset] sendWithResponse:YES];
+            //[[self.hiFiToyDevice getActivePreset] sendWithResponse:YES];
             [[self.hiFiToyDevice getActivePreset] saveToHiFiToyPeripheral];
             
         }
@@ -181,7 +181,7 @@
                                                          self.hiFiToyDevice.activeKeyPreset = tempPresetKey;
                                                          [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
                                                          
-                                                         [[self.hiFiToyDevice getActivePreset] sendWithResponse:YES];
+                                                         //[[self.hiFiToyDevice getActivePreset] sendWithResponse:YES];
                                                          [[self.hiFiToyDevice getActivePreset] saveToHiFiToyPeripheral];
                                                          
                                                          [self.tableView reloadData];

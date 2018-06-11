@@ -119,6 +119,8 @@
 //find (discovery) peripherals
 -(int) findBLEPeripheralsWithName:(NSString*)name
 {
+    _state = BLE_DISCOVERING;
+    nameFindingBle = name;
     
     if (CM.state  != CBCentralManagerStatePoweredOn) {
         NSLog(@"CoreBluetooth not correctly initialized!");
@@ -132,10 +134,12 @@
         [_peripherals removeAllObjects];
     }
     
-    nameFindingBle = name;
-    _state = BLE_DISCOVERING;
+    //nameFindingBle = name;
+    //_state = BLE_DISCOVERING;
     
     /*NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:TRUE],CBCentralManagerScanOptionAllowDuplicatesKey, nil];*/
+    
+    NSLog(@"Start discovering!");
     
     CBUUID *su = [self IntToCBUUID:0xFFF0];
     [CM scanForPeripheralsWithServices:[NSArray arrayWithObject:su] options:0/*options*/]; // Start scanning
@@ -152,7 +156,7 @@
     
     if ([CM isScanning]) {
         [CM stopScan];
-        NSLog(@"Stopped Scanning!");
+        NSLog(@"Stopped discovering!");
     }
 }
 
@@ -278,6 +282,10 @@
     NSLog(@"Status of CoreBluetooth central manager changed %d (%s)\r\n",
           (int)central.state,
           [self centralManagerStateToString:central.state]);
+    
+    if ((_state == BLE_DISCOVERING) && (central.state == 5)) {
+        [self findBLEPeripheralsWithName:nameFindingBle];
+    }
 }
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
@@ -288,7 +296,7 @@
     NSLog(@"didDiscoverPeripheral %@", peripheralAdvertName);
     
     //check DSP Name
-    if (([peripheralAdvertName compare:nameFindingBle] == NSOrderedSame) ||
+    if (([peripheralAdvertName isEqualToString:nameFindingBle]) ||
         ([nameFindingBle isEqualToString:@"ALL_PERIPHERAL"])){
         peripheral.delegate = self;
         

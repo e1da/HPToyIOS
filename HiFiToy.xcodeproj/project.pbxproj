@@ -36,6 +36,9 @@
 		D33A259B20CA9538008A94EF /* PresetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259A20CA9537008A94EF /* PresetCell.m */; };
 		D33A259E20CA9571008A94EF /* PresetDetailButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259D20CA9571008A94EF /* PresetDetailButton.m */; };
 		D33A25A120CA9A2C008A94EF /* PresetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */; };
+		D33A25A420CABC9C008A94EF /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */; };
+		D33A25A820CABF19008A94EF /* DeviceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A620CABF19008A94EF /* DeviceList.plist */; };
+		D33A25A920CABF19008A94EF /* PresetList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A720CABF19008A94EF /* PresetList.plist */; };
 		D39C3C9C20BEB4FF00BDC1A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9A20BEB4FF00BDC1A0 /* Main.storyboard */; };
 		D39C3C9E20BEB50000BDC1A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */; };
 		D39C3CA120BEB50000BDC1A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */; };
@@ -117,6 +120,9 @@
 		D33A259D20CA9571008A94EF /* PresetDetailButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresetDetailButton.m; sourceTree = "<group>"; };
 		D33A259F20CA9A2C008A94EF /* PresetDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetDetailViewController.h; sourceTree = "<group>"; };
 		D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetDetailViewController.m; sourceTree = "<group>"; };
+		D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		D33A25A620CABF19008A94EF /* DeviceList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceList.plist; sourceTree = "<group>"; };
+		D33A25A720CABF19008A94EF /* PresetList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PresetList.plist; sourceTree = "<group>"; };
 		D39C3C8E20BEB4FF00BDC1A0 /* HiFiToy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiFiToy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39C3C9B20BEB4FF00BDC1A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -158,6 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D33A25A420CABC9C008A94EF /* CoreBluetooth.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,12 +280,30 @@
 			path = PresetViewController;
 			sourceTree = "<group>";
 		};
+		D33A25A220CABC9C008A94EF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D33A25A520CABF19008A94EF /* Res */ = {
+			isa = PBXGroup;
+			children = (
+				D33A25A620CABF19008A94EF /* DeviceList.plist */,
+				D33A25A720CABF19008A94EF /* PresetList.plist */,
+			);
+			path = Res;
+			sourceTree = "<group>";
+		};
 		D39C3C8520BEB4FF00BDC1A0 = {
 			isa = PBXGroup;
 			children = (
 				D39C3C9020BEB4FF00BDC1A0 /* HiFiToy */,
 				D39C3CAC20BEB50000BDC1A0 /* HiFiToyTests */,
 				D39C3C8F20BEB4FF00BDC1A0 /* Products */,
+				D33A25A220CABC9C008A94EF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -300,6 +325,7 @@
 				D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */,
 				D39C3CA220BEB50000BDC1A0 /* Info.plist */,
 				D39C3CA320BEB50000BDC1A0 /* main.m */,
+				D33A25A520CABF19008A94EF /* Res */,
 			);
 			path = HiFiToy;
 			sourceTree = "<group>";
@@ -502,6 +528,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D33A25A820CABF19008A94EF /* DeviceList.plist in Resources */,
+				D33A25A920CABF19008A94EF /* PresetList.plist in Resources */,
 				D39C3CA120BEB50000BDC1A0 /* LaunchScreen.storyboard in Resources */,
 				D39C3C9E20BEB50000BDC1A0 /* Assets.xcassets in Resources */,
 				D39C3C9C20BEB4FF00BDC1A0 /* Main.storyboard in Resources */,

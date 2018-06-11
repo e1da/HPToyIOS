@@ -23,4 +23,10 @@
 - (BOOL) isProgressDialogVisible;
 - (void) dismissProgressDialog;
 - (void) showProgressDialog:(NSString *)title;
+
+- (void) showNewPairCodeInput;
+- (void) showPairCodeInput;
+- (void) showDeviceNameInput;
+
+- (void) showImportPresetDialog;
 @end

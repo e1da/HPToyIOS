@@ -19,8 +19,9 @@ typedef struct{
 typedef struct {
     uint8_t             i2cAddr;
     uint8_t             successWriteFlag;
-    uint32_t            pairingCode;
     uint8_t             dataBufLength;
+    uint8_t             nc;
+    uint32_t            pairingCode;
     DataBufHeader_t     firstDataBuf;
 } HiFiToyPeripheral_t;
 

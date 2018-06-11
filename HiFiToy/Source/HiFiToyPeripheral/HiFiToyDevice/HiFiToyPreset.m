@@ -16,7 +16,12 @@
 @interface HiFiToyPreset(){
     XmlParserWrapper * xmlParser;
     int count;
+    
+    int paramAddress;
 }
+
+- (void) getParamData:(NSNotification*)notification;
+
 @end
 
 @implementation HiFiToyPreset
@@ -117,6 +122,8 @@
     //Loudness
     Biquad * loudnessBiquad = [Biquad initWithAddress:LOUDNESS_BIQUAD_REG Order:BIQUAD_ORDER_2 Type:BIQUAD_BANDPASS
                                                  Freq:140 Qfac:0.0 dbVolume:0.0];
+    [loudnessBiquad setBorderMaxFreq:250 minFreq:10];
+    
     self.loudness = [Loudness initWithOrder:loudnessBiquad LG:0.0 LO:0.0 Gain:0.0 Offset:0.0];
     
     
@@ -139,8 +146,8 @@
     [self.drc setEnabled:1.0 forChannel:0];
     [self.drc setEnabled:1.0 forChannel:1];
     
-    [self updateChecksum];
     [self initCharacteristicsPointer];
+    [self updateChecksum];
 }
 
 + (HiFiToyPreset *) initDefaultPreset
@@ -221,6 +228,37 @@
     return data;
 }
 
+- (void) importFromHiFiToyPeripheral
+{
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(getParamData:)
+                                                 name: @"GetDataNotification"
+                                               object: nil];
+    
+    paramAddress = 0;
+    [[HiFiToyControl sharedInstance] getDspDataWithOffset:paramAddress];
+}
+
+- (void) getParamData:(NSNotification*)notification
+{
+    //static int length = 0;
+    
+    NSData * paramData = (NSData *)[notification object];
+    
+    if (paramData.length != 20) {
+        [[DialogSystem sharedInstance] showAlert:@"Import preset is not success."];
+        return;
+    }
+    
+    if (paramAddress == 0) {
+        //HiFiToyPeripheral_t * hiFiToyConfig = (HiFiToyPeripheral_t *)paramData.bytes;
+        
+        
+    }
+    
+    
+}
+
 - (BOOL)importData:(NSData *)data {
     BOOL importResult = YES;
     
@@ -267,6 +305,8 @@
     for (int i = 0; i < data.length; i++) {
         sum += d[i];
         fibonacci += sum;
+        
+        printf("%d %x %x\n", i, sum, fibonacci);
     }
     
     _checkSum = sum & 0xFF;

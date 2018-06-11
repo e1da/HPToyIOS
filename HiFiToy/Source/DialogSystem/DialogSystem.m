@@ -7,6 +7,8 @@
 //
 
 #import "DialogSystem.h"
+#import "HiFiToyDeviceList.h"
+#import "HiFiToyControl.h"
 
 @implementation DialogSystem
 
@@ -91,4 +93,198 @@
     
     [navigation.viewControllers.lastObject presentViewController:_progressController animated:YES completion:nil];
 }
+
+- (void) showNewPairCodeInput
+{
+    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+    
+    if (_alertController) {
+        
+        [self dismissAlert];
+        _alertController = nil;
+    }
+    
+    _alertController = [UIAlertController alertControllerWithTitle:@"New pair code"
+                                                           message:NSLocalizedString(@"Please input new pair code!", @"")
+                                                    preferredStyle:UIAlertControllerStyleAlert];
+    [_alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"Old pair code";
+        textField.borderStyle = UITextBorderStyleRoundedRect;
+        textField.keyboardType = UIKeyboardTypeNumberPad;
+    }];
+    [_alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"New pair code";
+        textField.borderStyle = UITextBorderStyleRoundedRect;
+        textField.keyboardType = UIKeyboardTypeNumberPad;
+    }];
+    [_alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"Confirm new pair code";
+        textField.borderStyle = UITextBorderStyleRoundedRect;
+        textField.keyboardType = UIKeyboardTypeNumberPad;
+    }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                          style:UIAlertActionStyleDestructive
+                                                        handler:nil];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                         UITextField *oldPairCode = [self.alertController.textFields objectAtIndex:0];
+                                                         UITextField *newPairCode = [self.alertController.textFields objectAtIndex:1];
+                                                         UITextField *confirmPairCode = [self.alertController.textFields objectAtIndex:2];
+                                                         
+                                                         if (([oldPairCode.text isEqualToString:@""]) ||
+                                                             ([newPairCode.text isEqualToString:@""]) ||
+                                                             ([confirmPairCode.text isEqualToString:@""])) {
+                                                             [self showAlert:@"String is empty. Change pair code is not success."];
+                                                             return;
+                                                         }
+                                                         
+                                                         if (![newPairCode.text isEqualToString:confirmPairCode.text]) {
+                                                             [self showAlert:@"Confirm and New strings are not equal. Change pair code is not success."];
+                                                             return;
+                                                         }
+                                                         
+                                                         HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
+                                                         if (device.pairingCode != [oldPairCode.text intValue]) {
+                                                             [self showAlert:@"Old pair code is not true. Change pair code is not success."];
+                                                             return;
+                                                         }
+                                                         
+                                                         device.pairingCode = [newPairCode.text intValue];
+                                                         [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+                                                     }];
+    
+    [_alertController addAction:cancelAction];
+    [_alertController addAction:okAction];
+    
+    [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
+}
+
+- (void) showPairCodeInput
+{
+    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+    
+    if (_alertController) {
+        
+        [self dismissAlert];
+        _alertController = nil;
+    }
+    
+    _alertController = [UIAlertController alertControllerWithTitle:@"Pair code fail"
+                                                           message:NSLocalizedString(@"Please input valid pair code!", @"")
+                                                    preferredStyle:UIAlertControllerStyleAlert];
+    [_alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"Pair code";
+        textField.borderStyle = UITextBorderStyleRoundedRect;
+        textField.keyboardType = UIKeyboardTypeNumberPad;
+    }];
+
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleDestructive
+                                                         handler:nil];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                         UITextField *pairCode = self.alertController.textFields.lastObject;
+                                                         
+                                                         if (![pairCode.text isEqualToString:@""]) {
+                                                             HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
+                                                             device.pairingCode = [pairCode.text intValue];
+                                                             [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+                                                             
+                                                             //send pairing code
+                                                             [[HiFiToyControl sharedInstance] startPairedProccess:device.pairingCode];
+                                                         } else {
+                                                             [navigation.viewControllers.lastObject presentViewController:self.alertController animated:YES completion:nil];
+                                                         }
+                                                     }];
+    
+    [_alertController addAction:cancelAction];
+    [_alertController addAction:okAction];
+    
+    [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
+}
+
+- (void) showDeviceNameInput
+{
+    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+    
+    if (_alertController) {
+        
+        [self dismissAlert];
+        _alertController = nil;
+    }
+    
+    _alertController = [UIAlertController alertControllerWithTitle:@"Device name"
+                                                           message:NSLocalizedString(@"Please input new device name!", @"")
+                                                    preferredStyle:UIAlertControllerStyleAlert];
+    [_alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        //textField.keyboardType = UIKeyboardTypeNumberPad;
+        HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
+        textField.text = device.name;
+    }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleDestructive
+                                                         handler:nil];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                         UITextField *name = self.alertController.textFields.firstObject;
+                                                         if (![name.text isEqualToString:@""]) {
+                                                             HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
+                                                             device.name = name.text;
+                                                             
+                                                             [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+                                                             
+                                                         } else {
+                                                             [navigation.viewControllers.lastObject presentViewController:self.alertController animated:YES completion:nil];
+                                                         }
+                                                     }];
+    
+    [_alertController addAction:cancelAction];
+    [_alertController addAction:okAction];
+    
+    [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
+}
+
+- (void) showImportPresetDialog
+{
+    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+    
+    if (_alertController) {
+        
+        [self dismissAlert];
+        _alertController = nil;
+    }
+    
+    _alertController = [UIAlertController alertControllerWithTitle:@"Preset info"
+                                                           message:NSLocalizedString(@"Import preset from HiFi Toy?", @"")
+                                                    preferredStyle:UIAlertControllerStyleAlert];
+    
+    HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
+    
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleDestructive
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             [preset saveToHiFiToyPeripheral];
+                                                         }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                         
+                                                         HiFiToyPreset * tempPreset = [preset copy];
+                                                         [tempPreset importFromHiFiToyPeripheral];
+                                
+                                                     }];
+    
+    [_alertController addAction:cancelAction];
+    [_alertController addAction:okAction];
+    
+    [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
+}
+
 @end

@@ -11,6 +11,7 @@
 #import "DeviceNameViewController.h"
 #import "PairingCodeViewController.h"
 #import "PresetViewController.h"
+#import "DialogSystem.h"
 
 @implementation OptionsViewController
 
@@ -64,6 +65,12 @@
 {
     
     if (indexPath.section == 0){
+        if (indexPath.row == 0){//change pairing code
+            
+            [[DialogSystem sharedInstance] showDeviceNameInput];
+            [self setupOutlets];
+        }
+        
         if (indexPath.row == 2){//restore factory settings
             
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"", @"")
@@ -87,6 +94,10 @@
             [alertController addAction:okAction];
             
             [self presentViewController:alertController animated:YES completion:nil];
+        }
+        if (indexPath.row == 3){//change pairing code
+            
+            [[DialogSystem sharedInstance] showNewPairCodeInput];
         }
         
     }

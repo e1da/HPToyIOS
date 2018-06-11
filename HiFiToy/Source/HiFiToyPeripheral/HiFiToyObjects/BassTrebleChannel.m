@@ -64,6 +64,11 @@
     copyBassTrebleChannel.trebleFreq   = self.trebleFreq;
     copyBassTrebleChannel.trebleDb     = self.trebleDb;
     
+    copyBassTrebleChannel.maxBassDb    = self.maxBassDb;
+    copyBassTrebleChannel.minBassDb    = self.minBassDb;
+    copyBassTrebleChannel.maxTrebleDb  = self.maxTrebleDb;
+    copyBassTrebleChannel.minTrebleDb  = self.minTrebleDb;
+    
     return copyBassTrebleChannel;
 }
 

@@ -53,7 +53,7 @@
         [bleDriver disconnectPeripheral];
 
     }
-    [bleDriver findBLEPeripheralsWithName:@"HiFiToy"];
+    [bleDriver findBLEPeripheralsWithName:@"HiFiToyPeripheral"];
 }
 
 - (void) stopDiscovery
@@ -126,6 +126,16 @@
     [self sendDataToDsp:data withResponse:YES];
 }
 
+- (void) setInitDsp
+{
+    TestPacket_t packet;
+    
+    packet.cmd = INIT_DSP;
+    
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(TestPacket_t)];
+    [self sendDataToDsp:data withResponse:YES];
+}
+
 - (void) sendDSPConfig:(NSData *)data
 {
     if (![self isConnected]) return;
@@ -150,11 +160,19 @@
     for (int i = 0; i < sendDataLength; i += 16){
         //send word offset and data bytes
         [self send16BytesWithOffset:(i >> 2) data:&sendData[i]];
+        
+        /*for (int u = 0; u < 16; u++){
+            printf("%02x ", sendData[i + u]);
+            
+        }
+        printf("\n");*/
     }
     free(sendData);
     
     //set write_flag = 1, i.e write is success
     [self sendWriteFlag:1];
+    //
+    [self setInitDsp];
 }
 
 
@@ -327,6 +345,7 @@
                     
                     NSLog(@"PAIR_NO");
                     //show input pair alert
+                    [[DialogSystem sharedInstance] showPairCodeInput];
                 }
                 break;
                 
@@ -349,15 +368,24 @@
                 } else {
                     NSLog(@"CHECK_FIRMWARE_FAIL");
                     
-                    [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Dsp Firmware is corrupted! Press 'Restore Factory Seetings' for solving problem!", @"")];
+                    /*[[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Dsp Firmware is corrupted! Press 'Restore Factory Settings' for solving problem!", @"")];*/
+                    HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
+                    [device setActiveKeyPreset:@"DefaultPreset"];
+                    HiFiToyPreset * preset = [device getActivePreset];
+                    
+                    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+                    
+                    [preset saveToHiFiToyPeripheral];
+                    
                 }
                 break;
                 
             case GET_CHECKSUM:
-                NSLog(@"GET_CHECKSUM_OK");
+                NSLog(@"GET_CHECKSUM");
                 uint16_t checksum = 0;
                 memcpy(&checksum, data + 1, 2);
                 
+                [self comparePreset:checksum];
                 
                 break;
             case CLIP_DETECTION:
@@ -375,6 +403,18 @@
     } else if (value.length == 20) {
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"GetDataNotification" object:value];
+    }
+}
+
+-(void) comparePreset:(uint16_t) checksum
+{
+    HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
+    NSLog(@"Checksum app preset = %x, Peripheral preset = %x", preset.checkSum, checksum);
+    
+    if (preset.checkSum != checksum) {
+        [[DialogSystem sharedInstance] showImportPresetDialog];
+    } else {
+        NSLog(@"Import and current presets are equals!");
     }
 }
 

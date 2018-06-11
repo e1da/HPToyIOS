@@ -15,4 +15,6 @@
     HiFiToyDeviceList * hiFiToyDeviceList;
 }
 
+- (void) keyfobDidFound;
+
 @end

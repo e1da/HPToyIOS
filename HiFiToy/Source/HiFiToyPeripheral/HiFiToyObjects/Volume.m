@@ -89,7 +89,7 @@
     currentInstance.address = address;
     
     if (maxDb > HW_MAX_DB) maxDb = HW_MAX_DB;
-    if (minDb > HW_MIN_DB) minDb = HW_MIN_DB;
+    if (minDb < HW_MIN_DB) minDb = HW_MIN_DB;
     currentInstance.maxDb = maxDb;
     currentInstance.minDb = minDb;
     

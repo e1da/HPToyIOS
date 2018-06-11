@@ -51,5 +51,45 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>HiFiToy used bluetooth. </string>
+
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string></string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>HiFiToy preset data type</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>$(PRODUCT_NAME:rfc1034identifier).tpr</string>
+			</array>
+		</dict>
+	</array>
+
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.text</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>HiFiToy file extension</string>
+			<key>UTTypeIdentifier</key>
+			<string>$(PRODUCT_NAME:rfc1034identifier).tpr</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>tpr</string>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>
