@@ -23,6 +23,7 @@ typedef enum : uint8_t {
     BIQUAD_BANDPASS     = 5
 } BiquadType_t;
 
+#pragma pack(1)
 typedef struct {
     BiquadOrder_t   order;
     BiquadType_t    type;
@@ -35,7 +36,7 @@ typedef struct {
     uint8_t         addr;    //0x00
     Biquad_t        biquad;  //0x01
 } BiquadPacket_t;   //size = 13
-
+#pragma options align=reset
 
 @interface Biquad : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
 

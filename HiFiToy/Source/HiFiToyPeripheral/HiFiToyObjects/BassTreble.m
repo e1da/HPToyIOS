@@ -313,7 +313,7 @@
             enabledCh[dataBufHeader->addr - BASS_TREBLE_REG] = (float)reverseNumber523(e[1]) / 0x800000;
         }
         
-        dataBufHeader += sizeof(DataBufHeader_t) + dataBufHeader->length;
+        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
     }
     
     return importFlag;

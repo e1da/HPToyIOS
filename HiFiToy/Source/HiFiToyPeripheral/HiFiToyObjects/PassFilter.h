@@ -12,17 +12,18 @@
 
 typedef BiquadType_t PassFilterType_t;
 
-typedef enum {
+typedef enum : uint8_t{
     BIQUAD_LENGTH_2, BIQUAD_LENGTH_4
 } BiquadLength_t;
 
-typedef enum {
+typedef enum : uint8_t{
     FILTER_ORDER_2 = 1,
     FILTER_ORDER_4 = 2,
     FILTER_ORDER_8 = 3
 } PassFilterOrder_t;
 
-typedef struct{
+#pragma pack(1)
+typedef struct {
     PassFilterOrder_t   order;
     PassFilterType_t    type;
     uint16_t freq;
@@ -33,6 +34,7 @@ typedef struct {
     uint8_t             biquadLength;   //0x01, val = 1, 2, 4
     PassFilter_t        filter;         //0x02
 } PassFilterPacket_t;                   //size == 6
+#pragma options align=reset
 
 @interface PassFilter : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
 

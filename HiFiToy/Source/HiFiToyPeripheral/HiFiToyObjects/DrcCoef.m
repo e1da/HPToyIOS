@@ -263,7 +263,7 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
             NSLog(@"import drc coef");
             return YES;
         }
-        dataBufHeader += sizeof(DataBufHeader_t) + dataBufHeader->length;
+        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
     }
     
     return NO;

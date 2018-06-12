@@ -16,14 +16,17 @@ typedef struct{
     uint8_t length;    // [byte] unit
 } DataBufHeader_t;
 
+#pragma pack(1)
 typedef struct {
     uint8_t             i2cAddr;
     uint8_t             successWriteFlag;
-    uint8_t             dataBufLength;
-    uint8_t             nc;
+    uint16_t            dataBufLength;
+    uint16_t            dataBytesLength;
+    uint8_t             nc[2];
     uint32_t            pairingCode;
     DataBufHeader_t     firstDataBuf;
 } HiFiToyPeripheral_t;
+#pragma options align=reset
 
 
 @protocol HiFiToyObject

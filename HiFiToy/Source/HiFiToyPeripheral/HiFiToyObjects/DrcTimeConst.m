@@ -218,7 +218,7 @@ static float uint32ToTimeMS(uint32_t time) {
             importCount++;
             if (importCount >= 2) break;
         }
-        dataBufHeader += sizeof(DataBufHeader_t) + dataBufHeader->length;
+        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
     }
     
     if (importCount == 2) {

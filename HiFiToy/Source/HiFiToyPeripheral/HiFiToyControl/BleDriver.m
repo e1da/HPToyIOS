@@ -410,7 +410,7 @@
     
     UInt16 characteristicUUID = [self CBUUIDToInt:characteristic.UUID];
     
-    if ((characteristicUUID == 0xFFF3) || (characteristicUUID == 0xFFF3)) {
+    if ((characteristicUUID == 0xFFF3) || (characteristicUUID == 0xFFF4)) {
         if (self.communicationDelegate){
             [self.communicationDelegate keyfobDidUpdateValue:characteristic.value];
         }

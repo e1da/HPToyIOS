@@ -235,13 +235,17 @@
                                                  name: @"GetDataNotification"
                                                object: nil];
     
+    //show import dialog
+    [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Import Preset...", @"")];
+    
     paramAddress = 0;
     [[HiFiToyControl sharedInstance] getDspDataWithOffset:paramAddress];
 }
 
 - (void) getParamData:(NSNotification*)notification
 {
-    //static int length = 0;
+    static uint8_t * data;
+    static int length = 0;
     
     NSData * paramData = (NSData *)[notification object];
     
@@ -251,12 +255,42 @@
     }
     
     if (paramAddress == 0) {
-        //HiFiToyPeripheral_t * hiFiToyConfig = (HiFiToyPeripheral_t *)paramData.bytes;
+        HiFiToyPeripheral_t * hiFiToyConfig = (HiFiToyPeripheral_t *)paramData.bytes;
+        length = hiFiToyConfig->dataBytesLength;
         
-        
+        if (data) free(data);
+        data = malloc(length);
     }
     
+    if (length > 20) {
+        memcpy(&data[paramAddress], paramData.bytes, 20);
+        paramAddress += 20;
+    } else {
+        memcpy(&data[paramAddress], paramData.bytes, length);
+        paramAddress += length;
+    }
     
+    DialogSystem * dialog = [DialogSystem sharedInstance];
+    if ([dialog isProgressDialogVisible]) {
+        dialog.progressController.message = [NSString stringWithFormat:@"Left %d packets.", length / 20];
+    }
+    
+    length -= 20;
+    if (length > 0) {
+        
+        [[HiFiToyControl sharedInstance] getDspDataWithOffset:paramAddress];
+    } else {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        
+        if ([dialog isProgressDialogVisible]) {
+            [dialog dismissProgressDialog];
+        }
+        
+        NSData * d = [NSData dataWithBytes:data length:paramAddress];
+        [self importData:d];
+        free(data);
+    }
+  
 }
 
 - (BOOL)importData:(NSData *)data {
@@ -283,6 +317,7 @@
         [[HiFiToyPresetList sharedInstance] updatePreset:self withKey:self.presetName];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"PresetImportNotification" object:self];
+        
     } else {
         [[DialogSystem sharedInstance] showAlert:@"Import preset is not success!"];
     }
@@ -306,7 +341,7 @@
         sum += d[i];
         fibonacci += sum;
         
-        printf("%d %x %x\n", i, sum, fibonacci);
+        //printf("%d %x %x\n", i, sum, fibonacci);
     }
     
     _checkSum = sum & 0xFF;

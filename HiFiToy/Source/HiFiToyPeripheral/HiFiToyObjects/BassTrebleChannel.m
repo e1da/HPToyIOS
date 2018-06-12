@@ -38,15 +38,17 @@
     self = [super init];
     if (self) {
         self.channel    = [decoder decodeIntForKey:@"keyChannel"];
-        self.bassFreq   = [decoder decodeIntForKey:@"keyBassFreq"];
-        self.bassDb     = [decoder decodeIntForKey:@"keyBassDb"];
-        self.trebleFreq = [decoder decodeIntForKey:@"keyTrebleFreq"];
-        self.trebleDb   = [decoder decodeIntForKey:@"keyTrebleDb"];
         
         self.maxBassDb      = [decoder decodeIntForKey:@"keyMaxBassDb"];
         self.minBassDb      = [decoder decodeIntForKey:@"keyMinBassDb"];
         self.maxTrebleDb    = [decoder decodeIntForKey:@"keyMaxTrebleDb"];
         self.minTrebleDb    = [decoder decodeIntForKey:@"keyMinTrebleDb"];
+        
+        self.bassFreq   = [decoder decodeIntForKey:@"keyBassFreq"];
+        self.bassDb     = [decoder decodeIntForKey:@"keyBassDb"];
+        self.trebleFreq = [decoder decodeIntForKey:@"keyTrebleFreq"];
+        self.trebleDb   = [decoder decodeIntForKey:@"keyTrebleDb"];
+    
     }
     return self;
 }
@@ -59,15 +61,16 @@
     BassTrebleChannel * copyBassTrebleChannel = [[[self class] allocWithZone:zone] init];
     
     copyBassTrebleChannel.channel      = self.channel;
-    copyBassTrebleChannel.bassFreq     = self.bassFreq;
-    copyBassTrebleChannel.bassDb       = self.bassDb;
-    copyBassTrebleChannel.trebleFreq   = self.trebleFreq;
-    copyBassTrebleChannel.trebleDb     = self.trebleDb;
     
     copyBassTrebleChannel.maxBassDb    = self.maxBassDb;
     copyBassTrebleChannel.minBassDb    = self.minBassDb;
     copyBassTrebleChannel.maxTrebleDb  = self.maxTrebleDb;
     copyBassTrebleChannel.minTrebleDb  = self.minTrebleDb;
+    
+    copyBassTrebleChannel.bassFreq     = self.bassFreq;
+    copyBassTrebleChannel.bassDb       = self.bassDb;
+    copyBassTrebleChannel.trebleFreq   = self.trebleFreq;
+    copyBassTrebleChannel.trebleDb     = self.trebleDb;
     
     return copyBassTrebleChannel;
 }

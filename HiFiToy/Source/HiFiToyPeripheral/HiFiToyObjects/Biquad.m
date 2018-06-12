@@ -484,7 +484,7 @@
             importFlag = YES;
             break;
         }
-        dataBufHeader += sizeof(DataBufHeader_t) + dataBufHeader->length;
+        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
     }
     
     if (importFlag == NO) {

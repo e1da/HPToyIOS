@@ -265,7 +265,7 @@
                                                     preferredStyle:UIAlertControllerStyleAlert];
     
     HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
-    
+    HiFiToyPreset * tempPreset = [preset copy];
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
                                                            style:UIAlertActionStyleDestructive
@@ -276,7 +276,7 @@
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * _Nonnull action) {
                                                          
-                                                         HiFiToyPreset * tempPreset = [preset copy];
+                                                         
                                                          [tempPreset importFromHiFiToyPeripheral];
                                 
                                                      }];

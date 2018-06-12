@@ -44,14 +44,10 @@
 {
     [super viewDidLoad];
     
-    /*[[NSNotificationCenter defaultCenter] addObserver:self
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didGetPresetImportNotification:)
                                                  name:@"PresetImportNotification"
                                                object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didGetPresetImportFailNotification:)
-                                                 name:@"PresetImportFailNotification"
-                                               object:nil];*/
     
     hiFiToyControl = [HiFiToyControl sharedInstance];
 }
@@ -256,6 +252,22 @@
     } else if (*freq > 100){
         *freq = *freq / 10 * 10;
     }
+}
+
+/*-----------------------------------------------------------------------------------------
+ didGetPresetImportNotification
+ -----------------------------------------------------------------------------------------*/
+-(void) didGetPresetImportNotification:(NSNotification*)notification
+{
+    NSLog(@"Preset import notification! [MainViewController]");
+    
+    HiFiToyPreset * preset = (HiFiToyPreset *)[notification object];
+    //set import preset to active in device and save
+    hiFiToyDevice.activeKeyPreset = preset.presetName;
+    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+    hiFiToyPreset = [hiFiToyDevice getActivePreset];
+    
+    [self setupOutlets];
 }
 
 @end

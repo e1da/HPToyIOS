@@ -15,9 +15,6 @@
 @interface DiscoveryViewController(){
     //UIAlertView *connectingAlert;
     
-    HiFiToyPreset * hiFiToyPreset;
-    HiFiToyPreset * tempPreset;
-    
     HiFiToyDevice * hiFiToyDevice;
 }
 
@@ -71,10 +68,6 @@
     /*[[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didGetPresetImportNotification:)
                                                  name:@"PresetImportNotification"
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didGetPresetImportFailNotification:)
-                                                 name:@"PresetImportFailNotification"
                                                object:nil];*/
     
     
@@ -246,7 +239,7 @@
 
 - (void) showHint:(UIButton *)button
 {
-    NSString * msgString = @"This window shows all available online iWoofer devices, which you may choose to control. Also you can rename UUID number for any simple name in the Options/Name menu.";
+    NSString * msgString = @"This window shows all available online HiFi Toy devices, which you may choose to control. Also you can rename UUID number for any simple name in the Options/Name menu.";
     
     [[DialogSystem sharedInstance] showAlert:msgString];
 }

@@ -178,7 +178,7 @@
             self.db = 18.0 - v * 0.25;
             return YES;
         }
-        dataBufHeader += sizeof(DataBufHeader_t) + dataBufHeader->length;
+        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
     }
     
     return NO;

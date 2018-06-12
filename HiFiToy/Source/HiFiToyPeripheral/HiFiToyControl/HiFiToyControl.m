@@ -148,16 +148,16 @@
     hiFiToyConfig.successWriteFlag = 0x00; //must be assign '0' before sendFactorySettings
     hiFiToyConfig.pairingCode = 0;
     hiFiToyConfig.dataBufLength = [self getDataBufLength:data];
+    hiFiToyConfig.dataBytesLength = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + data.length;
     
-    uint16_t sendDataLength = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + data.length;
-    uint8_t * sendData = malloc(sendDataLength);
+    uint8_t * sendData = malloc(hiFiToyConfig.dataBytesLength);
     
     memcpy(sendData, &hiFiToyConfig, sizeof(HiFiToyPeripheral_t));
     memcpy(sendData + offsetof(HiFiToyPeripheral_t, firstDataBuf), data.bytes, data.length);
     
     
     //send data
-    for (int i = 0; i < sendDataLength; i += 16){
+    for (int i = 0; i < hiFiToyConfig.dataBytesLength; i += 16){
         //send word offset and data bytes
         [self send16BytesWithOffset:(i >> 2) data:&sendData[i]];
         
@@ -314,7 +314,8 @@
     DialogSystem * dialog = [DialogSystem sharedInstance];
     
     if (remainPacketLength != 0){// if queue isn`t empty
-        if ([dialog isProgressDialogVisible]) {
+        if (([dialog isProgressDialogVisible]) &&
+            (![dialog.progressController.title isEqualToString:NSLocalizedString(@"Import Preset...", @"")])) {
             dialog.progressController.message = [NSString stringWithFormat:@"Left %d packets.", remainPacketLength];
         }
     } else {
