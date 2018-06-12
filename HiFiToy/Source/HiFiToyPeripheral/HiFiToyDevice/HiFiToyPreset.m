@@ -28,7 +28,7 @@
 
 - (void) initCharacteristicsPointer
 {
-    _characteristics = [NSArray arrayWithObjects:_masterVolume, _bassTreble, _loudness, _drc, nil];
+    _characteristics = [NSArray arrayWithObjects:_param, _masterVolume, _bassTreble, _loudness, _drc, nil];
 }
 
 //NSCoding protocol implementation
@@ -37,6 +37,7 @@
     [encoder encodeInt64:self.checkSum forKey:@"checkSum"];
     
     //Characteristics
+    [encoder encodeObject:self.param forKey:@"Parametric"];
     [encoder encodeObject:self.masterVolume forKey:@"MasterVolume"];
     [encoder encodeObject:self.bassTreble forKey:@"BassTreble"];
     [encoder encodeObject:self.loudness forKey:@"Loudness"];
@@ -50,6 +51,7 @@
         self.checkSum = [decoder decodeInt64ForKey:@"checkSum"];
         
         //Characteristics
+        self.param = [decoder decodeObjectForKey:@"Parametric"];
         self.masterVolume = [decoder decodeObjectForKey:@"MasterVolume"];
         self.bassTreble = [decoder decodeObjectForKey:@"BassTreble"];
         self.loudness = [decoder decodeObjectForKey:@"Loudness"];
@@ -72,6 +74,7 @@
     copyPreset.presetName = [self.presetName copy];
     copyPreset.checkSum = self.checkSum;
     
+    copyPreset.param = [self.param copy];
     copyPreset.masterVolume = [self.masterVolume copy];
     copyPreset.bassTreble = [self.bassTreble copy];
     copyPreset.loudness = [self.loudness copy];
@@ -88,7 +91,8 @@
     if ([object class] == [self class]){
         HiFiToyPreset * temp = object;
         
-        if (([self.masterVolume isEqual:temp.masterVolume] == NO) ||
+        if (([self.param isEqual:temp.param] == NO) ||
+            ([self.masterVolume isEqual:temp.masterVolume] == NO) ||
             ([self.bassTreble isEqual:temp.bassTreble] == NO) ||
             ([self.loudness isEqual:temp.loudness] == NO) ||
             ([self.drc isEqual:temp.drc] == NO)) {
@@ -104,6 +108,24 @@
 //creation method
 - (void) loadDefaultPreset{
     self.presetName = @"DefaultPreset";
+    
+    //Parametric biquads
+    if (!self.param){
+        self.param = [[BiquadContainer alloc] init];
+    } else {
+        [self.param clear];
+    }
+    
+    for (uint i = 0; i < 7; i++){
+        Biquad * biquad = [Biquad initWithAddress0:BIQUAD_FILTER_REG + i
+                                          Address1:BIQUAD_FILTER_REG + 7 + i
+                                             Order:BIQUAD_ORDER_2
+                                              Type:(i == 0) ? BIQUAD_PARAMETRIC : BIQUAD_DISABLED
+                                              Freq:100 Qfac:1.41 dbVolume:0.0];
+        [biquad setBorderMaxFreq:20000 minFreq:20];
+        
+        [self.param addBiquad:biquad];
+    }
     
     //Master Volume
     self.masterVolume = [Volume initWithAddress:MASTER_VOLUME_REG dbValue:0.0];

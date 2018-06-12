@@ -11,6 +11,7 @@
 #import "BassTreble.h"
 #import "Loudness.h"
 #import "Drc.h"
+#import "BiquadContainer.h"
 
 @interface HiFiToyPreset : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
 
@@ -22,10 +23,11 @@
 //pointer to all characteristics
 @property (nonatomic) NSArray *     characteristics;
 
-@property (nonatomic) Volume *      masterVolume;
-@property (nonatomic) BassTreble *  bassTreble;
-@property (nonatomic) Loudness *    loudness;
-@property (nonatomic) Drc *         drc;
+@property (nonatomic) BiquadContainer *     param;
+@property (nonatomic) Volume *              masterVolume;
+@property (nonatomic) BassTreble *          bassTreble;
+@property (nonatomic) Loudness *            loudness;
+@property (nonatomic) Drc *                 drc;
 
 - (void) initCharacteristicsPointer;
 

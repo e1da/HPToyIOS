@@ -7,7 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "HiFiToyObject.h"
+#import "Biquad.h"
 
-@interface BiquadContainer : NSObject
+@interface BiquadContainer : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
+
+//getters/setters
+- (int) count;
+- (void) addBiquad:(Biquad *)biquad;
+- (Biquad *) biquadAtIndex:(NSUInteger)index;
+- (void) clear;
+//- (void) setBiquadContainer:(BiquadContainer *) biquadContainer;
+
+//enabled methods
+- (void) setEnabled:(BOOL)enabled;
+- (BOOL) isEnabled;
+- (BOOL) isActive;
 
 @end

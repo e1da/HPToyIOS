@@ -33,14 +33,15 @@ typedef struct {
 } Biquad_t;
 
 typedef struct {
-    uint8_t         addr;    //0x00
-    Biquad_t        biquad;  //0x01
-} BiquadPacket_t;   //size = 13
+    uint8_t         addr[2]; //0x00
+    Biquad_t        biquad;  //0x02
+} BiquadPacket_t;   //size = 14
 #pragma options align=reset
 
 @interface Biquad : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
 
-@property (nonatomic)   int     address;
+@property (nonatomic)   int     address0;
+@property (nonatomic)   int     address1; //if == 0 then off else stereo (2nd channel)
 
 @property (nonatomic)   BiquadOrder_t   order;
 @property (nonatomic)   BiquadType_t    type;
@@ -62,6 +63,14 @@ typedef struct {
                           Freq:(int)freq
                           Qfac:(double)qFac
                       dbVolume:(double) dbVolume;
+
++ (Biquad *)initWithAddress0:(int)address0
+                    Address1:(int)address1
+                      Order:(BiquadOrder_t)order
+                       Type:(BiquadType_t)type
+                       Freq:(int)freq
+                       Qfac:(double)qFac
+                   dbVolume:(double) dbVolume;
 
 /*-----------------------------------------------------------------------------------------
  Math Calculation

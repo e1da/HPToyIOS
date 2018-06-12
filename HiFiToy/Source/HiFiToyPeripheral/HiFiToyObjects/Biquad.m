@@ -46,7 +46,8 @@
  NSCoding protocol implementation
  ==========================================================================================*/
 - (void) encodeWithCoder:(NSCoder *)encoder {
-    [encoder encodeInt:self.address forKey:@"keyAddress"];
+    [encoder encodeInt:self.address0 forKey:@"keyAddress0"];
+    [encoder encodeInt:self.address1 forKey:@"keyAddress1"];
     
     [encoder encodeInt:self.maxFreq forKey:@"keyMaxFreq"];
     [encoder encodeInt:self.minFreq forKey:@"keyMinFreq"];
@@ -66,7 +67,8 @@
 - (id)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if (self) {
-        self.address = [decoder decodeIntForKey:@"keyAddress"];
+        self.address0 = [decoder decodeIntForKey:@"keyAddress0"];
+        self.address1 = [decoder decodeIntForKey:@"keyAddress1"];
         
         self.maxFreq = [decoder decodeIntForKey:@"keyMaxFreq"];
         self.minFreq = [decoder decodeIntForKey:@"keyMinFreq"];
@@ -93,7 +95,8 @@
 {
     Biquad * copyBiquad = [[[self class] allocWithZone:zone] init];
     
-    copyBiquad.address = self.address;
+    copyBiquad.address0 = self.address0;
+    copyBiquad.address1 = self.address1;
     
     copyBiquad.maxFreq = self.maxFreq;
     copyBiquad.minFreq = self.minFreq;
@@ -119,7 +122,8 @@
     if ([object class] == [self class]){
         Biquad * temp = object;
         
-        if ((self.address == temp.address) &&
+        if ((self.address0 == temp.address0) &&
+            (self.address1 == temp.address1) &&
             (self.order == temp.order) &&
             (self.type == temp.type) &&
             (self.freq == temp.freq) &&
@@ -148,9 +152,21 @@
                        Qfac:(double)qFac
                    dbVolume:(double) dbVolume
 {
+    return [Biquad initWithAddress0:address Address1:0 Order:order Type:type Freq:freq Qfac:qFac dbVolume:dbVolume];
+}
+
++ (Biquad *)initWithAddress0:(int)address0
+                    Address1:(int)address1
+                       Order:(BiquadOrder_t)order
+                        Type:(BiquadType_t)type
+                        Freq:(int)freq
+                        Qfac:(double)qFac
+                    dbVolume:(double) dbVolume
+{
     Biquad *currentInstance = [[Biquad alloc] init];
     
-    currentInstance.address = address;
+    currentInstance.address0 = address0;
+    currentInstance.address1 = address1;
     
     currentInstance.order = order;
     currentInstance.type = type;
@@ -161,6 +177,10 @@
     return currentInstance;
 }
 
+- (uint8_t)address {
+    return self.address0;
+    
+}
 /*-----------------------------------------------------------------------------------------
  Math Calculation
  -----------------------------------------------------------------------------------------*/
@@ -335,7 +355,8 @@
 {
     BiquadPacket_t packet;
     
-    packet.addr             = self.address;
+    packet.addr[0]          = self.address0;
+    packet.addr[1]          = self.address1;
     packet.biquad.order     = self.order;
     packet.biquad.type      = self.type;
     packet.biquad.q         = self.qFac;
@@ -450,7 +471,7 @@
     }
     
     DataBufHeader_t dataBufHeader;
-    dataBufHeader.addr = self.address;
+    dataBufHeader.addr = self.address0;
     dataBufHeader.length = 20;
     
     NSMutableData *data = [[NSMutableData alloc] init];
@@ -458,6 +479,12 @@
     
     Number523_t coefs[5] = {to523(b0), to523(b1), to523(b2), to523(a1), to523(a2)}; // !!!maybe need reverse
     [data appendBytes:coefs length:20];
+    
+    if (self.address1) {
+        dataBufHeader.addr = self.address1;
+        [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
+        [data appendBytes:coefs length:20];
+    }
     
     return data;
 }
@@ -472,7 +499,7 @@
     DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
     
     for (int i = 0; i < HiFiToy->dataBufLength; i++) {
-        if ((dataBufHeader->addr == self.address) && (dataBufHeader->length == 20)){
+        if ((dataBufHeader->addr == self.address0) && (dataBufHeader->length == 20)){
             
             Number523_t * number = (Number523_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
             b0 = _523toFloat(number[0]); //!!!maybe need reverse
@@ -617,7 +644,8 @@
     
     XmlData * biquadXmlData = [[XmlData alloc] init];
     NSDictionary * dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                           [[NSNumber numberWithInt:self.address] stringValue], @"Address", nil];
+                           [[NSNumber numberWithInt:self.address0] stringValue], @"Address0",
+                           [[NSNumber numberWithInt:self.address1] stringValue], @"Address1", nil];
     
     
     [biquadXmlData addElementWithName:@"Biquad" withXmlValue:xmlData withAttrib:dict];
@@ -696,7 +724,7 @@
         if (count != 11){
             xmlParser.error = [NSString stringWithFormat:
                                @"Biquad=%@. Import from xml is not success. ",
-                               [[NSNumber numberWithInt:self.address] stringValue] ];
+                               [[NSNumber numberWithInt:self.address0] stringValue] ];
         }
         NSLog(@"%@", [self getInfo]);
         [xmlParser popDelegate];

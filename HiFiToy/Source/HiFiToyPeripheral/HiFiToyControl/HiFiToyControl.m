@@ -150,6 +150,8 @@
     hiFiToyConfig.dataBufLength = [self getDataBufLength:data];
     hiFiToyConfig.dataBytesLength = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + data.length;
     
+    NSLog(@"Send DSP Config L=%dbytes, B=%dbufs", hiFiToyConfig.dataBytesLength, hiFiToyConfig.dataBufLength);
+    
     uint8_t * sendData = malloc(hiFiToyConfig.dataBytesLength);
     
     memcpy(sendData, &hiFiToyConfig, sizeof(HiFiToyPeripheral_t));
