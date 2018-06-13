@@ -128,7 +128,10 @@
 - (NSString *) getActiveDeviceInfo
 {
     if (_keyActiveDevice) {
-        return [_keyActiveDevice substringFromIndex:(_keyActiveDevice.length - 15)];
+        if (_keyActiveDevice.length > 15) {
+            return [_keyActiveDevice substringFromIndex:(_keyActiveDevice.length - 15)];
+        }
+        return _keyActiveDevice;
     }
     return @"";
 }

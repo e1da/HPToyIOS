@@ -24,6 +24,9 @@
 @property (weak, nonatomic) IBOutlet UISlider *bassSlider_outl;
 @property (weak, nonatomic) IBOutlet UILabel *trebleLabel_outl;
 @property (weak, nonatomic) IBOutlet UISlider *trebleSlider_outl;
+
+@property (weak, nonatomic) IBOutlet UILabel *loudnessGainLabel_outl;
+@property (weak, nonatomic) IBOutlet UISlider *loudnessGainSlider_outl;
 @property (weak, nonatomic) IBOutlet UILabel *loudnessLabel_outl;
 @property (weak, nonatomic) IBOutlet UISlider *loudnessSlider_outl;
 
@@ -31,6 +34,8 @@
 - (IBAction)setGainSlider:(id)sender;
 - (IBAction)setBassSlider:(id)sender;
 - (IBAction)setTrebleSlider:(id)sender;
+
+- (IBAction)setLoudnessGainSlider:(id)sender;
 - (IBAction)setLoudnessSlider:(id)sender;
 
 @end

@@ -82,7 +82,7 @@
     //save data to Document directory
     NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                               NSUserDomainMask, YES) objectAtIndex:0];
-    NSString * filename = [NSString stringWithFormat:@"%@.iwf", self.hiFiToyPreset.presetName];
+    NSString * filename = [NSString stringWithFormat:@"%@.tpr", self.hiFiToyPreset.presetName];
     NSString * presetPath = [rootPath stringByAppendingPathComponent:filename];
     [exportData writeToFile:presetPath atomically:YES];
     

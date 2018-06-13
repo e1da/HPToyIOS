@@ -16,10 +16,13 @@
 
 @property (nonatomic)   float   LG;
 @property (nonatomic)   float   LO;
-@property (nonatomic)   float   gain;
+@property (nonatomic)   float   gain; // 0..1 off/on
 @property (nonatomic)   float   offset;
 
 + (Loudness *)initWithOrder:(Biquad *)biquad LG:(float)LG LO:(float)LO
                        Gain:(float)gain Offset:(float)offset;
+
+
+-(NSString *)getFreqInfo;
 
 @end

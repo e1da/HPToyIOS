@@ -85,9 +85,9 @@
                                                              handler:^(UIAlertAction * _Nonnull action) {
                                                                  
                                                                  HiFiToyControl * control = [HiFiToyControl sharedInstance];
-                                                                 if ([control isConnected]) {
-                                                                    //[control sendFactorySettings];
-                                                                 }
+                                                                 //if ([control isConnected]) {
+                                                                     [control restoreFactorySettings];
+                                                                 //}
                                                             }];
             
             [alertController addAction:cancelAction];

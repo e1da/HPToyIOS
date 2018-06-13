@@ -116,6 +116,16 @@
     [self sendDataToDsp:data withResponse:YES];
 }
 
+- (void) getVersion
+{
+    TestPacket_t packet;
+    
+    packet.cmd = GET_VERSION;
+    
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(TestPacket_t)];
+    [self sendDataToDsp:data withResponse:YES];
+}
+
 - (void) getChecksumParamData
 {
     TestPacket_t packet;
@@ -136,19 +146,31 @@
     [self sendDataToDsp:data withResponse:YES];
 }
 
+- (void) restoreFactorySettings
+{
+    HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
+    [device setActiveKeyPreset:@"DefaultPreset"];
+    HiFiToyPreset * preset = [device getActivePreset];
+    
+    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+    
+    [preset saveToHiFiToyPeripheral];
+}
+
 - (void) sendDSPConfig:(NSData *)data
 {
     if (![self isConnected]) return;
     
     //show progress dialog
     [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Save Configuration", @"")];
-
     
-    hiFiToyConfig.i2cAddr = I2C_ADDR;
-    hiFiToyConfig.successWriteFlag = 0x00; //must be assign '0' before sendFactorySettings
-    hiFiToyConfig.pairingCode = [[HiFiToyDeviceList sharedInstance] getActiveDevice].pairingCode;
-    hiFiToyConfig.dataBufLength = [self getDataBufLength:data];
-    hiFiToyConfig.dataBytesLength = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + data.length;
+    
+    hiFiToyConfig.i2cAddr           = I2C_ADDR;
+    hiFiToyConfig.successWriteFlag  = 0x00; //must be assign '0' before sendFactorySettings
+    hiFiToyConfig.version           = HIFI_TOY_VERSION;
+    hiFiToyConfig.pairingCode       = [[HiFiToyDeviceList sharedInstance] getActiveDevice].pairingCode;
+    hiFiToyConfig.dataBufLength     = [self getDataBufLength:data];
+    hiFiToyConfig.dataBytesLength   = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + data.length;
     
     NSLog(@"Send DSP Config L=%dbytes, B=%dbufs", hiFiToyConfig.dataBytesLength, hiFiToyConfig.dataBufLength);
     
@@ -367,22 +389,30 @@
                 if (status) {
                     NSLog(@"CHECK_FIRMWARE_OK");
                     
-                    [self getChecksumParamData];
+                    [self getVersion];
                 } else {
                     NSLog(@"CHECK_FIRMWARE_FAIL");
                     
                     /*[[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Dsp Firmware is corrupted! Press 'Restore Factory Settings' for solving problem!", @"")];*/
-                    HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
-                    [device setActiveKeyPreset:@"DefaultPreset"];
-                    HiFiToyPreset * preset = [device getActivePreset];
-                    
-                    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-                    
-                    [preset saveToHiFiToyPeripheral];
+                    [self restoreFactorySettings];
                     
                 }
                 break;
+            case GET_VERSION:
+            {
+                uint16_t version;
+                memcpy(&version, data + 1, sizeof(uint16_t));
                 
+                if (version == HIFI_TOY_VERSION) {
+                    NSLog(@"GET_VERSION_OK");
+                    [self getChecksumParamData];
+                } else {
+                    NSLog(@"GET_VERSION_FAIL");
+                    HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
+                    [preset saveToHiFiToyPeripheral];
+                }
+                break;
+            }
             case GET_CHECKSUM:
                 NSLog(@"GET_CHECKSUM");
                 uint16_t checksum = 0;

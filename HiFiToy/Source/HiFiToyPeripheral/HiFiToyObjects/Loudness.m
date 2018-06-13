@@ -122,9 +122,14 @@
 }
 
 //info string
--(NSString *)getInfo
+-(NSString *)getFreqInfo
 {
     return [NSString stringWithFormat:@"%dHz", self.biquad.freq];
+}
+
+-(NSString *)getInfo
+{
+    return [NSString stringWithFormat:@"%d%%", (int)(self.gain * 100)];
 }
 
 //send to dsp
