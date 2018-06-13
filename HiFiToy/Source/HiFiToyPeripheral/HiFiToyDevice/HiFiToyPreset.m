@@ -332,7 +332,11 @@
     [[DialogSystem sharedInstance] dismissProgressDialog];
     
     if (importResult){
-        [self updateChecksumWithParamData:data];
+        //get data without HiFiToyPeripheral header
+        uint8_t * params = (uint8_t *)data.bytes + offsetof(HiFiToyPeripheral_t, firstDataBuf);
+        NSData * paramData = [NSData dataWithBytes:params length:(data.length - offsetof(HiFiToyPeripheral_t, firstDataBuf))];
+        //update checksum preset
+        [self updateChecksumWithParamData:paramData];
         
         //add new import preset to list and save
         [[HiFiToyPresetList sharedInstance] openPresetListFromFile];

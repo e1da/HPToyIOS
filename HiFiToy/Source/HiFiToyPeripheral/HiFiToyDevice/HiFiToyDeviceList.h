@@ -26,5 +26,6 @@
 -(HiFiToyDevice *)setActiveDeviceWithKey:(NSString *) keyDevice;
 
 -(void) description;
+- (NSString *) getActiveDeviceInfo;
 
 @end

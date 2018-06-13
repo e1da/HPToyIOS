@@ -146,7 +146,7 @@
     
     hiFiToyConfig.i2cAddr = I2C_ADDR;
     hiFiToyConfig.successWriteFlag = 0x00; //must be assign '0' before sendFactorySettings
-    hiFiToyConfig.pairingCode = 0;
+    hiFiToyConfig.pairingCode = [[HiFiToyDeviceList sharedInstance] getActiveDevice].pairingCode;
     hiFiToyConfig.dataBufLength = [self getDataBufLength:data];
     hiFiToyConfig.dataBytesLength = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + data.length;
     

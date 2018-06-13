@@ -525,7 +525,13 @@
         [self doubleCompare:a1 withDouble:0.0f]){
         
         self.type = BIQUAD_DISABLED;
+        
+        NSLog(@"Biquad disabled");
         return YES;
+    }
+    
+    if (self.type == BIQUAD_DISABLED) { //bad idea, but worked
+        self.type = BIQUAD_PARAMETRIC;
     }
     
     double arg;
@@ -611,7 +617,8 @@
                  b2 =  0.0f;
                  a1 =  0.0f;
                  a2 =  0.0f;*/
-                return NO;
+                //return NO;
+                NSLog(@"Biquad disabled");
                 break;
         }
     } else {//BIQUAD_ORDER_1

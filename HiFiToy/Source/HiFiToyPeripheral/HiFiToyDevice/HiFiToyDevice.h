@@ -23,5 +23,4 @@
 
 - (HiFiToyPreset *) getActivePreset;
 
-
 @end
