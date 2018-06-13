@@ -39,6 +39,8 @@
 		D33A25A420CABC9C008A94EF /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */; };
 		D33A25A820CABF19008A94EF /* DeviceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A620CABF19008A94EF /* DeviceList.plist */; };
 		D33A25A920CABF19008A94EF /* PresetList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A720CABF19008A94EF /* PresetList.plist */; };
+		D379126320D111B80089962D /* XOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126220D111B80089962D /* XOverViewController.m */; };
+		D379126620D1153F0089962D /* XOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126520D1153F0089962D /* XOverView.m */; };
 		D39C3C9C20BEB4FF00BDC1A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9A20BEB4FF00BDC1A0 /* Main.storyboard */; };
 		D39C3C9E20BEB50000BDC1A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */; };
 		D39C3CA120BEB50000BDC1A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */; };
@@ -123,6 +125,10 @@
 		D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		D33A25A620CABF19008A94EF /* DeviceList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceList.plist; sourceTree = "<group>"; };
 		D33A25A720CABF19008A94EF /* PresetList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PresetList.plist; sourceTree = "<group>"; };
+		D379126120D111B80089962D /* XOverViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XOverViewController.h; sourceTree = "<group>"; };
+		D379126220D111B80089962D /* XOverViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XOverViewController.m; sourceTree = "<group>"; };
+		D379126420D1153F0089962D /* XOverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XOverView.h; sourceTree = "<group>"; };
+		D379126520D1153F0089962D /* XOverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XOverView.m; sourceTree = "<group>"; };
 		D39C3C8E20BEB4FF00BDC1A0 /* HiFiToy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiFiToy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39C3C9B20BEB4FF00BDC1A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -243,6 +249,10 @@
 		D33A258520CA89E7008A94EF /* XOverViewController */ = {
 			isa = PBXGroup;
 			children = (
+				D379126420D1153F0089962D /* XOverView.h */,
+				D379126520D1153F0089962D /* XOverView.m */,
+				D379126120D111B80089962D /* XOverViewController.h */,
+				D379126220D111B80089962D /* XOverViewController.m */,
 			);
 			path = XOverViewController;
 			sourceTree = "<group>";
@@ -552,6 +562,7 @@
 			files = (
 				D33A258220C952CD008A94EF /* FoundCell.m in Sources */,
 				D33A259820CA93B1008A94EF /* PresetViewController.m in Sources */,
+				D379126320D111B80089962D /* XOverViewController.m in Sources */,
 				D33A259B20CA9538008A94EF /* PresetCell.m in Sources */,
 				D33A254320C064A9008A94EF /* TAS5558.h in Sources */,
 				D33A253E20BFF674008A94EF /* Number88.h in Sources */,
@@ -570,6 +581,7 @@
 				D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */,
 				D33A256420C6E173008A94EF /* BlePacket.m in Sources */,
 				D33A254620C140F8008A94EF /* BassTrebleChannel.m in Sources */,
+				D379126620D1153F0089962D /* XOverView.m in Sources */,
 				D33A256D20C80C82008A94EF /* HiFiToyControl.m in Sources */,
 				D39C3CD920BEB8C500BDC1A0 /* XmlData.m in Sources */,
 				D39C3CC620BEB6DC00BDC1A0 /* PassFilter.m in Sources */,

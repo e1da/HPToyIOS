@@ -40,7 +40,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
-                                            <segue destination="FBZ-tn-Uuz" kind="push" identifier="showSubFilterMenu" id="CIx-I1-Z8R"/>
+                                            <segue destination="FBZ-tn-Uuz" kind="push" identifier="showXOverMenu" id="CIx-I1-Z8R"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -797,7 +797,7 @@
         <!--Xovers-->
         <scene sceneID="g0N-ve-iKc">
             <objects>
-                <viewController title="Xovers" id="FBZ-tn-Uuz" sceneMemberID="viewController">
+                <viewController title="Xovers" id="FBZ-tn-Uuz" customClass="XOverViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Cnd-9A-ZoD"/>
                         <viewControllerLayoutGuide type="bottom" id="pVB-cE-G5r"/>

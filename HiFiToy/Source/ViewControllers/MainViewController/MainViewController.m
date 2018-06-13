@@ -10,6 +10,7 @@
 #import "DialogSystem.h"
 #import "PresetViewController.h"
 #import "OptionsViewController.h"
+#import "XOverViewController.h"
 
 @implementation MainViewController
 
@@ -179,29 +180,28 @@
         destination.hiFiToyDevice = hiFiToyDevice;
     }
     
-    /*if ([[segue identifier] isEqualToString:@"showXOverMenu"]) {
+    if ([[segue identifier] isEqualToString:@"showXOverMenu"]) {
         XOverViewController *dest = (XOverViewController * )segue.destinationViewController;
         
-        dest.xOverView.maxFreq = 500;
-        dest.xOverView.minFreq = 20;
+        dest.maxFreq = 30000;
+        dest.minFreq = 20;
         
         if (!dest.dspElements){
             dest.dspElements  = [[NSMutableDictionary alloc] init];
         }
         [dest.dspElements removeAllObjects];
         
-        dspPreset = [self.dspDevice getActivePreset];
+        //[dest.dspElements setObject:dspPreset.FrontHPFilter forKey:@"HP"];
+        //[dest.dspElements setObject:dspPreset.FrontLPFilter forKey:@"LP"];
         
-        [dest.dspElements setObject:dspPreset.SubHPFilter forKey:@"HP"];
-        [dest.dspElements setObject:dspPreset.SubLPFilter forKey:@"LP"];
+        [dest.dspElements setObject:hiFiToyPreset.param forKey:@"PEQS"];
         
-        for (int i = 0; i < [dspPreset.SubParam count]; i++){
+        for (int i = 0; i < [hiFiToyPreset.param count]; i++){
             NSString * keyString = [NSString stringWithFormat:@"EQ#%d", i + 1];
-            [dest.dspElements setObject:[dspPreset.SubParam biquadAtIndex:i] forKey:keyString];
+            [dest.dspElements setObject:[hiFiToyPreset.param biquadAtIndex:i] forKey:keyString];
         }
         
-    }*/
-    
+    }
     
 }
 
