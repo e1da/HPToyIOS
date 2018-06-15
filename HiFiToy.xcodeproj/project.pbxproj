@@ -41,6 +41,14 @@
 		D33A25A920CABF19008A94EF /* PresetList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A720CABF19008A94EF /* PresetList.plist */; };
 		D379126320D111B80089962D /* XOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126220D111B80089962D /* XOverViewController.m */; };
 		D379126620D1153F0089962D /* XOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126520D1153F0089962D /* XOverView.m */; };
+		D379126920D1CC240089962D /* icon167.png in Resources */ = {isa = PBXBuildFile; fileRef = D379126820D1CC240089962D /* icon167.png */; };
+		D379126D20D1CCAE0089962D /* icon120.png in Resources */ = {isa = PBXBuildFile; fileRef = D379126A20D1CCAE0089962D /* icon120.png */; };
+		D379126E20D1CCAE0089962D /* icon152.png in Resources */ = {isa = PBXBuildFile; fileRef = D379126B20D1CCAE0089962D /* icon152.png */; };
+		D379126F20D1CCAE0089962D /* icon76.png in Resources */ = {isa = PBXBuildFile; fileRef = D379126C20D1CCAE0089962D /* icon76.png */; };
+		D379127120D1CEF80089962D /* icon1024.png in Resources */ = {isa = PBXBuildFile; fileRef = D379127020D1CEF80089962D /* icon1024.png */; };
+		D379127320D1D3450089962D /* icon180.png in Resources */ = {isa = PBXBuildFile; fileRef = D379127220D1D3450089962D /* icon180.png */; };
+		D379127720D3C2CE0089962D /* DrcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127620D3C2CE0089962D /* DrcViewController.m */; };
+		D379127A20D3C55B0089962D /* DrcView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127920D3C55B0089962D /* DrcView.m */; };
 		D39C3C9C20BEB4FF00BDC1A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9A20BEB4FF00BDC1A0 /* Main.storyboard */; };
 		D39C3C9E20BEB50000BDC1A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */; };
 		D39C3CA120BEB50000BDC1A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */; };
@@ -129,6 +137,16 @@
 		D379126220D111B80089962D /* XOverViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XOverViewController.m; sourceTree = "<group>"; };
 		D379126420D1153F0089962D /* XOverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XOverView.h; sourceTree = "<group>"; };
 		D379126520D1153F0089962D /* XOverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XOverView.m; sourceTree = "<group>"; };
+		D379126820D1CC240089962D /* icon167.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon167.png; sourceTree = "<group>"; };
+		D379126A20D1CCAE0089962D /* icon120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon120.png; sourceTree = "<group>"; };
+		D379126B20D1CCAE0089962D /* icon152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon152.png; sourceTree = "<group>"; };
+		D379126C20D1CCAE0089962D /* icon76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon76.png; sourceTree = "<group>"; };
+		D379127020D1CEF80089962D /* icon1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon1024.png; sourceTree = "<group>"; };
+		D379127220D1D3450089962D /* icon180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon180.png; sourceTree = "<group>"; };
+		D379127520D3C2CE0089962D /* DrcViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcViewController.h; sourceTree = "<group>"; };
+		D379127620D3C2CE0089962D /* DrcViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcViewController.m; sourceTree = "<group>"; };
+		D379127820D3C55B0089962D /* DrcView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcView.h; sourceTree = "<group>"; };
+		D379127920D3C55B0089962D /* DrcView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcView.m; sourceTree = "<group>"; };
 		D39C3C8E20BEB4FF00BDC1A0 /* HiFiToy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiFiToy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39C3C9B20BEB4FF00BDC1A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -206,6 +224,7 @@
 			children = (
 				D33A258420CA89E6008A94EF /* OptionsViewController */,
 				D33A258520CA89E7008A94EF /* XOverViewController */,
+				D379127420D3C2A60089962D /* DrcViewController */,
 				D33A257620C94852008A94EF /* DiscoveryViewController */,
 				D33A257720C94852008A94EF /* MainViewController */,
 			);
@@ -301,10 +320,35 @@
 		D33A25A520CABF19008A94EF /* Res */ = {
 			isa = PBXGroup;
 			children = (
+				D379126720D1CC240089962D /* icon */,
 				D33A25A620CABF19008A94EF /* DeviceList.plist */,
 				D33A25A720CABF19008A94EF /* PresetList.plist */,
 			);
 			path = Res;
+			sourceTree = "<group>";
+		};
+		D379126720D1CC240089962D /* icon */ = {
+			isa = PBXGroup;
+			children = (
+				D379127220D1D3450089962D /* icon180.png */,
+				D379127020D1CEF80089962D /* icon1024.png */,
+				D379126C20D1CCAE0089962D /* icon76.png */,
+				D379126A20D1CCAE0089962D /* icon120.png */,
+				D379126B20D1CCAE0089962D /* icon152.png */,
+				D379126820D1CC240089962D /* icon167.png */,
+			);
+			path = icon;
+			sourceTree = "<group>";
+		};
+		D379127420D3C2A60089962D /* DrcViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D379127520D3C2CE0089962D /* DrcViewController.h */,
+				D379127620D3C2CE0089962D /* DrcViewController.m */,
+				D379127820D3C55B0089962D /* DrcView.h */,
+				D379127920D3C55B0089962D /* DrcView.m */,
+			);
+			path = DrcViewController;
 			sourceTree = "<group>";
 		};
 		D39C3C8520BEB4FF00BDC1A0 = {
@@ -539,10 +583,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				D33A25A820CABF19008A94EF /* DeviceList.plist in Resources */,
+				D379126F20D1CCAE0089962D /* icon76.png in Resources */,
 				D33A25A920CABF19008A94EF /* PresetList.plist in Resources */,
+				D379127320D1D3450089962D /* icon180.png in Resources */,
+				D379127120D1CEF80089962D /* icon1024.png in Resources */,
 				D39C3CA120BEB50000BDC1A0 /* LaunchScreen.storyboard in Resources */,
+				D379126D20D1CCAE0089962D /* icon120.png in Resources */,
 				D39C3C9E20BEB50000BDC1A0 /* Assets.xcassets in Resources */,
 				D39C3C9C20BEB4FF00BDC1A0 /* Main.storyboard in Resources */,
+				D379126920D1CC240089962D /* icon167.png in Resources */,
+				D379126E20D1CCAE0089962D /* icon152.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,6 +616,7 @@
 				D33A259B20CA9538008A94EF /* PresetCell.m in Sources */,
 				D33A254320C064A9008A94EF /* TAS5558.h in Sources */,
 				D33A253E20BFF674008A94EF /* Number88.h in Sources */,
+				D379127A20D3C55B0089962D /* DrcView.m in Sources */,
 				D33A255E20C6AEBB008A94EF /* HiFiToyDeviceList.m in Sources */,
 				D33A253F20BFF674008A94EF /* Number523.h in Sources */,
 				D33A257420C94459008A94EF /* AppDelegate.m in Sources */,
@@ -573,6 +624,7 @@
 				D33A257A20C94865008A94EF /* DiscoveryViewController.m in Sources */,
 				D33A257D20C94875008A94EF /* MainViewController.m in Sources */,
 				D33A255B20C6AEAA008A94EF /* HiFiToyDevice.m in Sources */,
+				D379127720D3C2CE0089962D /* DrcViewController.m in Sources */,
 				D33A258320C952CD008A94EF /* DemoCell.m in Sources */,
 				D39C3CD220BEB71C00BDC1A0 /* Drc.m in Sources */,
 				D39C3CCF20BEB71200BDC1A0 /* Loudness.m in Sources */,

@@ -154,9 +154,10 @@
     
     //Drc
     DrcCoef * drcCoef17 = [DrcCoef initWithChannel:DRC_CH_1_7
-                                            Point0:initDrcPoint(-100, -100)
-                                            Point1:initDrcPoint(-12, -12)
-                                            Point2:initDrcPoint(0, 0)];
+                                            Point0:initDrcPoint(-96, -96)
+                                            Point1:initDrcPoint(-36, -36)
+                                            Point2:initDrcPoint(0, 0)
+                                            Point3:initDrcPoint(24, 0)];
     DrcCoef * drcCoef8 = [drcCoef17 copy];
     drcCoef8.channel = DRC_CH_8;
     

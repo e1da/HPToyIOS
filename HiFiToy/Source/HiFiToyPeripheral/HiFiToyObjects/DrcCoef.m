@@ -169,6 +169,49 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     return [self initWithChannel:channel Point0:p0 Point1:p1 Point2:p1 Point3:p2];
 }
 
+//setter/getter
+- (void) setPoint0:(DrcPoint_t)point0 {
+    if (point0.outputDb > _point1.outputDb) {
+        point0.outputDb = _point1.outputDb;
+    }
+    
+    _point0.outputDb = point0.outputDb;
+}
+
+- (void) setPoint1:(DrcPoint_t)point1 {
+    if (point1.inputDb > _point2.inputDb) {
+        point1.inputDb = _point2.inputDb;
+    }
+    if (point1.outputDb > _point2.outputDb) {
+        point1.outputDb = _point2.outputDb;
+    }
+    if (point1.outputDb < _point0.outputDb) {
+        point1.outputDb = _point0.outputDb;
+    }
+    _point1 = point1;
+}
+
+- (void) setPoint2:(DrcPoint_t)point2 {
+    if (point2.inputDb < _point1.inputDb) {
+        point2.inputDb = _point1.inputDb;
+    }
+    if (point2.outputDb > _point3.outputDb) {
+        point2.outputDb = _point3.outputDb;
+    }
+    if (point2.outputDb < _point1.outputDb) {
+        point2.outputDb = _point1.outputDb;
+    }
+    _point2 = point2;
+}
+
+- (void) setPoint3:(DrcPoint_t)point3 {
+    if (point3.outputDb < _point2.outputDb) {
+        point3.outputDb = _point2.outputDb;
+    }
+    _point3.outputDb = point3.outputDb;
+}
+
+
 - (uint8_t) address {
     if (self.channel == DRC_CH_8) {
         return DRC2_THRESHOLD_REG;

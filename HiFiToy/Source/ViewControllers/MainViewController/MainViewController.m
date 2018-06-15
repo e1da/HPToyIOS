@@ -107,7 +107,7 @@
             buttonVisibleFlag = YES;
             break;
         case 5:
-            tittleSection = @"DRC CONTROL";
+            tittleSection = @"COMPRESSOR CONTROL";
             buttonVisibleFlag = YES;
             break;
     }
@@ -155,7 +155,7 @@
             msgString = @"Loudness info";
             break;
         case 5://DRC
-            msgString = @"Drc info";
+            msgString = @"Compressor info";
             break;
         default:
             break;
