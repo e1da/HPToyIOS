@@ -130,6 +130,9 @@ static float uint32ToTimeMS(uint32_t time) {
 - (void) sendEnergyWithResponse:(BOOL)response
 {
     NSData *data = [self getEnergyBinary];
+    Packet_t packet;
+    memcpy(&packet, data.bytes, data.length);
+    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
     
     //send data
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
@@ -138,6 +141,9 @@ static float uint32ToTimeMS(uint32_t time) {
 - (void) sendAttackDecayWithResponse:(BOOL)response
 {
     NSData *data = [self getAttackDecayBinary];
+    Packet_t packet;
+    memcpy(&packet, data.bytes, data.length);
+    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
     
     //send data
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];

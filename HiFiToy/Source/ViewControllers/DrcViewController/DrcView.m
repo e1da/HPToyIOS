@@ -197,10 +197,10 @@
     HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
     DrcCoef * drc = preset.drc.coef17;
     
-    NSLog(@"%f %f", drc.point0.inputDb, drc.point0.outputDb);
+    /*NSLog(@"%f %f", drc.point0.inputDb, drc.point0.outputDb);
     NSLog(@"%f %f", drc.point1.inputDb, drc.point1.outputDb);
     NSLog(@"%f %f", drc.point2.inputDb, drc.point2.outputDb);
-    NSLog(@"%f %f", drc.point3.inputDb, drc.point3.outputDb);
+    NSLog(@"%f %f", drc.point3.inputDb, drc.point3.outputDb);*/
     
     //draw lines
     CGContextSetStrokeColorWithColor(context, [[UIColor blueColor] CGColor]);

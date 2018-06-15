@@ -905,6 +905,7 @@
                                                 <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="NiS-Wf-1TS">
                                                     <rect key="frame" x="0.5" y="0.53570000000000007" width="363" height="31"/>
                                                     <connections>
+                                                        <action selector="setEnabledSlider:" destination="aKc-ne-vec" eventType="valueChanged" id="bLp-ge-8ja"/>
                                                         <action selector="setLoudnessGainSlider:" destination="pGg-6v-bdr" eventType="valueChanged" id="4jR-A0-he6"/>
                                                     </connections>
                                                 </slider>
@@ -930,6 +931,8 @@
                     </navigationItem>
                     <connections>
                         <outlet property="drcView" destination="vl9-bA-Whd" id="w4V-mi-aJR"/>
+                        <outlet property="enabledLabel_outl" destination="cX5-xP-8bb" id="Uct-zd-g1n"/>
+                        <outlet property="enabledSlider_outl" destination="NiS-Wf-1TS" id="So5-hc-Vux"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Aui-IO-auG" userLabel="First Responder" sceneMemberID="firstResponder"/>

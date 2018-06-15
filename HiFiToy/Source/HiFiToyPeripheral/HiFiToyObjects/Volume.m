@@ -138,7 +138,10 @@
 - (void) sendWithResponse:(BOOL)response
 {
     NSData *data = [self getBinary];
-
+    Packet_t packet;
+    memcpy(&packet, data.bytes, data.length);
+    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
+    
     //send data
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }

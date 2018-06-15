@@ -179,6 +179,9 @@
 - (void) sendWithResponse:(BOOL)response
 {
     NSData *data = [self getFreqDbBinary];
+    Packet_t packet;
+    memcpy(&packet, data.bytes, data.length);
+    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
     
     //send data
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
@@ -187,6 +190,9 @@
 - (void) sendEnabledWithChannel:(uint8_t)channel withResponse:(BOOL)response
 {
     NSData *data = [self getEnabledBinaryWithChannel:channel];
+    Packet_t packet;
+    memcpy(&packet, data.bytes, data.length);
+    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
     
     //send data
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];

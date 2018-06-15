@@ -17,6 +17,7 @@ typedef struct{
 } DataBufHeader_t;
 
 #pragma pack(1)
+
 typedef struct {
     uint8_t             i2cAddr;
     uint8_t             successWriteFlag;

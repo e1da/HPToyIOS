@@ -168,6 +168,9 @@
 - (void) sendEvaluationWithResponse:(BOOL)response
 {
     NSData *data = [self getEvaluationBinary];
+    Packet_t packet;
+    memcpy(&packet, data.bytes, data.length);
+    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
     
     //send data
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
@@ -176,6 +179,9 @@
 - (void) sendEnabledForChannel:(uint8_t)channel withResponse:(BOOL)response
 {
     NSData *data = [self getEnabledBinaryForChannel:channel];
+    Packet_t packet;
+    memcpy(&packet, data.bytes, data.length);
+    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
     
     //send data
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];

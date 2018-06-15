@@ -34,17 +34,6 @@
 
 - (void) setTitleInfo
 {
-    /*(id activeDspElement = [self.dspElements objectForKey:self.activeElementKey];
-    
-    if (!activeDspElement) return;
-    
-    NSString * s;
-    if ([self.activeElementKey containsString:@"EQ"]){
-        s = [NSString stringWithFormat:@"PEQ%@", [self.activeElementKey substringFromIndex:3]];
-    } else {
-        s = self.activeElementKey;
-    }*/
-    
     NSString *title;
     
     switch (self.drcView.activePoint) {

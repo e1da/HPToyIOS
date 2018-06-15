@@ -34,6 +34,12 @@ typedef struct {
     uint8_t data[4];
 } TestPacket_t;
 
+typedef struct {
+    uint8_t addr;
+    uint8_t length;
+    uint8_t data[18];
+} Packet_t;
+
 typedef enum : uint8_t {
     PAIR_NO, PAIR_YES
 } PairStatus_t;
