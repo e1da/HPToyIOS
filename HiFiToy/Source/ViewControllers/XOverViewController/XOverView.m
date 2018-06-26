@@ -30,7 +30,7 @@
 /*-----------------------------------------------------------------------------------------
  Math Calculation
  -----------------------------------------------------------------------------------------*/
-- (int) freqToPixel:(int)freq{
+- (double) freqToPixel:(int)freq{
     return a_coef * log10(freq) + b_coef;
     
 }
@@ -47,6 +47,17 @@
 - (double) pixelToDb:(double)pixel
 {
     return (pixel - d_coef) / c_coef;
+}
+
+- (int) getWidth
+{
+    return width;
+}
+
+
+- (int) getHeight
+{
+    return height;
 }
 
 - (int) getLowPassBorderPix
@@ -114,7 +125,7 @@
     //check iphone x
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone ){
         CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-        NSLog(@"%f %f", screenSize.width, screenSize.height);
+        //NSLog(@"%f %f", screenSize.width, screenSize.height);
         if ((screenSize.width == 812) || (screenSize.height == 812)){
             border_right = 55;
             border_left = 30;

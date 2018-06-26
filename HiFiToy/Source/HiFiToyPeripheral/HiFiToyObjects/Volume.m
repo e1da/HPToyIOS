@@ -9,9 +9,6 @@
 #import "Volume.h"
 #import "HiFiToyControl.h"
 
-#define HW_MAX_DB   18.0
-#define HW_MIN_DB   -127.0
-
 @interface Volume(){
     int count;
 }
@@ -131,7 +128,10 @@
 //info string
 -(NSString *)getInfo
 {
-    return [NSString stringWithFormat:@"%0.1fdb", self.db];
+    if (self.db > MUTE_VOLUME) {
+        return [NSString stringWithFormat:@"%0.1fdb", self.db];
+    }
+    return @"Mute";
 }
 
 //send to dsp
@@ -153,9 +153,16 @@
     dataBufHeader.addr = self.address;
     dataBufHeader.length = 4;
     
-    uint16_t v = (18.0 - self.db) / 0.25;
-    if (v < 1) v = 1;
-    if (v > 0x245) v = 0x245;
+    uint16_t v;
+    if (self.db > MUTE_VOLUME) {
+        
+        v = (18.0 - self.db) / 0.25;
+        if (v < 1) v = 1;
+        if (v > 0x245) v = 0x245;
+        
+    } else {
+        v = 0x245;
+    }
     
     uint8_t vBuf[4] = {0, 0, (v >> 8) & 0xFF, v & 0xFF};
     
@@ -178,7 +185,11 @@
             if (v < 1) v = 1;
             if (v > 0x245) v = 0x245;
             
-            self.db = 18.0 - v * 0.25;
+            if (v != 0x245) {
+                self.db = 18.0 - v * 0.25;
+            } else {
+                self.db = MUTE_VOLUME;
+            }
             return YES;
         }
         dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);

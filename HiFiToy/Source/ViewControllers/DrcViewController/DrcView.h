@@ -37,6 +37,9 @@
 
 @property (nonatomic) int activePoint;
 
+- (int) getWidth;
+- (int) getHeight;
+
 - (double) dbToPixelX:(double)db;
 - (double) pixelXToDb:(double)pixel;
 - (double) dbToPixelY:(double)db;

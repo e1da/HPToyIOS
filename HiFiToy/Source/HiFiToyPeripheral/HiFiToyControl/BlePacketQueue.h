@@ -27,6 +27,8 @@
 - (BlePacket *) getFirstPacket;
 - (void) removeFirstPacket;
 
+- (void) print;
+
 //- (void) testModule;
 
 @end

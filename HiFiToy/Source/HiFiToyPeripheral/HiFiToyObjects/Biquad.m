@@ -477,7 +477,7 @@
     NSMutableData *data = [[NSMutableData alloc] init];
     [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
     
-    Number523_t coefs[5] = {to523(b0), to523(b1), to523(b2), to523(a1), to523(a2)}; // !!!maybe need reverse
+    Number523_t coefs[5] = {to523Reverse(b0), to523Reverse(b1), to523Reverse(b2), to523Reverse(a1), to523Reverse(a2)};
     [data appendBytes:coefs length:20];
     
     if (self.address1) {
@@ -502,11 +502,11 @@
         if ((dataBufHeader->addr == self.address0) && (dataBufHeader->length == 20)){
             
             Number523_t * number = (Number523_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
-            b0 = _523toFloat(number[0]); //!!!maybe need reverse
-            b1 = _523toFloat(number[1]);
-            b2 = _523toFloat(number[2]);
-            a1 = _523toFloat(number[3]);
-            a2 = _523toFloat(number[4]);
+            b0 = _523toFloat(reverseNumber523(number[0])); //!!!maybe need reverse
+            b1 = _523toFloat(reverseNumber523(number[1]));
+            b2 = _523toFloat(reverseNumber523(number[2]));
+            a1 = _523toFloat(reverseNumber523(number[3]));
+            a2 = _523toFloat(reverseNumber523(number[4]));
             
             importFlag = YES;
             break;

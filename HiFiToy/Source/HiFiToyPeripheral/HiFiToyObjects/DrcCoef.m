@@ -38,10 +38,10 @@ float getK(DrcPoint_t p0, DrcPoint_t p1) {
 DrcCoef_t getDrcCoef(DrcPoint_t p0, DrcPoint_t p1, DrcPoint_t p2, DrcPoint_t p3) {
     DrcCoef_t drcCoef;
     
-    drcCoef.threshold1_db = p0.inputDb;
-    drcCoef.threshold2_db = p1.inputDb;
-    drcCoef.offset1_db = p0.inputDb - p0.outputDb;
-    drcCoef.offset2_db = p1.inputDb - p1.outputDb;
+    drcCoef.threshold1_db = p1.inputDb;
+    drcCoef.threshold2_db = p2.inputDb;
+    drcCoef.offset1_db = p1.inputDb - p1.outputDb;
+    drcCoef.offset2_db = p2.inputDb - p2.outputDb;
     
     drcCoef.k0 = getK(p0, p1) - 1;
     drcCoef.k1 = getK(p1, p2) - 1;
@@ -54,14 +54,14 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     DrcPoint_t * drcPoint = calloc(4, sizeof(DrcPoint_t));
     
     drcPoint[1].inputDb = drcCoef->threshold1_db;
-    drcPoint[1].outputDb = drcCoef->threshold1_db - drcCoef->offset1_db;
+    drcPoint[1].outputDb = drcPoint[1].inputDb - drcCoef->offset1_db;
     drcPoint[2].inputDb = drcCoef->threshold2_db;
-    drcPoint[2].outputDb = drcCoef->threshold2_db - drcCoef->offset2_db;
+    drcPoint[2].outputDb = drcPoint[2].inputDb - drcCoef->offset2_db;
     
-    drcPoint[3].inputDb = 0.0;
-    drcPoint[3].outputDb = (drcCoef->k2 + 1) * (drcPoint[3].inputDb - drcPoint[2].inputDb) + drcPoint[2].outputDb;
-    drcPoint[0].inputDb = -200.0;
-    drcPoint[0].outputDb = (drcCoef->k0 + 1) * (drcPoint[0].inputDb - drcPoint[1].inputDb) + drcPoint[1].outputDb;
+    drcPoint[3].inputDb = POINT3_INPUT_DB;
+    drcPoint[3].outputDb = drcPoint[2].outputDb + (drcCoef->k2 + 1) * (drcPoint[3].inputDb - drcPoint[2].inputDb);
+    drcPoint[0].inputDb = POINT0_INPUT_DB;
+    drcPoint[0].outputDb = drcPoint[1].outputDb - (drcCoef->k0 + 1) * (drcPoint[1].inputDb - drcPoint[0].inputDb);
     
     return drcPoint;
 }
@@ -134,7 +134,8 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
             (fabs(self.point1.outputDb - temp.point1.outputDb) < 0.02f) &&
             (fabs(self.point2.inputDb - temp.point2.inputDb) < 0.02f) &&
             (fabs(self.point2.outputDb - temp.point2.outputDb) < 0.02f) &&
-            (fabs(self.point3.inputDb - temp.point3.inputDb) < 0.02f)){
+            (fabs(self.point3.inputDb - temp.point3.inputDb) < 0.02f) &&
+            (fabs(self.point3.outputDb - temp.point3.outputDb) < 0.02f)){
             return YES;
         }
         
@@ -170,7 +171,40 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
 }
 
 //setter/getter
-- (void) setPoint0:(DrcPoint_t)point0 {
+- (void) setPoint0:(DrcPoint_t)point0
+{
+    if (point0.inputDb > 0) point0.inputDb = 0;
+    if (point0.outputDb > 0) point0.outputDb = 0;
+    
+    _point0 = point0;
+}
+
+- (void) setPoint1:(DrcPoint_t)point1
+{
+    if (point1.inputDb > 0) point1.inputDb = 0;
+    if (point1.outputDb > 0) point1.outputDb = 0;
+    
+    _point1 = point1;
+}
+
+- (void) setPoint2:(DrcPoint_t)point2
+{
+    if (point2.inputDb > 0) point2.inputDb = 0;
+    if (point2.outputDb > 0) point2.outputDb = 0;
+    
+    _point2 = point2;
+}
+
+- (void) setPoint3:(DrcPoint_t)point3
+{
+    if (point3.inputDb > 0) point3.inputDb = 0;
+    if (point3.outputDb > 0) point3.outputDb = 0;
+    
+    _point3 = point3;
+}
+
+- (void) setPoint0WithCheck:(DrcPoint_t)point0
+{
     if (point0.outputDb > _point1.outputDb) {
         point0.outputDb = _point1.outputDb;
     }
@@ -178,7 +212,7 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     _point0.outputDb = point0.outputDb;
 }
 
-- (void) setPoint1:(DrcPoint_t)point1 {
+- (void) setPoint1WithCheck:(DrcPoint_t)point1 {
     if (point1.inputDb > _point2.inputDb) {
         point1.inputDb = _point2.inputDb;
     }
@@ -191,7 +225,7 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     _point1 = point1;
 }
 
-- (void) setPoint2:(DrcPoint_t)point2 {
+- (void) setPoint2WithCheck:(DrcPoint_t)point2 {
     if (point2.inputDb < _point1.inputDb) {
         point2.inputDb = _point1.inputDb;
     }
@@ -204,7 +238,7 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     _point2 = point2;
 }
 
-- (void) setPoint3:(DrcPoint_t)point3 {
+- (void) setPoint3WithCheck:(DrcPoint_t)point3 {
     if (point3.outputDb < _point2.outputDb) {
         point3.outputDb = _point2.outputDb;
     }
@@ -240,6 +274,11 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     packet.point[2] = initDrcPoint88(_point2.inputDb, _point2.outputDb);
     packet.point[3] = initDrcPoint88(_point3.inputDb, _point3.outputDb);
     
+    //NSLog(@"0:%0.1f %0.1f 1:%0.1f %0.1f", _point2.inputDb, _point2.outputDb, _point3.inputDb, _point3.outputDb);
+    /*packet.point[0] = initDrcPoint88(-90, -90);
+    packet.point[1] = initDrcPoint88(-60, -60);
+    packet.point[2] = initDrcPoint88(0, 0);
+    packet.point[3] = initDrcPoint88(24, 0);*/
     NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(DrcPointPacket_t)];
     
     //send data
@@ -285,15 +324,15 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
             //get drc coef
             DrcCoef_t drcCoef;
             
-            drcCoef.threshold1_db = _923toFloat(number[0]) * -6.0206;
-            drcCoef.threshold2_db = _923toFloat(number[1]) * -6.0206;
+            drcCoef.threshold1_db = _923toFloat(reverseNumber923(number[0])) * -6.0206;
+            drcCoef.threshold2_db = _923toFloat(reverseNumber923(number[1])) * -6.0206;
             
-            drcCoef.k0 = _523toFloat(number[2]);
-            drcCoef.k1 = _523toFloat(number[3]);
-            drcCoef.k2 = _523toFloat(number[4]);
+            drcCoef.k0 = _523toFloat(reverseNumber523(number[2]));
+            drcCoef.k1 = _523toFloat(reverseNumber523(number[3]));
+            drcCoef.k2 = _523toFloat(reverseNumber523(number[4]));
             
-            drcCoef.offset1_db = _923toFloat(number[5]) * 6.0206 - 24.0824;
-            drcCoef.offset2_db = _923toFloat(number[6]) * 6.0206 - 24.0824;
+            drcCoef.offset1_db = _923toFloat(reverseNumber923(number[5])) * 6.0206 - 24.0824;
+            drcCoef.offset2_db = _923toFloat(reverseNumber923(number[6])) * 6.0206 - 24.0824;
             
             //get drc point
             DrcPoint_t * drcPoint = getDrcPoints(&drcCoef);

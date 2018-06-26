@@ -49,6 +49,7 @@
 		D379127320D1D3450089962D /* icon180.png in Resources */ = {isa = PBXBuildFile; fileRef = D379127220D1D3450089962D /* icon180.png */; };
 		D379127720D3C2CE0089962D /* DrcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127620D3C2CE0089962D /* DrcViewController.m */; };
 		D379127A20D3C55B0089962D /* DrcView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127920D3C55B0089962D /* DrcView.m */; };
+		D379127D20DE7B4F0089962D /* DrcTimeConstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127C20DE7B4F0089962D /* DrcTimeConstViewController.m */; };
 		D39C3C9C20BEB4FF00BDC1A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9A20BEB4FF00BDC1A0 /* Main.storyboard */; };
 		D39C3C9E20BEB50000BDC1A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */; };
 		D39C3CA120BEB50000BDC1A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */; };
@@ -147,6 +148,8 @@
 		D379127620D3C2CE0089962D /* DrcViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcViewController.m; sourceTree = "<group>"; };
 		D379127820D3C55B0089962D /* DrcView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcView.h; sourceTree = "<group>"; };
 		D379127920D3C55B0089962D /* DrcView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcView.m; sourceTree = "<group>"; };
+		D379127B20DE7B4F0089962D /* DrcTimeConstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcTimeConstViewController.h; sourceTree = "<group>"; };
+		D379127C20DE7B4F0089962D /* DrcTimeConstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcTimeConstViewController.m; sourceTree = "<group>"; };
 		D39C3C8E20BEB4FF00BDC1A0 /* HiFiToy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiFiToy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39C3C9B20BEB4FF00BDC1A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -347,6 +350,8 @@
 				D379127620D3C2CE0089962D /* DrcViewController.m */,
 				D379127820D3C55B0089962D /* DrcView.h */,
 				D379127920D3C55B0089962D /* DrcView.m */,
+				D379127B20DE7B4F0089962D /* DrcTimeConstViewController.h */,
+				D379127C20DE7B4F0089962D /* DrcTimeConstViewController.m */,
 			);
 			path = DrcViewController;
 			sourceTree = "<group>";
@@ -623,6 +628,7 @@
 				D33A254020BFF674008A94EF /* Number923.h in Sources */,
 				D33A257A20C94865008A94EF /* DiscoveryViewController.m in Sources */,
 				D33A257D20C94875008A94EF /* MainViewController.m in Sources */,
+				D379127D20DE7B4F0089962D /* DrcTimeConstViewController.m in Sources */,
 				D33A255B20C6AEAA008A94EF /* HiFiToyDevice.m in Sources */,
 				D379127720D3C2CE0089962D /* DrcViewController.m in Sources */,
 				D33A258320C952CD008A94EF /* DemoCell.m in Sources */,

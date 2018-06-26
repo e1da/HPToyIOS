@@ -212,12 +212,14 @@
     
     uint32_t d[2] = {0, 0};
     
-    for (int i = 0; i < 7; i++){
+    for (int i = 7; i >= 0; i--){
         d[0] <<= 2;
         d[0] |= evaluationCh[i] & 0x03;
     }
     d[0] = reverseUint32(d[0]);
-    d[1] = reverseUint32(evaluationCh[7] & 0x03);
+    
+    d[1] = evaluationCh[7] & 0x03;
+    d[1] = reverseUint32(d[1]);
 
 
     [data appendBytes:d length:8];

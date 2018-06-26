@@ -78,7 +78,7 @@
     self.trebleSlider_outl.value = [hiFiToyPreset.bassTreble.bassTreble127 getTrebleDbPercent];
     
     self.loudnessGainLabel_outl.text = [hiFiToyPreset.loudness getInfo];
-    self.loudnessGainSlider_outl.value = hiFiToyPreset.loudness.gain;
+    self.loudnessGainSlider_outl.value = hiFiToyPreset.loudness.gain / 2;
     self.loudnessLabel_outl.text = [hiFiToyPreset.loudness getFreqInfo];
     self.loudnessSlider_outl.value = [hiFiToyPreset.loudness.biquad getFreqPercent];
 }
@@ -236,7 +236,7 @@
 
 - (IBAction)setLoudnessGainSlider:(id)sender
 {
-    hiFiToyPreset.loudness.gain = self.loudnessGainSlider_outl.value;
+    hiFiToyPreset.loudness.gain = self.loudnessGainSlider_outl.value * 2;
     self.loudnessGainLabel_outl.text = [hiFiToyPreset.loudness getInfo];
     
     [hiFiToyPreset.loudness sendWithResponse:NO];

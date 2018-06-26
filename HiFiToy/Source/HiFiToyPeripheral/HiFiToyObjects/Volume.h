@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "HiFiToyObject.h"
 
+#define HW_MAX_DB   18.0
+#define HW_MIN_DB   -127.0
+
+#define MUTE_VOLUME -81
+
 @interface Volume : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
 
 @property (nonatomic)   int         address;

@@ -25,7 +25,7 @@
     return (int)blePacketsArray.count;
 }
 
--(uint8_t) getAddressInPacket:(BlePacket *)packet
+/*-(uint8_t) getAddressInPacket:(BlePacket *)packet
 {
     DataBufHeader_t * header = (DataBufHeader_t *)packet.data.bytes;
     return header->addr;
@@ -35,7 +35,7 @@
 {
     DataBufHeader_t * header = (DataBufHeader_t *)packet.data.bytes;
     return header->length;
-}
+}*/
 
 - (void) addPacket:(BlePacket*)blePacket
 {
@@ -118,6 +118,23 @@
     if (blePacketsArray != nil){
         [blePacketsArray removeObjectAtIndex:0];
     }
+}
+
+- (void) print
+{
+    NSLog(@"<BlePacketQueue>");
+    if (blePacketsArray) {
+        for (int i = 0; i< blePacketsArray.count; i++) {
+            BlePacket * packet = [blePacketsArray objectAtIndex:i];
+            uint8_t * data = (uint8_t *)packet.data.bytes;
+            
+            for (int u = 0; u < packet.data.length; u++){
+                printf("%x ", data[u]);
+            }
+            printf("\n");
+        }
+    }
+    NSLog(@"</BlePacketQueue>");
 }
 
 /*-(void)testModule

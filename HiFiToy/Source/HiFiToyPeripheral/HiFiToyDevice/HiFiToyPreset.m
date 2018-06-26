@@ -128,7 +128,7 @@
     }
     
     //Master Volume
-    self.masterVolume = [Volume initWithAddress:MASTER_VOLUME_REG dbValue:0.0];
+    self.masterVolume = [Volume initWithAddress:MASTER_VOLUME_REG dbValue:0.0 maxDb:0.0 minDb:MUTE_VOLUME];
     
     //Bass Treble
     BassTrebleChannel * bassTreble12 = [BassTrebleChannel initWithChannel:BASS_TREBLE_CH_127
@@ -149,15 +149,15 @@
                                                  Freq:60 Qfac:0.0 dbVolume:0.0];
     [loudnessBiquad setBorderMaxFreq:150 minFreq:30];
     
-    self.loudness = [Loudness initWithOrder:loudnessBiquad LG:0.0 LO:0.0 Gain:0.0 Offset:0.0];
+    self.loudness = [Loudness initWithOrder:loudnessBiquad LG:-0.5 LO:0.0 Gain:0.0 Offset:0.0];
     
     
     //Drc
     DrcCoef * drcCoef17 = [DrcCoef initWithChannel:DRC_CH_1_7
-                                            Point0:initDrcPoint(-96, -96)
-                                            Point1:initDrcPoint(-36, -36)
-                                            Point2:initDrcPoint(0, 0)
-                                            Point3:initDrcPoint(24, 0)];
+                                            Point0:initDrcPoint(POINT0_INPUT_DB, -120)
+                                            Point1:initDrcPoint(-72, -72)
+                                            Point2:initDrcPoint(-24, -24)
+                                            Point3:initDrcPoint(POINT3_INPUT_DB, -24)];
     DrcCoef * drcCoef8 = [drcCoef17 copy];
     drcCoef8.channel = DRC_CH_8;
     
@@ -169,8 +169,8 @@
     
     [self.drc setEvaluation:POST_VOLUME_EVAL forChannel:0];
     [self.drc setEvaluation:POST_VOLUME_EVAL forChannel:1];
-    [self.drc setEnabled:1.0 forChannel:0];
-    [self.drc setEnabled:1.0 forChannel:1];
+    [self.drc setEnabled:0.0 forChannel:0];
+    [self.drc setEnabled:0.0 forChannel:1];
     
     [self initCharacteristicsPointer];
     [self updateChecksum];

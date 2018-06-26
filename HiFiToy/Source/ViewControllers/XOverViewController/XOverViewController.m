@@ -293,76 +293,69 @@
     }
     
     CGPoint translation = [recognizer translationInView:recognizer.view];
-    NSLog(@"%f", translation.x);
     
     static double delta_freq = 0;
-    static BOOL change_freq = YES;
+    //static BOOL change_freq = YES;
+    static BOOL xHysteresisFlag = NO;
+    static BOOL yHysteresisFlag = NO;
+    
     static CGPoint prev_translation;// = {0.0f, 0.0f};
     
     
     if (recognizer.state == UIGestureRecognizerStateBegan){
-        prev_translation = CGPointMake(0.0f, 0.0f);
+        prev_translation = translation; //CGPointMake(0.0f, 0.0f);
         
-        change_freq = YES;
+        //change_freq = YES;
+        xHysteresisFlag = NO;
+        yHysteresisFlag = NO;
         delta_freq = 0;
     }
     
-    float dx = translation.x -  prev_translation.x;
+    float dx = (translation.x -  prev_translation.x) / 2;
     float dy = translation.y -  prev_translation.y;
     
-    if (change_freq){
-        float slope_pix = [xOverView freqToPixel:[dspElement freq]];
-        int abs_dx = abs((int)dx);
-        
-        //get fast and slow partition of moving
-        float temp = slope_pix + dx / (1 + slope_pix / 100);
-        
-        float fast = [xOverView pixelToFreq:temp] - [dspElement freq];
-        float slow = dx / 4;
-        
-        //NSLog(@"%d %f %f", abs_dx, slow, fast);
-        
+    
+    //update freq
+    if (((fabs(translation.x) > [self.xOverView getWidth] * 0.05) || (xHysteresisFlag)) && (!yHysteresisFlag)) {
+        xHysteresisFlag = YES;
+
         double t;
         delta_freq = modf(delta_freq, &t);//get fraction part
         
-        if (abs_dx > 40){
-            delta_freq += fast;
-        } else if (abs_dx < 10){
-            delta_freq += slow;
-        } else {
-            float k_interpolate = (float)(abs_dx - 10) / (40 - 10);
-            delta_freq += (fast - slow) * k_interpolate + slow;
+        double freqPix = [self.xOverView freqToPixel:[dspElement freq]];
+        delta_freq += [self.xOverView pixelToFreq:(freqPix + dx)] - [dspElement freq];
+ 
+        //NSLog(@"dx=%f delta=%f", dx, delta_freq);
+        
+        if (fabs(delta_freq) >= 1.0) {
+            if ([dspElement isKindOfClass:[Biquad class]]){
+                Biquad * biquad = dspElement;
+                biquad.freq += delta_freq;
+            }
+            if ([dspElement isKindOfClass:[PassFilter class]]) {
+                PassFilter * filter = dspElement;
+                [filter setFreq:([filter Freq] + (int)delta_freq)];
+            }
         }
-        //NSLog(@"%f", delta_freq);
-        
-        if ([dspElement isKindOfClass:[Biquad class]]){
-            Biquad * biquad = dspElement;
-            biquad.freq += delta_freq;
-        }
-        if ([dspElement isKindOfClass:[PassFilter class]]) {
-            PassFilter * filter = dspElement;
-            [filter setFreq:([filter Freq] + (int)delta_freq)];
-        }
-        
-        
-        prev_translation.x = translation.x;
-        
+
     }
     
     //y-axis moved handler different for filter and biquad elements
     if ([dspElement isKindOfClass:[Biquad class]]){//DspBiquad
-        
-        if ((abs((int)dy) > 20 ) || (change_freq == NO)){
+        if (((fabs(translation.y) > [self.xOverView getHeight] * 0.1) || (yHysteresisFlag)) && (!xHysteresisFlag)){
+            yHysteresisFlag = YES;
+        //if ((abs((int)dy) > 20 ) || (change_freq == NO)){
             float bb_vol = [xOverView dbToPixel:[dspElement dbVolume]];
             [dspElement setDbVolume:[xOverView pixelToDb:(bb_vol + dy / 4.0f)]];
             
-            change_freq = NO;
-            prev_translation.y = translation.y;
+            
+            //change_freq = NO;
+            //prev_translation.y = translation.y;
         }
     } else {//PassFilter
         PassFilter * filter = (PassFilter *)dspElement;
         
-        if ((dy < -100 ) && (filter.order > FILTER_ORDER_2)){
+        /*if ((dy < -100 ) && (filter.order > FILTER_ORDER_2)){
             filter.order--;
             //filter.Order--;
             prev_translation.y = translation.y;
@@ -373,9 +366,11 @@
             //filter.Order++;
             prev_translation.y = translation.y;
             change_freq = NO;
-        }
+        }*/
         
     }
+    
+    prev_translation = translation;
     
 }
 

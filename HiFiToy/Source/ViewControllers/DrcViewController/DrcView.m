@@ -18,10 +18,10 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.maxDbX = 24;
-        self.minDbX = -96;
-        self.maxDbX = 24;
-        self.minDbX = -120;
+        self.maxDbX = POINT3_INPUT_DB;
+        self.minDbX = POINT0_INPUT_DB;
+        self.maxDbY = POINT3_INPUT_DB;
+        self.minDbX = POINT0_INPUT_DB - 24;
         self.initHeight = 0;
         
     }
@@ -32,6 +32,17 @@
 {
     if (activePoint > 3) activePoint = 3;
     _activePoint = activePoint;
+}
+
+- (int) getWidth
+{
+    return width;
+}
+
+
+- (int) getHeight
+{
+    return height;
 }
 
 /*-----------------------------------------------------------------------------------------
@@ -80,7 +91,7 @@
     //check iphone x
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone ){
         CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-        NSLog(@"%f %f", screenSize.width, screenSize.height);
+        //NSLog(@"%f %f", screenSize.width, screenSize.height);
         if ((screenSize.width == 812) || (screenSize.height == 812)){
             border_right = 55;
             border_left = 30;
@@ -163,7 +174,7 @@
     
     for (int i = self.maxDbX; i > self.minDbX; i -= DB_STEP_X){
         
-        NSString *dbString = [NSString stringWithFormat:@"%d", i];
+        NSString *dbString = [NSString stringWithFormat:@"%d", i + 24];
         CGRect rect = CGRectMake([self dbToPixelX:i] - 25, height - border_bottom + 10, // x y
                                  45, 30); //width height
         
@@ -176,7 +187,7 @@
 
     for (int i = self.maxDbY; i > self.minDbY; i -= DB_STEP_Y){
         
-        NSString *dbString = [NSString stringWithFormat:@"%d", i];
+        NSString *dbString = [NSString stringWithFormat:@"%d", i + 24];
         CGRect rect = CGRectMake(0, [self dbToPixelY:i] - 5, // x y
                                  [self dbToPixelX:self.minDbX] - 12, 30); //width height
         

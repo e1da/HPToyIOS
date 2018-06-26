@@ -23,4 +23,7 @@ uint32_t reverseUint32(uint32_t num) ;
                            Attack:(float)attackMS
                             Decay:(float)decayMS;
 
+- (void) sendEnergyWithResponse:(BOOL)response;
+- (void) sendAttackDecayWithResponse:(BOOL)response;
+
 @end

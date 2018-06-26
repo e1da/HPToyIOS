@@ -13,6 +13,23 @@
 
 @implementation DrcViewController
 
+/*-----------------------------------------------------------------------------------------
+ ViewController Orientation Methods
+ -----------------------------------------------------------------------------------------*/
+- (BOOL)shouldAutorotate {
+    return YES;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationPortrait;
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
@@ -20,8 +37,8 @@
     
     self.drcView.maxDbX = drc.coef17.point3.inputDb;
     self.drcView.minDbX = drc.coef17.point0.inputDb;
-    self.drcView.maxDbY = 24;
-    self.drcView.minDbY = -120;
+    self.drcView.maxDbY = drc.coef17.point3.inputDb;
+    self.drcView.minDbY = drc.coef17.point0.inputDb - 24;
     self.drcView.initHeight = 0;
     self.drcView.activePoint = 2;
     
@@ -39,19 +56,19 @@
     switch (self.drcView.activePoint) {
         case 0:
             title = [NSString stringWithFormat:@"in:%0.1f out:%0.1f",
-                     drc.coef17.point0.inputDb, drc.coef17.point0.outputDb];
+                     drc.coef17.point0.inputDb + 24, drc.coef17.point0.outputDb + 24];
             break;
         case 1:
             title = [NSString stringWithFormat:@"in:%0.1f out:%0.1f",
-                     drc.coef17.point1.inputDb, drc.coef17.point1.outputDb];
+                     drc.coef17.point1.inputDb + 24, drc.coef17.point1.outputDb + 24];
             break;
         case 2:
             title = [NSString stringWithFormat:@"in:%0.1f out:%0.1f",
-                     drc.coef17.point2.inputDb, drc.coef17.point2.outputDb];
+                     drc.coef17.point2.inputDb + 24, drc.coef17.point2.outputDb + 24];
             break;
         case 3:
             title = [NSString stringWithFormat:@"in:%0.1f out:%0.1f",
-                     drc.coef17.point3.inputDb, drc.coef17.point3.outputDb];
+                     drc.coef17.point3.inputDb + 24, drc.coef17.point3.outputDb + 24];
             break;
     }
     
@@ -90,28 +107,55 @@
 - (IBAction)panHandle:(UIPanGestureRecognizer *)recognizer
 {
     static CGPoint prevTranslation;
+    static BOOL xHysteresisFlag = NO;
+    static BOOL yHysteresisFlag = NO;
+    static CGPoint delta;
+    
     CGPoint translation = [recognizer translationInView:recognizer.view];
     
     if (recognizer.state == UIGestureRecognizerStateBegan){
         prevTranslation = CGPointMake(0.0f, 0.0f);
+        
+        xHysteresisFlag = NO;
+        yHysteresisFlag = NO;
+        
+        delta = CGPointMake(0, 0);
     }
     
-    CGPoint delta = CGPointMake(translation.x -  prevTranslation.x,
-                                translation.y -  prevTranslation.y);
+    double t;
+    delta.x = modf(delta.x, &t);//get fraction part
+    delta.y = modf(delta.y, &t);
+    
+    if (((fabs(translation.x) > [self.drcView getWidth] * 0.05) || (xHysteresisFlag)) && (!yHysteresisFlag)) {
+        xHysteresisFlag = YES;
+        
+        delta.x = (translation.x -  prevTranslation.x) / 4;
+        delta.y = 0;
+    }
+    if (((fabs(translation.y) > [self.drcView getHeight] * 0.05) || (yHysteresisFlag)) && (!xHysteresisFlag)){
+        yHysteresisFlag = YES;
+        
+        delta.x = 0;
+        delta.y = (translation.y -  prevTranslation.y) / 4;
+    }
+    /*CGPoint delta = CGPointMake(translation.x -  prevTranslation.x,
+                                translation.y -  prevTranslation.y);*/
+    
+    
     
 
     switch (self.drcView.activePoint) {
         case 0:
-            drc.coef17.point0 = [self updateDrcPoint:drc.coef17.point0 Delta:delta];
+            [drc.coef17 setPoint0WithCheck:[self updateDrcPoint:drc.coef17.point0 Delta:delta]];
             break;
         case 1:
-            drc.coef17.point1 = [self updateDrcPoint:drc.coef17.point1 Delta:delta];
+            [drc.coef17 setPoint1WithCheck:[self updateDrcPoint:drc.coef17.point1 Delta:delta]];
             break;
         case 2:
-            drc.coef17.point2 = [self updateDrcPoint:drc.coef17.point2 Delta:delta];
+            [drc.coef17 setPoint2WithCheck:[self updateDrcPoint:drc.coef17.point2 Delta:delta]];
             break;
         case 3:
-            drc.coef17.point3 = [self updateDrcPoint:drc.coef17.point3 Delta:delta];
+            [drc.coef17 setPoint3WithCheck:[self updateDrcPoint:drc.coef17.point3 Delta:delta]];
             break;
         default:
             return;
@@ -166,7 +210,13 @@
     double pixX = [self.drcView dbToPixelX:drcPoint.inputDb] + delta.x;
     double pixY = [self.drcView dbToPixelY:drcPoint.outputDb] + delta.y;
     
-    return initDrcPoint([self.drcView pixelXToDb:pixX], [self.drcView pixelYToDb:pixY]);
+    DrcPoint_t p = initDrcPoint([self.drcView pixelXToDb:pixX], [self.drcView pixelYToDb:pixY]);
+    
+    //add magnet for point = [-24, -24]
+    if ((p.inputDb < -23.9) && (p.inputDb > -24.1)) p.inputDb = -24;
+    if ((p.outputDb < -23.9) && (p.outputDb > -24.1)) p.outputDb = -24;
+    
+    return p;
 }
 
 @end

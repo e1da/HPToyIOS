@@ -151,9 +151,9 @@
     
     NSMutableData *data = [[NSMutableData alloc] init];
     [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
-    
-    Number923_t number[4] = {reverseNumber523(_LG), reverseNumber923(_LO),
-                                reverseNumber523(_gain), reverseNumber923(_offset)};
+
+    Number923_t number[4] = {to523Reverse(_LG), to923Reverse(_LO),
+                                to523Reverse(_gain), to923Reverse(_offset)};
     [data appendBytes:number length:(4 * sizeof(Number923_t))];
     
     return data;
@@ -181,10 +181,10 @@
         if ((dataBufHeader->addr == [self address]) && (dataBufHeader->length == 16)){
             
             int32_t * number = (int32_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
-            self.LG = _523toFloat(number[0]); //!!!maybe need reverse
-            self.LO = _923toFloat(number[1]);
-            self.gain = _523toFloat(number[2]);
-            self.offset = _923toFloat(number[3]);
+            self.LG     = _523toFloat(reverseNumber523(number[0]));
+            self.LO     = _923toFloat(reverseNumber923(number[1]));
+            self.gain   = _523toFloat(reverseNumber523(number[2]));
+            self.offset = _923toFloat(reverseNumber923(number[3]));
             
             NSLog(@"import loudness");
             return YES;

@@ -26,7 +26,8 @@
 {
     self = [super init];
     if (self) {
-        blePacketQueue = [[BlePacketQueue alloc] init];
+        [self initBlePacketQueue];
+        
         _state = BLE_DISCONNECTED;
         nameFindingBle = @"";
     }
@@ -44,7 +45,7 @@
     //NSLog(@"write [size=%d]", blePacketQueue.size);
     
     [blePacketQueue addPacketWithCharacteristic:characteristic data:data response:response];
-    
+    //[blePacketQueue print];
     
     if (bleBusy == NO){
         
@@ -102,17 +103,19 @@
     return NO;
 }
 
+- (void) initBlePacketQueue {
+    blePacketQueue = [[BlePacketQueue alloc] init];
+    [blePacketQueue clear];
+    
+    bleBusy = NO;
+}
+
 //reset core ble manager, clear ble packet queue
 - (int) resetCoreBleManager
 {
     CM = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     
-    //init ble packet system
-    blePacketQueue = [[BlePacketQueue alloc] init];
-    [blePacketQueue clear];
-    
-    bleBusy = NO;
-    
+    [self initBlePacketQueue];
     return 0;
 }
 
@@ -186,6 +189,9 @@
         }
     }
     _state = BLE_CONNECTING;
+    
+    //init ble packet system
+    [self initBlePacketQueue];
     
     NSLog(@"Connecting to peripheral with UUID : %@", peripheral.identifier.UUIDString);
     [CM connectPeripheral:peripheral options:nil];

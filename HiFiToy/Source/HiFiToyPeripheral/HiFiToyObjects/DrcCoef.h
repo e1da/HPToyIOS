@@ -10,6 +10,9 @@
 #import "HiFiToyObject.h"
 #import "Number88.h"
 
+#define POINT0_INPUT_DB     -120//-96
+#define POINT3_INPUT_DB     0//24
+
 typedef enum : uint8_t{
     DRC_CH_1_7, DRC_CH_8
 } DrcChannel_t;
@@ -34,10 +37,12 @@ typedef struct {
     Number88_t outputDb;
 } DrcPoint88_t;
 
+#pragma pack(1)
 typedef struct {
     DrcChannel_t channel;
     DrcPoint88_t point[4];
-} DrcPointPacket_t; //size = 9
+} DrcPointPacket_t; //size = 17
+#pragma options align=reset
 
 DrcPoint_t initDrcPoint(float inputDb, float outputDb);
 DrcPoint88_t initDrcPoint88(float inputDb, float outputDb);
@@ -60,5 +65,10 @@ DrcPoint88_t initDrcPoint88(float inputDb, float outputDb);
                       Point0:(DrcPoint_t)p0
                       Point1:(DrcPoint_t)p1
                       Point2:(DrcPoint_t)p2;
+
+- (void) setPoint0WithCheck:(DrcPoint_t)point0;
+- (void) setPoint1WithCheck:(DrcPoint_t)point1;
+- (void) setPoint2WithCheck:(DrcPoint_t)point2;
+- (void) setPoint3WithCheck:(DrcPoint_t)point3;
 
 @end

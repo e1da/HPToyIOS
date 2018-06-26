@@ -42,10 +42,13 @@
 @property NSArray * drawFreqUnitArray;
 
 
-- (int) freqToPixel:(int)freq;
+- (double) freqToPixel:(int)freq;
 - (double) pixelToFreq:(double)pix;
 - (double) dbToPixel:(double)db;
 - (double) pixelToDb:(double)pixel;
+
+- (int) getWidth;
+- (int) getHeight;
 
 - (int) getLowPassBorderPix;
 - (int) getHighPassBorderPix;
