@@ -271,13 +271,13 @@
 /* -------------------------------------- XmlParserDelegate ---------------------------------------*/
 - (void)didFindXmlElement:(NSString *)elementName attributes:(NSDictionary<NSString *,NSString *> *)attributeDict parser:(XmlParserWrapper *)xmlParser {
     //get DspAddress of DspBiquad
-    NSString * addrStr = [attributeDict objectForKey:@"Address"];
+    NSString * addrStr = [attributeDict objectForKey:@"Address0"];
     if (!addrStr) return;
     int dspAddr = [addrStr intValue];
     
     for (int i = 0; i < [self count]; i++){
         Biquad * biquad = [self biquadAtIndex:i];
-        if (dspAddr == biquad.address){
+        if (dspAddr == biquad.address0){
             [biquad importFromXml:xmlParser withAttrib:attributeDict];
             count++;
         }

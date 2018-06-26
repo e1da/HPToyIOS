@@ -161,7 +161,7 @@
     DrcCoef * drcCoef8 = [drcCoef17 copy];
     drcCoef8.channel = DRC_CH_8;
     
-    DrcTimeConst * drcTimeConst17 = [DrcTimeConst initWithChannel:DRC_CH_1_7 Energy:1.0 Attack:1.0 Decay:10];
+    DrcTimeConst * drcTimeConst17 = [DrcTimeConst initWithChannel:DRC_CH_1_7 Energy:0.1f Attack:10.0f Decay:100.0f];
     DrcTimeConst * drcTimeConst8 = [drcTimeConst17 copy];
     drcTimeConst8.channel = DRC_CH_8;
     

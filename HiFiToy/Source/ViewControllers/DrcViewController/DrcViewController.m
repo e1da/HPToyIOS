@@ -129,14 +129,14 @@
     if (((fabs(translation.x) > [self.drcView getWidth] * 0.05) || (xHysteresisFlag)) && (!yHysteresisFlag)) {
         xHysteresisFlag = YES;
         
-        delta.x = (translation.x -  prevTranslation.x) / 4;
+        delta.x = (translation.x -  prevTranslation.x) / 8;
         delta.y = 0;
     }
     if (((fabs(translation.y) > [self.drcView getHeight] * 0.05) || (yHysteresisFlag)) && (!xHysteresisFlag)){
         yHysteresisFlag = YES;
         
         delta.x = 0;
-        delta.y = (translation.y -  prevTranslation.y) / 4;
+        delta.y = (translation.y -  prevTranslation.y) / 8;
     }
     /*CGPoint delta = CGPointMake(translation.x -  prevTranslation.x,
                                 translation.y -  prevTranslation.y);*/

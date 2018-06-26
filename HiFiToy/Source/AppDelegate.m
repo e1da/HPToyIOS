@@ -46,7 +46,8 @@
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
     if (url) {
-        HiFiToyPreset * importPreset = [[[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset] copy];
+        //HiFiToyPreset * importPreset = [[[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset] copy];
+        HiFiToyPreset * importPreset = [HiFiToyPreset initDefaultPreset];
         [importPreset importFromXml:url];
         
         return YES;

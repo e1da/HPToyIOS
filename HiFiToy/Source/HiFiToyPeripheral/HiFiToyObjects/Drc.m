@@ -357,21 +357,24 @@
     if (!channelStr) return;
     DrcChannel_t channel = [channelStr intValue];
     
-    if (self.coef17.channel == channel){
-        [self.coef17 importFromXml:xmlParser withAttrib:attributeDict];
-        count++;
-    }
-    if (self.coef8.channel == channel){
-        [self.coef8 importFromXml:xmlParser withAttrib:attributeDict];
-        count++;
-    }
-    if (self.timeConst17.channel == channel){
-        [self.timeConst17 importFromXml:xmlParser withAttrib:attributeDict];
-        count++;
-    }
-    if (self.timeConst8.channel == channel){
-        [self.timeConst8 importFromXml:xmlParser withAttrib:attributeDict];
-        count++;
+    if ([elementName isEqualToString:@"DrcCoef"]) {
+        if (self.coef17.channel == channel){
+            [self.coef17 importFromXml:xmlParser withAttrib:attributeDict];
+            count++;
+        }
+        if (self.coef8.channel == channel){
+            [self.coef8 importFromXml:xmlParser withAttrib:attributeDict];
+            count++;
+        }
+    } else if ([elementName isEqualToString:@"DrcTimeConst"]) {
+        if (self.timeConst17.channel == channel){
+            [self.timeConst17 importFromXml:xmlParser withAttrib:attributeDict];
+            count++;
+        }
+        if (self.timeConst8.channel == channel){
+            [self.timeConst8 importFromXml:xmlParser withAttrib:attributeDict];
+            count++;
+        }
     }
     
 }
@@ -390,7 +393,7 @@
     for (int i = 0; i < 8; i++){
         NSString * keyStr = [NSString stringWithFormat:@"evaluationCh%d", i];
         if ([elementName isEqualToString:keyStr]){
-            enabledCh[i] = [string intValue];
+            evaluationCh[i] = [string intValue];
             count++;
         }
     }

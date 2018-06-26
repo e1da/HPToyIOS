@@ -225,11 +225,11 @@
                     parser:(XmlParserWrapper *)xmlParser {
     
     //get Address of Biquad
-    NSString * addrStr = [attributeDict objectForKey:@"Address"];
+    NSString * addrStr = [attributeDict objectForKey:@"Address0"];
     if (!addrStr) return;
     int addr = [addrStr intValue];
     
-    if (self.biquad.address == addr){
+    if (self.biquad.address0 == addr){
         [self.biquad importFromXml:xmlParser withAttrib:attributeDict];
         count++;
     }

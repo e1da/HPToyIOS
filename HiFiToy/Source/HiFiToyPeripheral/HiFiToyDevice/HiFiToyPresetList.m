@@ -112,6 +112,8 @@
 }
 
 -(HiFiToyPreset *) getPresetWithKey:(NSString *)presetKey{
+    if (!self.list) [self openPresetListFromFile];
+
     return (HiFiToyPreset*)[self.list objectForKey:presetKey];
 }
 
