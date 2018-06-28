@@ -6,28 +6,28 @@
 //  Copyright © 2018 Kerosinn_OSX. All rights reserved.
 //
 
-#import "BiquadContainer.h"
+#import "ParamFilterContainer.h"
 
-@interface BiquadContainer() {
-    NSMutableArray * biquads;
+@interface ParamFilterContainer() {
+    NSMutableArray * params;
     int count;
 }
 
 @end
 
-@implementation BiquadContainer
+@implementation ParamFilterContainer
 
 /*==========================================================================================
  NSCoding protocol implementation
  ==========================================================================================*/
 - (void) encodeWithCoder:(NSCoder *)encoder {
-    [encoder encodeObject:biquads forKey:@"keyBiquads"];
+    [encoder encodeObject:params forKey:@"keyParams"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if (self) {
-        biquads = [decoder decodeObjectForKey:@"keyBiquads"];
+        params = [decoder decodeObjectForKey:@"keyParams"];
     }
     return self;
 }
@@ -36,13 +36,13 @@
 /*==========================================================================================
  NSCopying protocol implementation
  ==========================================================================================*/
--(BiquadContainer *)copyWithZone:(NSZone *)zone
+-(ParamFilterContainer *)copyWithZone:(NSZone *)zone
 {
-    BiquadContainer * copyBiquadContainer = [[[self class] allocWithZone:zone] init];
+    ParamFilterContainer * copyBiquadContainer = [[[self class] allocWithZone:zone] init];
     
     //copyBiquadContainer.biquads = [[NSMutableArray alloc] initWithArray:self.biquads copyItems:YES];
     for (int i = 0; i < [self count]; i++) {
-        [copyBiquadContainer addBiquad:[[self biquadAtIndex:i] copy]];
+        [copyBiquadContainer addParam:[[self paramAtIndex:i] copy]];
     }
     
     return copyBiquadContainer;
@@ -54,18 +54,18 @@
 - (BOOL) isEqual: (id) object
 {
     if ([object class] == [self class]){
-        BiquadContainer * temp = object;
+        ParamFilterContainer * temp = object;
         
-        if ((!biquads) && (!temp)){
+        if ((!params) && (!temp)){
             return YES;
-        } else if ((!biquads) || (!temp)) {
+        } else if ((!params) || (!temp)) {
             return NO;
         }
         
         if ([self count] == [temp count]) {
             for (int i = 0; i < [self count]; i++) {
                 
-                if (![[self biquadAtIndex:i] isEqual:[temp biquadAtIndex:i]]) {
+                if (![[self paramAtIndex:i] isEqual:[temp paramAtIndex:i]]) {
                     return NO;
                 }
             }
@@ -79,34 +79,41 @@
 //getter setters
 - (int) count
 {
-    if (biquads) {
-        return (int)[biquads count];
+    if (params) {
+        return (int)[params count];
     }
 
     return -1;
 }
 
-- (void) addBiquad:(Biquad *)biquad
+- (void) addParam:(ParamFilter *)param
 {
-    if (!biquads){
-        biquads = [[NSMutableArray alloc] init];
+    if (!params){
+        params = [[NSMutableArray alloc] init];
     }
     
-    [biquads addObject:biquad];
+    [params addObject:param];
 }
 
-- (Biquad * ) biquadAtIndex:(NSUInteger)index
+- (ParamFilter *) paramAtIndex:(NSUInteger)index
 {
-    if (biquads) {
-        return [biquads objectAtIndex:index];
+    if (params) {
+        return [params objectAtIndex:index];
     }
     return nil;
 }
 
+- (void) removeAtIndex:(NSUInteger)index
+{
+    if (params) {
+        [params removeObjectAtIndex:index];
+    }
+}
+
 - (void) clear
 {
-    if (biquads) {
-        [biquads removeAllObjects];
+    if (params) {
+        [params removeAllObjects];
     }
 }
 
@@ -133,23 +140,24 @@
 {
     if (enabled) { // set YES
         for (int i = 0; i < [self count]; i++){
-            Biquad * biquad = [self biquadAtIndex:i];
+            ParamFilter * param = [self paramAtIndex:i];
             
-            if (fabs(biquad.dbVolume) > 0.01){
-                biquad.type = BIQUAD_PARAMETRIC;
-                [biquad sendWithResponse:YES];
+            if (fabs(param.dbVolume) > 0.01){
+                [param setEnabled:YES];
             }
         }
     } else { //set NO
         for (int i = 0; i < [self count]; i++){
-            Biquad * biquad = [self biquadAtIndex:i];
+            ParamFilter * param = [self paramAtIndex:i];
             
-            if ((biquad.type != BIQUAD_DISABLED) && (fabs(biquad.dbVolume) > 0.01)){
+            [param setEnabled:NO];
+  
+            /*if ((biquad.type != BIQUAD_DISABLED) && (fabs(biquad.dbVolume) > 0.01)){
                 biquad.type = BIQUAD_DISABLED;
                 [biquad sendWithResponse:YES];
             } else {
                 biquad.type = BIQUAD_DISABLED;
-            }
+            }*/
         }
         
     }
@@ -160,9 +168,8 @@
 - (BOOL) isEnabled
 {
     for (int i = 0; i < [self count]; i++){
-        Biquad * biquad = [self biquadAtIndex:i];
-        
-        if (biquad.type != BIQUAD_DISABLED){
+
+        if ([[self paramAtIndex:i] isEnabled]) {
             return YES;
         }
     }
@@ -172,9 +179,8 @@
 - (BOOL) isActive
 {
     for (int i = 0; i < [self count]; i++){
-        Biquad * biquad = [self biquadAtIndex:i];
         
-        if ((biquad.type != BIQUAD_DISABLED) && (fabs(biquad.dbVolume) > 0.01)){
+        if ([[self paramAtIndex:i] isActive]) {
             return YES;
         }
     }
@@ -184,15 +190,14 @@
 
 //HiFiToy Object
 - (uint8_t)address {
-    return [self biquadAtIndex:0].address;
+    return [self paramAtIndex:0].address;
 }
 
 //info string
 -(NSString *) getInfo
 {
-    if ((!biquads) || ([self count]  == 0)){
-        return @"Empty";
-    } else {
+    if ((params) && ([self count] > 0)){
+        
         return [NSString stringWithFormat:@"BiquadContainer length=%d", [self count] ];
     }
     
@@ -202,13 +207,9 @@
 //send to dsp
 - (void)sendWithResponse:(BOOL)response
 {
-    if ((!biquads) || ([self count] == 0)){
-        return;
-    } else {
+    if (params) {
         for (int i = 0; i < [self count]; i++){
-            Biquad * biquad = [self biquadAtIndex:i];
-            
-            [biquad sendWithResponse:response];
+            [[self paramAtIndex:i] sendWithResponse:response];
         }
     }
     
@@ -220,8 +221,8 @@
     NSMutableData *data = [[NSMutableData alloc] init];
     
     for (int i = 0; i < [self count]; i++){
-        Biquad * biquad = [self biquadAtIndex:i];
-        [data appendData:[biquad getBinary]];
+        ParamFilter * param = [self paramAtIndex:i];
+        [data appendData:[param getBinary]];
     }
     
     return data;
@@ -229,13 +230,10 @@
 
 - (BOOL)importData:(NSData *)data
 {
-    if ((!biquads) || ([self count] == 0)){
-        return YES;
-    } else {
+    if (params) {
         for (int i = 0; i < [self count]; i++){
-            Biquad * biquad = [self biquadAtIndex:i];
-            
-            if ([biquad importData:data] == NO){
+
+            if ([[self paramAtIndex:i] importData:data] == NO){
                 return NO;
             }
         }
@@ -248,13 +246,13 @@
 - (XmlData *)toXmlData {
     XmlData * xmlData = [[XmlData alloc] init];
     for (int i = 0; i < [self count]; i++){
-        [xmlData addXmlData:[[self biquadAtIndex:i] toXmlData]];
+        [xmlData addXmlData:[[self paramAtIndex:i] toXmlData]];
         
     }
     
     XmlData * biquadContainerXmlData = [[XmlData alloc] init];
     
-    int dspAddr = [self biquadAtIndex:0].address;
+    int dspAddr = [self paramAtIndex:0].address;
     NSDictionary * dict = [[NSDictionary alloc] initWithObjectsAndKeys:
                            [[NSNumber numberWithInt:dspAddr] stringValue], @"Address", nil];
     
@@ -276,7 +274,7 @@
     int dspAddr = [addrStr intValue];
     
     for (int i = 0; i < [self count]; i++){
-        Biquad * biquad = [self biquadAtIndex:i];
+        Biquad * biquad = [self paramAtIndex:i];
         if (dspAddr == biquad.address0){
             [biquad importFromXml:xmlParser withAttrib:attributeDict];
             count++;

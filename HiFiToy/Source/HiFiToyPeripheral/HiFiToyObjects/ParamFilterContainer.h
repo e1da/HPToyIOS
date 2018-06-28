@@ -8,14 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "HiFiToyObject.h"
-#import "Biquad.h"
+#import "ParamFilter.h"
 
-@interface BiquadContainer : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
+@interface ParamFilterContainer : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
 
 //getters/setters
 - (int) count;
-- (void) addBiquad:(Biquad *)biquad;
-- (Biquad *) biquadAtIndex:(NSUInteger)index;
+- (void) addParam:(ParamFilter *)param;
+- (ParamFilter *) paramAtIndex:(NSUInteger)index;
+- (void) removeAtIndex:(NSUInteger)index;
 - (void) clear;
 //- (void) setBiquadContainer:(BiquadContainer *) biquadContainer;
 

@@ -200,7 +200,7 @@
         
         for (int i = 0; i < [hiFiToyPreset.param count]; i++){
             NSString * keyString = [NSString stringWithFormat:@"EQ#%d", i + 1];
-            [dest.dspElements setObject:[hiFiToyPreset.param biquadAtIndex:i] forKey:keyString];
+            [dest.dspElements setObject:[hiFiToyPreset.param paramAtIndex:i] forKey:keyString];
         }
         
     }

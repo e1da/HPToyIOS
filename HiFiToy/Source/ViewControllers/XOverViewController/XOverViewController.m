@@ -8,7 +8,7 @@
 
 #import "XOverViewController.h"
 #import "DialogSystem.h"
-#import "BiquadContainer.h"
+#import "ParamFilterContainer.h"
 #import "PassFilter.h"
 
 @interface XOverViewController(){
@@ -100,7 +100,7 @@
     self.xOverView.activeElementKey = self.activeElementKey;
     
     
-    BiquadContainer * biquadContainer = [self.dspElements objectForKey:@"PEQS"];
+    ParamFilterContainer * biquadContainer = [self.dspElements objectForKey:@"PEQS"];
     if ([biquadContainer isEnabled]){
         _peqFlag_outl.title = @"PEQ On";
         _addEQ_outl.enabled = YES;
@@ -152,7 +152,7 @@
 }
 
 - (IBAction)setPeqFlag:(id)sender {
-    BiquadContainer * biquadContainer = [self.dspElements objectForKey:@"PEQS"];
+    ParamFilterContainer * biquadContainer = [self.dspElements objectForKey:@"PEQS"];
     
     if ([biquadContainer isEnabled]){
         [biquadContainer setEnabled:NO];
@@ -417,13 +417,13 @@
     } else if ([dspElement isKindOfClass:[PassFilter class]]){
         PassFilter * filter = (PassFilter *)dspElement;
         
-        if (filter.type == BIQUAD_HIGHPASS){
+        if ([filter getType] == BIQUAD_HIGHPASS){
             
             int start_x = [xOverView freqToPixel:xOverView.minFreq];
             int end_x = [xOverView getHighPassBorderPix];
             return [self checkCrossHighLowPass:start_x end_x:end_x tap_point:tap_point];
             
-        } else if (filter.type == BIQUAD_LOWPASS){
+        } else if ([filter getType] == BIQUAD_LOWPASS){
             
             int start_x = [xOverView getLowPassBorderPix];
             int end_x = [xOverView freqToPixel:xOverView.maxFreq];

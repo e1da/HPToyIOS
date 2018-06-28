@@ -111,20 +111,19 @@
     
     //Parametric biquads
     if (!self.param){
-        self.param = [[BiquadContainer alloc] init];
+        self.param = [[ParamFilterContainer alloc] init];
     } else {
         [self.param clear];
     }
     
     for (uint i = 0; i < 7; i++){
-        Biquad * biquad = [Biquad initWithAddress0:BIQUAD_FILTER_REG + i
-                                          Address1:BIQUAD_FILTER_REG + 7 + i
-                                             Order:BIQUAD_ORDER_2
-                                              Type:(i == 0) ? BIQUAD_PARAMETRIC : BIQUAD_DISABLED
-                                              Freq:100 Qfac:1.41 dbVolume:0.0];
-        [biquad setBorderMaxFreq:20000 minFreq:20];
+        ParamFilter * param = [ParamFilter initWithAddress0:BIQUAD_FILTER_REG + i
+                                                    Address1:BIQUAD_FILTER_REG + 7 + i
+                                                        Freq:100 Qfac:1.41 dbVolume:0.0
+                                                     Enabled:(i == 0) ? YES : NO];
+        [param setBorderMaxFreq:20000 minFreq:20];
         
-        [self.param addBiquad:biquad];
+        [self.param addParam:param];
     }
     
     //Master Volume
