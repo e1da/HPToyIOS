@@ -11,6 +11,7 @@
 #import "DeviceNameViewController.h"
 #import "PairingCodeViewController.h"
 #import "PresetViewController.h"
+#import "BiquadManagerViewController.h"
 #import "DialogSystem.h"
 
 @implementation OptionsViewController
@@ -125,6 +126,12 @@
     if ([[segue identifier] isEqualToString:@"showPresetManager"]) {
         PresetViewController *destination = (PresetViewController * )segue.destinationViewController;
         destination.hiFiToyDevice = self.hiFiToyDevice;
+        
+    }
+    
+    if ([[segue identifier] isEqualToString:@"showBiquadManager"]) {
+        BiquadManagerViewController *destination = (BiquadManagerViewController * )segue.destinationViewController;
+        destination.xover = [[self.hiFiToyDevice getActivePreset] xover];
         
     }
     

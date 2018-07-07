@@ -36,6 +36,14 @@ typedef struct {
     uint8_t         addr[2]; //0x00
     Biquad_t        biquad;  //0x02
 } BiquadPacket_t;   //size = 14
+
+typedef struct {
+    float b0;
+    float b1;
+    float b2;
+    float a1;
+    float a2;
+} BiquadCoef_t;
 #pragma options align=reset
 
 @interface Biquad : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>

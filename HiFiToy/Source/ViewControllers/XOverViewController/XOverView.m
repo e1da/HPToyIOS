@@ -100,16 +100,17 @@
  -----------------------------------------------------------------------------------------*/
 - (double) getFilters_y:(double)freq
 {
-    double result = 1.0f;
+    /*double result = 1.0f;
     
     for (NSString *key in [self.dspElements keyEnumerator]){
         id dspElemet = [self.dspElements objectForKey:key];
         
         if (![dspElemet respondsToSelector:@selector(getAFR:)]) continue;
         result *= [dspElemet getAFR:freq];
-    }
+    }*/
     
-    return result;
+    
+    return [self.xover getAFR:freq];
 }
 
 - (void) view_refresh
@@ -264,14 +265,14 @@
     
     CGContextSetLineWidth(context, 2.0);
     
-    if ([self.activeElementKey isEqualToString:@"HP"]){
+    if (self.xover.hp == self.activeElement) {
         CGContextSetStrokeColorWithColor(context, [[UIColor redColor] CGColor]);
         
         highpass_freq_pix = [self getHighPassBorderPix];
     } else {
         CGContextSetStrokeColorWithColor(context, [[UIColor blueColor] CGColor]);
         
-        if ([self.activeElementKey isEqualToString:@"LP"]){
+        if (self.xover.lp == self.activeElement){
             lowpass_freq_pix = [self getLowPassBorderPix];
         }
     }
@@ -283,14 +284,14 @@
     while (i <= width - border_right){
         double y = [self getFilters_y:[self pixelToFreq:i] ];
         
-        if ((i > highpass_freq_pix) && ([self.activeElementKey isEqualToString:@"HP"]) && (!change_color_flag)){
+        if ((i > highpass_freq_pix) && (self.xover.hp == self.activeElement) && (!change_color_flag)){
             CGContextDrawPath(context, kCGPathStroke);
             
             change_color_flag = YES;
             start = NO;
             CGContextSetStrokeColorWithColor(context, [[UIColor blueColor] CGColor]);
         }
-        if ((i > lowpass_freq_pix) && ([self.activeElementKey isEqualToString:@"LP"]) && (!change_color_flag)){
+        if ((i > lowpass_freq_pix) && (self.xover.lp == self.activeElement) && (!change_color_flag)){
             CGContextDrawPath(context, kCGPathStroke);
             
             change_color_flag = YES;
@@ -318,34 +319,30 @@
 
 - (void) drawFreqLineForParamFilters:(CGContextRef)context
 {
-    for (NSString *key in [self.dspElements keyEnumerator]){
-        if ([key containsString:@"EQ#"]){
-            Biquad * dspElement = [self.dspElements objectForKey:key];
-            if (dspElement.type != BIQUAD_PARAMETRIC){
-                continue;
-            }
-            
-            if ([self.activeElementKey isEqualToString:key]){
-                CGContextSetStrokeColorWithColor(context, [[UIColor redColor] CGColor]);
-                CGContextSetLineWidth(context, 3.0);
-            } else {
-                CGContextSetStrokeColorWithColor(context, [[UIColor brownColor] CGColor]);
-                CGContextSetAlpha(context, 1.0f);
-                CGContextSetLineWidth(context, 2.0);
-            }
-            
-            CGFloat dashes[] = {10,10};
-            CGContextSetLineDash(context, 0.0, dashes, 2);
-            
-            CGContextMoveToPoint(context, (float)[self freqToPixel:[dspElement freq]], border_top);
-            CGContextAddLineToPoint(context, (float)[self freqToPixel:[dspElement freq]],
-                                    height - border_bottom);
-            
-            CGContextDrawPath(context, kCGPathStroke);
-            
-            CGContextSetLineDash(context, 0.0, dashes, 0);
-
+    if (!self.xover.params) return;
+    
+    for (int i = 0; i < self.xover.params.count; i++) {
+        ParamFilter * param = [self.xover.params paramAtIndex:i];
+        
+        if (![param isEnabled]) continue;
+        
+        if (param == self.activeElement) {
+            CGContextSetStrokeColorWithColor(context, [[UIColor redColor] CGColor]);
+            CGContextSetLineWidth(context, 3.0);
+        } else {
+            CGContextSetStrokeColorWithColor(context, [[UIColor brownColor] CGColor]);
+            CGContextSetAlpha(context, 1.0f);
+            CGContextSetLineWidth(context, 2.0);
         }
+            
+        CGFloat dashes[] = {10,10};
+        CGContextSetLineDash(context, 0.0, dashes, 2);
+            
+        CGContextMoveToPoint(context, (float)[self freqToPixel:param.freq], border_top);
+        CGContextAddLineToPoint(context, (float)[self freqToPixel:param.freq], height - border_bottom);
+            
+        CGContextDrawPath(context, kCGPathStroke);
+        CGContextSetLineDash(context, 0.0, dashes, 0);
     }
     
 }

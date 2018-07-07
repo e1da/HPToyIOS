@@ -188,21 +188,7 @@
         dest.maxFreq = 30000;
         dest.minFreq = 20;
         
-        if (!dest.dspElements){
-            dest.dspElements  = [[NSMutableDictionary alloc] init];
-        }
-        [dest.dspElements removeAllObjects];
-        
-        //[dest.dspElements setObject:dspPreset.FrontHPFilter forKey:@"HP"];
-        //[dest.dspElements setObject:dspPreset.FrontLPFilter forKey:@"LP"];
-        
-        [dest.dspElements setObject:hiFiToyPreset.param forKey:@"PEQS"];
-        
-        for (int i = 0; i < [hiFiToyPreset.param count]; i++){
-            NSString * keyString = [NSString stringWithFormat:@"EQ#%d", i + 1];
-            [dest.dspElements setObject:[hiFiToyPreset.param paramAtIndex:i] forKey:keyString];
-        }
-        
+        dest.xover = hiFiToyPreset.xover;
     }
     
 }

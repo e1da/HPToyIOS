@@ -16,8 +16,7 @@
                         dbVolume:(double) dbVolume
                          Enabled:(BOOL)enabled
 {
-    BiquadType_t type = (enabled) ? BIQUAD_PARAMETRIC : BIQUAD_DISABLED;
-    return (ParamFilter *)[super initWithAddress:address Order:BIQUAD_ORDER_2 Type:type Freq:freq Qfac:qFac dbVolume:dbVolume];
+    return [ParamFilter initWithAddress0:address Address1:0 Freq:freq Qfac:qFac dbVolume:dbVolume Enabled:enabled];
 }
 
 + (ParamFilter *)initWithAddress0:(int)address0
@@ -28,7 +27,21 @@
                           Enabled:(BOOL)enabled
 {
     BiquadType_t type = (enabled) ? BIQUAD_PARAMETRIC : BIQUAD_DISABLED;
-    return (ParamFilter *)[super initWithAddress0:address0 Address1:address1 Order:BIQUAD_ORDER_2 Type:type Freq:freq Qfac:qFac dbVolume:dbVolume];
+    
+    ParamFilter *currentInstance = [[ParamFilter alloc] init];
+    
+    currentInstance.address0 = address0;
+    currentInstance.address1 = address1;
+    
+    currentInstance.order = BIQUAD_ORDER_2;
+    currentInstance.type = type;
+    currentInstance.freq = freq;
+    currentInstance.qFac = qFac;
+    currentInstance.dbVolume = dbVolume;
+    
+    return currentInstance;
+    
+    //return (ParamFilter *)[super initWithAddress0:address0 Address1:address1 Order:BIQUAD_ORDER_2 Type:type Freq:freq Qfac:qFac dbVolume:dbVolume];
 }
 
 //Enabled methods

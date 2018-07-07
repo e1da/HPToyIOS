@@ -16,7 +16,7 @@ typedef enum : uint8_t{
     BIQUAD_LENGTH_0, BIQUAD_LENGTH_1, BIQUAD_LENGTH_2, BIQUAD_LENGTH_4
 } BiquadLength_t;
 
-typedef enum : uint8_t{
+typedef enum : int8_t{
     FILTER_ORDER_0 = 0,
     FILTER_ORDER_2 = 1,
     FILTER_ORDER_4 = 2,

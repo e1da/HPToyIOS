@@ -53,14 +53,8 @@
  ==========================================================================================*/
 - (BOOL) isEqual: (id) object
 {
-    if ([object class] == [self class]){
+    if ((object) && ([object class] == [self class])) {
         ParamFilterContainer * temp = object;
-        
-        if ((!params) && (!temp)){
-            return YES;
-        } else if ((!params) || (!temp)) {
-            return NO;
-        }
         
         if ([self count] == [temp count]) {
             for (int i = 0; i < [self count]; i++) {
@@ -98,7 +92,7 @@
 - (ParamFilter *) paramAtIndex:(NSUInteger)index
 {
     if (params) {
-        return [params objectAtIndex:index];
+        return (ParamFilter *)[params objectAtIndex:index];
     }
     return nil;
 }
@@ -115,6 +109,16 @@
     if (params) {
         [params removeAllObjects];
     }
+}
+
+- (BOOL) containsParam:(ParamFilter *) param
+{
+    return [params containsObject:param];
+}
+
+- (NSUInteger) indexOfParam:(ParamFilter *) param
+{
+    return [params indexOfObject:param];
 }
 
 /*- (void) setBiquadContainer:(BiquadContainer *) biquadContainer
@@ -192,6 +196,48 @@
 - (uint8_t)address {
     return [self paramAtIndex:0].address;
 }
+
+//get AMPL FREQ response
+- (double) getAFR:(double)freqX
+{
+    double resultAFR = 1.0;
+    
+    if (params) {
+        for (int i = 0; i < [self count]; i++){
+            resultAFR *= [[self paramAtIndex:i] getAFR:freqX];
+        }
+    }
+
+    return resultAFR;
+}
+
+- (ParamFilter *) getFirstEnabled
+{
+    if (params) {
+        for (int i = 0; i < [self count]; i++){
+            if ([[self paramAtIndex:i] isEnabled]) {
+                return [self paramAtIndex:i];
+            }
+        }
+    }
+    
+    return nil;
+}
+
+- (ParamFilter *) getFirstDisabled
+{
+    if (params) {
+        for (int i = 0; i < [self count]; i++){
+            if (![[self paramAtIndex:i] isEnabled]) {
+                return [self paramAtIndex:i];
+            }
+        }
+    }
+    
+    return nil;
+}
+
+
 
 //info string
 -(NSString *) getInfo

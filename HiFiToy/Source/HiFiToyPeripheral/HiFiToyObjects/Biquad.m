@@ -23,6 +23,42 @@
 
 @end
 
+bool isFloatEqual(float a, float b)
+{
+    return (fabsf(a - b) < 0.01f);
+}
+
+/*
+ LP b1==2b0 b0==b2
+ HP b1==-2b0 b0==b2
+ PARAM b1==-a1
+ BANDPASS b1==0 b2==-b0
+ ALLPASS b1==-a1 b0==-a2
+ */
+BiquadType_t getBiquadType(BiquadCoef_t coef)
+{
+    if ((isFloatEqual(coef.b0, 1.0f)) && (isFloatEqual(coef.b1, 0.0f)) && (isFloatEqual(coef.b2, 0.0f)) &&
+        (isFloatEqual(coef.a1, 0.0f)) && (isFloatEqual(coef.a2, 0.0f)) ) {
+        return BIQUAD_DISABLED;
+        
+    } else if ( (isFloatEqual(coef.b1, 2 * coef.b0)) && (isFloatEqual(coef.b0, coef.b2)) ) {
+        return BIQUAD_LOWPASS;
+        
+    } else if ( (isFloatEqual(coef.b1, -2 * coef.b0)) && (isFloatEqual(coef.b0, coef.b2)) ) {
+        return BIQUAD_HIGHPASS;
+        
+    } else if ( (isFloatEqual(coef.b1, -coef.a1)) && (isFloatEqual(coef.b0, -coef.a2)) ) {
+        return BIQUAD_ALLPASS;
+        
+    } else if (isFloatEqual(coef.b1, -coef.a1)) {
+        return BIQUAD_PARAMETRIC;
+        
+    } else if ( (isFloatEqual(coef.b1, 0)) && (isFloatEqual(coef.b0, -coef.b2)) ) {
+        return BIQUAD_BANDPASS;
+    }
+    
+    return BIQUAD_DISABLED;
+}
 
 @implementation Biquad
 
@@ -340,6 +376,109 @@
     
 }
 
+- (BiquadCoef_t) getBiquadCoef
+{
+    BiquadCoef_t coef;
+    memset(&coef, 0, sizeof(BiquadCoef_t));
+    
+    double w0 = 2 * M_PI * (float)self.freq / FS;
+    double ampl;// = pow(10, dbBoost / 40);
+    double gainLinear = 1;//0^(gain/20);
+    double bandwidth = 1.41;
+    double alpha, a0;//, a1 = 0, a2 = 0, b0 = 0, b1 = 0, b2 = 0;
+    
+    double s = sin(w0), c = cos(w0);
+    
+    if (self.order == BIQUAD_ORDER_2){
+        switch (self.type){
+            case BIQUAD_LOWPASS:
+                alpha = s / (2 * self.qFac);
+                a0 =   1.0 + alpha;
+                coef.a1 =  2 * c / (a0);
+                coef.a2 =   (1.0 - alpha) / (-a0);
+                coef.b0 =  (1.0 - c) * gainLinear / (2 * a0);
+                coef.b1 =  (1.0 - c)  * gainLinear / a0;
+                coef.b2 =  (1.0 - c) * gainLinear / (2 * a0);
+                break;
+            case BIQUAD_HIGHPASS:
+                alpha = s / (2 * self.qFac);
+                a0 =   1.0 + alpha;
+                coef.a1 =  2 * c / (a0);
+                coef.a2 =   (1.0 - alpha) / (-a0);
+                coef.b0 =  (1.0 + c) * gainLinear / (2 * a0);
+                coef.b1 =  -1*(1.0 + c)  * gainLinear / a0;
+                coef.b2 =  (1.0 + c) * gainLinear / (2 * a0);
+                break;
+            case BIQUAD_PARAMETRIC:
+                ampl = pow(10, self.dbVolume / 40);
+                alpha = s / (2 * self.qFac);
+                a0 =  1 + alpha / ampl;
+                coef.a1 =  2 * c / a0;
+                coef.a2 =  (1 - alpha / ampl) / (-a0);
+                coef.b0 =  (1 + alpha * ampl) * gainLinear / a0;
+                coef.b1 = -(2 * c) * gainLinear / a0;
+                coef.b2 =  (1 - alpha * ampl) * gainLinear / a0;
+                break;
+            case BIQUAD_ALLPASS:
+                alpha = s / (2 * self.qFac);
+                a0 =   1.0 + alpha;
+                coef.a1 =  2 * c / (a0);
+                coef.a2 =   (1.0 - alpha) / (-a0);
+                coef.b0 =  (1.0 - alpha) * gainLinear / a0;
+                coef.b1 =  -2 * c * gainLinear / a0;
+                coef.b2 =  (1.0 + alpha) * gainLinear / a0;
+                break;
+            case BIQUAD_BANDPASS:
+                //ln(2) / 2 = 0.3465735902
+                alpha = s * sinh( 0.3465735902 * bandwidth * w0 / s);
+                
+                a0 =   1 + alpha;
+                coef.a1 =   2 * c / a0;
+                coef.a2 =   (1 - alpha) / (-a0);
+                coef.b0 =   alpha * gainLinear / a0;
+                coef.b1 =   0;
+                coef.b2 =  -alpha * gainLinear / a0;
+                break;
+            case BIQUAD_DISABLED:
+            default:
+                coef.b0 =  1.0f;
+                coef.b1 =  0.0f;
+                coef.b2 =  0.0f;
+                coef.a1 =  0.0f;
+                coef.a2 =  0.0f;
+                break;
+        }
+    } else {//order == BIQUAD_ORDER_1
+        switch (self.type){
+            case BIQUAD_LOWPASS:
+                coef.a1 = pow(2.7, -w0);
+                coef.b0 = 1.0 - coef.a1;
+                break;
+            case BIQUAD_HIGHPASS:
+                coef.a1 = pow(2.7, -w0);
+                coef.b0 = coef.a1;
+                coef.b1 = -coef.a1;
+                break;
+            case BIQUAD_ALLPASS:
+                coef.a1 = pow(2.7, -w0);
+                coef.b0 = -coef.a1;
+                coef.b1 = 1.0;
+                break;
+            case BIQUAD_DISABLED:
+            default:
+                coef.b0 =  1.0f;
+                coef.b1 =  0.0f;
+                coef.b2 =  0.0f;
+                coef.a1 =  0.0f;
+                coef.a2 =  0.0f;
+                break;
+        }
+        
+    }
+    
+    return coef;
+}
+
 //info string
 -(NSString *)getInfo
 {
@@ -375,100 +514,6 @@
 //get binary for save to dsp
 - (NSData *) getBinary
 {
-    double w0 = 2 * M_PI * (float)self.freq / FS;
-    double ampl;// = pow(10, dbBoost / 40);
-    double gainLinear = 1;//0^(gain/20);
-    double bandwidth = 1.41;
-    double alpha, a0, a1 = 0, a2 = 0, b0 = 0, b1 = 0, b2 = 0;
-
-    double s = sin(w0), c = cos(w0);
-    
-    if (self.order == BIQUAD_ORDER_2){
-        switch (self.type){
-            case BIQUAD_LOWPASS:
-                alpha = s / (2 * self.qFac);
-                a0 =   1.0 + alpha;
-                a1 =  2 * c / (a0);
-                a2 =   (1.0 - alpha) / (-a0);
-                b0 =  (1.0 - c) * gainLinear / (2 * a0);
-                b1 =  (1.0 - c)  * gainLinear / a0;
-                b2 =  (1.0 - c) * gainLinear / (2 * a0);
-                break;
-            case BIQUAD_HIGHPASS:
-                alpha = s / (2 * self.qFac);
-                a0 =   1.0 + alpha;
-                a1 =  2 * c / (a0);
-                a2 =   (1.0 - alpha) / (-a0);
-                b0 =  (1.0 + c) * gainLinear / (2 * a0);
-                b1 =  -1*(1.0 + c)  * gainLinear / a0;
-                b2 =  (1.0 + c) * gainLinear / (2 * a0);
-                break;
-            case BIQUAD_PARAMETRIC:
-                ampl = pow(10, self.dbVolume / 40);
-                alpha = s / (2 * self.qFac);
-                a0 =  1 + alpha / ampl;
-                a1 =  2 * c / a0;
-                a2 =  (1 - alpha / ampl) / (-a0);
-                b0 =  (1 + alpha * ampl) * gainLinear / a0;
-                b1 = -(2 * c) * gainLinear / a0;
-                b2 =  (1 - alpha * ampl) * gainLinear / a0;
-                break;
-            case BIQUAD_ALLPASS:
-                alpha = s / (2 * self.qFac);
-                a0 =   1.0 + alpha;
-                a1 =  2 * c / (a0);
-                a2 =   (1.0 - alpha) / (-a0);
-                b0 =  (1.0 - alpha) * gainLinear / a0;
-                b1 =  -2 * c * gainLinear / a0;
-                b2 =  (1.0 + alpha) * gainLinear / a0;
-                break;
-            case BIQUAD_BANDPASS:
-                //ln(2) / 2 = 0.3465735902
-                alpha = s * sinh( 0.3465735902 * bandwidth * w0 / s);
-                
-                a0 =   1 + alpha;
-                a1 =   2 * c / a0;
-                a2 =   (1 - alpha) / (-a0);
-                b0 =   alpha * gainLinear / a0;
-                b1 =   0;
-                b2 =  -alpha * gainLinear / a0;
-                break;
-            case BIQUAD_DISABLED:
-            default:
-                b0 =  1.0f;
-                b1 =  0.0f;
-                b2 =  0.0f;
-                a1 =  0.0f;
-                a2 =  0.0f;
-                break;
-        }
-    } else {//order == BIQUAD_ORDER_1
-        switch (self.type){
-            case BIQUAD_LOWPASS:
-                a1 = pow(2.7, -w0);
-                b0 = 1.0 - a1;
-                break;
-            case BIQUAD_HIGHPASS:
-                a1 = pow(2.7, -w0);
-                b0 = a1;
-                b1 = -a1;
-                break;
-            case BIQUAD_ALLPASS:
-                a1 = pow(2.7, -w0);
-                b0 = -a1;
-                b1 = 1.0;
-                break;
-            case BIQUAD_DISABLED:
-            default:
-                b0 =  1.0f;
-                b1 =  0.0f;
-                b2 =  0.0f;
-                a1 =  0.0f;
-                a2 =  0.0f;
-                break;
-        }
-        
-    }
     
     DataBufHeader_t dataBufHeader;
     dataBufHeader.addr = self.address0;
@@ -477,7 +522,10 @@
     NSMutableData *data = [[NSMutableData alloc] init];
     [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
     
-    Number523_t coefs[5] = {to523Reverse(b0), to523Reverse(b1), to523Reverse(b2), to523Reverse(a1), to523Reverse(a2)};
+    BiquadCoef_t coef = [self getBiquadCoef];
+    
+    Number523_t coefs[5] = {to523Reverse(coef.b0), to523Reverse(coef.b1), to523Reverse(coef.b2),
+                            to523Reverse(coef.a1), to523Reverse(coef.a2)};
     [data appendBytes:coefs length:20];
     
     if (self.address1) {
@@ -490,7 +538,10 @@
 }
 
 - (BOOL) importData:(NSData *)data{
-    double a1 = 0, a2 = 0, b0 = 0, b1 = 0, b2 = 0;
+    //double a1 = 0, a2 = 0, b0 = 0, b1 = 0, b2 = 0;
+    BiquadCoef_t coef;
+    memset(&coef, 0, sizeof(BiquadCoef_t));
+    
     double w0, fr, qF, vol;
     
     BOOL importFlag = NO;
@@ -502,11 +553,11 @@
         if ((dataBufHeader->addr == self.address0) && (dataBufHeader->length == 20)){
             
             Number523_t * number = (Number523_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
-            b0 = _523toFloat(reverseNumber523(number[0])); //!!!maybe need reverse
-            b1 = _523toFloat(reverseNumber523(number[1]));
-            b2 = _523toFloat(reverseNumber523(number[2]));
-            a1 = _523toFloat(reverseNumber523(number[3]));
-            a2 = _523toFloat(reverseNumber523(number[4]));
+            coef.b0 = _523toFloat(reverseNumber523(number[0])); //!!!maybe need reverse
+            coef.b1 = _523toFloat(reverseNumber523(number[1]));
+            coef.b2 = _523toFloat(reverseNumber523(number[2]));
+            coef.a1 = _523toFloat(reverseNumber523(number[3]));
+            coef.a2 = _523toFloat(reverseNumber523(number[4]));
             
             importFlag = YES;
             break;
@@ -518,7 +569,7 @@
         return NO;
     }
     
-    if ([self doubleCompare:b0 withDouble:1.0f] &&
+    /*if ([self doubleCompare:b0 withDouble:1.0f] &&
         [self doubleCompare:b1 withDouble:0.0f] &&
         [self doubleCompare:b2 withDouble:0.0f] &&
         [self doubleCompare:a2 withDouble:0.0f] &&
@@ -532,7 +583,9 @@
     
     if (self.type == BIQUAD_DISABLED) { //bad idea, but worked
         self.type = BIQUAD_PARAMETRIC;
-    }
+    }*/
+    self.type = getBiquadType(coef);
+    NSLog(@"BiquadType=%d", self.type);
     
     double arg;
     
@@ -540,12 +593,12 @@
         //if correct read b0, b1, b2, a1, a2 then
         switch (self.type){
             case BIQUAD_LOWPASS:
-                arg = 2 * b1 / a1 + 1;
+                arg = 2 * coef.b1 / coef.a1 + 1;
                 if ((arg < 1.0f) && (arg > -1.0f)) return NO;
                 
                 w0 = acos(1.0f / arg);
                 fr = round(w0 * FS / (2 * M_PI));
-                qF = sin(w0) * a1 / (2 * (2 * cos(w0) - a1));
+                qF = sin(w0) * coef.a1 / (2 * (2 * cos(w0) - coef.a1));
                 NSLog(@"Fr comp %d == %d", self.freq, (int)fr);
                 NSLog(@"Qf comp %f == %f", self.qFac, qF);
                 
@@ -553,12 +606,12 @@
                 self.qFac = qF;
                 break;
             case BIQUAD_HIGHPASS:
-                arg = 2 * b1 / a1 + 1;
+                arg = 2 * coef.b1 / coef.a1 + 1;
                 if ((arg < 1.0f) && (arg > -1.0f)) return NO;
                 
                 w0 = acos(-1.0f / arg);
                 fr = round(w0 * FS / (2 * M_PI));
-                qF = sin(w0) * a1 / (2 * (2 * cos(w0) - a1));
+                qF = sin(w0) * coef.a1 / (2 * (2 * cos(w0) - coef.a1));
                 NSLog(@"Fr comp %d == %d", self.freq, (int)fr);
                 NSLog(@"Qf comp %f == %f", self.qFac, qF);
                 
@@ -566,19 +619,19 @@
                 self.qFac = qF;
                 break;
             case BIQUAD_PARAMETRIC:
-                arg = a1 / (b0 + b2);
+                arg = coef.a1 / (coef.b0 + coef.b2);
                 if ((arg > 1.0f) || (arg < -1.0f)) return NO;
                 
                 w0 = acos(arg);
                 fr = round(w0 * FS / (2 * M_PI));
                 
-                arg = (b0 * 2 * cos(w0) - a1) / (2 * cos(w0) - a1);
+                arg = (coef.b0 * 2 * cos(w0) - coef.a1) / (2 * cos(w0) - coef.a1);
                 if (arg < 0.0) return NO;
                 
                 float ampl = sqrt(arg);
                 vol = 40 * log10(ampl);
                 
-                float alpha = (2 * cos(w0) / a1 - 1) * ampl;
+                float alpha = (2 * cos(w0) / coef.a1 - 1) * ampl;
                 qF = sin(w0) / (2 * alpha);
                 
                 /*Qf = sin(w0) * a1 / (2 * (2 * b0 *cos(w0) - a1));
@@ -592,12 +645,12 @@
                 self.dbVolume = vol;
                 break;
             case BIQUAD_ALLPASS:
-                arg = a1 / (b0 + 1);
+                arg = coef.a1 / (coef.b0 + 1);
                 if ((arg > 1.0f) || (arg < -1.0f)) return NO;
                 
                 w0 = acos(arg);
                 fr = round(w0 * FS / (2 * M_PI));
-                qF = sin(w0) * a1 / (2 * (2 * cos(w0) - a1));
+                qF = sin(w0) * coef.a1 / (2 * (2 * cos(w0) - coef.a1));
                 NSLog(@"Fr comp %d == %d", self.freq, (int)fr);
                 NSLog(@"Qf comp %f == %f", self.qFac, qF);
                 
@@ -605,7 +658,7 @@
                 self.qFac = qF;
                 break;
             case BIQUAD_BANDPASS:
-                w0 = acos(a1 / 2 * (1 + b0 / (1 - b0)));
+                w0 = acos(coef.a1 / 2 * (1 + coef.b0 / (1 - coef.b0)));
                 self.freq = w0 * (float)FS / (2 * M_PI);
                 //TODO set import bandwidth
                 break;
@@ -622,9 +675,9 @@
                 break;
         }
     } else {//BIQUAD_ORDER_1
-        if (a1 <= 0.0) return NO;
+        if (coef.a1 <= 0.0) return NO;
         
-        w0 = -log10(a1) / log10(2.7);
+        w0 = -log10(coef.a1) / log10(2.7);
         self.freq = round(w0 * FS / (2 * M_PI));
     }
     

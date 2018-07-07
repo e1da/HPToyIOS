@@ -28,7 +28,7 @@
 
 - (void) initCharacteristicsPointer
 {
-    _characteristics = [NSArray arrayWithObjects:_param, _masterVolume, _bassTreble, _loudness, _drc, nil];
+    _characteristics = [NSArray arrayWithObjects:_xover, _masterVolume, _bassTreble, _loudness, _drc, nil];
 }
 
 //NSCoding protocol implementation
@@ -37,7 +37,7 @@
     [encoder encodeInt64:self.checkSum forKey:@"checkSum"];
     
     //Characteristics
-    [encoder encodeObject:self.param forKey:@"Parametric"];
+    [encoder encodeObject:self.xover forKey:@"XOver"];
     [encoder encodeObject:self.masterVolume forKey:@"MasterVolume"];
     [encoder encodeObject:self.bassTreble forKey:@"BassTreble"];
     [encoder encodeObject:self.loudness forKey:@"Loudness"];
@@ -51,7 +51,7 @@
         self.checkSum = [decoder decodeInt64ForKey:@"checkSum"];
         
         //Characteristics
-        self.param = [decoder decodeObjectForKey:@"Parametric"];
+        self.xover = [decoder decodeObjectForKey:@"XOver"];
         self.masterVolume = [decoder decodeObjectForKey:@"MasterVolume"];
         self.bassTreble = [decoder decodeObjectForKey:@"BassTreble"];
         self.loudness = [decoder decodeObjectForKey:@"Loudness"];
@@ -74,7 +74,7 @@
     copyPreset.presetName = [self.presetName copy];
     copyPreset.checkSum = self.checkSum;
     
-    copyPreset.param = [self.param copy];
+    copyPreset.xover = [self.xover copy];
     copyPreset.masterVolume = [self.masterVolume copy];
     copyPreset.bassTreble = [self.bassTreble copy];
     copyPreset.loudness = [self.loudness copy];
@@ -91,7 +91,7 @@
     if ([object class] == [self class]){
         HiFiToyPreset * temp = object;
         
-        if (([self.param isEqual:temp.param] == NO) ||
+        if (([self.xover isEqual:temp.xover] == NO) ||
             ([self.masterVolume isEqual:temp.masterVolume] == NO) ||
             ([self.bassTreble isEqual:temp.bassTreble] == NO) ||
             ([self.loudness isEqual:temp.loudness] == NO) ||
@@ -110,11 +110,7 @@
     self.presetName = @"DefaultPreset";
     
     //Parametric biquads
-    if (!self.param){
-        self.param = [[ParamFilterContainer alloc] init];
-    } else {
-        [self.param clear];
-    }
+    ParamFilterContainer * params = [[ParamFilterContainer alloc] init];
     
     for (uint i = 0; i < 7; i++){
         ParamFilter * param = [ParamFilter initWithAddress0:BIQUAD_FILTER_REG + i
@@ -123,8 +119,20 @@
                                                      Enabled:(i == 0) ? YES : NO];
         [param setBorderMaxFreq:20000 minFreq:20];
         
-        [self.param addParam:param];
+        [params addParam:param];
     }
+    
+    //HP
+    PassFilter2 * hp = [PassFilter2 initWithAddress0:BIQUAD_FILTER_REG Address1:(BIQUAD_FILTER_REG + 7)
+                                       BiquadLength:BIQUAD_LENGTH_2 Order:FILTER_ORDER_2 Type:BIQUAD_HIGHPASS Freq:60];
+    //LP
+    PassFilter2 * lp = [PassFilter2 initWithAddress0:BIQUAD_FILTER_REG + 2 Address1:(BIQUAD_FILTER_REG + 7 + 2)
+                                        BiquadLength:BIQUAD_LENGTH_2 Order:FILTER_ORDER_2 Type:BIQUAD_LOWPASS Freq:10000];
+    
+    self.xover = [XOver initWithAddress0:BIQUAD_FILTER_REG Address1:(BIQUAD_FILTER_REG + 7)
+                                  Params:params Hp:hp Lp:lp];
+    
+    
     
     //Master Volume
     self.masterVolume = [Volume initWithAddress:MASTER_VOLUME_REG dbValue:0.0 maxDb:0.0 minDb:MUTE_VOLUME];

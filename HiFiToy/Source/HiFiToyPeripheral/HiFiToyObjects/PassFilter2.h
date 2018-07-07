@@ -45,4 +45,6 @@
 - (void) setFreqPercent:(double)percent;
 - (double) getFreqPercent;
 
+- (double) getAFR:(double)freqX;
+
 @end

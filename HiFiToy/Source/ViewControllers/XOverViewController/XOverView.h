@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "XOver.h"
 
 /*==========================================================================================
  DEFINES
@@ -33,8 +34,10 @@
 
 @property double initHeight;
 
-@property NSMutableDictionary *dspElements;
-@property NSString *activeElementKey;
+@property XOver * xover;
+@property id <HiFiToyObject> activeElement;
+//@property NSMutableDictionary *dspElements;
+//@property NSString *activeElementKey;
 
 @property int maxFreq;
 @property int minFreq;

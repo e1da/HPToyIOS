@@ -39,6 +39,7 @@
 		D33A25A420CABC9C008A94EF /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */; };
 		D33A25A820CABF19008A94EF /* DeviceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A620CABF19008A94EF /* DeviceList.plist */; };
 		D33A25A920CABF19008A94EF /* PresetList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A720CABF19008A94EF /* PresetList.plist */; };
+		D33E22A520EA430700872CA4 /* BiquadManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33E22A420EA430700872CA4 /* BiquadManagerViewController.m */; };
 		D379126320D111B80089962D /* XOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126220D111B80089962D /* XOverViewController.m */; };
 		D379126620D1153F0089962D /* XOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126520D1153F0089962D /* XOverView.m */; };
 		D379126920D1CC240089962D /* icon167.png in Resources */ = {isa = PBXBuildFile; fileRef = D379126820D1CC240089962D /* icon167.png */; };
@@ -137,6 +138,8 @@
 		D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		D33A25A620CABF19008A94EF /* DeviceList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceList.plist; sourceTree = "<group>"; };
 		D33A25A720CABF19008A94EF /* PresetList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PresetList.plist; sourceTree = "<group>"; };
+		D33E22A320EA430700872CA4 /* BiquadManagerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BiquadManagerViewController.h; sourceTree = "<group>"; };
+		D33E22A420EA430700872CA4 /* BiquadManagerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadManagerViewController.m; sourceTree = "<group>"; };
 		D379126120D111B80089962D /* XOverViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XOverViewController.h; sourceTree = "<group>"; };
 		D379126220D111B80089962D /* XOverViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XOverViewController.m; sourceTree = "<group>"; };
 		D379126420D1153F0089962D /* XOverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XOverView.h; sourceTree = "<group>"; };
@@ -268,6 +271,7 @@
 		D33A258420CA89E6008A94EF /* OptionsViewController */ = {
 			isa = PBXGroup;
 			children = (
+				D33E22A220EA42EA00872CA4 /* BiquadManagerViewController */,
 				D33A258C20CA8FE0008A94EF /* DeviceNameViewController */,
 				D33A258D20CA8FE0008A94EF /* PairingCodeViewController */,
 				D33A258E20CA8FE0008A94EF /* PresetViewController */,
@@ -337,6 +341,15 @@
 				D33A25A720CABF19008A94EF /* PresetList.plist */,
 			);
 			path = Res;
+			sourceTree = "<group>";
+		};
+		D33E22A220EA42EA00872CA4 /* BiquadManagerViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D33E22A320EA430700872CA4 /* BiquadManagerViewController.h */,
+				D33E22A420EA430700872CA4 /* BiquadManagerViewController.m */,
+			);
+			path = BiquadManagerViewController;
 			sourceTree = "<group>";
 		};
 		D379126720D1CC240089962D /* icon */ = {
@@ -653,6 +666,7 @@
 				D33A256120C6E163008A94EF /* BleDriver.m in Sources */,
 				D33A259520CA9141008A94EF /* PairingCodeViewController.m in Sources */,
 				D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */,
+				D33E22A520EA430700872CA4 /* BiquadManagerViewController.m in Sources */,
 				D33A256420C6E173008A94EF /* BlePacket.m in Sources */,
 				D33A254620C140F8008A94EF /* BassTrebleChannel.m in Sources */,
 				D379126620D1153F0089962D /* XOverView.m in Sources */,
@@ -838,7 +852,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HC834Q5NUC;
 				INFOPLIST_FILE = HiFiToy/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -856,7 +870,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HC834Q5NUC;
 				INFOPLIST_FILE = HiFiToy/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

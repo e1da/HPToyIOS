@@ -143,13 +143,14 @@
 - (void) setOrder:(PassFilterOrder_t)order
 {
     if (order > self.biquadLength) order = (PassFilterOrder_t)self.biquadLength;
+    if (order < FILTER_ORDER_0) order = FILTER_ORDER_0;
     
     _order = order;
 }
 
 - (void) setType:(PassFilterType_t)type
 {
-    if ((type != BIQUAD_LOWPASS) || (type != BIQUAD_HIGHPASS)) type = BIQUAD_DISABLED;
+    if ((type != BIQUAD_LOWPASS) && (type != BIQUAD_HIGHPASS)) type = BIQUAD_DISABLED;
     _type = type;
 }
 
@@ -187,8 +188,10 @@
 {
     Biquad * biquad[4];
     
+    int length[4] = {0, 1, 2, 4};
+    
     //init biquads
-    for (int i = 0; i < self.biquadLength; i++) {
+    for (int i = 0; i < length[_biquadLength]; i++) {
         
         if (self.address1) {
             biquad[i] = [Biquad initWithAddress0:(self.address0 + i) Address1:(self.address1 + i)
@@ -230,7 +233,7 @@
             break;
     }
     
-    return [NSArray arrayWithObjects:biquad count:4];
+    return [NSArray arrayWithObjects:biquad count:length[_biquadLength]];
 }
 
 //get AMPL FREQ response
@@ -297,7 +300,12 @@
     
     Biquad * biquad = [biquads objectAtIndex:0];
     
+    
     if (biquad) {
+        if ((biquad.type != BIQUAD_HIGHPASS) && (biquad.type != BIQUAD_LOWPASS)) {
+            return NO;
+        }
+            
         self.freq = biquad.freq;
         self.type = biquad.type;
         

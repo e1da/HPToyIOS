@@ -18,12 +18,20 @@
 - (ParamFilter *) paramAtIndex:(NSUInteger)index;
 - (void) removeAtIndex:(NSUInteger)index;
 - (void) clear;
+- (BOOL) containsParam:(ParamFilter *) param;
+- (NSUInteger) indexOfParam:(ParamFilter *) param;
+
 //- (void) setBiquadContainer:(BiquadContainer *) biquadContainer;
+
+- (double) getAFR:(double)freqX;
 
 //enabled methods
 - (void) setEnabled:(BOOL)enabled;
 - (BOOL) isEnabled;
 - (BOOL) isActive;
+
+- (ParamFilter *) getFirstEnabled;
+- (ParamFilter *) getFirstDisabled;
 
 
 

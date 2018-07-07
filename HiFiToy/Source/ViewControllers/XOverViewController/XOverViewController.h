@@ -8,14 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "XOverView.h"
+#import "HiFiToyObject.h"
 
-@interface XOverViewController : UIViewController
+@interface XOverViewController : UIViewController <UIPopoverPresentationControllerDelegate> {
+    id <HiFiToyObject> activeElement;
+}
 
 @property int maxFreq;
 @property int minFreq;
 
-@property NSMutableDictionary * dspElements;
-@property NSString * activeElementKey;
+//@property NSMutableDictionary * dspElements;
+//@property NSString * activeElementKey;
+
+@property XOver * xover;
 
 @property (strong, nonatomic) IBOutlet XOverView *xOverView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *peqFlag_outl;
