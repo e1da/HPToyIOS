@@ -335,17 +335,51 @@
 
 - (BOOL)importData:(NSData *)data
 {
-    HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
-    DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
+    int addr[2] = {self.address0, self.address1};
     
-    if ((self.hp) && ([self.hp importData:data] == NO)) {
-        return NO;
+    //create default hp and import
+    PassFilter2 * hp = [PassFilter2 initWithAddress0:addr[0] Address1:addr[1]
+                                        BiquadLength:BIQUAD_LENGTH_0 Order:FILTER_ORDER_0 Type:BIQUAD_HIGHPASS Freq:100];
+    
+    if (([hp importData:data]) && (hp.type == BIQUAD_HIGHPASS)) {
+        
+        self.hp = hp;
+        
+        addr[0] += hp.biquadLength;
+        if (addr[1]) addr[1] += hp.biquadLength;
+    } else {
+        self.hp = nil;
     }
-    if ((self.lp) && ([self.lp importData:data] == NO)) {
-        return NO;
+    
+    //create default lp and import
+    PassFilter2 * lp = [PassFilter2 initWithAddress0:addr[0] Address1:addr[1]
+                                        BiquadLength:BIQUAD_LENGTH_0 Order:FILTER_ORDER_0 Type:BIQUAD_LOWPASS Freq:100];
+    
+    if (([lp importData:data]) && (hp.type == BIQUAD_LOWPASS)){
+        
+        self.lp = lp;
+        
+        addr[0] += lp.biquadLength;
+        if (addr[1]) addr[1] += lp.biquadLength;
+    } else {
+        self.lp = nil;
     }
-    if ((self.params) && ([self.params importData:data] == NO)) {
-        return NO;
+    
+    //import params
+    if (!self.params) {
+        self.params = [[ParamFilterContainer alloc] init];
+    } else {
+        [self.params clear];
+    }
+    
+    while (addr[0] < self.address0 + 7) {
+        ParamFilter * param = [ParamFilter initWithAddress0:addr[0] Address1:addr[1] Freq:100 Qfac:1.41 dbVolume:0.0 Enabled:NO];
+        
+        if (![param importData:data]) return NO;
+        [self.params addParam:param];
+       
+        addr[0]++;
+        if (addr[1]) addr[1]++;
     }
     
     return YES;

@@ -44,6 +44,19 @@
     //return (ParamFilter *)[super initWithAddress0:address0 Address1:address1 Order:BIQUAD_ORDER_2 Type:type Freq:freq Qfac:qFac dbVolume:dbVolume];
 }
 
+- (BOOL) importData:(NSData *)data
+{
+    if (![super importData:data]) {
+        return NO;
+    }
+    
+    if ((self.type != BIQUAD_PARAMETRIC) && (self.type != BIQUAD_DISABLED)) {
+        self.type = BIQUAD_DISABLED;
+        return NO;
+    }
+    return YES;
+}
+
 //Enabled methods
 - (void) setEnabled:(BOOL)enabled
 {

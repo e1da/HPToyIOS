@@ -287,7 +287,7 @@
     return data;
 }
 
-- (BOOL) importData:(NSData *)data
+/*- (BOOL) importData:(NSData *)data
 {
     NSArray * biquads = [self getBiquads];
     
@@ -327,6 +327,65 @@
     
     
     NSLog(@"import filter with order = %d", self.order);
+    return YES;
+}*/
+
+- (BOOL) importData:(NSData *)data
+{
+    self.biquadLength = BIQUAD_LENGTH_0;
+    
+    //create default biquad
+    Biquad * biquad = [Biquad initWithAddress0:self.address0
+                                      Address1:self.address1
+                                         Order:BIQUAD_ORDER_2 Type:BIQUAD_DISABLED
+                                          Freq:100 Qfac:1.41 dbVolume:0.0];
+    PassFilterOrder_t tempOrder;
+    
+    //import biquad and parse
+    if ([biquad importData:data]) {
+        if ((biquad.type != BIQUAD_HIGHPASS) && (biquad.type != BIQUAD_LOWPASS)) {
+            return NO;
+        }
+        
+        self.freq = biquad.freq;
+        self.type = biquad.type;
+        
+        if (fabs(biquad.qFac - 0.71) < 0.01) {
+            tempOrder =  FILTER_ORDER_2;
+            
+        } else if (fabs(biquad.qFac - 0.54) < 0.01){
+            tempOrder =  FILTER_ORDER_4;
+            
+        } else if (fabs(biquad.qFac - 0.90) < 0.01) {
+            tempOrder =  FILTER_ORDER_8;
+        } else {
+            return NO;
+        }
+    } else {
+        return NO;
+    }
+    
+    self.biquadLength = BIQUAD_LENGTH_1;
+    
+    //get biquad length
+    while (biquad.type == self.type) {
+        biquad = [Biquad initWithAddress0:(self.address0 + self.biquadLength)
+                                 Address1:( (self.address1) ? (self.address1 + self.biquadLength) : 0 )
+                                    Order:BIQUAD_ORDER_2 Type:BIQUAD_DISABLED
+                                     Freq:100 Qfac:1.41 dbVolume:0.0];
+        
+        if (([biquad importData:data]) && (biquad.type == self.type)) {
+                self.biquadLength++;
+        } else {
+            break;
+        }
+    }
+    
+    //set order
+    self.order = tempOrder;
+    
+    
+    NSLog(@"import pass filter with order = %d", self.order);
     return YES;
 }
 

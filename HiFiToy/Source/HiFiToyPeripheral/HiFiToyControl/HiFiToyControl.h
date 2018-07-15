@@ -10,7 +10,7 @@
 #import "BleDriver.h"
 #import "HiFiToyObject.h"
 
-#define HIFI_TOY_VERSION            7
+#define HIFI_TOY_VERSION            9
 #define CC2540_PAGE_SIZE            2048
 #define ATTACH_PAGE_OFFSET          (3 * CC2540_PAGE_SIZE)//3 page
 
