@@ -17,7 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lpBiquadLabel_outl;
 @property (weak, nonatomic) IBOutlet UILabel *paramBiquadLabel_outl;
 
-- (void) setHp:(BiquadLength_t)biquadLength;
-- (void) setLp:(BiquadLength_t)biquadLength;
+//- (void) setHp:(BiquadLength_t)biquadLength;
+//- (void) setLp:(BiquadLength_t)biquadLength;
 
 @end

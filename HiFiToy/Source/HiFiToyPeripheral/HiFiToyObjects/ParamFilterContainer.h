@@ -16,10 +16,16 @@
 - (int) count;
 - (void) addParam:(ParamFilter *)param;
 - (ParamFilter *) paramAtIndex:(NSUInteger)index;
+- (ParamFilter *) paramWithMinFreq;
+- (ParamFilter *) paramWithMaxFreq;
 - (void) removeAtIndex:(NSUInteger)index;
+- (void) removeParam:(ParamFilter *) param;
+- (void) removeWithPossibleReplace:(ParamFilter *) param;
 - (void) clear;
 - (BOOL) containsParam:(ParamFilter *) param;
 - (NSUInteger) indexOfParam:(ParamFilter *) param;
+
+- (ParamFilter *) findParamWithAddr:(int)addr;
 
 //- (void) setBiquadContainer:(BiquadContainer *) biquadContainer;
 
@@ -32,6 +38,9 @@
 
 - (ParamFilter *) getFirstEnabled;
 - (ParamFilter *) getFirstDisabled;
+
+//sort params. first - active and last - dis active
+- (void) sortActive;
 
 
 

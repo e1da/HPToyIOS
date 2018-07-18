@@ -9,8 +9,6 @@
 #import "XOverViewController.h"
 #import "DialogSystem.h"
 #import "ParamFilterContainer.h"
-#import "BiquadManagerViewController.h"
-#import "PassFilter.h"
 
 @interface XOverViewController(){
     BOOL addKeyDown;
@@ -131,11 +129,11 @@
  -----------------------------------------------------------------------------------------*/
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"showBiquadManager"]) {
+    /*if ([[segue identifier] isEqualToString:@"showBiquadManager"]) {
         BiquadManagerViewController *destination = (BiquadManagerViewController * )segue.destinationViewController;
         destination.xover = self.xover;
         
-    }
+    }*/
     
     if ([[segue identifier] isEqualToString:@"showPopover"]) {
         UIViewController *destination = (UIViewController * )segue.destinationViewController;
@@ -231,8 +229,6 @@
 - (IBAction)panHandle:(UIPanGestureRecognizer *)recognizer
 {
     [self moved:activeElement  gesture:recognizer];
-    //ble send
-    [activeElement sendWithResponse:NO];
     
     //display refresh
     [self refreshView];
@@ -372,10 +368,17 @@
             if ([dspElement isKindOfClass:[ParamFilter class]]){
                 ParamFilter * param = dspElement;
                 param.freq += delta_freq;
+                //ble send
+                [dspElement sendWithResponse:NO];
             }
             if ([dspElement isKindOfClass:[PassFilter2 class]]) {
                 PassFilter2 * filter = dspElement;
-                filter.freq += delta_freq;
+                
+                if (filter.order != FILTER_ORDER_0) {
+                    filter.freq += delta_freq;
+                    //ble send
+                    [dspElement sendWithResponse:NO];
+                }
             }
         }
 
@@ -390,6 +393,9 @@
             
             float bb_vol = [xOverView dbToPixel:[dspElement dbVolume]];
             [dspElement setDbVolume:[xOverView pixelToDb:(bb_vol + dy / 4.0f)]];
+            
+            //ble send
+            [dspElement sendWithResponse:NO];
 
         }
         prev_translation.y = translation.y;
@@ -400,13 +406,17 @@
         if (!xHysteresisFlag) {
             
             if (dy < -100 ){
-                filter.order--;
+                //filter.order--;
+                PassFilterOrder_t order = filter.order;
+                [self.xover setOrder:(order - 1) forPassFilter:filter];
                 
                 yHysteresisFlag = YES;
                 prev_translation.y = translation.y;
                 
             } else if (dy > 100 ){
-                filter.order++;
+                //filter.order++;
+                PassFilterOrder_t order = filter.order;
+                [self.xover setOrder:(order + 1) forPassFilter:filter];
                 
                 yHysteresisFlag = YES;
                 prev_translation.y = translation.y;
@@ -461,13 +471,29 @@
     } else if (dspElement == self.xover.hp) {
         
         int start_x = [xOverView freqToPixel:xOverView.minFreq];
-        int end_x = [xOverView getHighPassBorderPix];
+        int end_x;
+        
+        if (self.xover.hp.order != FILTER_ORDER_0) {
+            end_x = [xOverView getHighPassBorderPix];
+        } else {
+            ParamFilter * param = [self.xover.params paramWithMinFreq];
+            end_x = [xOverView freqToPixel:param.freq];
+        }
+        
         return [self checkCrossHighLowPass:start_x end_x:end_x tap_point:tap_point];
         
     } else if (dspElement == self.xover.lp) {
         
-        int start_x = [xOverView getLowPassBorderPix];
+        int start_x;
         int end_x = [xOverView freqToPixel:xOverView.maxFreq];
+        
+        if (self.xover.lp.order != FILTER_ORDER_0) {
+            start_x = [xOverView getLowPassBorderPix];
+        } else {
+            ParamFilter * param = [self.xover.params paramWithMaxFreq];
+            start_x = [xOverView freqToPixel:param.freq];
+        }
+        
         return [self checkCrossHighLowPass:start_x end_x:end_x tap_point:tap_point];
     }
     
@@ -508,52 +534,7 @@
     }
 }
 
-- (int) getFreqForNextEnabledParametric{
-    int freq = -1;
-    
-    NSMutableArray * freqs = [[NSMutableArray alloc] init];
-    
-    //get freqs from all params, hp, lp
-    if (self.xover.params) {
-        for (int i = 0; i < self.xover.params.count; i++) {
-            ParamFilter * param = [self.xover.params paramAtIndex:i];
-            if ([param isEnabled]) {
-                [freqs addObject:[NSNumber numberWithInt:param.freq]];
-                
-            }
-        }
-    }
-    if (self.xover.hp) [freqs addObject:[NSNumber numberWithInt:self.xover.hp.freq]];
-    if (self.xover.lp) [freqs addObject:[NSNumber numberWithInt:self.xover.lp.freq]];
-    
-    if (freqs.count < 2) return freq;
-    
-    //sort freqs
-    NSSortDescriptor *lowestToHighest = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES];
-    [freqs sortUsingDescriptors:[NSArray arrayWithObject:lowestToHighest]];
-    
-    //get max delta freq
-    int maxIndex = 0;
-    int maxDFreq = 0;
-    for (int i = 0; i < freqs.count - 1; i++){
-        int f0 = [[freqs objectAtIndex:i] intValue];
-        int f1 = [[freqs objectAtIndex:i + 1] intValue];
-        
-        if (f1 - f0 > maxDFreq){
-            maxDFreq = f1 - f0;
-            maxIndex = i;
-        }
-    }
-    
-    int f0 = [[freqs objectAtIndex:maxIndex] intValue];
-    int f1 = [[freqs objectAtIndex:maxIndex + 1] intValue];
-    
-    //freq calculate
-    double dfreq = (log10(f0) + log10(f1)) / 2;
-    freq = pow(10, dfreq);
-    
-    return freq;
-}
+
 
 
 - (BOOL) enableNextBiquadsWithFreq:(int)Freq
@@ -582,7 +563,7 @@
     
     if (!param) return NO;//error, not find disable biquad
 
-    int freq = [self getFreqForNextEnabledParametric];
+    int freq = [self.xover getFreqForNextEnabledParametric];
     param.freq = (freq == -1) ? 300 : freq;
     
     param.qFac = Qfac;

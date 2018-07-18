@@ -36,13 +36,12 @@
     [encoder encodeInt:self.address0 forKey:@"keyAddress0"];
     [encoder encodeInt:self.address1 forKey:@"keyAddress1"];
     
-    [encoder encodeInt:self.biquadLength forKey:@"keyBiquadLength"];
     [encoder encodeInt:self.order forKey:@"keyOrder"];
     [encoder encodeInt:self.type forKey:@"keyType"];
-    [encoder encodeInt:self.freq forKey:@"keyFreq"];
     
     [encoder encodeInt:self.maxFreq forKey:@"keyMaxFreq"];
     [encoder encodeInt:self.minFreq forKey:@"keyMinFreq"];
+    [encoder encodeInt:self.freq forKey:@"keyFreq"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -51,7 +50,6 @@
         self.address0 = [decoder decodeIntForKey:@"keyAddress0"];
         self.address1 = [decoder decodeIntForKey:@"keyAddress1"];
         
-        self.biquadLength = [decoder decodeIntForKey:@"keyBiquadLength"];
         self.order = [decoder decodeIntForKey:@"keyOrder"];
         self.type = [decoder decodeIntForKey:@"keyType"];
         
@@ -72,7 +70,6 @@
     copyFilter.address0 = self.address0;
     copyFilter.address1 = self.address1;
     
-    copyFilter.biquadLength = self.biquadLength;
     copyFilter.order = self.order;
     copyFilter.type = self.type;
     
@@ -93,7 +90,6 @@
         
         if ((self.address0 != temp.address0) ||
             (self.address1 != temp.address1) ||
-            (self.biquadLength != temp.biquadLength) ||
             (self.order != temp.order) ||
             (self.type != temp.type) ||
             (self.freq != temp.freq)){
@@ -107,17 +103,15 @@
 
 /*---------------------- create method -----------------------------*/
 + (PassFilter2 *)initWithAddress:(int)address
-                     BiquadLength:(BiquadLength_t)biquadLength
-                            Order:(PassFilterOrder_t)order
-                             Type:(PassFilterType_t)type
-                             Freq:(int)freq
+                           Order:(PassFilterOrder_t)order
+                            Type:(PassFilterType_t)type
+                            Freq:(int)freq
 {
-    return [PassFilter2 initWithAddress0:address Address1:0 BiquadLength:biquadLength Order:order Type:type Freq:freq];
+    return [PassFilter2 initWithAddress0:address Address1:0 Order:order Type:type Freq:freq];
 }
 
 + (PassFilter2 *)initWithAddress0:(int)address0
                          Address1:(int)address1
-                     BiquadLength:(BiquadLength_t)biquadLength
                             Order:(PassFilterOrder_t)order
                              Type:(PassFilterType_t)type
                              Freq:(int)freq
@@ -127,7 +121,6 @@
     currentInstance.address0 = address0;
     currentInstance.address1 = address1;
     
-    currentInstance.biquadLength = biquadLength;
     currentInstance.order = order;
     currentInstance.type = type;
     currentInstance.freq = freq;
@@ -142,7 +135,7 @@
 //getter/setter function
 - (void) setOrder:(PassFilterOrder_t)order
 {
-    if (order > self.biquadLength) order = (PassFilterOrder_t)self.biquadLength;
+    if (order > MAX_ORDER) order = MAX_ORDER;
     if (order < FILTER_ORDER_0) order = FILTER_ORDER_0;
     
     _order = order;
@@ -191,7 +184,7 @@
     int length[4] = {0, 1, 2, 4};
     
     //init biquads
-    for (int i = 0; i < length[_biquadLength]; i++) {
+    for (int i = 0; i < length[self.order]; i++) {
         
         if (self.address1) {
             biquad[i] = [Biquad initWithAddress0:(self.address0 + i) Address1:(self.address1 + i)
@@ -233,7 +226,7 @@
             break;
     }
     
-    return [NSArray arrayWithObjects:biquad count:length[_biquadLength]];
+    return [NSArray arrayWithObjects:biquad count:length[self.order]];
 }
 
 //get AMPL FREQ response
@@ -262,8 +255,8 @@
 {
     PassFilterPacket_t packet;
     
-    packet.addr         = [self address];
-    packet.biquadLength = self.biquadLength;//0,1,2,3
+    packet.addr[0]      = self.address0;
+    packet.addr[1]      = self.address1;
     packet.filter.order = self.order;
     packet.filter.type  = self.type;
     packet.filter.freq  = self.freq;
@@ -332,7 +325,7 @@
 
 - (BOOL) importData:(NSData *)data
 {
-    self.biquadLength = BIQUAD_LENGTH_0;
+    //self.biquadLength = BIQUAD_LENGTH_0;
     
     //create default biquad
     Biquad * biquad = [Biquad initWithAddress0:self.address0
@@ -365,7 +358,7 @@
         return NO;
     }
     
-    self.biquadLength = BIQUAD_LENGTH_1;
+    /*self.biquadLength = BIQUAD_LENGTH_1;
     
     //get biquad length
     while (biquad.type == self.type) {
@@ -379,7 +372,7 @@
         } else {
             break;
         }
-    }
+    }*/
     
     //set order
     self.order = tempOrder;
@@ -395,7 +388,6 @@
     [xmlData addElementWithName:@"MaxFreq" withIntValue:self.maxFreq];
     [xmlData addElementWithName:@"MinFreq" withIntValue:self.minFreq];
     
-    [xmlData addElementWithName:@"BiquadLength" withIntValue:self.biquadLength];
     [xmlData addElementWithName:@"Order" withIntValue:self.order];
     [xmlData addElementWithName:@"Type" withIntValue:self.type];
     [xmlData addElementWithName:@"Freq" withIntValue:self.freq];
@@ -438,10 +430,6 @@
         count++;
     }
     
-    if ([elementName isEqualToString:@"BiquadLength"]){
-        self.biquadLength = [string intValue];
-        count++;
-    }
     if ([elementName isEqualToString:@"Order"]){
         self.order = [string intValue];
         count++;
@@ -460,7 +448,7 @@
                    parser:(XmlParserWrapper *)xmlParser {
     
     if ([elementName isEqualToString:@"PassFilter"]){
-        if (count != 6){
+        if (count != 5){
             xmlParser.error = [NSString stringWithFormat:
                                @"PassFilter=%@. Import from xml is not success. ",
                                [[NSNumber numberWithInt:self.address0] stringValue] ];

@@ -268,12 +268,23 @@
     if (self.xover.hp == self.activeElement) {
         CGContextSetStrokeColorWithColor(context, [[UIColor redColor] CGColor]);
         
-        highpass_freq_pix = [self getHighPassBorderPix];
+        if (self.xover.hp.order != FILTER_ORDER_0) {
+            highpass_freq_pix = [self getHighPassBorderPix];
+        } else {
+            ParamFilter * param = [self.xover.params paramWithMinFreq];
+            highpass_freq_pix = [self freqToPixel:param.freq];
+        }
+        
     } else {
         CGContextSetStrokeColorWithColor(context, [[UIColor blueColor] CGColor]);
         
         if (self.xover.lp == self.activeElement){
-            lowpass_freq_pix = [self getLowPassBorderPix];
+            if (self.xover.lp.order != FILTER_ORDER_0) {
+                lowpass_freq_pix = [self getLowPassBorderPix];
+            } else {
+                ParamFilter * param = [self.xover.params paramWithMaxFreq];
+                lowpass_freq_pix = [self freqToPixel:param.freq];
+            }
         }
     }
     
@@ -315,6 +326,9 @@
     
     [self drawFreqLineForParamFilters:(CGContextRef)context];
     
+    //[self drawTap:context forPassFilter:self.xover.hp];
+    //[self drawTap:context forPassFilter:self.xover.lp];
+    
 }
 
 - (void) drawFreqLineForParamFilters:(CGContextRef)context
@@ -345,6 +359,72 @@
         CGContextSetLineDash(context, 0.0, dashes, 0);
     }
     
+}
+
+- (void) drawTap:(CGContextRef)context forPassFilter:(PassFilter2 *)passFilter
+{
+    if (passFilter.order != FILTER_ORDER_0) return;
+    
+    if (self.activeElement == passFilter) {
+        CGContextSetFillColorWithColor(context, [[UIColor redColor] CGColor]);
+    } else {
+        CGContextSetFillColorWithColor(context, [[UIColor brownColor] CGColor]);
+    }
+    
+    bool start = NO;
+    double p;
+    
+    int border_pix;
+    CGPoint point;
+    
+    if (passFilter.type == BIQUAD_HIGHPASS) {
+        
+        border_pix = [self getHighPassBorderPix];
+        if (border_pix <= border_left + 50) border_pix = width - border_right;
+        p = width - border_right;
+        
+        for (int i = border_left; i < width - border_right; i++) {
+            double y = [self getFilters_y:[self pixelToFreq:i] ];
+            
+            if ((y > CLIP_DB) && (!start)) {
+                start = YES;
+                p = i;
+            }
+
+            if ((i - p > 50) || (i > border_pix) ){
+                point.x = i;
+                point.y = (y > CLIP_DB) ? y : CLIP_DB;
+                break;
+            }
+        }
+        
+    } else if (passFilter.type == BIQUAD_LOWPASS) {
+        
+        border_pix = [self getLowPassBorderPix];
+        if (border_pix >= width - border_right - 50) border_pix = border_left;
+        p = border_left;
+        
+        for (int i = width - border_right; i >= border_left; i--) {
+            double y = [self getFilters_y:[self pixelToFreq:i] ];
+            
+            if ((y > CLIP_DB) && (!start)) {
+                start = YES;
+                p = i;
+            }
+            
+            if ((p - i > 50) || (i < border_pix) ){
+                point.x = i;
+                point.y = (y > CLIP_DB) ? y : CLIP_DB;
+                break;
+            }
+            
+        }
+    } else {
+        return;
+    }
+    
+    CGContextFillEllipseInRect(context, CGRectMake(point.x - 5, [ self dbToPixel:(20.0f * log10(point.y)) ]  - 5, 10, 10));
+    CGContextDrawPath(context, kCGPathStroke);
 }
 
 /*-----------------------------------------------------------------------------------------

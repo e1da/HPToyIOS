@@ -39,7 +39,6 @@
 		D33A25A420CABC9C008A94EF /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */; };
 		D33A25A820CABF19008A94EF /* DeviceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A620CABF19008A94EF /* DeviceList.plist */; };
 		D33A25A920CABF19008A94EF /* PresetList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A720CABF19008A94EF /* PresetList.plist */; };
-		D33E22A520EA430700872CA4 /* BiquadManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33E22A420EA430700872CA4 /* BiquadManagerViewController.m */; };
 		D379126320D111B80089962D /* XOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126220D111B80089962D /* XOverViewController.m */; };
 		D379126620D1153F0089962D /* XOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126520D1153F0089962D /* XOverView.m */; };
 		D379126920D1CC240089962D /* icon167.png in Resources */ = {isa = PBXBuildFile; fileRef = D379126820D1CC240089962D /* icon167.png */; };
@@ -61,7 +60,6 @@
 		D39C3CAE20BEB50000BDC1A0 /* HiFiToyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CAD20BEB50000BDC1A0 /* HiFiToyTests.m */; };
 		D39C3CC020BEB6A500BDC1A0 /* Biquad.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CBF20BEB6A500BDC1A0 /* Biquad.m */; };
 		D39C3CC320BEB6CD00BDC1A0 /* ParamFilterContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CC220BEB6CD00BDC1A0 /* ParamFilterContainer.m */; };
-		D39C3CC620BEB6DC00BDC1A0 /* PassFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CC520BEB6DC00BDC1A0 /* PassFilter.m */; };
 		D39C3CC920BEB6FB00BDC1A0 /* Volume.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CC820BEB6FB00BDC1A0 /* Volume.m */; };
 		D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CCB20BEB70800BDC1A0 /* BassTreble.m */; };
 		D39C3CCF20BEB71200BDC1A0 /* Loudness.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CCE20BEB71200BDC1A0 /* Loudness.m */; };
@@ -138,8 +136,6 @@
 		D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		D33A25A620CABF19008A94EF /* DeviceList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceList.plist; sourceTree = "<group>"; };
 		D33A25A720CABF19008A94EF /* PresetList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PresetList.plist; sourceTree = "<group>"; };
-		D33E22A320EA430700872CA4 /* BiquadManagerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BiquadManagerViewController.h; sourceTree = "<group>"; };
-		D33E22A420EA430700872CA4 /* BiquadManagerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadManagerViewController.m; sourceTree = "<group>"; };
 		D379126120D111B80089962D /* XOverViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XOverViewController.h; sourceTree = "<group>"; };
 		D379126220D111B80089962D /* XOverViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XOverViewController.m; sourceTree = "<group>"; };
 		D379126420D1153F0089962D /* XOverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XOverView.h; sourceTree = "<group>"; };
@@ -175,8 +171,6 @@
 		D39C3CBF20BEB6A500BDC1A0 /* Biquad.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Biquad.m; sourceTree = "<group>"; };
 		D39C3CC120BEB6CD00BDC1A0 /* ParamFilterContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParamFilterContainer.h; sourceTree = "<group>"; };
 		D39C3CC220BEB6CD00BDC1A0 /* ParamFilterContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParamFilterContainer.m; sourceTree = "<group>"; };
-		D39C3CC420BEB6DC00BDC1A0 /* PassFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassFilter.h; sourceTree = "<group>"; };
-		D39C3CC520BEB6DC00BDC1A0 /* PassFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PassFilter.m; sourceTree = "<group>"; };
 		D39C3CC720BEB6FB00BDC1A0 /* Volume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Volume.h; sourceTree = "<group>"; };
 		D39C3CC820BEB6FB00BDC1A0 /* Volume.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Volume.m; sourceTree = "<group>"; };
 		D39C3CCA20BEB70800BDC1A0 /* BassTreble.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BassTreble.h; sourceTree = "<group>"; };
@@ -271,7 +265,6 @@
 		D33A258420CA89E6008A94EF /* OptionsViewController */ = {
 			isa = PBXGroup;
 			children = (
-				D33E22A220EA42EA00872CA4 /* BiquadManagerViewController */,
 				D33A258C20CA8FE0008A94EF /* DeviceNameViewController */,
 				D33A258D20CA8FE0008A94EF /* PairingCodeViewController */,
 				D33A258E20CA8FE0008A94EF /* PresetViewController */,
@@ -341,15 +334,6 @@
 				D33A25A720CABF19008A94EF /* PresetList.plist */,
 			);
 			path = Res;
-			sourceTree = "<group>";
-		};
-		D33E22A220EA42EA00872CA4 /* BiquadManagerViewController */ = {
-			isa = PBXGroup;
-			children = (
-				D33E22A320EA430700872CA4 /* BiquadManagerViewController.h */,
-				D33E22A420EA430700872CA4 /* BiquadManagerViewController.m */,
-			);
-			path = BiquadManagerViewController;
 			sourceTree = "<group>";
 		};
 		D379126720D1CC240089962D /* icon */ = {
@@ -488,8 +472,6 @@
 				D39C3CC220BEB6CD00BDC1A0 /* ParamFilterContainer.m */,
 				D379127E20E3BD9F0089962D /* XOver.h */,
 				D379127F20E3BD9F0089962D /* XOver.m */,
-				D39C3CC420BEB6DC00BDC1A0 /* PassFilter.h */,
-				D39C3CC520BEB6DC00BDC1A0 /* PassFilter.m */,
 				D379128420E546DA0089962D /* PassFilter2.h */,
 				D379128520E546DA0089962D /* PassFilter2.m */,
 				D39C3CC720BEB6FB00BDC1A0 /* Volume.h */,
@@ -666,14 +648,12 @@
 				D33A256120C6E163008A94EF /* BleDriver.m in Sources */,
 				D33A259520CA9141008A94EF /* PairingCodeViewController.m in Sources */,
 				D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */,
-				D33E22A520EA430700872CA4 /* BiquadManagerViewController.m in Sources */,
 				D33A256420C6E173008A94EF /* BlePacket.m in Sources */,
 				D33A254620C140F8008A94EF /* BassTrebleChannel.m in Sources */,
 				D379126620D1153F0089962D /* XOverView.m in Sources */,
 				D33A256D20C80C82008A94EF /* HiFiToyControl.m in Sources */,
 				D379128620E546DA0089962D /* PassFilter2.m in Sources */,
 				D39C3CD920BEB8C500BDC1A0 /* XmlData.m in Sources */,
-				D39C3CC620BEB6DC00BDC1A0 /* PassFilter.m in Sources */,
 				D39C3CDA20BEB8C500BDC1A0 /* XmlParserWrapper.m in Sources */,
 				D33A258B20CA8A30008A94EF /* NavigationController.m in Sources */,
 				D379128320E3C70A0089962D /* ParamFilter.m in Sources */,

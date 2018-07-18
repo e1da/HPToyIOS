@@ -30,8 +30,6 @@ typedef enum : uint8_t{
 @property (nonatomic) int           address0;
 @property (nonatomic) int           address1;
 
-//@property (nonatomic) XOverState_t  state;
-
 @property (nonatomic) ParamFilterContainer  * params;
 @property (nonatomic) PassFilter2           * hp;
 @property (nonatomic) PassFilter2           * lp;
@@ -42,11 +40,16 @@ typedef enum : uint8_t{
 //mono
 + (XOver *)initWithAddress:(int)address
                      Params:(ParamFilterContainer *)params Hp:(PassFilter2 *)hp Lp:(PassFilter2 *)lp;
+//stereo default
++ (XOver *)initDefaultWithAddress0:(int)address0 Address1:(int)address1;
 
-- (XOverState_t) getState;
+
 - (int) getLength;
+- (void) setOrder:(PassFilterOrder_t)order forPassFilter:(PassFilter2 *)passFilter;
 
-- (void) update;
+//utility
+- (int) getFreqForNextEnabledParametric;
+//- (void) update;
 
 - (double) getAFR:(double)freqX;
 

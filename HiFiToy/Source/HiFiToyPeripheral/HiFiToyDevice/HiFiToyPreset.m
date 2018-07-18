@@ -109,29 +109,8 @@
 - (void) loadDefaultPreset{
     self.presetName = @"DefaultPreset";
     
-    //Parametric biquads
-    ParamFilterContainer * params = [[ParamFilterContainer alloc] init];
-    
-    for (uint i = 0; i < 7; i++){
-        ParamFilter * param = [ParamFilter initWithAddress0:BIQUAD_FILTER_REG + i
-                                                    Address1:BIQUAD_FILTER_REG + 7 + i
-                                                        Freq:100 Qfac:1.41 dbVolume:0.0
-                                                     Enabled:(i == 0) ? YES : NO];
-        [param setBorderMaxFreq:20000 minFreq:20];
-        
-        [params addParam:param];
-    }
-    
-    //HP
-    PassFilter2 * hp = [PassFilter2 initWithAddress0:BIQUAD_FILTER_REG Address1:(BIQUAD_FILTER_REG + 7)
-                                       BiquadLength:BIQUAD_LENGTH_2 Order:FILTER_ORDER_2 Type:BIQUAD_HIGHPASS Freq:60];
-    //LP
-    PassFilter2 * lp = [PassFilter2 initWithAddress0:BIQUAD_FILTER_REG + 2 Address1:(BIQUAD_FILTER_REG + 7 + 2)
-                                        BiquadLength:BIQUAD_LENGTH_2 Order:FILTER_ORDER_2 Type:BIQUAD_LOWPASS Freq:10000];
-    
-    self.xover = [XOver initWithAddress0:BIQUAD_FILTER_REG Address1:(BIQUAD_FILTER_REG + 7)
-                                  Params:params Hp:hp Lp:lp];
-    
+    //XOver
+    self.xover = [XOver initDefaultWithAddress0:BIQUAD_FILTER_REG Address1:(BIQUAD_FILTER_REG + 7)];
     
     
     //Master Volume

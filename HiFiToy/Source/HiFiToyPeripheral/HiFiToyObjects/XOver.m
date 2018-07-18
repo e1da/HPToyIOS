@@ -37,8 +37,8 @@
         self.address1 = [decoder decodeIntForKey:@"keyAddress1"];
         
         self.params = [decoder decodeObjectForKey:@"keyParams"];
-        self.hp = [decoder decodeObjectForKey:@"keyHP"];
-        self.lp = [decoder decodeObjectForKey:@"keyLP"];
+        _hp = [decoder decodeObjectForKey:@"keyHP"];
+        _lp = [decoder decodeObjectForKey:@"keyLP"];
     }
     return self;
 }
@@ -116,7 +116,7 @@
     currentInstance.hp = hp;
     currentInstance.lp = lp;
     
-    [currentInstance update];
+    [currentInstance updateParam];
     
     return currentInstance;
 }
@@ -128,50 +128,38 @@
     return [self initWithAddress0:address Address1:0 Params:params Hp:hp Lp:lp];
 }
 
+//stereo default
++ (XOver *)initDefaultWithAddress0:(int)address0 Address1:(int)address1
+{
+    //HP
+    PassFilter2 * hp = [PassFilter2 initWithAddress0:address0 Address1:address1
+                                               Order:FILTER_ORDER_2 Type:BIQUAD_HIGHPASS Freq:60];
+    //LP
+    PassFilter2 * lp = [PassFilter2 initWithAddress0:address0 + 2 Address1:(address1) ? (address1 + 2) : 0
+                                               Order:FILTER_ORDER_2 Type:BIQUAD_LOWPASS Freq:10000];
+    
+    //Parametric biquads
+    ParamFilterContainer * params = [[ParamFilterContainer alloc] init];
+    
+    for (uint i = 0; i < 7; i++) {
+        ParamFilter * param = [ParamFilter initWithAddress0:address0 + i
+                                                   Address1:(address1) ? (address1 + i) : 0
+                                                       Freq:100 * (i + 1) Qfac:1.41 dbVolume:0.0
+                                                    Enabled:YES];
+        [param setBorderMaxFreq:20000 minFreq:20];
+        
+        [params addParam:param];
+    }
+    
+    return [self initWithAddress0:address0 Address1:address1 Params:params Hp:hp Lp:lp];
+}
+
 - (uint8_t)address {
     return self.address0;
     
 }
 
-/*typedef enum : uint8_t{
-    HP0_LP0_PARAM7,
-    HP0_LP1_PARAM6,
-    HP0_LP2_PARAM5,
-    HP1_LP0_PARAM6,
-    HP1_LP1_PARAM5,
-    HP1_LP2_PARAM4,
-    HP2_LP0_PARAM5,
-    HP2_LP1_PARAM4,
-    HP2_LP2_PARAM3,
-} XOverState_t;*/
-
 //setters/getters
-- (XOverState_t) getState
-{
-    XOverState_t state;
-    
-    if (self.hp) {
-        state = self.hp.biquadLength * 3;//0..2
-        if (state > HP2_LP0_PARAM5) return ERROR;
-        
-    } else {
-        state = HP0_LP0_PARAM7;
-    }
-    
-    if (self.lp) {
-        if (self.lp.biquadLength > BIQUAD_LENGTH_2) return ERROR;
-        state += self.lp.biquadLength;// +0..2
-    }
-    
-    uint8_t paramLength[9] = {7, 6, 5, 6, 5, 4, 5, 4, 3};//func paramLength (state)
-    if ((!self.params) || (self.params.count != paramLength[state])) {
-        return ERROR;
-    }
-    
-    
-    return state;
-}
-
 - (int) getLength
 {
     int length = 0;
@@ -182,69 +170,182 @@
     return length;
 }
 
-- (void) setHp:(PassFilter2 *)hp
+- (void) setOrder:(PassFilterOrder_t)order forPassFilter:(PassFilter2 *)passFilter
 {
-    if (hp) {
-        if (hp.biquadLength > BIQUAD_LENGTH_2) hp.biquadLength = BIQUAD_LENGTH_2;
-        _hp = hp;
+    if ((order < FILTER_ORDER_0) || (order > FILTER_ORDER_8)) return;
+    if ((!passFilter) || (passFilter.order == order)) return;
     
+    if (passFilter.order == FILTER_ORDER_0) {
+        if (order == FILTER_ORDER_2) {
+            
+            ParamFilter * param = [self.params findParamWithAddr:passFilter.address0];
+            [self.params removeWithPossibleReplace:param];
+            
+        } else if (order == FILTER_ORDER_4) {
+            
+            ParamFilter * param = [self.params findParamWithAddr:passFilter.address0];
+            [self.params removeWithPossibleReplace:param];
+            param = [self.params findParamWithAddr:passFilter.address0 + 1];
+            [self.params removeWithPossibleReplace:param];
+        }
+    } else if (passFilter.order == FILTER_ORDER_2) {
         
-    } else {
-        _hp = nil;
+        if (order == FILTER_ORDER_0) {
+            
+            int freq = [self getFreqForNextEnabledParametric];
+            
+            ParamFilter * param = [ParamFilter initWithAddress0:passFilter.address0
+                                                       Address1:passFilter.address1
+                                                           Freq:freq Qfac:1.41 dbVolume:0.0
+                                                        Enabled:YES];
+            [self.params addParam:param];
+            [param sendWithResponse:YES];
+            
+        } else if (order == FILTER_ORDER_4) {
+
+            ParamFilter * param = [self.params findParamWithAddr:passFilter.address0 + 1];
+            [self.params removeWithPossibleReplace:param];
+        }
+        
+    } else if (passFilter.order == FILTER_ORDER_4) {
+        
+        if (order == FILTER_ORDER_0) {
+            
+            int freq = [self getFreqForNextEnabledParametric];
+            
+            ParamFilter * param = [ParamFilter initWithAddress0:passFilter.address0
+                                                       Address1:passFilter.address1
+                                                           Freq:freq Qfac:1.41 dbVolume:0.0
+                                                        Enabled:YES];
+            [self.params addParam:param];
+            [param sendWithResponse:YES];
+            
+            freq = [self getFreqForNextEnabledParametric];
+            
+            param = [ParamFilter initWithAddress0:passFilter.address0 + 1
+                                         Address1:(passFilter.address1) ? (passFilter.address1 + 1) : 0
+                                             Freq:freq Qfac:1.41 dbVolume:0.0
+                                          Enabled:YES];
+            [self.params addParam:param];
+            [param sendWithResponse:YES];
+            
+        } else if (order == FILTER_ORDER_2) {
+            
+            int freq = [self getFreqForNextEnabledParametric];
+            
+            ParamFilter * param = [ParamFilter initWithAddress0:passFilter.address0 + 1
+                                                       Address1:(passFilter.address1) ? (passFilter.address1 + 1) : 0
+                                                           Freq:freq Qfac:1.41 dbVolume:0.0
+                                                        Enabled:YES];
+            [self.params addParam:param];
+            [param sendWithResponse:YES];
+        }
     }
-    [self update];
-}
-
-
-
-- (void) setLp:(PassFilter2 *)lp
-{
-    if (lp) {
-        if (lp.biquadLength > BIQUAD_LENGTH_2) lp.biquadLength = BIQUAD_LENGTH_2;
-        _lp = lp;
     
-    } else {
-        _lp = nil;
-    }
-    [self update];
+    passFilter.order = order;
+    [passFilter sendWithResponse:YES];
 }
 
-- (void) update {
+//transfer param from pass biquad or remove
+- (void) updateParam {
+    
+    if ((!self.params) || (self.params.count == 0)) return;
+    
+    if ((self.hp) && (self.hp.order != FILTER_ORDER_0)) {
+        if (self.hp.order >= FILTER_ORDER_2) {
+            ParamFilter * param = [self.params findParamWithAddr:self.hp.address0];
+            [self.params removeWithPossibleReplace:param];
+        }
+        if (self.hp.order == FILTER_ORDER_4) {
+            ParamFilter * param = [self.params findParamWithAddr:self.hp.address0 + 1];
+            [self.params removeWithPossibleReplace:param];
+        }
+    }
+    
+    if ((self.lp) && (self.lp.order != FILTER_ORDER_0)) {
+        if (self.lp.order >= FILTER_ORDER_2) {
+            ParamFilter * param = [self.params findParamWithAddr:self.lp.address0];
+            [self.params removeWithPossibleReplace:param];
+        }
+        if (self.lp.order == FILTER_ORDER_4) {
+            ParamFilter * param = [self.params findParamWithAddr:self.lp.address0 + 1];
+            [self.params removeWithPossibleReplace:param];
+        }
+    }
+    
+}
+
+- (int) getFreqForNextEnabledParametric {
+    int freq = -1;
+    
+    NSMutableArray * freqs = [[NSMutableArray alloc] init];
+    
+    //get freqs from all params, hp, lp
+    if (self.params) {
+        for (int i = 0; i < self.params.count; i++) {
+            ParamFilter * param = [self.params paramAtIndex:i];
+            if ([param isEnabled]) {
+                [freqs addObject:[NSNumber numberWithInt:param.freq]];
+                
+            }
+        }
+    }
+    if (self.hp) [freqs addObject:[NSNumber numberWithInt:self.hp.freq]];
+    if (self.lp) [freqs addObject:[NSNumber numberWithInt:self.lp.freq]];
+    
+    if (freqs.count < 2) return freq;
+    
+    //sort freqs
+    NSSortDescriptor *lowestToHighest = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES];
+    [freqs sortUsingDescriptors:[NSArray arrayWithObject:lowestToHighest]];
+    
+    //get max delta freq
+    int maxIndex = 0;
+    int maxDFreq = 0;
+    for (int i = 0; i < freqs.count - 1; i++){
+        int f0 = [[freqs objectAtIndex:i] intValue];
+        int f1 = [[freqs objectAtIndex:i + 1] intValue];
+        
+        if (f1 - f0 > maxDFreq){
+            maxDFreq = f1 - f0;
+            maxIndex = i;
+        }
+    }
+    
+    int f0 = [[freqs objectAtIndex:maxIndex] intValue];
+    int f1 = [[freqs objectAtIndex:maxIndex + 1] intValue];
+    
+    //freq calculate
+    double dfreq = (log10(f0) + log10(f1)) / 2;
+    freq = pow(10, dfreq);
+    
+    return freq;
+}
+
+/*- (void) update {
     int paramLength = MAX_BIQUADS;
     
     if (self.hp) {
         self.hp.address0 = self.address0;
         self.hp.address1 = self.address1;
-        paramLength -= self.hp.biquadLength;
+        paramLength -= self.hp.order;
     }
     if (self.lp){
-        if (self.hp) {
-            self.lp.address0 = self.address0 + self.hp.biquadLength;
-            if (self.address1) {
-                self.lp.address1 = self.address1 + self.hp.biquadLength;
-            } else {
-                self.lp.address1 = 0;
-            }
-        } else {
-            self.lp.address0 = self.address0;
-            self.lp.address1 = self.address1;
-        }
-        paramLength -= self.lp.biquadLength;
+        self.lp.address0 = _address0 + 2;
+        self.lp.address1 = (_address1) ? (_address1 + 2) : 0;
+        paramLength -= self.lp.order;
     }
+    
     
     if (paramLength > 0) {
         ParamFilterContainer * temp = nil;
         
-        //store enabled biquads to temp
         if (self.params) {
-            temp = [[ParamFilterContainer alloc] init];
-            
-            
-            for (int i = 0; i < self.params.count; i++) {
-                ParamFilter * paramFilter = [self.params paramAtIndex:i];
-                if ([paramFilter isActive]) [temp addParam:paramFilter];
-            }
+            //get copy and sort
+            temp = [self.params copy];
+            [temp sortActive];
         }
+        
         
         //fill new params
         self.params = [[ParamFilterContainer alloc] init];
@@ -253,7 +354,7 @@
             int addrOffset = MAX_BIQUADS - paramLength + i;
             ParamFilter * param;
             
-            if (i < temp.count) {
+            if ((temp) && (i < temp.count)) {
                 param = [temp paramAtIndex:i];
                 param.address0 = self.address0 + addrOffset;
                 param.address1 = (self.address1) ? (self.address1 + addrOffset) : 0;
@@ -261,8 +362,8 @@
             } else {
                 param = [ParamFilter initWithAddress0:self.address0 + addrOffset
                                              Address1:(self.address1) ? (self.address1 + addrOffset) : 0
-                                                 Freq:100 Qfac:1.41 dbVolume:0.0
-                                              Enabled:(i == 0) ? YES : NO];
+                                                 Freq:100 * (i + 1) Qfac:1.41 dbVolume:0.0
+                                              Enabled:YES];
             }
             [param setBorderMaxFreq:20000 minFreq:20];
                 
@@ -271,7 +372,7 @@
     } else {
         self.params = nil;
     }
-}
+}*/
 
 //get AMPL FREQ response
 - (double) getAFR:(double)freqX
@@ -291,13 +392,13 @@
     NSString * infoStr;
     
     if (self.hp) {
-        infoStr = [NSString stringWithFormat:@"HP=%d ", self.hp.biquadLength];
+        infoStr = [NSString stringWithFormat:@"HP=%d ", self.hp.order];
     } else {
         infoStr = @"HP=0 ";
     }
     
     if (self.lp) {
-        infoStr = [infoStr stringByAppendingString:[NSString stringWithFormat:@"LP=%d ", self.lp.biquadLength]];
+        infoStr = [infoStr stringByAppendingString:[NSString stringWithFormat:@"LP=%d ", self.lp.order]];
     } else {
         infoStr = [infoStr stringByAppendingString:@"LP=0 "];
     }
@@ -339,28 +440,28 @@
     
     //create default hp and import
     PassFilter2 * hp = [PassFilter2 initWithAddress0:addr[0] Address1:addr[1]
-                                        BiquadLength:BIQUAD_LENGTH_0 Order:FILTER_ORDER_0 Type:BIQUAD_HIGHPASS Freq:100];
+                                               Order:FILTER_ORDER_0 Type:BIQUAD_HIGHPASS Freq:100];
     
     if (([hp importData:data]) && (hp.type == BIQUAD_HIGHPASS)) {
         
         self.hp = hp;
         
-        addr[0] += hp.biquadLength;
-        if (addr[1]) addr[1] += hp.biquadLength;
+        addr[0] += hp.order;
+        if (addr[1]) addr[1] += hp.order;
     } else {
         self.hp = nil;
     }
     
     //create default lp and import
     PassFilter2 * lp = [PassFilter2 initWithAddress0:addr[0] Address1:addr[1]
-                                        BiquadLength:BIQUAD_LENGTH_0 Order:FILTER_ORDER_0 Type:BIQUAD_LOWPASS Freq:100];
+                                               Order:FILTER_ORDER_0 Type:BIQUAD_LOWPASS Freq:100];
     
     if (([lp importData:data]) && (hp.type == BIQUAD_LOWPASS)){
         
         self.lp = lp;
         
-        addr[0] += lp.biquadLength;
-        if (addr[1]) addr[1] += lp.biquadLength;
+        addr[0] += lp.order;
+        if (addr[1]) addr[1] += lp.order;
     } else {
         self.lp = nil;
     }
@@ -419,11 +520,11 @@
     
     if ((self.hp) && (self.hp.address == addr)){
         [self.hp importFromXml:xmlParser withAttrib:attributeDict];
-        count += self.hp.biquadLength;
+        count += self.hp.order;
     }
     if ((self.lp) && (self.lp.address == addr)){
         [self.lp importFromXml:xmlParser withAttrib:attributeDict];
-        count += self.lp.biquadLength;
+        count += self.lp.order;
     }
     if ((self.params) && (self.params.address == addr)){
         [self.params importFromXml:xmlParser withAttrib:attributeDict];

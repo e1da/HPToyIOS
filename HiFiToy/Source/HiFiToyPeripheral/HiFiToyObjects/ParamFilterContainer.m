@@ -97,11 +97,69 @@
     return nil;
 }
 
+- (ParamFilter *) paramWithMinFreq
+{
+    int index = 0;
+    for (int i = 0; i < [self count]; i++) {
+        ParamFilter * current = [self paramAtIndex:i];
+        ParamFilter * min = [self paramAtIndex:index];
+        
+        if (min.freq > current.freq) {
+            index = i;
+        }
+    }
+    return [self paramAtIndex:index];
+}
+
+- (ParamFilter *) paramWithMaxFreq
+{
+    int index = 0;
+    for (int i = 0; i < [self count]; i++) {
+        ParamFilter * current = [self paramAtIndex:i];
+        ParamFilter * max = [self paramAtIndex:index];
+        
+        if (max.freq < current.freq) {
+            index = i;
+        }
+    }
+    return [self paramAtIndex:index];
+}
+
 - (void) removeAtIndex:(NSUInteger)index
 {
     if (params) {
         [params removeObjectAtIndex:index];
     }
+}
+
+- (void) removeParam:(ParamFilter *) param
+{
+    if ([self containsParam:param]) {
+        NSUInteger index = [self indexOfParam:param];
+        [self removeAtIndex:index];
+    }
+}
+
+//try copy param to another disactive param and delete
+- (void) removeWithPossibleReplace:(ParamFilter *) param
+{
+    if ((!param) || (![self containsParam:param])) return;
+    
+    if ([param isActive]) {
+ 
+        for (int i = 0; i < [self count]; i++) {
+            ParamFilter * p = [self paramAtIndex:i] ;
+            if (p == param) continue;
+            
+            if (![p isActive]) {
+                [p setBiquad:param];
+                [p sendWithResponse:YES];
+                break;
+            }
+        }
+    }
+    
+    [self removeParam:param];
 }
 
 - (void) clear
@@ -119,6 +177,18 @@
 - (NSUInteger) indexOfParam:(ParamFilter *) param
 {
     return [params indexOfObject:param];
+}
+
+- (ParamFilter *) findParamWithAddr:(int)addr
+{
+    for (int i = 0; i < [self count]; i++) {
+        ParamFilter * param = [self paramAtIndex:i];
+        
+        if (param.address0 == addr) {
+            return param;
+        }
+    }
+    return nil;
 }
 
 /*- (void) setBiquadContainer:(BiquadContainer *) biquadContainer
@@ -146,9 +216,9 @@
         for (int i = 0; i < [self count]; i++){
             ParamFilter * param = [self paramAtIndex:i];
             
-            if (fabs(param.dbVolume) > 0.01){
+            //if (fabs(param.dbVolume) > 0.01){
                 [param setEnabled:YES];
-            }
+            //}
         }
     } else { //set NO
         for (int i = 0; i < [self count]; i++){
@@ -237,6 +307,38 @@
     return nil;
 }
 
+//sort params. first - active and last - dis active
+- (void) sortActive
+{
+    if (params) {
+        BOOL replaceFlag = YES;
+        
+        while (replaceFlag) {
+            replaceFlag = NO;
+            
+            for (int i = 0; i < [self count] - 1; i++){
+                ParamFilter * current = [[self paramAtIndex:i] copy];
+                ParamFilter * next = [self paramAtIndex:i + 1];
+                
+                if ((![current isActive]) && ([next isActive])) {
+                    //swap address
+                    /*int addr0 = current.address0;
+                    int addr1 = current.address0;
+                    current.address0 = next.address0;
+                    current.address1 = next.address1;
+                    next.address0 = addr0;
+                    next.address1 = addr1;*/
+                    //swap params
+                    [params replaceObjectAtIndex:i withObject:next];
+                    [params replaceObjectAtIndex:(i + 1) withObject:current];
+                    
+                    replaceFlag = YES;
+                    break;
+                }
+            }
+        }
+    }
+}
 
 
 //info string
