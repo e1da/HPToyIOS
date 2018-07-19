@@ -422,8 +422,11 @@
                 
                 break;
             case CLIP_DETECTION:
-                
+            {
+                NSNumber * clip = [NSNumber numberWithInt:status];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ClipDetectionNotification" object:clip];
                 break;
+            }
             case OTW_DETECTION:
                 
                 break;

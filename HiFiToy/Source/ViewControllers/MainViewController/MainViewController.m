@@ -50,6 +50,11 @@
                                                  name:@"PresetImportNotification"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didClipDetection:)
+                                                 name:@"ClipDetectionNotification"
+                                               object:nil];
+    
     hiFiToyControl = [HiFiToyControl sharedInstance];
 }
 
@@ -68,6 +73,7 @@
 }
 
 - (void) setupOutlets{
+    self.gainLabel_outl.textColor = [UIColor blackColor];
     self.gainLabel_outl.text = [hiFiToyPreset.masterVolume getInfo];
     self.gainSlider_outl.value = [hiFiToyPreset.masterVolume getDbPercent];
     
@@ -251,7 +257,7 @@
 }
 
 /*-----------------------------------------------------------------------------------------
- didGetPresetImportNotification
+    PresetImportNotification
  -----------------------------------------------------------------------------------------*/
 -(void) didGetPresetImportNotification:(NSNotification*)notification
 {
@@ -264,6 +270,17 @@
     hiFiToyPreset = [hiFiToyDevice getActivePreset];
     
     [self setupOutlets];
+}
+
+/*-----------------------------------------------------------------------------------------
+    ClipDetectionNotification
+ -----------------------------------------------------------------------------------------*/
+- (void) didClipDetection:(NSNotification *)notification
+{
+    BOOL clip = [[notification object] boolValue];
+    NSLog(@"Clip=%d", clip);
+    
+    self.gainLabel_outl.textColor = clip ? [UIColor redColor] : [UIColor blackColor];
 }
 
 @end
