@@ -73,6 +73,7 @@
 }
 
 - (void) setupOutlets{
+    self.volumeTitle_outl.textColor = [UIColor blackColor];
     self.gainLabel_outl.textColor = [UIColor blackColor];
     self.gainLabel_outl.text = [hiFiToyPreset.masterVolume getInfo];
     self.gainSlider_outl.value = [hiFiToyPreset.masterVolume getDbPercent];
@@ -96,25 +97,25 @@
     
     switch (section){
         case 0:
-            tittleSection = @"XOVER CONTROL";
-            buttonVisibleFlag = YES;
+            tittleSection = @"VOLUME CONTROL";
             break;
         case 1:
-            break;
-        case 2:
-            tittleSection = @"GAIN CONTROL";
-            break;
-        case 3:
             tittleSection = @"BASS TREBLE CONTROL";
             buttonVisibleFlag = YES;
             break;
-        case 4:
+        case 2:
             tittleSection = @"LOUDNESS CONTROL";
             buttonVisibleFlag = YES;
             break;
-        case 5:
+        case 3:
+            tittleSection = @"FILTERS CONTROL";
+            buttonVisibleFlag = YES;
+            break;
+        case 4:
             tittleSection = @"COMPRESSOR CONTROL";
             buttonVisibleFlag = YES;
+            break;
+        case 5:
             break;
     }
     
@@ -148,19 +149,19 @@
     NSString * msgString = nil;
  
     switch (button.tag) {
-        case 0://XOVER
-            msgString = @"Xover let you fully control up to 7 Biquads: Parametric EQs, LPF and HPF, both are Butterworth 2 or 4 order. PEQ On/Off button bypassing PEQ's";
+        case 0://VOLUME
+            msgString = @"Volume info";
             break;
-        case 2://GAIN
-            msgString = @"Gain info";
-            break;
-        case 3://BASS TREBLE
+        case 1://BASS TREBLE
             msgString = @"Bass and Treble info";
             break;
-        case 4://LOUDNESS
+        case 2://LOUDNESS
             msgString = @"Loudness info";
             break;
-        case 5://DRC
+        case 3://FILTERS
+            msgString = @"Filters let you fully control up to 7 Biquads: Parametric EQs, LPF and HPF, both are Butterworth 2 or 4 order. PEQ On/Off button bypassing PEQ's";
+            break;
+        case 4://DRC
             msgString = @"Compressor info";
             break;
         default:
@@ -281,6 +282,7 @@
     NSLog(@"Clip=%d", clip);
     
     self.gainLabel_outl.textColor = clip ? [UIColor redColor] : [UIColor blackColor];
+    self.volumeTitle_outl.textColor = clip ? [UIColor redColor] : [UIColor blackColor];
 }
 
 @end

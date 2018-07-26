@@ -18,6 +18,7 @@
 }
 
 //outlets
+@property (weak, nonatomic) IBOutlet UILabel *volumeTitle_outl;
 @property (weak, nonatomic) IBOutlet UILabel *gainLabel_outl;
 @property (weak, nonatomic) IBOutlet UISlider *gainSlider_outl;
 @property (weak, nonatomic) IBOutlet UILabel *bassLabel_outl;

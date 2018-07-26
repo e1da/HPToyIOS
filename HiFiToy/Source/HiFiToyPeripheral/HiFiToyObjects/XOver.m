@@ -133,10 +133,10 @@
 {
     //HP
     PassFilter2 * hp = [PassFilter2 initWithAddress0:address0 Address1:address1
-                                               Order:FILTER_ORDER_2 Type:BIQUAD_HIGHPASS Freq:60];
+                                               Order:FILTER_ORDER_0 Type:BIQUAD_HIGHPASS Freq:60];
     //LP
     PassFilter2 * lp = [PassFilter2 initWithAddress0:address0 + 2 Address1:(address1) ? (address1 + 2) : 0
-                                               Order:FILTER_ORDER_2 Type:BIQUAD_LOWPASS Freq:10000];
+                                               Order:FILTER_ORDER_0 Type:BIQUAD_LOWPASS Freq:10000];
     
     //Parametric biquads
     ParamFilterContainer * params = [[ParamFilterContainer alloc] init];

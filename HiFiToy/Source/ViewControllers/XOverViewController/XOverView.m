@@ -326,8 +326,8 @@
     
     [self drawFreqLineForParamFilters:(CGContextRef)context];
     
-    //[self drawTap:context forPassFilter:self.xover.hp];
-    //[self drawTap:context forPassFilter:self.xover.lp];
+    [self drawSimpleTap:context forPassFilter:self.xover.hp];
+    [self drawSimpleTap:context forPassFilter:self.xover.lp];
     
 }
 
@@ -425,6 +425,37 @@
     
     CGContextFillEllipseInRect(context, CGRectMake(point.x - 5, [ self dbToPixel:(20.0f * log10(point.y)) ]  - 5, 10, 10));
     CGContextDrawPath(context, kCGPathStroke);
+}
+
+- (void) drawSimpleTap:(CGContextRef)context forPassFilter:(PassFilter2 *)passFilter
+{
+    if (passFilter.order != FILTER_ORDER_0) return;
+    
+    if (self.activeElement == passFilter) {
+        CGContextSetFillColorWithColor(context, [[UIColor redColor] CGColor]);
+    } else {
+        CGContextSetFillColorWithColor(context, [[UIColor brownColor] CGColor]);
+    }
+    
+    CGPoint point;
+    
+    if (passFilter.type == BIQUAD_HIGHPASS) {
+        point.x = border_left;
+        point.y = [self getFilters_y:[self pixelToFreq:border_left] ];
+        
+    } else if (passFilter.type == BIQUAD_LOWPASS) {
+        
+        point.x = width - border_right;
+        point.y = [self getFilters_y:[self pixelToFreq:width - border_right] ];
+        
+    } else {
+        return;
+    }
+    
+    if (point.y > CLIP_DB) {
+        CGContextFillEllipseInRect(context, CGRectMake(point.x - 5, [ self dbToPixel:(20.0f * log10(point.y)) ]  - 5, 10, 10));
+        CGContextDrawPath(context, kCGPathStroke);
+    }
 }
 
 /*-----------------------------------------------------------------------------------------
