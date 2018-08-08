@@ -14,25 +14,27 @@ typedef enum {
 } BleState_t;
 
 typedef enum : uint8_t {
-    ESTABLISH_PAIR  = 0x00,
-    SET_PAIR_CODE   = 0x01,
-    SET_WRITE_FLAG  = 0x02,
-    GET_WRITE_FLAG  = 0x03,
-    GET_VERSION     = 0x04,
-    GET_CHECKSUM    = 0x05,
-    INIT_DSP        = 0x06,
+    ESTABLISH_PAIR      = 0x00,
+    SET_PAIR_CODE       = 0x01,
+    SET_WRITE_FLAG      = 0x02,
+    GET_WRITE_FLAG      = 0x03,
+    GET_VERSION         = 0x04,
+    GET_CHECKSUM        = 0x05,
+    INIT_DSP            = 0x06,
+    SET_AUDIO_SOURCE    = 0x07,
+    GET_AUDIO_SOURCE    = 0x08,
     
     //feedback msg
-    CLIP_DETECTION = 0xFD,
-    OTW_DETECTION = 0xFE,
-    PARAM_CONNECTION_ENABLED = 0xFF
+    CLIP_DETECTION              = 0xFD,
+    OTW_DETECTION               = 0xFE,
+    PARAM_CONNECTION_ENABLED    = 0xFF
     
-} TestCmd_t;
+} CommonCmd_t;
 
 typedef struct {
     uint8_t cmd;
     uint8_t data[4];
-} TestPacket_t;
+} CommonPacket_t;
 
 typedef struct {
     uint8_t addr;

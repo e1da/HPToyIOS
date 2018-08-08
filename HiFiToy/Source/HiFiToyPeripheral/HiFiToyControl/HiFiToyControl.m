@@ -21,6 +21,7 @@
         bleDriver = [[BleDriver alloc] init];
         [bleDriver resetCoreBleManager];
         bleDriver.communicationDelegate = self;
+        _audioSource = AUTO;
     }
     
     return self;
@@ -73,76 +74,98 @@
 
 - (void) sendNewPairingCode:(uint32_t) pairing_code
 {
-    TestPacket_t packet;
+    CommonPacket_t packet;
     
     packet.cmd = SET_PAIR_CODE;
     memcpy(&packet.data, &pairing_code, 4);
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(TestPacket_t)];
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
     [self sendDataToDsp:data withResponse:YES];
     
 }
 
 - (void) startPairedProccess:(uint32_t) pairing_code
 {
-    TestPacket_t packet;
+    CommonPacket_t packet;
     
     packet.cmd = ESTABLISH_PAIR;
     memcpy(&packet.data, &pairing_code, 4);
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(TestPacket_t)];
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
     [self sendDataToDsp:data withResponse:YES];
     
 }
 
 - (void) sendWriteFlag:(uint8_t) write_flag
 {
-    TestPacket_t packet;
+    CommonPacket_t packet;
     
     packet.cmd = SET_WRITE_FLAG;
     packet.data[0] = write_flag;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(TestPacket_t)];
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
     [self sendDataToDsp:data withResponse:YES];
 }
 
 - (void) checkFirmareWriteFlag
 {
-    TestPacket_t packet;
+    CommonPacket_t packet;
     
     packet.cmd = GET_WRITE_FLAG;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(TestPacket_t)];
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
     [self sendDataToDsp:data withResponse:YES];
 }
 
 - (void) getVersion
 {
-    TestPacket_t packet;
+    CommonPacket_t packet;
     
     packet.cmd = GET_VERSION;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(TestPacket_t)];
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
     [self sendDataToDsp:data withResponse:YES];
 }
 
 - (void) getChecksumParamData
 {
-    TestPacket_t packet;
+    CommonPacket_t packet;
     
     packet.cmd = GET_CHECKSUM;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(TestPacket_t)];
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
     [self sendDataToDsp:data withResponse:YES];
 }
 
 - (void) setInitDsp
 {
-    TestPacket_t packet;
+    CommonPacket_t packet;
     
     packet.cmd = INIT_DSP;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(TestPacket_t)];
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
+    [self sendDataToDsp:data withResponse:YES];
+}
+
+- (void) setAudioSource:(AudioSource_t)audioSource
+{
+    _audioSource = audioSource;
+    
+    CommonPacket_t packet;
+    packet.cmd = SET_AUDIO_SOURCE;
+    packet.data[0] = audioSource;
+    
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
+    [self sendDataToDsp:data withResponse:YES];
+}
+
+- (void) updateAudioSource
+{
+    CommonPacket_t packet;
+    
+    packet.cmd = GET_AUDIO_SOURCE;
+    
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
     [self sendDataToDsp:data withResponse:YES];
 }
 
@@ -171,6 +194,7 @@
     hiFiToyConfig.pairingCode       = [[HiFiToyDeviceList sharedInstance] getActiveDevice].pairingCode;
     hiFiToyConfig.dataBufLength     = [self getDataBufLength:data];
     hiFiToyConfig.dataBytesLength   = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + data.length;
+    hiFiToyConfig.audioSource       = _audioSource;
     
     NSLog(@"Send DSP Config L=%dbytes, B=%dbufs", hiFiToyConfig.dataBytesLength, hiFiToyConfig.dataBufLength);
     
@@ -357,7 +381,7 @@
         uint8_t data[9];
         [value getBytes:&data length:9];
         
-        TestCmd_t feedbackMsg = data[0];
+        CommonCmd_t feedbackMsg = data[0];
         uint8_t status = data[1];
         
         switch (feedbackMsg) {
@@ -405,7 +429,7 @@
                 
                 if (version == HIFI_TOY_VERSION) {
                     NSLog(@"GET_VERSION_OK");
-                    [self getChecksumParamData];
+                    [self updateAudioSource];
                 } else {
                     NSLog(@"GET_VERSION_FAIL");
                     HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
@@ -421,6 +445,13 @@
                 [self comparePreset:checksum];
                 
                 break;
+            case GET_AUDIO_SOURCE:
+            {
+                _audioSource = data[1];
+                NSLog(@"GET_AUDIO_SOURCE %d", _audioSource);
+                [self getChecksumParamData];
+                break;
+            }
             case CLIP_DETECTION:
             {
                 NSNumber * clip = [NSNumber numberWithInt:status];

@@ -56,6 +56,7 @@
     
     _nameLabel_outl.text = self.hiFiToyDevice.name;
     _UUIDLabel_outl.text = [[HiFiToyDeviceList sharedInstance] getActiveDeviceInfo];
+    _audioSourceSegment_outl.selectedSegmentIndex = hiFiToyControl.audioSource;
 }
 
 /*-----------------------------------------------------------------------------------------
@@ -136,5 +137,9 @@
     
 }
 
+
+- (IBAction)changeAudioSource:(id)sender {
+    hiFiToyControl.audioSource = self.audioSourceSegment_outl.selectedSegmentIndex;
+}
 
 @end

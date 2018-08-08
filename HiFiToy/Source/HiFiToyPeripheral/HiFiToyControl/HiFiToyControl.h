@@ -10,14 +10,17 @@
 #import "BleDriver.h"
 #import "HiFiToyObject.h"
 
-#define HIFI_TOY_VERSION            9
+#define HIFI_TOY_VERSION            10
 #define CC2540_PAGE_SIZE            2048
 #define ATTACH_PAGE_OFFSET          (3 * CC2540_PAGE_SIZE)//3 page
 
 @interface HiFiToyControl : NSObject <BleCommunicationDelegate> {
     BleDriver * bleDriver;
     HiFiToyPeripheral_t hiFiToyConfig;
+    
 }
+
+@property (nonatomic) AudioSource_t audioSource;
 
 + (HiFiToyControl *)sharedInstance;
 
@@ -36,6 +39,8 @@
 - (void) getVersion;
 - (void) getChecksumParamData;
 - (void) setInitDsp;
+
+- (void) updateAudioSource;
 
 - (void) restoreFactorySettings;
 - (void) sendDSPConfig:(NSData *)data;

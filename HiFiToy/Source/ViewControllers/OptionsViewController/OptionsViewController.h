@@ -20,5 +20,8 @@
 //outlets
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel_outl;
 @property (weak, nonatomic) IBOutlet UILabel *UUIDLabel_outl;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *audioSourceSegment_outl;
+
+- (IBAction)changeAudioSource:(id)sender;
 
 @end
