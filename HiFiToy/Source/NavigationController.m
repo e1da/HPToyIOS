@@ -41,7 +41,30 @@
     // Do any additional setup after loading the view.
     self.interactivePopGestureRecognizer.enabled = NO;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didClipDetection:)
+                                                 name:@"ClipDetectionNotification"
+                                               object:nil];
+    
+    
 }
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+/*-----------------------------------------------------------------------------------------
+ ClipDetectionNotification
+ -----------------------------------------------------------------------------------------*/
+- (void) didClipDetection:(NSNotification *)notification
+{
+    BOOL clip = [[notification object] boolValue];
+    //NSLog(@"Clip=%d", clip);
+
+    self.navigationBar.barTintColor = clip ? [UIColor redColor] : [UIColor whiteColor];
+    //self.navigationBar.translucent = clip ? NO : YES;
+}
+
 
 - (void)didReceiveMemoryWarning
 {
