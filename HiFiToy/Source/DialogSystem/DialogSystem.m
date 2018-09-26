@@ -287,4 +287,35 @@
     [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
 }
 
+- (void) showEnergySyncDialog:(EnergyConfig_t)energy
+{
+    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+    
+    if (_alertController) {
+        
+        [self dismissAlert];
+        _alertController = nil;
+    }
+    
+    _alertController = [UIAlertController alertControllerWithTitle:@"Info"
+                                                           message:NSLocalizedString(@"Are you sure want to sync energy manager?", @"")
+                                                    preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleDestructive
+                                                         handler:nil];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                         
+                                                         [[HiFiToyControl sharedInstance] sendEnergyConfig:energy];
+                                                         [self showAlert:@"Energy manager is syncronized."];
+                                                     }];
+    
+    [_alertController addAction:cancelAction];
+    [_alertController addAction:okAction];
+    
+    [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
+}
+
 @end

@@ -281,8 +281,8 @@
     BOOL clip = [[notification object] boolValue];
     NSLog(@"Clip=%d", clip);
     
-    self.gainLabel_outl.textColor = clip ? [UIColor redColor] : [UIColor blackColor];
-    self.volumeTitle_outl.textColor = clip ? [UIColor redColor] : [UIColor blackColor];
+    self.gainLabel_outl.textColor = /*clip ? [UIColor redColor] :*/ [UIColor blackColor];
+    self.volumeTitle_outl.textColor = /*clip ? [UIColor redColor] :*/ [UIColor blackColor];
 }
 
 @end

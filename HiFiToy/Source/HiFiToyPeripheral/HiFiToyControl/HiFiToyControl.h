@@ -32,6 +32,9 @@
 - (void) connect:(CBPeripheral *)p;
 - (void) disconnect;
 
+//base send command
+- (void) sendDataToDsp:(NSData *)data withResponse:(BOOL)response;
+//sys command
 - (void) sendNewPairingCode:(uint32_t) pairing_code;
 - (void) startPairedProccess:(uint32_t) pairing_code;
 - (void) sendWriteFlag:(uint8_t) write_flag;
@@ -39,13 +42,13 @@
 - (void) getVersion;
 - (void) getChecksumParamData;
 - (void) setInitDsp;
-
 - (void) updateAudioSource;
+- (void) sendEnergyConfig:(EnergyConfig_t)energy;
+- (void) getEnergyConfig;
 
+//adv command (save/restore to/from storage)
 - (void) restoreFactorySettings;
 - (void) sendDSPConfig:(NSData *)data;
-
-- (void) sendDataToDsp:(NSData *)data withResponse:(BOOL)response;
 
 - (void) getDspDataWithOffset:(uint16_t)offset;
 

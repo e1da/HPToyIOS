@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HiFiToyObject.h"
 
 @interface DialogSystem : NSObject
 
@@ -29,4 +30,6 @@
 - (void) showDeviceNameInput;
 
 - (void) showImportPresetDialog;
+
+- (void) showEnergySyncDialog:(EnergyConfig_t)energy;
 @end

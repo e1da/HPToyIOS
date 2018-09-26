@@ -63,6 +63,7 @@
 		D39C3CE220BEDD9D00BDC1A0 /* Number523.c in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDC20BEDD9D00BDC1A0 /* Number523.c */; };
 		D39C3CE320BEDD9D00BDC1A0 /* Number88.c in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CE020BEDD9D00BDC1A0 /* Number88.c */; };
 		D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CE120BEDD9D00BDC1A0 /* Number923.c */; };
+		D3E97AB12157F08200C98402 /* EnergyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E97AB02157F08200C98402 /* EnergyViewController.m */; };
 		D3F63295214C172A00340314 /* HiFiToyIcon87.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F63288214C172900340314 /* HiFiToyIcon87.png */; };
 		D3F63296214C172A00340314 /* HiFiToyIcon120.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F63289214C172900340314 /* HiFiToyIcon120.png */; };
 		D3F63297214C172A00340314 /* HiFiToyIcon1024.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F6328A214C172900340314 /* HiFiToyIcon1024.png */; };
@@ -191,6 +192,8 @@
 		D39C3CDF20BEDD9D00BDC1A0 /* Number523.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Number523.h; sourceTree = "<group>"; };
 		D39C3CE020BEDD9D00BDC1A0 /* Number88.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Number88.c; sourceTree = "<group>"; };
 		D39C3CE120BEDD9D00BDC1A0 /* Number923.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Number923.c; sourceTree = "<group>"; };
+		D3E97AAF2157F08200C98402 /* EnergyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EnergyViewController.h; sourceTree = "<group>"; };
+		D3E97AB02157F08200C98402 /* EnergyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EnergyViewController.m; sourceTree = "<group>"; };
 		D3F63288214C172900340314 /* HiFiToyIcon87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HiFiToyIcon87.png; sourceTree = "<group>"; };
 		D3F63289214C172900340314 /* HiFiToyIcon120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HiFiToyIcon120.png; sourceTree = "<group>"; };
 		D3F6328A214C172900340314 /* HiFiToyIcon1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HiFiToyIcon1024.png; sourceTree = "<group>"; };
@@ -279,6 +282,7 @@
 		D33A258420CA89E6008A94EF /* OptionsViewController */ = {
 			isa = PBXGroup;
 			children = (
+				D3E97AAE2157F06500C98402 /* EnergyViewController */,
 				D33A258C20CA8FE0008A94EF /* DeviceNameViewController */,
 				D33A258D20CA8FE0008A94EF /* PairingCodeViewController */,
 				D33A258E20CA8FE0008A94EF /* PresetViewController */,
@@ -538,6 +542,15 @@
 			path = NumberUtility;
 			sourceTree = "<group>";
 		};
+		D3E97AAE2157F06500C98402 /* EnergyViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D3E97AAF2157F08200C98402 /* EnergyViewController.h */,
+				D3E97AB02157F08200C98402 /* EnergyViewController.m */,
+			);
+			path = EnergyViewController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -699,6 +712,7 @@
 				D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */,
 				D33A256A20C6E209008A94EF /* BlePacketQueue.m in Sources */,
 				D33A25A120CA9A2C008A94EF /* PresetDetailViewController.m in Sources */,
+				D3E97AB12157F08200C98402 /* EnergyViewController.m in Sources */,
 				D33A255820C68B92008A94EF /* HiFiToyPresetList.m in Sources */,
 				D33A257120C943F5008A94EF /* DialogSystem.m in Sources */,
 				D39C3CC320BEB6CD00BDC1A0 /* ParamFilterContainer.m in Sources */,

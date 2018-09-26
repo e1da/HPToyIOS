@@ -46,7 +46,19 @@
                                                  name:@"ClipDetectionNotification"
                                                object:nil];
     
+    self.clipView = [[UIView alloc] init];
+    [self.clipView setFrame:CGRectMake(0, self.navigationBar.frame.size.height - 3, self.navigationBar.frame.size.width, 3)];
+    [self.clipView setBackgroundColor:[UIColor clearColor]];
+    [self.navigationBar addSubview:self.clipView];
+}
+
+
+- (void) viewWillLayoutSubviews
+{
+    NSString * s = [NSString stringWithFormat:@"w=%f h=%f",  self.navigationBar.frame.size.width,  self.navigationBar.frame.size.height];
+    NSLog(@"viewWillLayoutSubviews %@", s);
     
+    [self.clipView setFrame:CGRectMake(0, self.navigationBar.frame.size.height - 3, self.navigationBar.frame.size.width, 3)];
 }
 
 - (void)dealloc {
@@ -61,7 +73,18 @@
     BOOL clip = [[notification object] boolValue];
     //NSLog(@"Clip=%d", clip);
 
-    self.navigationBar.barTintColor = clip ? [UIColor redColor] : [UIColor whiteColor];
+    //self.navigationBar.barTintColor = clip ? [UIColor redColor] : [UIColor whiteColor];
+    if (clip) {
+        [UIView animateWithDuration:0.5 animations:^{
+            [self.clipView setBackgroundColor:[UIColor redColor]];
+        }];
+        
+    } else {
+        [UIView animateWithDuration:0.5 animations:^{
+            [self.clipView setBackgroundColor:[UIColor clearColor]];
+        }];
+    }
+    
     //self.navigationBar.translucent = clip ? NO : YES;
 }
 
@@ -71,17 +94,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
- {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
-
 
 @end
