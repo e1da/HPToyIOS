@@ -11,6 +11,7 @@
 #import "PresetViewController.h"
 #import "OptionsViewController.h"
 #import "XOverViewController.h"
+#import "FiltersViewController.h"
 
 @implementation MainViewController
 
@@ -198,6 +199,14 @@
         dest.xover = hiFiToyPreset.xover;
     }
     
+    if ([[segue identifier] isEqualToString:@"showNewFilters"]) {
+        FiltersViewController *dest = (FiltersViewController * )segue.destinationViewController;
+        
+        //dest.maxFreq = 30000;
+        //dest.minFreq = 20;
+        
+        dest.xover = hiFiToyPreset.xover;
+    }
 }
 
 /*-----------------------------------------------------------------------------------------

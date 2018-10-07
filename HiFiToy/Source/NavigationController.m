@@ -73,16 +73,20 @@
     BOOL clip = [[notification object] boolValue];
     //NSLog(@"Clip=%d", clip);
 
-    //self.navigationBar.barTintColor = clip ? [UIColor redColor] : [UIColor whiteColor];
+
     if (clip) {
-        [UIView animateWithDuration:0.5 animations:^{
+        [self.clipView setBackgroundColor:[UIColor redColor]];
+        //animate
+        /*[UIView animateWithDuration:0.5 animations:^{
             [self.clipView setBackgroundColor:[UIColor redColor]];
-        }];
+        }];*/
         
     } else {
-        [UIView animateWithDuration:0.5 animations:^{
+        [self.clipView setBackgroundColor:[UIColor clearColor]];
+        //animate
+        /*[UIView animateWithDuration:0.5 animations:^{
             [self.clipView setBackgroundColor:[UIColor clearColor]];
-        }];
+        }];*/
     }
     
     //self.navigationBar.translucent = clip ? NO : YES;
