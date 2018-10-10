@@ -12,6 +12,8 @@
 		D30FF8772163D467007FA50D /* NumValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF8762163D467007FA50D /* NumValueControl.m */; };
 		D30FF87A21650820007FA50D /* FilterLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF87921650820007FA50D /* FilterLabel.m */; };
 		D30FF8802166A0D7007FA50D /* FilterTypeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF87F2166A0D7007FA50D /* FilterTypeControl.m */; };
+		D30FF883216A6B1A007FA50D /* BiquadLL.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF882216A6B1A007FA50D /* BiquadLL.m */; };
+		D30FF886216D49DE007FA50D /* FloatUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D30FF885216D49DE007FA50D /* FloatUtility.c */; };
 		D33A253E20BFF674008A94EF /* Number88.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDE20BEDD9D00BDC1A0 /* Number88.h */; };
 		D33A253F20BFF674008A94EF /* Number523.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDF20BEDD9D00BDC1A0 /* Number523.h */; };
 		D33A254020BFF674008A94EF /* Number923.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDD20BEDD9D00BDC1A0 /* Number923.h */; };
@@ -111,6 +113,10 @@
 		D30FF87921650820007FA50D /* FilterLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterLabel.m; sourceTree = "<group>"; };
 		D30FF87E2166A0D7007FA50D /* FilterTypeControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilterTypeControl.h; sourceTree = "<group>"; };
 		D30FF87F2166A0D7007FA50D /* FilterTypeControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterTypeControl.m; sourceTree = "<group>"; };
+		D30FF881216A6B1A007FA50D /* BiquadLL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BiquadLL.h; sourceTree = "<group>"; };
+		D30FF882216A6B1A007FA50D /* BiquadLL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadLL.m; sourceTree = "<group>"; };
+		D30FF884216D49DE007FA50D /* FloatUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloatUtility.h; sourceTree = "<group>"; };
+		D30FF885216D49DE007FA50D /* FloatUtility.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = FloatUtility.c; sourceTree = "<group>"; };
 		D33A254220C06481008A94EF /* TAS5558.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAS5558.h; sourceTree = "<group>"; };
 		D33A254420C140F8008A94EF /* BassTrebleChannel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BassTrebleChannel.h; sourceTree = "<group>"; };
 		D33A254520C140F8008A94EF /* BassTrebleChannel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BassTrebleChannel.m; sourceTree = "<group>"; };
@@ -543,6 +549,8 @@
 		D39C3CBD20BEB65A00BDC1A0 /* HiFiToyObjects */ = {
 			isa = PBXGroup;
 			children = (
+				D30FF881216A6B1A007FA50D /* BiquadLL.h */,
+				D30FF882216A6B1A007FA50D /* BiquadLL.m */,
 				D39C3CBE20BEB6A500BDC1A0 /* Biquad.h */,
 				D39C3CBF20BEB6A500BDC1A0 /* Biquad.m */,
 				D379128120E3C70A0089962D /* ParamFilter.h */,
@@ -592,6 +600,8 @@
 				D39C3CDC20BEDD9D00BDC1A0 /* Number523.c */,
 				D39C3CDD20BEDD9D00BDC1A0 /* Number923.h */,
 				D39C3CE120BEDD9D00BDC1A0 /* Number923.c */,
+				D30FF884216D49DE007FA50D /* FloatUtility.h */,
+				D30FF885216D49DE007FA50D /* FloatUtility.c */,
 			);
 			path = NumberUtility;
 			sourceTree = "<group>";
@@ -762,6 +772,7 @@
 				D33A258320C952CD008A94EF /* DemoCell.m in Sources */,
 				D39C3CD220BEB71C00BDC1A0 /* Drc.m in Sources */,
 				D39C3CCF20BEB71200BDC1A0 /* Loudness.m in Sources */,
+				D30FF886216D49DE007FA50D /* FloatUtility.c in Sources */,
 				D30FF8772163D467007FA50D /* NumValueControl.m in Sources */,
 				D33A256120C6E163008A94EF /* BleDriver.m in Sources */,
 				D33A259520CA9141008A94EF /* PairingCodeViewController.m in Sources */,
@@ -774,6 +785,7 @@
 				D379128620E546DA0089962D /* PassFilter2.m in Sources */,
 				D39C3CD920BEB8C500BDC1A0 /* XmlData.m in Sources */,
 				D39C3CDA20BEB8C500BDC1A0 /* XmlParserWrapper.m in Sources */,
+				D30FF883216A6B1A007FA50D /* BiquadLL.m in Sources */,
 				D33A258B20CA8A30008A94EF /* NavigationController.m in Sources */,
 				D379128320E3C70A0089962D /* ParamFilter.m in Sources */,
 				D39C3CE220BEDD9D00BDC1A0 /* Number523.c in Sources */,
