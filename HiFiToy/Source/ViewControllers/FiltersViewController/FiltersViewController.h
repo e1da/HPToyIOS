@@ -10,12 +10,13 @@
 #import "NumKeyboardController.h"
 #import "HiFiToyObject.h"
 #import "Filters.h"
+#import "BiquadValueControl.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 
 
-@interface FiltersViewController : UIViewController <NumKeyboardDelegate> {
+@interface FiltersViewController : UIViewController <NumKeyboardDelegate, BiquadValueControlDelegate> {
 
 }
 

@@ -18,12 +18,7 @@
     
     FilterTypeControl * filterTypeControl;
     UISegmentedControl * typeBiquadSegmentedControl;
-    
-    NumValueControl * freqControl;
-    NumValueControl * volumeControl;
-    NumValueControl * qfacControl;
-    
-    UILabel * fL;
+    BiquadValueControl * biquadControl;
     
 }
 
@@ -60,45 +55,23 @@
     [filterTypeControl.nextBtn addTarget:self action:@selector(changeFilter:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:filterTypeControl];
     
-    NSArray * types = [NSArray arrayWithObjects:@"LP",@"HP",@"Param", @"AllPass", @"Off", nil];
+    NSArray * types = [NSArray arrayWithObjects:@"LP", @"HP", @"Param", @"AllPass", @"Off", nil];
     typeBiquadSegmentedControl = [[UISegmentedControl alloc] initWithItems:types];
     [typeBiquadSegmentedControl setTintColor:[UIColor lightGrayColor]];
     typeBiquadSegmentedControl.enabled = NO;
     [self.view addSubview:typeBiquadSegmentedControl];
     
-    freqControl = [[NumValueControl alloc] init];
-    [freqControl setNumValue:500 withDeltaValue:10 withType:NumberTypePositiveInteger];
-    freqControl.leftLabel.text = @"FREQ";
-    freqControl.leftLabel.textColor = [UIColor lightGrayColor];
-    [freqControl.leftLabel setTextAlignment:NSTextAlignmentRight];
-    freqControl.rightLabel.text = @"HZ";
-    [freqControl.rightLabel setTextAlignment:NSTextAlignmentLeft];
-    [freqControl addValuePressEvent:self action:@selector(showKeyboardWithValue:)];
-    [self.view addSubview:freqControl];
-    
-    volumeControl = [[NumValueControl alloc] init];
-    [volumeControl setNumValue:-3 withDeltaValue:0.1 withType:NumberTypeFloat];
-    volumeControl.leftLabel.text = @"BOOST";
-    [volumeControl.leftLabel setTextAlignment:NSTextAlignmentRight];
-    volumeControl.rightLabel.text = @"DB";
-    [volumeControl.rightLabel setTextAlignment:NSTextAlignmentLeft];
-    [volumeControl addValuePressEvent:self action:@selector(showKeyboardWithValue:)];
-    [self.view addSubview:volumeControl];
-    
-    qfacControl = [[NumValueControl alloc] init];
-    [qfacControl setNumValue:1.41 withDeltaValue:0.01 withType:NumberTypePositiveDouble];
-    qfacControl.leftLabel.text = @"Q-FAC";
-    [qfacControl.leftLabel setTextAlignment:NSTextAlignmentRight];
-    qfacControl.rightLabel.text = @"";
-    [qfacControl.rightLabel setTextAlignment:NSTextAlignmentLeft];
-    [qfacControl addValuePressEvent:self action:@selector(showKeyboardWithValue:)];
-    [self.view addSubview:qfacControl];
-    
+    biquadControl = [[BiquadValueControl alloc] init];
+    biquadControl.delegate = self;
+    biquadControl.filters = self.filters;
+    [self.view addSubview:biquadControl];
 }
 
 - (void) updateSubviews {
     BiquadLL * b = [_filters getActiveBiquad];
     BiquadType_t type = b.biquadParam.type;
+    
+    [biquadControl update];
     
     if (type == BIQUAD_HIGHPASS) {
         PassFilter * p = [_filters getHighpass];
@@ -108,10 +81,8 @@
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 1;
         
-        freqControl.hidden = NO;
-        [freqControl setNumValue:[p Freq] withDeltaValue:10 withType:NumberTypePositiveInteger];
-        volumeControl.hidden = YES;
-        qfacControl.hidden = YES;
+        biquadControl.showOnlyFreq = YES;
+        biquadControl.hidden = NO;
         
     } else if (type == BIQUAD_LOWPASS) {
         PassFilter * p = [_filters getLowpass];
@@ -121,10 +92,8 @@
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 0;
         
-        freqControl.hidden = NO;
-        [freqControl setNumValue:[p Freq] withDeltaValue:10 withType:NumberTypePositiveInteger];
-        volumeControl.hidden = YES;
-        qfacControl.hidden = YES;
+        biquadControl.showOnlyFreq = YES;
+        biquadControl.hidden = NO;
         
     } else if (type == BIQUAD_PARAMETRIC){
         
@@ -132,14 +101,8 @@
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 2;
         
-        BiquadParam * bParam = b.biquadParam;
-        
-        freqControl.hidden = NO;
-        [freqControl setNumValue:bParam.freq withDeltaValue:10 withType:NumberTypePositiveInteger];
-        volumeControl.hidden = NO;
-        [volumeControl setNumValue:bParam.dbVolume withDeltaValue:0.1 withType:NumberTypeFloat];
-        qfacControl.hidden = NO;
-        [qfacControl setNumValue:bParam.qFac withDeltaValue:0.01 withType:NumberTypePositiveDouble];
+        biquadControl.showOnlyFreq = NO;
+        biquadControl.hidden = NO;
         
     } else if (type == BIQUAD_ALLPASS) {
         
@@ -147,10 +110,8 @@
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 3;
         
-        freqControl.hidden = NO;
-        [freqControl setNumValue:b.biquadParam.freq withDeltaValue:10 withType:NumberTypePositiveInteger];
-        volumeControl.hidden = YES;
-        qfacControl.hidden = YES;
+        biquadControl.showOnlyFreq = YES;
+        biquadControl.hidden = NO;
         
     } else { // off biquad
         
@@ -158,9 +119,7 @@
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 4;
         
-        freqControl.hidden = YES;
-        volumeControl.hidden = YES;
-        qfacControl.hidden = YES;
+        biquadControl.hidden = YES;
     }
 }
 
@@ -182,18 +141,8 @@
     int width = self.view.frame.size.width;
     int height = self.view.frame.size.height - top;
     
-    /*filterTypeControl.hidden = NO;
+    filterTypeControl.hidden = NO;
     typeBiquadSegmentedControl.hidden = NO;
-    
-    freqControl.hidden = NO;
-    
-    if ((self.xover.hp != activeElement) && (self.xover.lp != activeElement)) {
-        volumeControl.hidden = NO;
-        qfacControl.hidden = NO;
-    } else {
-        volumeControl.hidden = YES;
-        qfacControl.hidden = YES;
-    }*/
     [self updateSubviews];
     
     [filtersView setFrame:CGRectMake(0, top, width, 0.4 * height)];
@@ -203,9 +152,7 @@
     [typeBiquadSegmentedControl setFrame:CGRectMake(0.1 * width, top + 0.52 * height,
                                                     0.8 * width, 0.1 * height)];
     
-    freqControl.frame = CGRectMake(0, top + 0.65 * height, self.view.frame.size.width, 0.1 * height);
-    volumeControl.frame = CGRectMake(0, top + 0.75 * height, self.view.frame.size.width, 0.1 * height);
-    qfacControl.frame = CGRectMake(0, top + 0.85 * height, self.view.frame.size.width, 0.1 * height);
+    biquadControl.frame = CGRectMake(0, top + 0.65 * height, self.view.frame.size.width, 0.3 * height);
 }
 
 - (void) viewWillLayoutSubviewsLandscape {
@@ -215,10 +162,7 @@
     
     filterTypeControl.hidden = YES;
     typeBiquadSegmentedControl.hidden = YES;
-    
-    freqControl.hidden = YES;
-    volumeControl.hidden = YES;
-    qfacControl.hidden = YES;
+    biquadControl.hidden = YES;
     
     [filtersView setFrame:CGRectMake(0, top, width, height)];
 }
@@ -262,10 +206,10 @@
     [self presentViewController:keyController animated:YES completion:nil];
 }
 
-- (void) didKeyboardEnter:(double) value {
+- (void) didKeyboardEnter:(NumValueControl *) valControl {
+    [biquadControl updateValueControl:valControl];
     [self didKeyboardClose];
     
-    NSLog(@"Return value = %@", [NSString stringWithFormat:@"%f", value]);
 }
 
 - (void) didKeyboardClose {

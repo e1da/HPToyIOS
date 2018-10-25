@@ -12,9 +12,10 @@
 		D301F079217255C500E181C6 /* FloatUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D30FF885216D49DE007FA50D /* FloatUtility.c */; };
 		D301F07E2172871E00E181C6 /* Biquad.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F07C2172871D00E181C6 /* Biquad.m */; };
 		D301F081217F479200E181C6 /* BiquadParam.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F080217F479200E181C6 /* BiquadParam.m */; };
+		D301F085218213BF00E181C6 /* NumValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F083218213BF00E181C6 /* NumValueControl.m */; };
+		D301F091218246EB00E181C6 /* BiquadValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F090218246EB00E181C6 /* BiquadValueControl.m */; };
 		D30FF8702163AB4D007FA50D /* KeyboardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF86D2163AB4D007FA50D /* KeyboardButton.m */; };
 		D30FF8712163AB4D007FA50D /* NumKeyboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF86E2163AB4D007FA50D /* NumKeyboardController.m */; };
-		D30FF8772163D467007FA50D /* NumValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF8762163D467007FA50D /* NumValueControl.m */; };
 		D30FF87A21650820007FA50D /* FilterLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF87921650820007FA50D /* FilterLabel.m */; };
 		D30FF8802166A0D7007FA50D /* FilterTypeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF87F2166A0D7007FA50D /* FilterTypeControl.m */; };
 		D30FF883216A6B1A007FA50D /* BiquadLL.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF882216A6B1A007FA50D /* BiquadLL.m */; };
@@ -58,7 +59,6 @@
 		D379127720D3C2CE0089962D /* DrcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127620D3C2CE0089962D /* DrcViewController.m */; };
 		D379127A20D3C55B0089962D /* DrcView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127920D3C55B0089962D /* DrcView.m */; };
 		D379127D20DE7B4F0089962D /* DrcTimeConstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127C20DE7B4F0089962D /* DrcTimeConstViewController.m */; };
-		D387FD6A215FA35C00C80D73 /* AdvSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D387FD69215FA35C00C80D73 /* AdvSlider.m */; };
 		D387FD6E215FB42100C80D73 /* next.png in Resources */ = {isa = PBXBuildFile; fileRef = D387FD6C215FB42100C80D73 /* next.png */; };
 		D387FD6F215FB42100C80D73 /* prev.png in Resources */ = {isa = PBXBuildFile; fileRef = D387FD6D215FB42100C80D73 /* prev.png */; };
 		D387FD71215FB97D00C80D73 /* thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = D387FD70215FB97D00C80D73 /* thumb.png */; };
@@ -109,12 +109,14 @@
 		D301F07D2172871E00E181C6 /* Biquad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Biquad.h; sourceTree = "<group>"; };
 		D301F07F217F479200E181C6 /* BiquadParam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BiquadParam.h; sourceTree = "<group>"; };
 		D301F080217F479200E181C6 /* BiquadParam.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadParam.m; sourceTree = "<group>"; };
+		D301F083218213BF00E181C6 /* NumValueControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumValueControl.m; sourceTree = "<group>"; };
+		D301F084218213BF00E181C6 /* NumValueControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumValueControl.h; sourceTree = "<group>"; };
+		D301F08F218246EB00E181C6 /* BiquadValueControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BiquadValueControl.h; sourceTree = "<group>"; };
+		D301F090218246EB00E181C6 /* BiquadValueControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadValueControl.m; sourceTree = "<group>"; };
 		D30FF86C2163AB4D007FA50D /* NumKeyboardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumKeyboardController.h; sourceTree = "<group>"; };
 		D30FF86D2163AB4D007FA50D /* KeyboardButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardButton.m; sourceTree = "<group>"; };
 		D30FF86E2163AB4D007FA50D /* NumKeyboardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumKeyboardController.m; sourceTree = "<group>"; };
 		D30FF86F2163AB4D007FA50D /* KeyboardButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardButton.h; sourceTree = "<group>"; };
-		D30FF8752163D467007FA50D /* NumValueControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumValueControl.h; sourceTree = "<group>"; };
-		D30FF8762163D467007FA50D /* NumValueControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumValueControl.m; sourceTree = "<group>"; };
 		D30FF87821650820007FA50D /* FilterLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilterLabel.h; sourceTree = "<group>"; };
 		D30FF87921650820007FA50D /* FilterLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterLabel.m; sourceTree = "<group>"; };
 		D30FF87E2166A0D7007FA50D /* FilterTypeControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilterTypeControl.h; sourceTree = "<group>"; };
@@ -191,8 +193,6 @@
 		D379127920D3C55B0089962D /* DrcView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcView.m; sourceTree = "<group>"; };
 		D379127B20DE7B4F0089962D /* DrcTimeConstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcTimeConstViewController.h; sourceTree = "<group>"; };
 		D379127C20DE7B4F0089962D /* DrcTimeConstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcTimeConstViewController.m; sourceTree = "<group>"; };
-		D387FD68215FA35C00C80D73 /* AdvSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvSlider.h; sourceTree = "<group>"; };
-		D387FD69215FA35C00C80D73 /* AdvSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvSlider.m; sourceTree = "<group>"; };
 		D387FD6C215FB42100C80D73 /* next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = next.png; sourceTree = "<group>"; };
 		D387FD6D215FB42100C80D73 /* prev.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prev.png; sourceTree = "<group>"; };
 		D387FD70215FB97D00C80D73 /* thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumb.png; sourceTree = "<group>"; };
@@ -263,6 +263,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D301F082218213BF00E181C6 /* ValueControls */ = {
+			isa = PBXGroup;
+			children = (
+				D301F084218213BF00E181C6 /* NumValueControl.h */,
+				D301F083218213BF00E181C6 /* NumValueControl.m */,
+				D301F08F218246EB00E181C6 /* BiquadValueControl.h */,
+				D301F090218246EB00E181C6 /* BiquadValueControl.m */,
+			);
+			path = ValueControls;
+			sourceTree = "<group>";
+		};
 		D30FF86B2163AB4D007FA50D /* NumberKeyboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -607,12 +618,9 @@
 		D39F5517215E33D00017DF48 /* FiltersViewController */ = {
 			isa = PBXGroup;
 			children = (
-				D30FF8752163D467007FA50D /* NumValueControl.h */,
-				D30FF8762163D467007FA50D /* NumValueControl.m */,
+				D301F082218213BF00E181C6 /* ValueControls */,
 				D39F5518215E34070017DF48 /* FiltersViewController.h */,
 				D39F5519215E34070017DF48 /* FiltersViewController.m */,
-				D387FD68215FA35C00C80D73 /* AdvSlider.h */,
-				D387FD69215FA35C00C80D73 /* AdvSlider.m */,
 				D30FF87821650820007FA50D /* FilterLabel.h */,
 				D30FF87921650820007FA50D /* FilterLabel.m */,
 				D30FF87E2166A0D7007FA50D /* FilterTypeControl.h */,
@@ -774,7 +782,6 @@
 				D39C3CD220BEB71C00BDC1A0 /* Drc.m in Sources */,
 				D39C3CCF20BEB71200BDC1A0 /* Loudness.m in Sources */,
 				D30FF886216D49DE007FA50D /* FloatUtility.c in Sources */,
-				D30FF8772163D467007FA50D /* NumValueControl.m in Sources */,
 				D33A256120C6E163008A94EF /* BleDriver.m in Sources */,
 				D33A259520CA9141008A94EF /* PairingCodeViewController.m in Sources */,
 				D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */,
@@ -785,6 +792,7 @@
 				D33A256D20C80C82008A94EF /* HiFiToyControl.m in Sources */,
 				D39C3CD920BEB8C500BDC1A0 /* XmlData.m in Sources */,
 				D39C3CDA20BEB8C500BDC1A0 /* XmlParserWrapper.m in Sources */,
+				D301F091218246EB00E181C6 /* BiquadValueControl.m in Sources */,
 				D30FF883216A6B1A007FA50D /* BiquadLL.m in Sources */,
 				D33A258B20CA8A30008A94EF /* NavigationController.m in Sources */,
 				D39C3CE220BEDD9D00BDC1A0 /* Number523.c in Sources */,
@@ -802,8 +810,8 @@
 				D33A256A20C6E209008A94EF /* BlePacketQueue.m in Sources */,
 				D39F551A215E34070017DF48 /* FiltersViewController.m in Sources */,
 				D33A25A120CA9A2C008A94EF /* PresetDetailViewController.m in Sources */,
+				D301F085218213BF00E181C6 /* NumValueControl.m in Sources */,
 				D3E97AB12157F08200C98402 /* EnergyViewController.m in Sources */,
-				D387FD6A215FA35C00C80D73 /* AdvSlider.m in Sources */,
 				D33A255820C68B92008A94EF /* HiFiToyPresetList.m in Sources */,
 				D30FF8712163AB4D007FA50D /* NumKeyboardController.m in Sources */,
 				D33A257120C943F5008A94EF /* DialogSystem.m in Sources */,
