@@ -43,17 +43,6 @@
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
     [self initSubviews];
     
-    //init active element
-    activeElement = [self.xover.params getFirstEnabled];
-    if (!activeElement) {
-        if (self.xover.hp) {
-            activeElement = self.xover.hp;
-        } else {
-            activeElement = self.xover.lp;
-        }
-    }
-    
-    
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -108,44 +97,71 @@
 }
 
 - (void) updateSubviews {
-    if ([self.xover.params containsParam:(ParamFilter *)activeElement]) {
-        
-        int num = (int)[self.xover.params indexOfParam:(ParamFilter *)activeElement];
-        ParamFilter * param = [self.xover.params paramAtIndex:num];
-        
-        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"PARAMETRIC #%d", num];
-        filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
-        typeBiquadSegmentedControl.selectedSegmentIndex = 2;
-        
-        [freqControl setNumValue:param.freq withDeltaValue:10 withType:NumberTypePositiveInteger];
-        volumeControl.hidden = NO;
-        [volumeControl setNumValue:param.dbVolume withDeltaValue:0.1 withType:NumberTypeFloat];
-        qfacControl.hidden = NO;
-        [qfacControl setNumValue:param.qFac withDeltaValue:0.01 withType:NumberTypePositiveDouble];
-        
-    } else if (self.xover.hp == activeElement) {
+    BiquadLL * b = [_filters getActiveBiquad];
+    BiquadType_t type = b.biquadParam.type;
+    
+    if (type == BIQUAD_HIGHPASS) {
+        PassFilter * p = [_filters getHighpass];
+       
         int dbOnOctave[4] = {0, 12, 24, 48};// db/oct
-        
-        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"HIGHPASS %ddb/oct", dbOnOctave[self.xover.hp.order]];
+        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"HIGHPASS %ddb/oct", dbOnOctave[[p getOrder]]];
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 1;
         
-        [freqControl setNumValue:self.xover.hp.freq withDeltaValue:10 withType:NumberTypePositiveInteger];
+        freqControl.hidden = NO;
+        [freqControl setNumValue:[p Freq] withDeltaValue:10 withType:NumberTypePositiveInteger];
         volumeControl.hidden = YES;
         qfacControl.hidden = YES;
         
-    } else if (self.xover.lp == activeElement) {
-        int dbOnOctave[4] = {0, 12, 24, 48};// db/oct
+    } else if (type == BIQUAD_LOWPASS) {
+        PassFilter * p = [_filters getLowpass];
         
-        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"LOWPASS %ddb/oct", dbOnOctave[self.xover.lp.order]];
+        int dbOnOctave[4] = {0, 12, 24, 48};// db/oct
+        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"LOWPASS %ddb/oct", dbOnOctave[[p getOrder]]];
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 0;
         
-        [freqControl setNumValue:self.xover.lp.freq withDeltaValue:10 withType:NumberTypePositiveInteger];
+        freqControl.hidden = NO;
+        [freqControl setNumValue:[p Freq] withDeltaValue:10 withType:NumberTypePositiveInteger];
+        volumeControl.hidden = YES;
+        qfacControl.hidden = YES;
+        
+    } else if (type == BIQUAD_PARAMETRIC){
+        
+        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"PARAMETRIC #%d", _filters.activeBiquadIndex];
+        filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
+        typeBiquadSegmentedControl.selectedSegmentIndex = 2;
+        
+        BiquadParam * bParam = b.biquadParam;
+        
+        freqControl.hidden = NO;
+        [freqControl setNumValue:bParam.freq withDeltaValue:10 withType:NumberTypePositiveInteger];
+        volumeControl.hidden = NO;
+        [volumeControl setNumValue:bParam.dbVolume withDeltaValue:0.1 withType:NumberTypeFloat];
+        qfacControl.hidden = NO;
+        [qfacControl setNumValue:bParam.qFac withDeltaValue:0.01 withType:NumberTypePositiveDouble];
+        
+    } else if (type == BIQUAD_ALLPASS) {
+        
+        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"ALLPASS #%d", _filters.activeBiquadIndex];
+        filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
+        typeBiquadSegmentedControl.selectedSegmentIndex = 3;
+        
+        freqControl.hidden = NO;
+        [freqControl setNumValue:b.biquadParam.freq withDeltaValue:10 withType:NumberTypePositiveInteger];
+        volumeControl.hidden = YES;
+        qfacControl.hidden = YES;
+        
+    } else { // off biquad
+        
+        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"OFF BIQUAD #%d", _filters.activeBiquadIndex];
+        filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
+        typeBiquadSegmentedControl.selectedSegmentIndex = 4;
+        
+        freqControl.hidden = YES;
         volumeControl.hidden = YES;
         qfacControl.hidden = YES;
     }
-    
 }
 
 - (void) viewWillLayoutSubviews {
@@ -166,7 +182,7 @@
     int width = self.view.frame.size.width;
     int height = self.view.frame.size.height - top;
     
-    filterTypeControl.hidden = NO;
+    /*filterTypeControl.hidden = NO;
     typeBiquadSegmentedControl.hidden = NO;
     
     freqControl.hidden = NO;
@@ -177,7 +193,8 @@
     } else {
         volumeControl.hidden = YES;
         qfacControl.hidden = YES;
-    }
+    }*/
+    [self updateSubviews];
     
     [filtersView setFrame:CGRectMake(0, top, width, 0.4 * height)];
     
@@ -210,88 +227,13 @@
 - (void) changeFilter:(UIButton *)btn {
     
     if ([btn.titleLabel.text isEqualToString:@"\u2329"]) { // press prev button
-        activeElement = [self prevElement:activeElement];
+        [_filters prevActiveBiquadIndex];
         [self updateSubviews];
     } else if ([btn.titleLabel.text isEqualToString:@"\u232A"]) { // press next button
-        activeElement = [self nextElement:activeElement];
+        [_filters nextActiveBiquadIndex];
         [self updateSubviews];
     }
 }
-
-// sequence EQ1, EQ2 .. EQn, HP, LP, EQ1 ...
-- (id) prevElement:(id) element
-{
-    
-    if ([self.xover.params containsParam:(ParamFilter *)element]) {
-        
-        int num = (int)[self.xover.params indexOfParam:(ParamFilter *)element];
-        
-        if (num > 0) {
-            return [self.xover.params paramAtIndex:num - 1];
-        } else if (self.xover.lp) {
-            return self.xover.lp;
-        } else if (self.xover.hp) {
-            return self.xover.hp;
-        } else {
-            [self.xover.params paramAtIndex:0];
-        }
-    } else if (self.xover.lp == element) {
-        
-        if (self.xover.hp) {
-            return self.xover.hp;
-        } else if ((self.xover.params) && (self.xover.params.count > 0)) {
-            return [self.xover.params paramAtIndex:self.xover.params.count - 1];
-        }
-        
-    } else if (self.xover.hp == element) {
-        
-        if ((self.xover.params) && (self.xover.params.count > 0)) {
-            return [self.xover.params paramAtIndex:self.xover.params.count - 1];
-        } else if (self.xover.lp) {
-            return self.xover.lp;
-        }
-    }
-    
-    return nil;
-}
-
-// sequence EQ1, EQ2 .. EQn, HP, LP, EQ1 ...
-- (id) nextElement:(id) element
-{
-    
-    if ([self.xover.params containsParam:(ParamFilter *)element]) {
-        
-        int num = (int)[self.xover.params indexOfParam:(ParamFilter *)element];
-        
-        if (num < self.xover.params.count - 1) {
-            return [self.xover.params paramAtIndex:num + 1];
-        } else if (self.xover.hp) {
-            return self.xover.hp;
-        } else if (self.xover.lp) {
-            return self.xover.lp;
-        } else {
-            [self.xover.params paramAtIndex:0];
-        }
-    } else if (self.xover.hp == element) {
-        
-        if (self.xover.lp) {
-            return self.xover.lp;
-        } else if ((self.xover.params) && (self.xover.params.count > 0)) {
-            return [self.xover.params paramAtIndex:0];
-        }
-        
-    } else if (self.xover.lp == element) {
-        
-        if ((self.xover.params) && (self.xover.params.count > 0)) {
-            return [self.xover.params paramAtIndex:0];
-        } else if (self.xover.hp) {
-            return self.xover.hp;
-        }
-    }
-    
-    return nil;
-}
-
 
 /* ----------------------------------- Keyboard methods (change NumValueControl) ----------------------------------------- */
 - (void) showKeyboardWithValue:(NumValueControl *)valControl {

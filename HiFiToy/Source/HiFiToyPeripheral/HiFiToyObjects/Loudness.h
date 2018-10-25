@@ -8,18 +8,18 @@
 
 #import <Foundation/Foundation.h>
 #import "HiFiToyObject.h"
-#import "Biquad.h"
+#import "BiquadLL.h"
 
 @interface Loudness : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
 
-@property (nonatomic)   Biquad * biquad;
+@property (nonatomic)   BiquadLL * biquad;
 
 @property (nonatomic)   float   LG;
 @property (nonatomic)   float   LO;
 @property (nonatomic)   float   gain; // 0..1 off/on
 @property (nonatomic)   float   offset;
 
-+ (Loudness *)initWithOrder:(Biquad *)biquad LG:(float)LG LO:(float)LO
++ (Loudness *)initWithOrder:(BiquadLL *)biquad LG:(float)LG LO:(float)LO
                        Gain:(float)gain Offset:(float)offset;
 
 

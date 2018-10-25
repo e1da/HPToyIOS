@@ -9,17 +9,17 @@
 #import <UIKit/UIKit.h>
 #import "NumKeyboardController.h"
 #import "HiFiToyObject.h"
-#import "XOver.h"
+#import "Filters.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 
 
 @interface FiltersViewController : UIViewController <NumKeyboardDelegate> {
-    id <HiFiToyObject> activeElement;
+
 }
 
-@property XOver * xover;
+@property Filters * filters;
 
 @end
 

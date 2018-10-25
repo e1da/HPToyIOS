@@ -88,7 +88,7 @@
     self.loudnessGainLabel_outl.text = [hiFiToyPreset.loudness getInfo];
     self.loudnessGainSlider_outl.value = hiFiToyPreset.loudness.gain / 2;
     self.loudnessLabel_outl.text = [hiFiToyPreset.loudness getFreqInfo];
-    self.loudnessSlider_outl.value = [hiFiToyPreset.loudness.biquad getFreqPercent];
+    self.loudnessSlider_outl.value = [hiFiToyPreset.loudness.biquad.biquadParam getFreqPercent];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -196,7 +196,7 @@
         dest.maxFreq = 30000;
         dest.minFreq = 20;
         
-        dest.xover = hiFiToyPreset.xover;
+        dest.filters = hiFiToyPreset.filters;
     }
     
     if ([[segue identifier] isEqualToString:@"showNewFilters"]) {
@@ -205,7 +205,7 @@
         //dest.maxFreq = 30000;
         //dest.minFreq = 20;
         
-        dest.xover = hiFiToyPreset.xover;
+        dest.filters = hiFiToyPreset.filters;
     }
 }
 
@@ -246,24 +246,24 @@
 
 - (IBAction)setLoudnessSlider:(id)sender
 {
-    [hiFiToyPreset.loudness.biquad setFreqPercent:self.loudnessSlider_outl.value];
+    BiquadParam * p = hiFiToyPreset.loudness.biquad.biquadParam;
+    [p setFreqPercent:self.loudnessSlider_outl.value];
+    
     //round
-    int freq = hiFiToyPreset.loudness.biquad.freq;
-    [self freqRound:&freq];
-    hiFiToyPreset.loudness.biquad.freq = freq;
+    p.freq = [self freqRound:p.freq];
     
     self.loudnessLabel_outl.text = [hiFiToyPreset.loudness getFreqInfo];
-    
     [hiFiToyPreset.loudness.biquad sendWithResponse:NO];
 }
 
 
--(void) freqRound:(int *)freq {
-    if (*freq > 1000){
-        *freq = *freq / 100 * 100;
-    } else if (*freq > 100){
-        *freq = *freq / 10 * 10;
+-(int) freqRound:(int)freq {
+    if (freq > 1000) {
+        return freq / 100 * 100;
+    } else if (freq > 100) {
+        return freq / 10 * 10;
     }
+    return freq;
 }
 
 /*-----------------------------------------------------------------------------------------

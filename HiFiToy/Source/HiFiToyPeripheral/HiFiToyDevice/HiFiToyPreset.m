@@ -28,7 +28,7 @@
 
 - (void) initCharacteristicsPointer
 {
-    _characteristics = [NSArray arrayWithObjects:_xover, _masterVolume, _bassTreble, _loudness, _drc, nil];
+    _characteristics = [NSArray arrayWithObjects:_filters, _masterVolume, _bassTreble, _loudness, _drc, nil];
 }
 
 //NSCoding protocol implementation
@@ -37,7 +37,7 @@
     [encoder encodeInt64:self.checkSum forKey:@"checkSum"];
     
     //Characteristics
-    [encoder encodeObject:self.xover forKey:@"XOver"];
+    [encoder encodeObject:self.filters forKey:@"Filters"];
     [encoder encodeObject:self.masterVolume forKey:@"MasterVolume"];
     [encoder encodeObject:self.bassTreble forKey:@"BassTreble"];
     [encoder encodeObject:self.loudness forKey:@"Loudness"];
@@ -51,7 +51,7 @@
         self.checkSum = [decoder decodeInt64ForKey:@"checkSum"];
         
         //Characteristics
-        self.xover = [decoder decodeObjectForKey:@"XOver"];
+        self.filters = [decoder decodeObjectForKey:@"Filters"];
         self.masterVolume = [decoder decodeObjectForKey:@"MasterVolume"];
         self.bassTreble = [decoder decodeObjectForKey:@"BassTreble"];
         self.loudness = [decoder decodeObjectForKey:@"Loudness"];
@@ -74,7 +74,7 @@
     copyPreset.presetName = [self.presetName copy];
     copyPreset.checkSum = self.checkSum;
     
-    copyPreset.xover = [self.xover copy];
+    copyPreset.filters = [self.filters copy];
     copyPreset.masterVolume = [self.masterVolume copy];
     copyPreset.bassTreble = [self.bassTreble copy];
     copyPreset.loudness = [self.loudness copy];
@@ -91,7 +91,7 @@
     if ([object class] == [self class]){
         HiFiToyPreset * temp = object;
         
-        if (([self.xover isEqual:temp.xover] == NO) ||
+        if (([self.filters isEqual:temp.filters] == NO) ||
             ([self.masterVolume isEqual:temp.masterVolume] == NO) ||
             ([self.bassTreble isEqual:temp.bassTreble] == NO) ||
             ([self.loudness isEqual:temp.loudness] == NO) ||
@@ -109,8 +109,9 @@
 - (void) loadDefaultPreset{
     self.presetName = @"DefaultPreset";
     
-    //XOver
-    self.xover = [XOver initDefaultWithAddress0:BIQUAD_FILTER_REG Address1:(BIQUAD_FILTER_REG + 7)];
+    //Filters
+    self.filters = [Filters initDefaultWithAddr0:BIQUAD_FILTER_REG withAddr1:(BIQUAD_FILTER_REG + 7)];
+    //self.xover = [XOver initDefaultWithAddress0:BIQUAD_FILTER_REG Address1:(BIQUAD_FILTER_REG + 7)];
     
     
     //Master Volume
@@ -131,9 +132,18 @@
     [self.bassTreble setEnabledChannel:1 Enabled:1.0];
     
     //Loudness
-    Biquad * loudnessBiquad = [Biquad initWithAddress:LOUDNESS_BIQUAD_REG Order:BIQUAD_ORDER_2 Type:BIQUAD_BANDPASS
-                                                 Freq:60 Qfac:0.0 dbVolume:0.0];
-    [loudnessBiquad setBorderMaxFreq:150 minFreq:30];
+    /*BiquadLL * loudnessBiquad = [BiquadLL initWithAddress:LOUDNESS_BIQUAD_REG Order:BIQUAD_ORDER_2 Type:BIQUAD_BANDPASS
+                                                 Freq:60 Qfac:0.0 dbVolume:0.0];*/
+    
+    BiquadLL * loudnessBiquad = [BiquadLL initWithAddress:LOUDNESS_BIQUAD_REG];
+    BiquadParam * p = loudnessBiquad.biquadParam;
+    
+    [p setBorderMaxFreq:150 minFreq:30];
+    p.order = BIQUAD_ORDER_2;
+    p.type = BIQUAD_BANDPASS;
+    p.freq = 60;
+    p.qFac = 0;
+    p.dbVolume = 0;
     
     self.loudness = [Loudness initWithOrder:loudnessBiquad LG:-0.5 LO:0.0 Gain:0.0 Offset:0.0];
     

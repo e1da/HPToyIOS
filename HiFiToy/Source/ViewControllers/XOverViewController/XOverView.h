@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "XOver.h"
+#import "Filters.h"
 
 /*==========================================================================================
  DEFINES
@@ -34,16 +34,12 @@
 
 @property double initHeight;
 
-@property XOver * xover;
-@property id <HiFiToyObject> activeElement;
-//@property NSMutableDictionary *dspElements;
-//@property NSString *activeElementKey;
+@property Filters * filters;
 
 @property int maxFreq;
 @property int minFreq;
 
 @property NSArray * drawFreqUnitArray;
-
 
 - (double) freqToPixel:(int)freq;
 - (double) pixelToFreq:(double)pix;
@@ -55,7 +51,5 @@
 
 - (int) getLowPassBorderPix;
 - (int) getHighPassBorderPix;
-
-- (double) getFilters_y:(double)freq;
 
 @end

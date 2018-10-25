@@ -8,27 +8,23 @@
 
 #import "XOverViewController.h"
 #import "DialogSystem.h"
-#import "ParamFilterContainer.h"
 
 @interface XOverViewController(){
     BOOL addKeyDown;
     BOOL addParametricSuccess;
+    
+    CGPoint prev_translation;
+    double delta_freq;
+    BOOL xHysteresisFlag;
+    BOOL yHysteresisFlag;
 }
 
 - (void) refreshView;
 - (void) setTitleInfo;
 
 - (void) selectActiveFilter:(UIGestureRecognizer *)recognizer;
-- (void) moved:(id)dspElement gesture:(UIPanGestureRecognizer *)recognizer;
-- (BOOL) checkCross:(id)dspElement tap_point:(CGPoint)tap_point;
-
-//advanced function for add del and other manage operation with biquads
-- (BOOL) enableNextBiquadsWithFreq:(int)Freq
-                              Qfac:(double)Qfac
-                          dbVolume:(double) dbVolume;
-//freq find automatically
-- (BOOL) enableNextBiquadsWithQfac:(double)Qfac
-                          dbVolume:(double) dbVolume;
+- (void) moved:(BiquadLL *)biquad translation:(CGPoint)translation;
+- (BOOL) checkCross:(BiquadLL *)biquad tap_point:(CGPoint)tap_point;
 
 @end
 
@@ -75,18 +71,7 @@
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:addButton];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     
-    
     addKeyDown = NO;
-    
-    
-    activeElement = [self.xover.params getFirstEnabled];
-    if (!activeElement) {
-        if (self.xover.hp) {
-            activeElement = self.xover.hp;
-        } else {
-            activeElement = self.xover.lp;
-        }
-    }
     
     //configure XOverView
     self.xOverView.maxFreq = self.maxFreq;
@@ -102,17 +87,9 @@
     }
     
     
-    self.xOverView.xover = self.xover;
-    self.xOverView.activeElement = activeElement;
-    
-    if ((self.xover.params) && ([self.xover.params isEnabled])) {
-        _peqFlag_outl.title = @"PEQ On";
-        _addEQ_outl.enabled = YES;
-    } else {
-        _peqFlag_outl.title = @"PEQ Off";
-        _addEQ_outl.enabled = NO;
-    }
-    
+    self.xOverView.filters = self.filters;
+    _peqFlag_outl.title = ([self.filters isPEQEnabled]) ? @"PEQ On" : @"PEQ Off";
+
     [self refreshView];
 }
 
@@ -129,18 +106,11 @@
  -----------------------------------------------------------------------------------------*/
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    /*if ([[segue identifier] isEqualToString:@"showBiquadManager"]) {
-        BiquadManagerViewController *destination = (BiquadManagerViewController * )segue.destinationViewController;
-        destination.xover = self.xover;
-        
-    }*/
-    
     if ([[segue identifier] isEqualToString:@"showPopover"]) {
         UIViewController *destination = (UIViewController * )segue.destinationViewController;
         destination.popoverPresentationController.delegate = self;
         
     }
-    
 }
 
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller
@@ -160,24 +130,24 @@
 }
 
 
-- (void) setTitleInfo
-{
-    if (!activeElement) return;
+- (void) setTitleInfo {
     
     NSString * title = nil;
     
-    if (activeElement == self.xover.hp) {
-        title = [NSString stringWithFormat:@"HP:%@", [activeElement getInfo]];
-    } else if (activeElement == self.xover.lp) {
-        title = [NSString stringWithFormat:@"LP:%@", [activeElement getInfo]];
-        
-    } else if ([self.xover.params containsParam:(ParamFilter *)activeElement]) {
-        
-        NSUInteger num = [self.xover.params indexOfParam:(ParamFilter *)activeElement];
-        title = [NSString stringWithFormat:@"PEQ%d:%@", (int)num, [activeElement getInfo]];
-        
+    BiquadLL * b = [_filters getActiveBiquad];
+    BiquadType_t type = b.biquadParam.type;
+    
+    if (type == BIQUAD_LOWPASS) {
+        PassFilter * lp = [_filters getLowpass];
+        title = [NSString stringWithFormat:@"LP:%@", [lp getInfo]];
+    } else if (type == BIQUAD_HIGHPASS) {
+        PassFilter * hp = [_filters getHighpass];
+        title = [NSString stringWithFormat:@"HP:%@", [hp getInfo]];
+    } else if (type == BIQUAD_PARAMETRIC) {
+        title = [NSString stringWithFormat:@"PEQ%d:%@", _filters.activeBiquadIndex, [b getInfo]];
+    } else if (type == BIQUAD_ALLPASS) {
+        title = [NSString stringWithFormat:@"AP%d:%@", _filters.activeBiquadIndex, [b getInfo]];
     } else {
-        
         title = @"Filters";
     }
 
@@ -192,26 +162,11 @@
 }
 
 - (IBAction)setPeqFlag:(id)sender {
-    if (!self.xover.params) return;
-    
-    if ([self.xover.params isEnabled]) {
-        [self.xover.params setEnabled:NO];
-        self.peqFlag_outl.title = @"PEQ Off";
-        _addEQ_outl.enabled = NO;
-        
-        if ([self.xover.params containsParam:(ParamFilter *)activeElement]) {
-            activeElement =  (self.xover.hp) ? self.xover.hp : self.xover.lp;
-        }
-        
-    } else {
-        [self.xover.params setEnabled:YES];
-        self.peqFlag_outl.title = @"PEQ On";
-        _addEQ_outl.enabled = YES;
-        
-        if (!activeElement) activeElement = [self.xover.params getFirstEnabled];
-    }
-    
-    self.xOverView.activeElement = activeElement;
+
+    BOOL enabled = [self.filters isPEQEnabled];
+    [self.filters setPEQEnabled:!enabled];
+    _peqFlag_outl.title = ([self.filters isPEQEnabled]) ? @"PEQ On" : @"PEQ Off";
+
     [self refreshView];
 }
 
@@ -226,12 +181,43 @@
 }
 
 //change Freq Order dbVolume
-- (IBAction)panHandle:(UIPanGestureRecognizer *)recognizer
-{
-    [self moved:activeElement  gesture:recognizer];
+- (IBAction)panHandle:(UIPanGestureRecognizer *)recognizer {
+
+    CGPoint translation = [recognizer translationInView:recognizer.view];
+    
+    if (recognizer.state == UIGestureRecognizerStateBegan){
+        prev_translation = translation;
+        
+        xHysteresisFlag = NO;
+        yHysteresisFlag = NO;
+        delta_freq = 0;
+    }
+    
+    
+    if (_filters.activeNullLP) {
+        float dy = translation.y -  prev_translation.y;
+        
+        if (dy > 100 ){
+            [_filters upOrderFor:BIQUAD_LOWPASS]; // increment order
+            prev_translation.y = translation.y;
+        }
+        
+    } else if (_filters.activeNullHP) {
+        float dy = translation.y -  prev_translation.y;
+        
+        if (dy > 100 ){
+            [_filters upOrderFor:BIQUAD_HIGHPASS]; // increment order
+            prev_translation.y = translation.y;
+        }
+        
+    } else {
+        [self moved:[_filters getActiveBiquad]  translation:translation];
+        
+    }
     
     //display refresh
     [self refreshView];
+    
 }
 
 
@@ -246,111 +232,81 @@
     
     double currentScaleFactor = recognizer.scale / lastScaleFactor;
     lastScaleFactor = recognizer.scale;
+
+    BiquadLL * b = [_filters getActiveBiquad];
+    BiquadParam * p = b.biquadParam;
+    if (p.type != BIQUAD_PARAMETRIC) return;
     
-    ParamFilter * param = (ParamFilter *)activeElement;
+    p.qFac /= currentScaleFactor;
     
-    if (![self.xover.params containsParam:param]) return;
-    
-    param.qFac /= currentScaleFactor;
     //send to dsp cc2540
-    [param sendWithResponse:NO];
+    [b sendWithResponse:NO];
     
     //display refresh
     [self refreshView];
     
 }
 
-// sequence EQ1, EQ2 .. EQn, HP, LP, EQ1 ...
-- (id) nextElement:(id) element
-{
-    
-    if ([self.xover.params containsParam:(ParamFilter *)element]) {
-        
-        int num = (int)[self.xover.params indexOfParam:(ParamFilter *)element];
-        
-        if (num < self.xover.params.count - 1) {
-            return [self.xover.params paramAtIndex:num + 1];
-        } else if (self.xover.hp) {
-            return self.xover.hp;
-        } else if (self.xover.lp) {
-            return self.xover.lp;
-        } else {
-            [self.xover.params paramAtIndex:0];
-        }
-    } else if (self.xover.hp == element) {
-        
-        if (self.xover.lp) {
-            return self.xover.lp;
-        } else if ((self.xover.params) && (self.xover.params.count > 0)) {
-            return [self.xover.params paramAtIndex:0];
-        }
-        
-    } else if (self.xover.lp == element) {
-        
-        if ((self.xover.params) && (self.xover.params.count > 0)) {
-            return [self.xover.params paramAtIndex:0];
-        } else if (self.xover.hp) {
-            return self.xover.hp;
-        }
-    }
-    
-    return nil;
-}
-
 - (void ) selectActiveFilter:(UIGestureRecognizer *)recognizer
 {
     CGPoint tap_point = [recognizer locationInView:recognizer.view];
     
-    id element = activeElement;
+    int tempIndex = _filters.activeBiquadIndex;
     
-    for (int u = 0; u < [self.xover getLength]; u++){
-        element = [self nextElement:element];
-
-        ParamFilter * param = (ParamFilter *)element;// skip disabled param filters
-        if (([self.xover.params containsParam:param]) && (![param isEnabled])){
+    if (![self.filters getLowpass]) {
+        CGPoint p = CGPointMake([self.xOverView freqToPixel:self.maxFreq],
+                                [self.xOverView dbToPixel:[self.filters getAFR:self.maxFreq]]);
+        
+        //check cross
+        if ( (abs((int)(p.x - tap_point.x)) < 30) && (abs((int)(p.y - tap_point.y)) < 30) ) {
+            self.filters.activeNullLP = YES;
+            [self refreshView];
+            return;
+        } else {
+            self.filters.activeNullLP = NO;
+        }
+    }
+    if (![self.filters getHighpass]) {
+        CGPoint tap_point = [recognizer locationInView:recognizer.view];
+        CGPoint p = CGPointMake([self.xOverView freqToPixel:self.minFreq],
+                                [self.xOverView dbToPixel:[self.filters getAFR:self.minFreq]]);
+        
+        //check cross
+        if ( (abs((int)(p.x - tap_point.x)) < 30) && (abs((int)(p.y - tap_point.y)) < 30) ) {
+            self.filters.activeNullHP = YES;
+            [self refreshView];
+            return;
+        } else {
+            self.filters.activeNullHP = NO;
+        }
+    }
+    
+    
+    for (int u = 0; u < [_filters getBiquadLength]; u++){
+        [_filters nextActiveBiquadIndex];
+        
+        BiquadLL * b = [_filters getActiveBiquad];
+        BiquadType_t t = b.biquadParam.type;
+        
+        if ((t != BIQUAD_LOWPASS) && (t != BIQUAD_HIGHPASS) && (t != BIQUAD_PARAMETRIC) && (t != BIQUAD_ALLPASS)) {
             continue;
         }
         
-        if ([self checkCross:element tap_point:tap_point]){
-            activeElement = element;
-            self.xOverView.activeElement = element;
-            break;
+        if ([self checkCross:b tap_point:tap_point]){
+            [self refreshView];
+            return;
         }
     }
-    
-    
-    [self refreshView];
+    _filters.activeBiquadIndex = tempIndex;
 }
 
 
-- (void) moved:(id)dspElement gesture:(UIPanGestureRecognizer *)recognizer
-{
-    if ((![dspElement isKindOfClass:[ParamFilter class]]) && (![dspElement isKindOfClass:[PassFilter2 class]])) {
-        return;
-    }
-    
-    CGPoint translation = [recognizer translationInView:recognizer.view];
-    
-    static double delta_freq = 0;
-    //static BOOL change_freq = YES;
-    static BOOL xHysteresisFlag = NO;
-    static BOOL yHysteresisFlag = NO;
-    
-    static CGPoint prev_translation;// = {0.0f, 0.0f};
-    
-    
-    if (recognizer.state == UIGestureRecognizerStateBegan){
-        prev_translation = translation; //CGPointMake(0.0f, 0.0f);
-        
-        //change_freq = YES;
-        xHysteresisFlag = NO;
-        yHysteresisFlag = NO;
-        delta_freq = 0;
-    }
+- (void) moved:(BiquadLL *)biquad translation:(CGPoint)translation {
+    BiquadParam * bParam = biquad.biquadParam;
+    if (( bParam.type == BIQUAD_OFF) || (( bParam.type == BIQUAD_USER))) return;
     
     float dx = (translation.x -  prev_translation.x) / 2;
     float dy = translation.y -  prev_translation.y;
-    
     
     //update freq
     if (((fabs(translation.x) > [self.xOverView getWidth] * 0.05) || (xHysteresisFlag)) && (!yHysteresisFlag)) {
@@ -359,94 +315,83 @@
         double t;
         delta_freq = modf(delta_freq, &t);//get fraction part
         
-        double freqPix = [self.xOverView freqToPixel:[dspElement freq]];
-        delta_freq += [self.xOverView pixelToFreq:(freqPix + dx)] - [dspElement freq];
+        double freqPix = [self.xOverView freqToPixel:biquad.biquadParam.freq];
+        delta_freq += [self.xOverView pixelToFreq:(freqPix + dx)] -  bParam.freq;
  
         //NSLog(@"dx=%f delta=%f", dx, delta_freq);
         
         if (fabs(delta_freq) >= 1.0) {
-            if ([dspElement isKindOfClass:[ParamFilter class]]){
-                ParamFilter * param = dspElement;
-                param.freq += delta_freq;
-                //ble send
-                [dspElement sendWithResponse:NO];
-            }
-            if ([dspElement isKindOfClass:[PassFilter2 class]]) {
-                PassFilter2 * filter = dspElement;
+            if (( bParam.type == BIQUAD_HIGHPASS) || ( bParam.type == BIQUAD_LOWPASS)) {
+                PassFilter * f = ( bParam.type == BIQUAD_LOWPASS) ? [_filters getLowpass] : [_filters getHighpass];
                 
-                if (filter.order != FILTER_ORDER_0) {
-                    filter.freq += delta_freq;
-                    //ble send
-                    [dspElement sendWithResponse:NO];
-                }
+                int newFreq = [f Freq] + delta_freq;
+                [f setFreq:newFreq];
+                //ble send
+                [f sendWithResponse:NO];
+                
+            } else {//parametric allpass
+                bParam.freq += delta_freq;
+                //ble send
+                [biquad sendWithResponse:NO];
             }
         }
 
     }
     prev_translation.x = translation.x;
     
-    //y-axis moved handler different for filter and biquad elements
-    if ([dspElement isKindOfClass:[ParamFilter class]]) {
-        
-        if (((fabs(translation.y) > [self.xOverView getHeight] * 0.1) || (yHysteresisFlag)) && (!xHysteresisFlag)){
-            yHysteresisFlag = YES;
-            
-            float bb_vol = [xOverView dbToPixel:[dspElement dbVolume]];
-            [dspElement setDbVolume:[xOverView pixelToDb:(bb_vol + dy / 4.0f)]];
-            
-            //ble send
-            [dspElement sendWithResponse:NO];
+    
+    if ((bParam.type == BIQUAD_HIGHPASS) || (bParam.type == BIQUAD_LOWPASS))  {
 
-        }
-        prev_translation.y = translation.y;
-        
-    } else if ([dspElement isKindOfClass:[PassFilter2 class]]) {//PassFilter2
-        PassFilter2 * filter = (PassFilter2 *)dspElement;
-        
         if (!xHysteresisFlag) {
             
             if (dy < -100 ){
-                //filter.order--;
-                PassFilterOrder_t order = filter.order;
-                [self.xover setOrder:(order - 1) forPassFilter:filter];
+                [_filters downOrderFor: bParam.type]; // decrement order
                 
                 yHysteresisFlag = YES;
                 prev_translation.y = translation.y;
                 
             } else if (dy > 100 ){
-                //filter.order++;
-                PassFilterOrder_t order = filter.order;
-                [self.xover setOrder:(order + 1) forPassFilter:filter];
+                [_filters upOrderFor: bParam.type]; // increment order
                 
                 yHysteresisFlag = YES;
                 prev_translation.y = translation.y;
             }
             
         }
+    } else if (bParam.type == BIQUAD_PARAMETRIC) {
         
+        if (((fabs(translation.y) > [self.xOverView getHeight] * 0.1) || (yHysteresisFlag)) && (!xHysteresisFlag)){
+            yHysteresisFlag = YES;
+            
+            float newVolInPix = [xOverView dbToPixel:bParam.dbVolume] + dy / 4.0f;
+            bParam.dbVolume = [xOverView pixelToDb:newVolInPix];
+            //ble send
+            [biquad sendWithResponse:NO];
+            
+        }
+        prev_translation.y = translation.y;
     }
-    
 }
 
 /* ----------------------- check cross Filters's freq ------------------------------*/
-- (BOOL) checkCrossParamFilters:(Biquad *)biquad
+- (BOOL) checkCrossParamFilters:(BiquadLL *)biquad
                         point_x: (float)point_x
 {
-    if (abs((int)(point_x - [xOverView freqToPixel:biquad.freq])) < 15){
+    if (abs((int)(point_x - [xOverView freqToPixel:biquad.biquadParam.freq])) < 15){
         return YES;
         
     }
     return NO;
 }
 
-- (BOOL) checkCrossHighLowPass:(int)start_x
+- (BOOL) checkCrossPassFilters:(int)start_x
                          end_x:(int)end_x
                      tap_point:(CGPoint)tap_point
 {
     BOOL result = NO;
     
     for (int i = start_x; i < end_x; i++){
-        double y = [xOverView getFilters_y:[xOverView pixelToFreq:i]];
+        double y = [self.filters getAFR:[xOverView pixelToFreq:i]];
         
         if (sqrt(pow(tap_point.x - i, 2) +
                  pow(tap_point.y - [xOverView dbToPixel:( 20.0f * log10(y) )], 2)) < 20){
@@ -459,121 +404,26 @@
     return result;
 }
 
-- (BOOL) checkCross:(id)dspElement tap_point:(CGPoint)tap_point
+- (BOOL) checkCross:(BiquadLL *)biquad tap_point:(CGPoint)tap_point
 {
-    BOOL result = NO;
+    //BOOL result = NO;
+    BiquadType_t type = biquad.biquadParam.type;
     
-    if ([self.xover.params containsParam:dspElement]) {
-        ParamFilter * param = dspElement;
-        if ([param isEnabled]) {
-            return [self checkCrossParamFilters:param point_x:tap_point.x];
-        }
-    } else if (dspElement == self.xover.hp) {
-        
+    if (type == BIQUAD_HIGHPASS) {
         int start_x = [xOverView freqToPixel:xOverView.minFreq];
-        int end_x;
+        int end_x = [xOverView getHighPassBorderPix];
+        return [self checkCrossPassFilters:start_x end_x:end_x tap_point:tap_point];
         
-        if (self.xover.hp.order != FILTER_ORDER_0) {
-            end_x = [xOverView getHighPassBorderPix];
-        } else {
-            ParamFilter * param = [self.xover.params paramWithMinFreq];
-            end_x = [xOverView freqToPixel:param.freq];
-        }
+    } else if (type == BIQUAD_LOWPASS) {
         
-        return [self checkCrossHighLowPass:start_x end_x:end_x tap_point:tap_point];
-        
-    } else if (dspElement == self.xover.lp) {
-        
-        int start_x;
+        int start_x = [xOverView getLowPassBorderPix];
         int end_x = [xOverView freqToPixel:xOverView.maxFreq];
+        return [self checkCrossPassFilters:start_x end_x:end_x tap_point:tap_point];
         
-        if (self.xover.lp.order != FILTER_ORDER_0) {
-            start_x = [xOverView getLowPassBorderPix];
-        } else {
-            ParamFilter * param = [self.xover.params paramWithMaxFreq];
-            start_x = [xOverView freqToPixel:param.freq];
-        }
-        
-        return [self checkCrossHighLowPass:start_x end_x:end_x tap_point:tap_point];
     }
     
-    return result;
-}
-
-//add delete Action
-- (IBAction)addParametric:(id)sender {
-    [self enableNextBiquadsWithQfac:1.41f
-                           dbVolume:0.0f];
-    
-    [self refreshView];
-}
-
-- (IBAction)delParametric:(id)sender {
-    id dspElement = activeElement;
-    
-    if ([dspElement isKindOfClass:[ParamFilter class]]){
-        ParamFilter * param = (ParamFilter *)dspElement;
-        [param setEnabled:NO];
-        param.dbVolume = 0.0;
-        //biquad.type = BIQUAD_DISABLED;
-        //biquad.dbVolume = 0.0;
-        
-        //ble send
-        [param sendWithResponse:YES];
-        
-        //choose new active element
-        id element = [self.xover.params getFirstEnabled];
-        
-        if (!element){
-            element =  (self.xover.hp) ? self.xover.hp : self.xover.lp;
-        }
-        activeElement = element;
-        self.xOverView.activeElement = activeElement;
-        
-        [self refreshView];
-    }
-}
-
-
-
-
-- (BOOL) enableNextBiquadsWithFreq:(int)Freq
-                              Qfac:(double)Qfac
-                          dbVolume:(double) dbVolume
-{
-    ParamFilter * param = [self.xover.params getFirstDisabled];
-    
-    if (!param) return NO;//error, not find disabled param biquad
-    
-    param.freq = Freq;
-    param.qFac = Qfac;
-    param.dbVolume = dbVolume;
-    
-    activeElement = param;
-    self.xOverView.activeElement = param;
-    
-    return YES;
-}
-
-//freq find automatically
-- (BOOL) enableNextBiquadsWithQfac:(double)Qfac
-                          dbVolume:(double) dbVolume
-{
-    ParamFilter * param = [self.xover.params getFirstDisabled];
-    
-    if (!param) return NO;//error, not find disable biquad
-
-    int freq = [self.xover getFreqForNextEnabledParametric];
-    param.freq = (freq == -1) ? 300 : freq;
-    
-    param.qFac = Qfac;
-    param.dbVolume = dbVolume;
-    [param setEnabled:YES];
-    
-    activeElement = param;
-    self.xOverView.activeElement = param;
-    
-    return YES;
+    //parametric, allpasa
+    return [self checkCrossParamFilters:biquad point_x:tap_point.x];
 }
 
 @end

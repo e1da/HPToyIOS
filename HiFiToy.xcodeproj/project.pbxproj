@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D301F0772172554900E181C6 /* FloatUtility.h in Sources */ = {isa = PBXBuildFile; fileRef = D30FF884216D49DE007FA50D /* FloatUtility.h */; };
+		D301F078217255C500E181C6 /* FloatUtility.h in Sources */ = {isa = PBXBuildFile; fileRef = D30FF884216D49DE007FA50D /* FloatUtility.h */; };
+		D301F079217255C500E181C6 /* FloatUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D30FF885216D49DE007FA50D /* FloatUtility.c */; };
+		D301F07E2172871E00E181C6 /* Biquad.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F07C2172871D00E181C6 /* Biquad.m */; };
+		D301F081217F479200E181C6 /* BiquadParam.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F080217F479200E181C6 /* BiquadParam.m */; };
 		D30FF8702163AB4D007FA50D /* KeyboardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF86D2163AB4D007FA50D /* KeyboardButton.m */; };
 		D30FF8712163AB4D007FA50D /* NumKeyboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF86E2163AB4D007FA50D /* NumKeyboardController.m */; };
 		D30FF8772163D467007FA50D /* NumValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF8762163D467007FA50D /* NumValueControl.m */; };
@@ -14,6 +19,8 @@
 		D30FF8802166A0D7007FA50D /* FilterTypeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF87F2166A0D7007FA50D /* FilterTypeControl.m */; };
 		D30FF883216A6B1A007FA50D /* BiquadLL.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF882216A6B1A007FA50D /* BiquadLL.m */; };
 		D30FF886216D49DE007FA50D /* FloatUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D30FF885216D49DE007FA50D /* FloatUtility.c */; };
+		D30FF889216E2F5C007FA50D /* Filters.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF888216E2F5C007FA50D /* Filters.m */; };
+		D30FF88C216FA8E8007FA50D /* PassFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF88B216FA8E8007FA50D /* PassFilter.m */; };
 		D33A253E20BFF674008A94EF /* Number88.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDE20BEDD9D00BDC1A0 /* Number88.h */; };
 		D33A253F20BFF674008A94EF /* Number523.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDF20BEDD9D00BDC1A0 /* Number523.h */; };
 		D33A254020BFF674008A94EF /* Number923.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDD20BEDD9D00BDC1A0 /* Number923.h */; };
@@ -51,9 +58,6 @@
 		D379127720D3C2CE0089962D /* DrcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127620D3C2CE0089962D /* DrcViewController.m */; };
 		D379127A20D3C55B0089962D /* DrcView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127920D3C55B0089962D /* DrcView.m */; };
 		D379127D20DE7B4F0089962D /* DrcTimeConstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127C20DE7B4F0089962D /* DrcTimeConstViewController.m */; };
-		D379128020E3BD9F0089962D /* XOver.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127F20E3BD9F0089962D /* XOver.m */; };
-		D379128320E3C70A0089962D /* ParamFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = D379128220E3C70A0089962D /* ParamFilter.m */; };
-		D379128620E546DA0089962D /* PassFilter2.m in Sources */ = {isa = PBXBuildFile; fileRef = D379128520E546DA0089962D /* PassFilter2.m */; };
 		D387FD6A215FA35C00C80D73 /* AdvSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = D387FD69215FA35C00C80D73 /* AdvSlider.m */; };
 		D387FD6E215FB42100C80D73 /* next.png in Resources */ = {isa = PBXBuildFile; fileRef = D387FD6C215FB42100C80D73 /* next.png */; };
 		D387FD6F215FB42100C80D73 /* prev.png in Resources */ = {isa = PBXBuildFile; fileRef = D387FD6D215FB42100C80D73 /* prev.png */; };
@@ -64,8 +68,6 @@
 		D39C3CA120BEB50000BDC1A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */; };
 		D39C3CA420BEB50000BDC1A0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CA320BEB50000BDC1A0 /* main.m */; };
 		D39C3CAE20BEB50000BDC1A0 /* HiFiToyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CAD20BEB50000BDC1A0 /* HiFiToyTests.m */; };
-		D39C3CC020BEB6A500BDC1A0 /* Biquad.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CBF20BEB6A500BDC1A0 /* Biquad.m */; };
-		D39C3CC320BEB6CD00BDC1A0 /* ParamFilterContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CC220BEB6CD00BDC1A0 /* ParamFilterContainer.m */; };
 		D39C3CC920BEB6FB00BDC1A0 /* Volume.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CC820BEB6FB00BDC1A0 /* Volume.m */; };
 		D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CCB20BEB70800BDC1A0 /* BassTreble.m */; };
 		D39C3CCF20BEB71200BDC1A0 /* Loudness.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CCE20BEB71200BDC1A0 /* Loudness.m */; };
@@ -103,6 +105,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D301F07C2172871D00E181C6 /* Biquad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Biquad.m; sourceTree = "<group>"; };
+		D301F07D2172871E00E181C6 /* Biquad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Biquad.h; sourceTree = "<group>"; };
+		D301F07F217F479200E181C6 /* BiquadParam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BiquadParam.h; sourceTree = "<group>"; };
+		D301F080217F479200E181C6 /* BiquadParam.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadParam.m; sourceTree = "<group>"; };
 		D30FF86C2163AB4D007FA50D /* NumKeyboardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumKeyboardController.h; sourceTree = "<group>"; };
 		D30FF86D2163AB4D007FA50D /* KeyboardButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardButton.m; sourceTree = "<group>"; };
 		D30FF86E2163AB4D007FA50D /* NumKeyboardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumKeyboardController.m; sourceTree = "<group>"; };
@@ -115,8 +121,12 @@
 		D30FF87F2166A0D7007FA50D /* FilterTypeControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterTypeControl.m; sourceTree = "<group>"; };
 		D30FF881216A6B1A007FA50D /* BiquadLL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BiquadLL.h; sourceTree = "<group>"; };
 		D30FF882216A6B1A007FA50D /* BiquadLL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadLL.m; sourceTree = "<group>"; };
-		D30FF884216D49DE007FA50D /* FloatUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloatUtility.h; sourceTree = "<group>"; };
+		D30FF884216D49DE007FA50D /* FloatUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FloatUtility.h; path = HiFiToy/Source/HiFiToyPeripheral/NumberUtility/FloatUtility.h; sourceTree = SOURCE_ROOT; };
 		D30FF885216D49DE007FA50D /* FloatUtility.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = FloatUtility.c; sourceTree = "<group>"; };
+		D30FF887216E2F5C007FA50D /* Filters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Filters.h; sourceTree = "<group>"; };
+		D30FF888216E2F5C007FA50D /* Filters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Filters.m; sourceTree = "<group>"; };
+		D30FF88A216FA8E8007FA50D /* PassFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassFilter.h; sourceTree = "<group>"; };
+		D30FF88B216FA8E8007FA50D /* PassFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassFilter.m; sourceTree = "<group>"; };
 		D33A254220C06481008A94EF /* TAS5558.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAS5558.h; sourceTree = "<group>"; };
 		D33A254420C140F8008A94EF /* BassTrebleChannel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BassTrebleChannel.h; sourceTree = "<group>"; };
 		D33A254520C140F8008A94EF /* BassTrebleChannel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BassTrebleChannel.m; sourceTree = "<group>"; };
@@ -181,12 +191,6 @@
 		D379127920D3C55B0089962D /* DrcView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcView.m; sourceTree = "<group>"; };
 		D379127B20DE7B4F0089962D /* DrcTimeConstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcTimeConstViewController.h; sourceTree = "<group>"; };
 		D379127C20DE7B4F0089962D /* DrcTimeConstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcTimeConstViewController.m; sourceTree = "<group>"; };
-		D379127E20E3BD9F0089962D /* XOver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XOver.h; sourceTree = "<group>"; };
-		D379127F20E3BD9F0089962D /* XOver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XOver.m; sourceTree = "<group>"; };
-		D379128120E3C70A0089962D /* ParamFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParamFilter.h; sourceTree = "<group>"; };
-		D379128220E3C70A0089962D /* ParamFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParamFilter.m; sourceTree = "<group>"; };
-		D379128420E546DA0089962D /* PassFilter2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassFilter2.h; sourceTree = "<group>"; };
-		D379128520E546DA0089962D /* PassFilter2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PassFilter2.m; sourceTree = "<group>"; };
 		D387FD68215FA35C00C80D73 /* AdvSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvSlider.h; sourceTree = "<group>"; };
 		D387FD69215FA35C00C80D73 /* AdvSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvSlider.m; sourceTree = "<group>"; };
 		D387FD6C215FB42100C80D73 /* next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = next.png; sourceTree = "<group>"; };
@@ -202,10 +206,6 @@
 		D39C3CA920BEB50000BDC1A0 /* HiFiToyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HiFiToyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39C3CAD20BEB50000BDC1A0 /* HiFiToyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HiFiToyTests.m; sourceTree = "<group>"; };
 		D39C3CAF20BEB50000BDC1A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D39C3CBE20BEB6A500BDC1A0 /* Biquad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Biquad.h; sourceTree = "<group>"; };
-		D39C3CBF20BEB6A500BDC1A0 /* Biquad.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Biquad.m; sourceTree = "<group>"; };
-		D39C3CC120BEB6CD00BDC1A0 /* ParamFilterContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParamFilterContainer.h; sourceTree = "<group>"; };
-		D39C3CC220BEB6CD00BDC1A0 /* ParamFilterContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParamFilterContainer.m; sourceTree = "<group>"; };
 		D39C3CC720BEB6FB00BDC1A0 /* Volume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Volume.h; sourceTree = "<group>"; };
 		D39C3CC820BEB6FB00BDC1A0 /* Volume.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Volume.m; sourceTree = "<group>"; };
 		D39C3CCA20BEB70800BDC1A0 /* BassTreble.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BassTreble.h; sourceTree = "<group>"; };
@@ -549,18 +549,16 @@
 		D39C3CBD20BEB65A00BDC1A0 /* HiFiToyObjects */ = {
 			isa = PBXGroup;
 			children = (
+				D301F07D2172871E00E181C6 /* Biquad.h */,
+				D301F07C2172871D00E181C6 /* Biquad.m */,
+				D30FF88A216FA8E8007FA50D /* PassFilter.h */,
+				D30FF88B216FA8E8007FA50D /* PassFilter.m */,
+				D301F07F217F479200E181C6 /* BiquadParam.h */,
+				D301F080217F479200E181C6 /* BiquadParam.m */,
 				D30FF881216A6B1A007FA50D /* BiquadLL.h */,
 				D30FF882216A6B1A007FA50D /* BiquadLL.m */,
-				D39C3CBE20BEB6A500BDC1A0 /* Biquad.h */,
-				D39C3CBF20BEB6A500BDC1A0 /* Biquad.m */,
-				D379128120E3C70A0089962D /* ParamFilter.h */,
-				D379128220E3C70A0089962D /* ParamFilter.m */,
-				D39C3CC120BEB6CD00BDC1A0 /* ParamFilterContainer.h */,
-				D39C3CC220BEB6CD00BDC1A0 /* ParamFilterContainer.m */,
-				D379127E20E3BD9F0089962D /* XOver.h */,
-				D379127F20E3BD9F0089962D /* XOver.m */,
-				D379128420E546DA0089962D /* PassFilter2.h */,
-				D379128520E546DA0089962D /* PassFilter2.m */,
+				D30FF887216E2F5C007FA50D /* Filters.h */,
+				D30FF888216E2F5C007FA50D /* Filters.m */,
 				D39C3CC720BEB6FB00BDC1A0 /* Volume.h */,
 				D39C3CC820BEB6FB00BDC1A0 /* Volume.m */,
 				D39C3CCA20BEB70800BDC1A0 /* BassTreble.h */,
@@ -751,19 +749,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D301F081217F479200E181C6 /* BiquadParam.m in Sources */,
+				D301F0772172554900E181C6 /* FloatUtility.h in Sources */,
 				D33A258220C952CD008A94EF /* FoundCell.m in Sources */,
 				D33A259820CA93B1008A94EF /* PresetViewController.m in Sources */,
 				D379126320D111B80089962D /* XOverViewController.m in Sources */,
 				D33A259B20CA9538008A94EF /* PresetCell.m in Sources */,
 				D33A254320C064A9008A94EF /* TAS5558.h in Sources */,
 				D33A253E20BFF674008A94EF /* Number88.h in Sources */,
-				D379128020E3BD9F0089962D /* XOver.m in Sources */,
 				D379127A20D3C55B0089962D /* DrcView.m in Sources */,
 				D33A255E20C6AEBB008A94EF /* HiFiToyDeviceList.m in Sources */,
+				D301F07E2172871E00E181C6 /* Biquad.m in Sources */,
 				D33A253F20BFF674008A94EF /* Number523.h in Sources */,
 				D33A257420C94459008A94EF /* AppDelegate.m in Sources */,
 				D33A254020BFF674008A94EF /* Number923.h in Sources */,
 				D30FF8802166A0D7007FA50D /* FilterTypeControl.m in Sources */,
+				D30FF889216E2F5C007FA50D /* Filters.m in Sources */,
 				D33A257A20C94865008A94EF /* DiscoveryViewController.m in Sources */,
 				D33A257D20C94875008A94EF /* MainViewController.m in Sources */,
 				D379127D20DE7B4F0089962D /* DrcTimeConstViewController.m in Sources */,
@@ -782,12 +783,10 @@
 				D33A254620C140F8008A94EF /* BassTrebleChannel.m in Sources */,
 				D379126620D1153F0089962D /* XOverView.m in Sources */,
 				D33A256D20C80C82008A94EF /* HiFiToyControl.m in Sources */,
-				D379128620E546DA0089962D /* PassFilter2.m in Sources */,
 				D39C3CD920BEB8C500BDC1A0 /* XmlData.m in Sources */,
 				D39C3CDA20BEB8C500BDC1A0 /* XmlParserWrapper.m in Sources */,
 				D30FF883216A6B1A007FA50D /* BiquadLL.m in Sources */,
 				D33A258B20CA8A30008A94EF /* NavigationController.m in Sources */,
-				D379128320E3C70A0089962D /* ParamFilter.m in Sources */,
 				D39C3CE220BEDD9D00BDC1A0 /* Number523.c in Sources */,
 				D33A254920C15AF7008A94EF /* DrcCoef.m in Sources */,
 				D33A255220C5728E008A94EF /* DrcTimeConst.m in Sources */,
@@ -798,7 +797,6 @@
 				D39C3CA420BEB50000BDC1A0 /* main.m in Sources */,
 				D33A259E20CA9571008A94EF /* PresetDetailButton.m in Sources */,
 				D33A258820CA8A00008A94EF /* OptionsViewController.m in Sources */,
-				D39C3CC020BEB6A500BDC1A0 /* Biquad.m in Sources */,
 				D39C3CE320BEDD9D00BDC1A0 /* Number88.c in Sources */,
 				D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */,
 				D33A256A20C6E209008A94EF /* BlePacketQueue.m in Sources */,
@@ -809,7 +807,7 @@
 				D33A255820C68B92008A94EF /* HiFiToyPresetList.m in Sources */,
 				D30FF8712163AB4D007FA50D /* NumKeyboardController.m in Sources */,
 				D33A257120C943F5008A94EF /* DialogSystem.m in Sources */,
-				D39C3CC320BEB6CD00BDC1A0 /* ParamFilterContainer.m in Sources */,
+				D30FF88C216FA8E8007FA50D /* PassFilter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -817,6 +815,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D301F078217255C500E181C6 /* FloatUtility.h in Sources */,
+				D301F079217255C500E181C6 /* FloatUtility.c in Sources */,
 				D39C3CAE20BEB50000BDC1A0 /* HiFiToyTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

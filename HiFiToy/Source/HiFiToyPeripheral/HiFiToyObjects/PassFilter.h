@@ -7,20 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "HiFiToyObject.h"
-#import "Biquad.h"
+#import "BiquadLL.h"
 
 typedef BiquadType_t PassFilterType_t;
 
-typedef enum : uint8_t{
-    BIQUAD_LENGTH_0, BIQUAD_LENGTH_1, BIQUAD_LENGTH_2, BIQUAD_LENGTH_4
-} BiquadLength_t;
-
 typedef enum : int8_t{
-    FILTER_ORDER_0 = 0,
-    FILTER_ORDER_2 = 1,
-    FILTER_ORDER_4 = 2,
-    FILTER_ORDER_8 = 3
+    PASSFILTER_ORDER_0      = 0,
+    PASSFILTER_ORDER_2      = 1,
+    PASSFILTER_ORDER_4      = 2,
+    PASSFILTER_ORDER_8      = 3,
+    PASSFILTER_ORDER_UNK    = 4
 } PassFilterOrder_t;
 
 #pragma pack(1)
@@ -31,43 +27,30 @@ typedef struct {
 } PassFilter_t;
 
 typedef struct {
-    uint8_t             addr;           //0x00
-    uint8_t             biquadLength;   //0x01, val = 1, 2, 4
-    PassFilter_t        filter;         //0x02
-} PassFilterPacket_t;                   //size == 6
+    uint8_t             addr[8];        //0x00
+    PassFilter_t        filter;         //0x08
+    uint8_t             nc;
+} PassFilterPacket_t;                   //size == 13
 #pragma options align=reset
 
-@interface PassFilter : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
+@interface PassFilter : NSObject <NSCopying>
 
-@property (nonatomic)   Biquad * biquad0;
-@property (nonatomic)   Biquad * biquad1;
-@property (nonatomic)   Biquad * biquad2;
-@property (nonatomic)   Biquad * biquad3;
-
-//@property (nonatomic)   PassFilterOrder_t order;
-
+@property (nonatomic)   NSArray<BiquadLL *> * biquads;
 //border property
 @property (nonatomic)   PassFilterOrder_t maxOrder;
 @property (nonatomic)   PassFilterOrder_t minOrder;
 
 
-+ (PassFilter *)initWithOrder:(PassFilterOrder_t)order Type:(PassFilterType_t)type Freq:(int)freq
-                         Addr:(int)addr
-                 BiquadLength:(BiquadLength_t)biquadLength;
++ (PassFilter *)initWithBiquads:(NSArray<BiquadLL *> *)biquads withType:(PassFilterType_t)type;
 
 // getter/setter
--(void) setOrder:(PassFilterOrder_t)order;
--(PassFilterOrder_t) getOrder;
--(void) setType:(PassFilterType_t)type;
--(PassFilterType_t) getType;
+//-(void) setOrder:(PassFilterOrder_t)order;
+-(PassFilterOrder_t)    getOrder;
+-(void)                 setType:(PassFilterType_t)type;
+-(PassFilterType_t)     getType;
 
 -(void) setFreq:(int)freq;
 -(int) Freq;
-
-//-(void) setEnabled:(BOOL)enabled;
--(BOOL) isEnabled;
-
-//-(void) setPassFilter:(PassFilter *)filter;
 
 //border setter function
 - (void) setBorderMaxFreq:(int)maxFreq minFreq:(int)minFreq;
@@ -80,9 +63,8 @@ typedef struct {
               maxDbVolume:(double)maxDbVolume minQfac:(double)minDbVolume
                  maxOrder:(PassFilterOrder_t)maxOrder minOrder:(PassFilterOrder_t)minOrder;
 
-/*-----------------------------------------------------------------------------------------
- Math Calculation
- -----------------------------------------------------------------------------------------*/
-- (double) getAFR:(double)freqX;
+-(NSString *)getInfo;
+//send to dsp
+- (void) sendWithResponse:(BOOL)response;
 
 @end

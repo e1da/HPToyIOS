@@ -9,6 +9,12 @@
 #import <XCTest/XCTest.h>
 #import "FloatUtility.h"
 #import "BiquadLL.h"
+#import "Volume.h"
+
+extern bool isFloatEqualWithAccuracy(float arg0, float arg1, int accuracy);
+extern bool isFloatNull(float f);
+
+extern bool isFloatDiffLessThan(float f0, float f1, float maxDiff);
 
 @interface HiFiToyTests : XCTestCase
 
@@ -90,55 +96,46 @@
     biquadParam.qFac = 1.41f;
     biquadParam.dbVolume = 3.0f;
     
-    [biquad setBiquadParam:biquadParam];
-    biquadParam = [biquad getBiquadParam];
-    
-    XCTAssertEqual(biquadParam.order, BIQUAD_ORDER_2);
-    XCTAssertEqual(biquadParam.type, BIQUAD_PARAMETRIC);
-    XCTAssertEqual(biquadParam.freq, 100, @"Freq error");
-    XCTAssertTrue(isFloatDiffLessThan(biquadParam.qFac, 1.41f, 0.01f));
-    XCTAssertTrue(isFloatDiffLessThan(biquadParam.dbVolume, 3.0f, 0.01f));
+    [biquad.biquadParam setBiquadParam:biquadParam];
+
+    XCTAssertEqual(biquad.biquadParam.order, BIQUAD_ORDER_2);
+    XCTAssertEqual(biquad.biquadParam.type, BIQUAD_PARAMETRIC);
+    XCTAssertEqual(biquad.biquadParam.freq, 100, @"Freq error");
+    XCTAssertTrue(isFloatDiffLessThan(biquad.biquadParam.qFac, 1.41f, 0.01f));
+    XCTAssertTrue(isFloatDiffLessThan(biquad.biquadParam.dbVolume, 3.0f, 0.01f));
     
     XCTAssertFalse(isFloatDiffLessThan(biquadParam.dbVolume, 3.015f, 0.01f));
     
-    biquadParam.type = BIQUAD_LOWPASS;
-    [biquad setBiquadParam:biquadParam];
+    biquad.biquadParam.type = BIQUAD_LOWPASS;
     
-    biquadParam = [biquad getBiquadParam];
-    XCTAssertEqual(biquadParam.order, BIQUAD_ORDER_2);
-    XCTAssertEqual(biquadParam.type, BIQUAD_LOWPASS);
-    XCTAssertEqual(biquadParam.freq, 100, @"Freq error");
+    XCTAssertEqual(biquad.biquadParam.order, BIQUAD_ORDER_2);
+    XCTAssertEqual(biquad.biquadParam.type, BIQUAD_LOWPASS);
+    XCTAssertEqual(biquad.biquadParam.freq, 100, @"Freq error");
     
-    biquadParam.type = BIQUAD_HIGHPASS;
-    [biquad setBiquadParam:biquadParam];
+    biquad.biquadParam.type = BIQUAD_HIGHPASS;
+
+    XCTAssertEqual(biquad.biquadParam.order, BIQUAD_ORDER_2);
+    XCTAssertEqual(biquad.biquadParam.type, BIQUAD_HIGHPASS);
+    XCTAssertEqual(biquad.biquadParam.freq, 100, @"Freq error");
     
-    biquadParam = [biquad getBiquadParam];
-    XCTAssertEqual(biquadParam.order, BIQUAD_ORDER_2);
-    XCTAssertEqual(biquadParam.type, BIQUAD_HIGHPASS);
-    XCTAssertEqual(biquadParam.freq, 100, @"Freq error");
+    biquad.biquadParam.type = BIQUAD_ALLPASS;
+    biquad.biquadParam.freq = 350;
     
-    biquadParam.type = BIQUAD_ALLPASS;
-    biquadParam.freq = 350;
-    [biquad setBiquadParam:biquadParam];
-    
-    biquadParam = [biquad getBiquadParam];
-    XCTAssertEqual(biquadParam.order, BIQUAD_ORDER_2);
-    XCTAssertEqual(biquadParam.type, BIQUAD_ALLPASS);
-    XCTAssertEqual(biquadParam.freq, 350, @"Freq error");
+    XCTAssertEqual(biquad.biquadParam.order, BIQUAD_ORDER_2);
+    XCTAssertEqual(biquad.biquadParam.type, BIQUAD_ALLPASS);
+    XCTAssertEqual(biquad.biquadParam.freq, 350, @"Freq error");
     
     BiquadCoef_t coef = {0.5f, -0.5f, 1.994f, -0.98f, -1.5f};
     biquad.coef = coef;
     
-    biquadParam = [biquad getBiquadParam];
-    XCTAssertEqual(biquadParam.order, BIQUAD_ORDER_2);
-    XCTAssertEqual(biquadParam.type, BIQUAD_USER);
+    XCTAssertEqual(biquad.biquadParam.order, BIQUAD_ORDER_2);
+    XCTAssertEqual(biquad.biquadParam.type, BIQUAD_USER);
     
-    biquadParam.order = BIQUAD_ORDER_2;
-    biquadParam.type = BIQUAD_PARAMETRIC;
-    biquadParam.freq = 45;
-    biquadParam.qFac = 1.41f;
-    biquadParam.dbVolume = -3.0f;
-    [biquad setBiquadParam:biquadParam];
+    biquad.biquadParam.order = BIQUAD_ORDER_2;
+    biquad.biquadParam.type = BIQUAD_PARAMETRIC;
+    biquad.biquadParam.freq = 45;
+    biquad.biquadParam.qFac = 1.41f;
+    biquad.biquadParam.dbVolume = -3.0f;
 
     XCTAssertTrue(isCoefEqual(biquad.coef.b0, 0.999637926f));
     XCTAssertTrue(isCoefEqual(biquad.coef.b1, -1.997511844f));
@@ -149,67 +146,66 @@
     BiquadCoef_t coefParam = {0.999637926f, -1.997511844f, 0.997882581f, 1.997511844f, -0.997520508f};
     biquad.coef = coefParam;
     
-    biquadParam = [biquad getBiquadParam];
-    XCTAssertEqual(biquadParam.order, BIQUAD_ORDER_2);
-    XCTAssertEqual(biquadParam.type, BIQUAD_PARAMETRIC);
-    XCTAssertEqual(biquadParam.freq, 45);
-    XCTAssertTrue(isFloatDiffLessThan(biquadParam.qFac, 1.41f, 0.01f));
-    XCTAssertTrue(isFloatDiffLessThan(biquadParam.dbVolume, -3.0f, 0.01f));
+    XCTAssertEqual(biquad.biquadParam.order, BIQUAD_ORDER_2);
+    XCTAssertEqual(biquad.biquadParam.type, BIQUAD_PARAMETRIC);
+    XCTAssertEqual(biquad.biquadParam.freq, 45);
+    XCTAssertTrue(isFloatDiffLessThan(biquad.biquadParam.qFac, 1.41f, 0.01f));
+    XCTAssertTrue(isFloatDiffLessThan(biquad.biquadParam.dbVolume, -3.0f, 0.01f));
 }
 
 - (void) testBiquadLLEqualsCopyArchive {
     BiquadLL * biquad = [BiquadLL initWithAddress:0x51];
     
-    BiquadParam_t biquadParam;
-    biquadParam.order = BIQUAD_ORDER_2;
-    biquadParam.type = BIQUAD_PARAMETRIC;
-    biquadParam.freq = 100;
-    biquadParam.qFac = 1.41f;
-    biquadParam.dbVolume = 3.0f;
-    
-    [biquad setBiquadParam:biquadParam];
+    biquad.biquadParam.order = BIQUAD_ORDER_2;
+    biquad.biquadParam.type = BIQUAD_PARAMETRIC;
+    biquad.biquadParam.freq = 100;
+    biquad.biquadParam.qFac = 1.41f;
+    biquad.biquadParam.dbVolume = 3.0f;
     
     BiquadLL * biquad1 = [BiquadLL initWithAddress:0x51];
     
-    biquadParam.order = BIQUAD_ORDER_2;
-    biquadParam.type = BIQUAD_PARAMETRIC;
-    biquadParam.freq = 100;
-    biquadParam.qFac = 1.41f;
-    biquadParam.dbVolume = 3.0f;
-    
-    [biquad1 setBiquadParam:biquadParam];
+    biquad1.biquadParam.order = BIQUAD_ORDER_2;
+    biquad1.biquadParam.type = BIQUAD_PARAMETRIC;
+    biquad1.biquadParam.freq = 100;
+    biquad1.biquadParam.qFac = 1.41f;
+    biquad1.biquadParam.dbVolume = 3.0f;
     
     XCTAssertTrue([biquad1 isEqual:biquad]);
     
-    biquadParam.type = BIQUAD_LOWPASS;
-    [biquad1 setBiquadParam:biquadParam];
+    biquad1.biquadParam.type = BIQUAD_LOWPASS;
     XCTAssertFalse([biquad1 isEqual:biquad]);
     
-    biquadParam.type = BIQUAD_PARAMETRIC;
-    [biquad1 setBiquadParam:biquadParam];
+    biquad1.biquadParam.type = BIQUAD_PARAMETRIC;
     XCTAssertTrue([biquad1 isEqual:biquad]);
     
-    biquadParam.qFac = 1.45f;
-    [biquad1 setBiquadParam:biquadParam];
+    biquad1.biquadParam.qFac = 1.45f;
     XCTAssertFalse([biquad1 isEqual:biquad]);
     
-    biquadParam.qFac = 1.41f;
-    [biquad1 setBiquadParam:biquadParam];
-    [biquad setType:BIQUAD_LOWPASS];
-    [biquad1 setType:BIQUAD_LOWPASS];
+    biquad1.biquadParam.qFac = 1.41f;
+    biquad1.biquadParam.type = BIQUAD_LOWPASS;
+    biquad.biquadParam.type = BIQUAD_LOWPASS;
     XCTAssertTrue([biquad1 isEqual:biquad]);
     
     //check copy
     BiquadLL * biquad2 = [biquad1 copy];
     XCTAssertTrue([biquad2 isEqual:biquad1]);
+    XCTAssertTrue([biquad2 isKindOfClass:[BiquadLL class]]);
     
     //check archive: encoder, decoder
     NSData * d = [NSKeyedArchiver archivedDataWithRootObject:biquad2];
     BiquadLL * biquad3 = [NSKeyedUnarchiver unarchiveObjectWithData:d];
+    
+    XCTAssertTrue([biquad3 isKindOfClass:[BiquadLL class]]);
     XCTAssertTrue([biquad3 isEqual:biquad2]);
     
-    [biquad3 setFreq:500];
+    biquad3.biquadParam.freq = 500;
     XCTAssertFalse([biquad3 isEqual:biquad2]);
 }
 
+- (void) testBiquadParamCopy {
+    BiquadParam * p = [[BiquadParam alloc] init];
+    BiquadParam * pc = [p copy];
+    
+    XCTAssertTrue([p isEqual:pc]);
+}
 @end

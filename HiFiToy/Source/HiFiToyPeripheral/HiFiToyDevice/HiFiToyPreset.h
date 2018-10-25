@@ -11,7 +11,8 @@
 #import "BassTreble.h"
 #import "Loudness.h"
 #import "Drc.h"
-#import "XOver.h"
+
+#import "Filters.h"
 
 @interface HiFiToyPreset : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
 
@@ -23,7 +24,7 @@
 //pointer to all characteristics
 @property (nonatomic) NSArray *     characteristics;
 
-@property (nonatomic) XOver *               xover;
+@property (nonatomic) Filters *             filters;
 @property (nonatomic) Volume *              masterVolume;
 @property (nonatomic) BassTreble *          bassTreble;
 @property (nonatomic) Loudness *            loudness;

@@ -30,10 +30,17 @@
         _LO = 0;
         _gain = 0;
         _offset = 0;
-        _biquad = [Biquad initWithAddress:LOUDNESS_BIQUAD_REG
+        /*_biquad = [Biquad initWithAddress:LOUDNESS_BIQUAD_REG
                                     Order:BIQUAD_ORDER_2
                                      Type:BIQUAD_BANDPASS
-                                     Freq:140 Qfac:0 dbVolume:0];
+                                     Freq:140 Qfac:0 dbVolume:0];*/
+        _biquad = [BiquadLL initWithAddress:LOUDNESS_BIQUAD_REG];
+        BiquadParam * p = _biquad.biquadParam;
+        p.order = BIQUAD_ORDER_2;
+        p.type = BIQUAD_BANDPASS;
+        p.freq = 140;
+        p.qFac = 0;
+        p.dbVolume = 0;
     }
     
     return self;
@@ -103,7 +110,7 @@
     return NO;
 }
 
-+ (Loudness *)initWithOrder:(Biquad *)biquad LG:(float)LG LO:(float)LO
++ (Loudness *)initWithOrder:(BiquadLL *)biquad LG:(float)LG LO:(float)LO
                        Gain:(float)gain Offset:(float)offset
 {
     Loudness *currentInstance = [[Loudness alloc] init];
@@ -124,7 +131,7 @@
 //info string
 -(NSString *)getFreqInfo
 {
-    return [NSString stringWithFormat:@"%dHz", self.biquad.freq];
+    return [NSString stringWithFormat:@"%dHz", _biquad.biquadParam.freq];
 }
 
 -(NSString *)getInfo
