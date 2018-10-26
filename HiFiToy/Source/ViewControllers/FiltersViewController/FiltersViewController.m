@@ -11,10 +11,11 @@
 #import "NumValueControl.h"
 #import "FilterLabel.h"
 #import "FilterTypeControl.h"
+#import "XOverView.h"
 
 
 @interface FiltersViewController () {
-    UIView * filtersView;
+    XOverView * filtersView;
     
     FilterTypeControl * filterTypeControl;
     UISegmentedControl * typeBiquadSegmentedControl;
@@ -46,8 +47,22 @@
 }
 
 - (void)initSubviews {
-    filtersView = [[UIView alloc] init];
-    [filtersView setBackgroundColor:[UIColor blackColor]];
+    filtersView = [[XOverView alloc] init];
+    [filtersView setBackgroundColor:[UIColor whiteColor]];
+    //configure XOverView
+    filtersView.maxFreq = 30000;
+    filtersView.minFreq = 20;
+    
+    if (filtersView.maxFreq > 500){
+        filtersView.drawFreqUnitArray = [NSArray arrayWithObjects:[NSNumber numberWithInt:20],
+                                            [NSNumber numberWithInt:100], [NSNumber numberWithInt:1000],
+                                            [NSNumber numberWithInt:10000], nil];
+    } else {
+        filtersView.drawFreqUnitArray = [NSArray arrayWithObjects:[NSNumber numberWithInt:20],
+                                            [NSNumber numberWithInt:100], [NSNumber numberWithInt:500], nil];
+    }
+    filtersView.filters = self.filters;
+    
     [self.view addSubview:filtersView];
 
     filterTypeControl = [[FilterTypeControl alloc] init];
@@ -55,10 +70,10 @@
     [filterTypeControl.nextBtn addTarget:self action:@selector(changeFilter:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:filterTypeControl];
     
-    NSArray * types = [NSArray arrayWithObjects:@"LP", @"HP", @"Param", @"AllPass", @"Off", nil];
+    NSArray * types = [NSArray arrayWithObjects:@"LP", @"HP", @"Param", @"AllPass", @"User", @"Off", nil];
     typeBiquadSegmentedControl = [[UISegmentedControl alloc] initWithItems:types];
     [typeBiquadSegmentedControl setTintColor:[UIColor lightGrayColor]];
-    typeBiquadSegmentedControl.enabled = NO;
+    [typeBiquadSegmentedControl addTarget:self action:@selector(changeTypeFilter:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:typeBiquadSegmentedControl];
     
     biquadControl = [[BiquadValueControl alloc] init];
@@ -72,6 +87,9 @@
     BiquadType_t type = b.biquadParam.type;
     
     [biquadControl update];
+    
+    [typeBiquadSegmentedControl setEnabled:(![_filters isLowpassFull]) forSegmentAtIndex:0];
+    [typeBiquadSegmentedControl setEnabled:(![_filters isHighpassFull]) forSegmentAtIndex:1];
     
     if (type == BIQUAD_HIGHPASS) {
         PassFilter * p = [_filters getHighpass];
@@ -113,14 +131,23 @@
         biquadControl.showOnlyFreq = YES;
         biquadControl.hidden = NO;
         
-    } else { // off biquad
+    } else if (type == BIQUAD_USER){ // off biquad
         
-        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"OFF BIQUAD #%d", _filters.activeBiquadIndex];
+        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"USER BIQUAD #%d", _filters.activeBiquadIndex];
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 4;
         
         biquadControl.hidden = YES;
+        
+    } else {
+        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"OFF BIQUAD #%d", _filters.activeBiquadIndex];
+        filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
+        typeBiquadSegmentedControl.selectedSegmentIndex = 5;
+        
+        biquadControl.hidden = YES;
     }
+    
+    [filtersView setNeedsDisplay];
 }
 
 - (void) viewWillLayoutSubviews {
@@ -165,6 +192,7 @@
     biquadControl.hidden = YES;
     
     [filtersView setFrame:CGRectMake(0, top, width, height)];
+    [filtersView setNeedsDisplay];
 }
 
 /* --------------------------------------------- Change filters method --------------------------------------------------- */
@@ -179,7 +207,121 @@
     }
 }
 
+/* --------------------------------------------- Change filters method --------------------------------------------------- */
+- (void) changeTypeFilter:(UISegmentedControl *) segmentControl {
+    
+    BiquadLL * b = [_filters getActiveBiquad];
+    BiquadType_t prevType = b.biquadParam.type;
+    
+    switch (segmentControl.selectedSegmentIndex) {
+        case 0:
+        {
+            NSLog(@"LP");
+            
+            if ([_filters isLowpassFull]) break;
+            
+            PassFilter * lp = [_filters getLowpass];
+            int freq = (lp) ? lp.Freq : 20000;
+                
+            b.enabled = YES;
+            b.biquadParam.type = BIQUAD_LOWPASS;
+            b.biquadParam.freq = freq;
+                
+            lp = [_filters getLowpass];
+            [lp sendWithResponse:YES];
+            
+            break;
+        }
+        case 1:
+        {
+            NSLog(@"HP");
+            
+            if ([_filters isHighpassFull]) break;
+            
+            PassFilter * hp = [_filters getHighpass];
+            int freq = (hp) ? hp.Freq : 20;
+            
+            b.enabled = YES;
+            b.biquadParam.type = BIQUAD_HIGHPASS;
+            b.biquadParam.freq = freq;
+            
+            hp = [_filters getHighpass];
+            [hp sendWithResponse:YES];
+            
+            break;
+        }
+        case 2:
+            NSLog(@"PEQ");
+ 
+            b.enabled = [_filters isPEQEnabled];
+            b.biquadParam.order = BIQUAD_ORDER_2;
+            b.biquadParam.type = BIQUAD_PARAMETRIC;
+            
+            if (prevType != BIQUAD_ALLPASS) {
+                int freq = [_filters getBetterNewFreq];
+                b.biquadParam.freq = (freq != -1) ? freq : 100;
+            }
+            b.biquadParam.qFac = 1.41f;
+            b.biquadParam.dbVolume = 0.0f;
+            
+            [b sendWithResponse:YES];
+            break;
+            
+        case 3:
+            NSLog(@"AP");
+            
+            b.enabled = YES;
+            b.biquadParam.order = BIQUAD_ORDER_2;
+            b.biquadParam.type = BIQUAD_ALLPASS;
+            
+            if (prevType != BIQUAD_PARAMETRIC) {
+                int freq = [_filters getBetterNewFreq];
+                b.biquadParam.freq = (freq != -1) ? freq : 100;
+                b.biquadParam.qFac = 1.41f;
+            }
+            b.biquadParam.dbVolume = 0.0f;
+            
+            [b sendWithResponse:YES];
+            break;
+            
+        case 4:
+            NSLog(@"USER");
+
+            b.enabled = YES;
+            b.biquadParam.order = BIQUAD_ORDER_2;
+            b.biquadParam.type = BIQUAD_USER;
+            
+            [b sendWithResponse:YES];
+            break;
+            
+        case 5:
+            NSLog(@"OFF");
+            
+            b.enabled = YES;
+            b.biquadParam.order = BIQUAD_ORDER_2;
+            b.biquadParam.type = BIQUAD_OFF;
+            
+            [b sendWithResponse:YES];
+            break;
+    }
+    
+    if (prevType == BIQUAD_HIGHPASS) {
+        PassFilter * pass = [_filters getHighpass];
+        if (pass) [pass sendWithResponse:YES];
+        
+    } else if (prevType == BIQUAD_LOWPASS) {
+        PassFilter * pass = [_filters getLowpass];
+        if (pass) [pass sendWithResponse:YES];
+    }
+    
+    [self updateSubviews];
+}
+
 /* ----------------------------------- Keyboard methods (change NumValueControl) ----------------------------------------- */
+- (void) updateBiquadValueControl {
+    [filtersView setNeedsDisplay];
+}
+
 - (void) showKeyboardWithValue:(NumValueControl *)valControl {
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     

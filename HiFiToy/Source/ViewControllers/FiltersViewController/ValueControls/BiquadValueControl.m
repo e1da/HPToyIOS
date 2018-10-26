@@ -76,6 +76,8 @@
         volumeControl.numValue = b.biquadParam.dbVolume;
         qfacControl.numValue = b.biquadParam.qFac;
     }
+    
+    if (_delegate) [_delegate updateBiquadValueControl];
 }
 
 - (void) updateValueControl:(NumValueControl *)control {

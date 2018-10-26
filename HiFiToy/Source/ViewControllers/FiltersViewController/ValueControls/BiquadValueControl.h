@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol BiquadValueControlDelegate
 
 - (void) showKeyboardWithValue:(NumValueControl *)valControl;
+- (void) updateBiquadValueControl;
 
 @end;
 

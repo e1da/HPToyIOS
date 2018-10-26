@@ -45,6 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) isPEQEnabled;
 - (void) setPEQEnabled:(BOOL)enabled;
 
+- (int) getBetterNewFreq;
+
 - (double) getAFR:(double)freqX;
 
 @end
