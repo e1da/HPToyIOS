@@ -139,7 +139,6 @@
     BiquadParam * p = loudnessBiquad.biquadParam;
     
     [p setBorderMaxFreq:150 minFreq:30];
-    p.order = BIQUAD_ORDER_2;
     p.type = BIQUAD_BANDPASS;
     p.freq = 60;
     p.qFac = 0;

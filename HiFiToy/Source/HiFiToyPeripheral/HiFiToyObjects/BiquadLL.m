@@ -170,94 +170,66 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     
     float s = sinf(w0), c = cosf(w0);
     
-    if (param.order == BIQUAD_ORDER_2){
-        switch (param.type){
-            case BIQUAD_LOWPASS:
-                alpha = s / (2 * param.qFac);
-                a0 =  1 + alpha;
-                _coef.a1 =  2 * c / (a0);
-                _coef.a2 =  (1 - alpha) / (-a0);
-                _coef.b0 =  (1 - c) / (2 * a0);
-                _coef.b1 =  (1 - c) / a0;
-                _coef.b2 =  (1 - c) / (2 * a0);
-                break;
-            case BIQUAD_HIGHPASS:
-                alpha = s / (2 * param.qFac);
-                a0 =  1 + alpha;
-                _coef.a1 =  2 * c / (a0);
-                _coef.a2 =  (1 - alpha) / (-a0);
-                _coef.b0 =  (1 + c) / (2 * a0);
-                _coef.b1 =  (1 + c) / (-a0);
-                _coef.b2 =  (1 + c) / (2 * a0);
-                break;
-            case BIQUAD_PARAMETRIC:
-                ampl = powf(10, param.dbVolume / 40);
-                alpha = s / (2 * param.qFac);
-                a0 =  1 + alpha / ampl;
-                _coef.a1 =  2 * c / a0;
-                _coef.a2 =  (1 - alpha / ampl) / (-a0);
-                _coef.b0 =  (1 + alpha * ampl) / a0;
-                _coef.b1 =  (2 * c) / (-a0);
-                _coef.b2 =  (1 - alpha * ampl) / a0;
-                break;
-            case BIQUAD_ALLPASS:
-                alpha = s / (2 * param.qFac);
-                a0 =   1 + alpha;
-                _coef.a1 =  2 * c / (a0);
-                _coef.a2 =  (1 - alpha) / (-a0);
-                _coef.b0 =  (1 - alpha) / a0;
-                _coef.b1 =  2 * c / (-a0);
-                _coef.b2 =  (1 + alpha) / a0;
-                break;
-            case BIQUAD_BANDPASS:
-                //ln(2) / 2 = 0.3465735902
-                alpha = s * sinh( 0.3465735902 * bandwidth * w0 / s);
+    switch (param.type){
+        case BIQUAD_LOWPASS:
+            alpha = s / (2 * param.qFac);
+            a0 =  1 + alpha;
+            _coef.a1 =  2 * c / (a0);
+            _coef.a2 =  (1 - alpha) / (-a0);
+            _coef.b0 =  (1 - c) / (2 * a0);
+            _coef.b1 =  (1 - c) / a0;
+            _coef.b2 =  (1 - c) / (2 * a0);
+            break;
+        case BIQUAD_HIGHPASS:
+            alpha = s / (2 * param.qFac);
+            a0 =  1 + alpha;
+            _coef.a1 =  2 * c / (a0);
+            _coef.a2 =  (1 - alpha) / (-a0);
+            _coef.b0 =  (1 + c) / (2 * a0);
+            _coef.b1 =  (1 + c) / (-a0);
+            _coef.b2 =  (1 + c) / (2 * a0);
+            break;
+        case BIQUAD_PARAMETRIC:
+            ampl = powf(10, param.dbVolume / 40);
+            alpha = s / (2 * param.qFac);
+            a0 =  1 + alpha / ampl;
+            _coef.a1 =  2 * c / a0;
+            _coef.a2 =  (1 - alpha / ampl) / (-a0);
+            _coef.b0 =  (1 + alpha * ampl) / a0;
+            _coef.b1 =  (2 * c) / (-a0);
+            _coef.b2 =  (1 - alpha * ampl) / a0;
+            break;
+        case BIQUAD_ALLPASS:
+            alpha = s / (2 * param.qFac);
+            a0 =   1 + alpha;
+            _coef.a1 =  2 * c / (a0);
+            _coef.a2 =  (1 - alpha) / (-a0);
+            _coef.b0 =  (1 - alpha) / a0;
+            _coef.b1 =  2 * c / (-a0);
+            _coef.b2 =  (1 + alpha) / a0;
+            break;
+        case BIQUAD_BANDPASS:
+            //ln(2) / 2 = 0.3465735902
+            alpha = s * sinh( 0.3465735902 * bandwidth * w0 / s);
                 
-                a0 =   1 + alpha;
-                _coef.a1 =   2 * c / a0;
-                _coef.a2 =   (1 - alpha) / (-a0);
-                _coef.b0 =   alpha / a0;
-                _coef.b1 =   0;
-                _coef.b2 =  -alpha / a0;
-                break;
-            case BIQUAD_OFF:
-                _coef.b0 =  1.0f;
-                _coef.b1 =  0.0f;
-                _coef.b2 =  0.0f;
-                _coef.a1 =  0.0f;
-                _coef.a2 =  0.0f;
-                break;
-            default:
-                break;
-        }
-    } else {//order == BIQUAD_ORDER_1
-        switch (param.type){
-            case BIQUAD_LOWPASS:
-                _coef.a1 = pow(2.7, -w0);
-                _coef.b0 = 1.0 - _coef.a1;
-                break;
-            case BIQUAD_HIGHPASS:
-                _coef.a1 = pow(2.7, -w0);
-                _coef.b0 = _coef.a1;
-                _coef.b1 = -_coef.a1;
-                break;
-            case BIQUAD_ALLPASS:
-                _coef.a1 = pow(2.7, -w0);
-                _coef.b0 = -_coef.a1;
-                _coef.b1 = 1.0;
-                break;
-            case BIQUAD_OFF:
-                _coef.b0 =  1.0f;
-                _coef.b1 =  0.0f;
-                _coef.b2 =  0.0f;
-                _coef.a1 =  0.0f;
-                _coef.a2 =  0.0f;
-                break;
-            default:
-                break;
-        }
-        
+            a0 =   1 + alpha;
+            _coef.a1 =   2 * c / a0;
+            _coef.a2 =   (1 - alpha) / (-a0);
+            _coef.b0 =   alpha / a0;
+            _coef.b1 =   0;
+            _coef.b2 =  -alpha / a0;
+            break;
+        case BIQUAD_OFF:
+            _coef.b0 =  1.0f;
+            _coef.b1 =  0.0f;
+            _coef.b2 =  0.0f;
+            _coef.a1 =  0.0f;
+            _coef.a2 =  0.0f;
+            break;
+        default:
+            break;
     }
+ 
 }
 
 - (void) setEnabled:(BOOL)enabled {

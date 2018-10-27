@@ -36,7 +36,6 @@
                                      Freq:140 Qfac:0 dbVolume:0];*/
         _biquad = [BiquadLL initWithAddress:LOUDNESS_BIQUAD_REG];
         BiquadParam * p = _biquad.biquadParam;
-        p.order = BIQUAD_ORDER_2;
         p.type = BIQUAD_BANDPASS;
         p.freq = 140;
         p.qFac = 0;

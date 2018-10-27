@@ -14,6 +14,8 @@
 		D301F081217F479200E181C6 /* BiquadParam.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F080217F479200E181C6 /* BiquadParam.m */; };
 		D301F085218213BF00E181C6 /* NumValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F083218213BF00E181C6 /* NumValueControl.m */; };
 		D301F091218246EB00E181C6 /* BiquadValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F090218246EB00E181C6 /* BiquadValueControl.m */; };
+		D301F09421834FDF00E181C6 /* BiquadCoefValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F09321834FDF00E181C6 /* BiquadCoefValueControl.m */; };
+		D301F097218353D700E181C6 /* CoefButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F096218353D700E181C6 /* CoefButton.m */; };
 		D30FF8702163AB4D007FA50D /* KeyboardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF86D2163AB4D007FA50D /* KeyboardButton.m */; };
 		D30FF8712163AB4D007FA50D /* NumKeyboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF86E2163AB4D007FA50D /* NumKeyboardController.m */; };
 		D30FF87A21650820007FA50D /* FilterLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF87921650820007FA50D /* FilterLabel.m */; };
@@ -113,6 +115,10 @@
 		D301F084218213BF00E181C6 /* NumValueControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumValueControl.h; sourceTree = "<group>"; };
 		D301F08F218246EB00E181C6 /* BiquadValueControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BiquadValueControl.h; sourceTree = "<group>"; };
 		D301F090218246EB00E181C6 /* BiquadValueControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadValueControl.m; sourceTree = "<group>"; };
+		D301F09221834FDF00E181C6 /* BiquadCoefValueControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BiquadCoefValueControl.h; sourceTree = "<group>"; };
+		D301F09321834FDF00E181C6 /* BiquadCoefValueControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadCoefValueControl.m; sourceTree = "<group>"; };
+		D301F095218353D700E181C6 /* CoefButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoefButton.h; sourceTree = "<group>"; };
+		D301F096218353D700E181C6 /* CoefButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoefButton.m; sourceTree = "<group>"; };
 		D30FF86C2163AB4D007FA50D /* NumKeyboardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumKeyboardController.h; sourceTree = "<group>"; };
 		D30FF86D2163AB4D007FA50D /* KeyboardButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardButton.m; sourceTree = "<group>"; };
 		D30FF86E2163AB4D007FA50D /* NumKeyboardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumKeyboardController.m; sourceTree = "<group>"; };
@@ -270,6 +276,8 @@
 				D301F083218213BF00E181C6 /* NumValueControl.m */,
 				D301F08F218246EB00E181C6 /* BiquadValueControl.h */,
 				D301F090218246EB00E181C6 /* BiquadValueControl.m */,
+				D301F09221834FDF00E181C6 /* BiquadCoefValueControl.h */,
+				D301F09321834FDF00E181C6 /* BiquadCoefValueControl.m */,
 			);
 			path = ValueControls;
 			sourceTree = "<group>";
@@ -625,6 +633,8 @@
 				D30FF87921650820007FA50D /* FilterLabel.m */,
 				D30FF87E2166A0D7007FA50D /* FilterTypeControl.h */,
 				D30FF87F2166A0D7007FA50D /* FilterTypeControl.m */,
+				D301F095218353D700E181C6 /* CoefButton.h */,
+				D301F096218353D700E181C6 /* CoefButton.m */,
 			);
 			path = FiltersViewController;
 			sourceTree = "<group>";
@@ -807,8 +817,10 @@
 				D33A258820CA8A00008A94EF /* OptionsViewController.m in Sources */,
 				D39C3CE320BEDD9D00BDC1A0 /* Number88.c in Sources */,
 				D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */,
+				D301F097218353D700E181C6 /* CoefButton.m in Sources */,
 				D33A256A20C6E209008A94EF /* BlePacketQueue.m in Sources */,
 				D39F551A215E34070017DF48 /* FiltersViewController.m in Sources */,
+				D301F09421834FDF00E181C6 /* BiquadCoefValueControl.m in Sources */,
 				D33A25A120CA9A2C008A94EF /* PresetDetailViewController.m in Sources */,
 				D301F085218213BF00E181C6 /* NumValueControl.m in Sources */,
 				D3E97AB12157F08200C98402 /* EnergyViewController.m in Sources */,

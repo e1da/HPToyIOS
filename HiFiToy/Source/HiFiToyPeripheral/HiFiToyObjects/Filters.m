@@ -121,7 +121,6 @@
         
         [biquad.biquadParam setBorderMaxFreq:20000 minFreq:20];
         
-        biquad.biquadParam.order    = BIQUAD_ORDER_2;
         biquad.biquadParam.type     = BIQUAD_PARAMETRIC;
         biquad.biquadParam.freq     = 100 * (i + 1);
         biquad.biquadParam.qFac     = 1.41f;
@@ -408,7 +407,6 @@
         BiquadLL * b = [biquads objectAtIndex:i];
         
         b.enabled = [self isPEQEnabled];
-        b.biquadParam.order = BIQUAD_ORDER_2;
         b.biquadParam.type = BIQUAD_PARAMETRIC;
         
         int freq = [self getBetterNewFreq];

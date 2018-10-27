@@ -29,7 +29,6 @@
     BiquadParam * b;
     BiquadParam_t p;
     
-    p.order = BIQUAD_ORDER_2;
     p.type = (type == BIQUAD_LOWPASS) ? BIQUAD_LOWPASS : BIQUAD_HIGHPASS;
     if ((biquads) && (biquads.count > 0)) {
         p.freq = [[biquads objectAtIndex:0] biquadParam].freq;

@@ -1,22 +1,21 @@
 //
-//  FilterLabel.m
+//  CoefLabel.m
 //  HiFiToy
 //
-//  Created by Kerosinn_OSX on 03/10/2018.
+//  Created by Kerosinn_OSX on 26/10/2018.
 //  Copyright © 2018 Kerosinn_OSX. All rights reserved.
 //
 
+#import "CoefButton.h"
 #import "FilterLabel.h"
 
+@implementation CoefButton
 
-
-@implementation FilterLabel
-
-
-- (id) initWithText:(NSString *)text withFontSize:(CGFloat)size {
+- (id) initWithText:(NSString *)text withFontSize:(CGFloat)size withAlign:(UIControlContentHorizontalAlignment)align {
     self = [super init];
     if (self) {
-        _size = size;
+        self.size = size;
+        self.contentHorizontalAlignment = align;
         [self setText:text];
     }
     return self;
@@ -26,17 +25,9 @@
     NSDictionary * attr = [NSDictionary dictionaryWithObject:[UIFont fontWithName:@"ArialRoundedMTBold" size:self.size]
                                                       forKey:NSFontAttributeName];
     NSAttributedString * attrStr =  [[NSMutableAttributedString alloc] initWithString:text attributes:attr];
-    
-    self.attributedText = attrStr;
-    self.textColor = [UIColor lightGrayColor];
-    self.textAlignment = NSTextAlignmentCenter;
-    [self setBackgroundColor:[UIColor clearColor]];
-}
 
-- (void) setSize:(CGFloat)size {
-    _size = size;
-    [self setText:self.attributedText.string];
+    [self setAttributedTitle:attrStr forState:UIControlStateNormal];
+    self.titleLabel.textColor = [UIColor orangeColor];
 }
-
 
 @end

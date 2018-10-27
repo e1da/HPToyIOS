@@ -17,22 +17,28 @@ typedef enum {
     NumberTypePositiveFloat, // one symbol after point
     NumberTypeFloat,
     NumberTypePositiveDouble, // two symbol after point
-    NumberTypeDouble
+    NumberTypeDouble,
+    NumberTypeMaxReal
 } NumberType_t;
 
 @class NumValueControl;
 
 @protocol NumValueControlDelegate
 
+- (void) didPressValue:(NumValueControl *) control;
+
+@optional
 - (void) didPressNext:(NumValueControl *) control;
 - (void) didPressPrev:(NumValueControl *) control;
-- (void) didPressValue:(NumValueControl *) control;
 
 @end;
 
 @interface NumValueControl : UIView
 
 @property (nonatomic) id <NumValueControlDelegate> delegate;
+
+@property (nonatomic) BOOL arrowHidden;
+@property (nonatomic) CGFloat valueFontSize;
 
 @property (nonatomic) double numValue;
 @property (nonatomic) NumberType_t type;

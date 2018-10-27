@@ -11,11 +11,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef enum : uint8_t {
-    BIQUAD_ORDER_1,
-    BIQUAD_ORDER_2
-} BiquadOrder_t;
-
-typedef enum : uint8_t {
     BIQUAD_LOWPASS      = 2,
     BIQUAD_HIGHPASS     = 1,
     BIQUAD_OFF          = 0,
@@ -45,7 +40,6 @@ typedef struct {
 
 
 typedef struct {
-    BiquadOrder_t   order;
     BiquadType_t    type;
     uint16_t        freq;
     float           qFac;
@@ -66,7 +60,6 @@ extern bool isCoefEqual(float c0, float c1);
 
 @property (nonatomic) id <BiquadParamDelegate> delegate;
 
-@property (nonatomic)   BiquadOrder_t   order;
 @property (nonatomic)   BiquadType_t    type;
 @property (nonatomic)   uint16_t        freq;
 @property (nonatomic)   float           qFac;

@@ -22,7 +22,6 @@ bool isCoefEqual(float c0, float c1) {
         BiquadParamBorder_t b = {20000, 20, 10.0, 0.1, 12.0, -36.0};
         self.border = b;
         
-        self.order = BIQUAD_ORDER_2;
         self.type = BIQUAD_OFF;
         self.freq = 100;
         self.qFac = 1.41f;
@@ -41,75 +40,65 @@ bool isCoefEqual(float c0, float c1) {
 
 
 - (void) updateWithCoef:(BiquadCoef_t)coef {
-    _order = [self getOrderFromCoef:coef];
     _type = [self getTypeFromCoef:coef];
 
     float arg, w0;
 
-    if (self.order == BIQUAD_ORDER_2){
-        //if correct read b0, b1, b2, a1, a2 then
-        switch (self.type){
-            case BIQUAD_LOWPASS:
-                arg = 2 * coef.b1 / coef.a1 + 1;
-                if ((arg < 1.0f) && (arg > -1.0f)) break;
+    switch (self.type){
+        case BIQUAD_LOWPASS:
+            arg = 2 * coef.b1 / coef.a1 + 1;
+            if ((arg < 1.0f) && (arg > -1.0f)) break;
                 
-                w0 = acos(1.0f / arg);
-                _freq = round(w0 * FS / (2 * M_PI));
-                _qFac = sin(w0) * coef.a1 / (2 * (2 * cos(w0) - coef.a1));
-                break;
-                
-            case BIQUAD_HIGHPASS:
-                arg = 2 * coef.b1 / coef.a1 + 1;
-                if ((arg < 1.0f) && (arg > -1.0f)) break;
-                
-                w0 = acos(-1.0f / arg);
-                _freq = round(w0 * FS / (2 * M_PI));
-                _qFac = sin(w0) * coef.a1 / (2 * (2 * cos(w0) - coef.a1));
-                break;
-                
-            case BIQUAD_PARAMETRIC:
-                arg = coef.a1 / (coef.b0 + coef.b2);
-                if ((arg > 1.0f) || (arg < -1.0f)) break;
-                
-                w0 = acos(arg);
-                _freq = round(w0 * FS / (2 * M_PI));
-                
-                arg = (coef.b0 * 2 * cos(w0) - coef.a1) / (2 * cos(w0) - coef.a1);
-                if (arg < 0.0) break;
-                
-                float ampl = sqrt(arg);
-                _dbVolume = 40 * log10(ampl);
-                
-                float alpha = (2 * cos(w0) / coef.a1 - 1) * ampl;
-                _qFac = sin(w0) / (2 * alpha);
-                break;
-                
-            case BIQUAD_ALLPASS:
-                arg = coef.a1 / (coef.b0 + 1);
-                if ((arg > 1.0f) || (arg < -1.0f)) break;
-                
-                w0 = acos(arg);
-                _freq = round(w0 * FS / (2 * M_PI));
-                _qFac = sin(w0) * coef.a1 / (2 * (2 * cos(w0) - coef.a1));
-                break;
-                
-            case BIQUAD_BANDPASS:
-                w0 = acos(coef.a1 / 2 * (1 + coef.b0 / (1 - coef.b0)));
-                _freq = w0 * (float)FS / (2 * M_PI);
-                //TODO set import bandwidth
-                break;
-                
-            case BIQUAD_OFF:
-            case BIQUAD_USER:
-            default:
-                break;
-        }
-    } else {//BIQUAD_ORDER_1
-        
-        if (coef.a1 > 0) {
-            w0 = -log10(coef.a1) / log10(2.7);
+            w0 = acos(1.0f / arg);
             _freq = round(w0 * FS / (2 * M_PI));
-        }
+            _qFac = sin(w0) * coef.a1 / (2 * (2 * cos(w0) - coef.a1));
+            break;
+                
+        case BIQUAD_HIGHPASS:
+            arg = 2 * coef.b1 / coef.a1 + 1;
+            if ((arg < 1.0f) && (arg > -1.0f)) break;
+                
+            w0 = acos(-1.0f / arg);
+            _freq = round(w0 * FS / (2 * M_PI));
+            _qFac = sin(w0) * coef.a1 / (2 * (2 * cos(w0) - coef.a1));
+            break;
+                
+        case BIQUAD_PARAMETRIC:
+            arg = coef.a1 / (coef.b0 + coef.b2);
+            if ((arg > 1.0f) || (arg < -1.0f)) break;
+                
+            w0 = acos(arg);
+            _freq = round(w0 * FS / (2 * M_PI));
+                
+            arg = (coef.b0 * 2 * cos(w0) - coef.a1) / (2 * cos(w0) - coef.a1);
+            if (arg < 0.0) break;
+                
+            float ampl = sqrt(arg);
+            _dbVolume = 40 * log10(ampl);
+                
+            float alpha = (2 * cos(w0) / coef.a1 - 1) * ampl;
+            _qFac = sin(w0) / (2 * alpha);
+            break;
+                
+        case BIQUAD_ALLPASS:
+            arg = coef.a1 / (coef.b0 + 1);
+            if ((arg > 1.0f) || (arg < -1.0f)) break;
+                
+            w0 = acos(arg);
+            _freq = round(w0 * FS / (2 * M_PI));
+            _qFac = sin(w0) * coef.a1 / (2 * (2 * cos(w0) - coef.a1));
+            break;
+                
+        case BIQUAD_BANDPASS:
+            w0 = acos(coef.a1 / 2 * (1 + coef.b0 / (1 - coef.b0)));
+            _freq = w0 * (float)FS / (2 * M_PI);
+            //TODO set import bandwidth
+            break;
+                
+        case BIQUAD_OFF:
+        case BIQUAD_USER:
+        default:
+            break;
     }
 }
 
@@ -119,10 +108,8 @@ bool isCoefEqual(float c0, float c1) {
 -(BiquadParam *)copyWithZone:(NSZone *)zone {
     BiquadParam * copyParam = [[[self class] allocWithZone:zone] init];
     
-    
     copyParam.border = self.border;
     
-    copyParam.order = self.order;
     copyParam.type = self.type;
     copyParam.freq = self.freq;
     copyParam.qFac = self.qFac;
@@ -142,8 +129,7 @@ bool isCoefEqual(float c0, float c1) {
         BiquadParamBorder_t bTemp = temp.border;
         BiquadParamBorder_t b = self.border;
         
-        if ((self.order == temp.order) &&
-            (self.type == temp.type) &&
+        if ((self.type == temp.type) &&
             (self.freq == temp.freq) &&
             (isFloatNull(self.qFac - temp.qFac)) &&
             (isFloatNull(self.dbVolume - temp.dbVolume)) &&
@@ -160,14 +146,6 @@ bool isCoefEqual(float c0, float c1) {
     
     
     return NO;
-}
-
-
-- (BiquadOrder_t) getOrderFromCoef:(BiquadCoef_t)coef {
-    if ( (isFloatNull(coef.b2)) && (isFloatNull(coef.a2)) && (!isFloatNull(coef.b0)) && (!isFloatNull(coef.b1)) && (!isFloatNull(coef.a1)) ) {
-        return BIQUAD_ORDER_1;
-    }
-    return BIQUAD_ORDER_2;
 }
 
 - (BiquadType_t) getTypeFromCoef:(BiquadCoef_t)coef {
@@ -193,11 +171,6 @@ bool isCoefEqual(float c0, float c1) {
     }
     
     return BIQUAD_USER;
-}
-
-- (void) setOrder:(BiquadOrder_t)order {
-    _order = order;
-    if (_delegate) [_delegate didUpdateBiquadParam:self];
 }
 
 - (void) setType:(BiquadType_t)type {
@@ -247,7 +220,6 @@ bool isCoefEqual(float c0, float c1) {
 }
 
 - (void) setBiquadParam:(BiquadParam_t)p {
-    _order = p.order;
     _type = p.type;
     _freq = p.freq;
     _qFac = p.qFac;
@@ -258,7 +230,6 @@ bool isCoefEqual(float c0, float c1) {
 
 - (BiquadParam_t) getBiquadParam {
     BiquadParam_t p;
-    p.order = _order;
     p.type = _type;
     p.freq = _freq;
     p.qFac = _qFac;
@@ -311,27 +282,22 @@ bool isCoefEqual(float c0, float c1) {
 }
 
 - (double) getAFR:(double)freqX {
-    if (self.order == BIQUAD_ORDER_2) {
-        switch (self.type) {
-            case BIQUAD_LOWPASS:
-                return [self get_LPF:freqX];
-                break;
-            case BIQUAD_HIGHPASS:
-                return [self get_HPF:freqX];
-                break;
-            case BIQUAD_PARAMETRIC:
-                return [self get_PeakingEQ:freqX];
-                break;
-            case BIQUAD_OFF:
-                return 1.0f;
-                break;
-            default:
-                return 1.0f;
-                break;
-        }
-    } else {
-        return 1.0f;
+    switch (self.type) {
+        case BIQUAD_LOWPASS:
+            return [self get_LPF:freqX];
+            
+        case BIQUAD_HIGHPASS:
+            return [self get_HPF:freqX];
+            
+        case BIQUAD_PARAMETRIC:
+            return [self get_PeakingEQ:freqX];
+            
+        case BIQUAD_OFF:
+            return 1.0f;
+        default:
+            return 1.0f;
     }
+    
 }
 
 

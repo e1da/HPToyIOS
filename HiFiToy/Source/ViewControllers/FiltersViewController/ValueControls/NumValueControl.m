@@ -22,6 +22,8 @@
     self = [super init];
     if (self) {
         [self setBackgroundColor:[UIColor darkGrayColor]];
+        self.arrowHidden = NO;
+        self.valueFontSize = 28;
         
         prevButton = [[UIButton alloc] init];
         [prevButton setTitle:@"\u2329" forState:UIControlStateNormal];
@@ -47,10 +49,10 @@
         [valButton addTarget:self action:@selector(valButtonPress) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:valButton];
         
-        self.leftLabel = [[FilterLabel alloc] initWithText:@"Freq" withFontSize:14];
+        self.leftLabel = [[FilterLabel alloc] initWithText:@"" withFontSize:14];
         self.leftLabel.textColor = [UIColor lightGrayColor];
         [self addSubview:self.leftLabel];
-        self.rightLabel = [[FilterLabel alloc] initWithText:@"Hz" withFontSize:14];
+        self.rightLabel = [[FilterLabel alloc] initWithText:@"" withFontSize:14];
         self.rightLabel.textColor = [UIColor lightGrayColor];
         [self addSubview:self.rightLabel];
     }
@@ -71,9 +73,14 @@
     CGFloat w = self.frame.size.width;
     
     self.leftLabel.frame = CGRectMake(  0, 0,           0.2 * w, self.frame.size.height);
-    prevButton.frame = CGRectMake(      0.2 * w, 0,     0.1 * w, self.frame.size.height);
-    valButton.frame = CGRectMake(       0.3 * w, 0,     0.4 * w, self.frame.size.height);
-    nextButton.frame = CGRectMake(      0.7 * w, 0,     0.1 * w, self.frame.size.height);
+    
+    if (_arrowHidden) {
+        valButton.frame = CGRectMake(       0.2 * w, 0,     0.6 * w, self.frame.size.height);
+    } else {
+        prevButton.frame = CGRectMake(      0.2 * w, 0,     0.1 * w, self.frame.size.height);
+        valButton.frame = CGRectMake(       0.3 * w, 0,     0.4 * w, self.frame.size.height);
+        nextButton.frame = CGRectMake(      0.7 * w, 0,     0.1 * w, self.frame.size.height);
+    }
     self.rightLabel.frame = CGRectMake( 0.8 * w, 0,     0.2 * w, self.frame.size.height);
     
 }
@@ -87,8 +94,20 @@
     [self updateValueView];
 }
 
+- (void) setArrowHidden:(BOOL)arrowHidden {
+    _arrowHidden = arrowHidden;
+    
+    prevButton.hidden = _arrowHidden;
+    nextButton.hidden = _arrowHidden;
+}
+
+- (void) setValueFontSize:(CGFloat)valueFontSize {
+    _valueFontSize = valueFontSize;
+    [self updateValueView];
+}
+
 - (void) updateValueView {
-    FilterLabel * f = [[FilterLabel alloc] initWithText:[self getStringValue] withFontSize:28];
+    FilterLabel * f = [[FilterLabel alloc] initWithText:[self getStringValue] withFontSize:_valueFontSize];
     f.textColor = [UIColor orangeColor];
     [valButton setAttributedTitle:f.attributedText forState:UIControlStateNormal];
     
@@ -115,7 +134,7 @@
 }
 
 - (BOOL) isOnlyPositive {
-    if ((_type == NumberTypeInteger) || (_type == NumberTypeFloat) || (_type == NumberTypeDouble)) {
+    if ((_type == NumberTypeInteger) || (_type == NumberTypeFloat) || (_type == NumberTypeDouble) || (_type == NumberTypeMaxReal)) {
         return NO;
     }
     return YES;
@@ -143,6 +162,8 @@
         case NumberTypePositiveDouble:
         case NumberTypeDouble:
             return [NSString stringWithFormat:@"%0.2f", self.numValue ];
+        case NumberTypeMaxReal:
+            return [NSString stringWithFormat:@"%0.4f", self.numValue ];
     }
     return nil;
 }

@@ -20,7 +20,7 @@
     FilterTypeControl * filterTypeControl;
     UISegmentedControl * typeBiquadSegmentedControl;
     BiquadValueControl * biquadControl;
-    
+    BiquadCoefValueControl * biquadCoefControl;
 }
 
 @end
@@ -80,6 +80,11 @@
     biquadControl.delegate = self;
     biquadControl.filters = self.filters;
     [self.view addSubview:biquadControl];
+    
+    biquadCoefControl = [[BiquadCoefValueControl alloc] init];
+    biquadCoefControl.delegate = self;
+    biquadCoefControl.filters = self.filters;
+    [self.view addSubview:biquadCoefControl];
 }
 
 - (void) updateSubviews {
@@ -87,6 +92,7 @@
     BiquadType_t type = b.biquadParam.type;
     
     [biquadControl update];
+    [biquadCoefControl update];
     
     [typeBiquadSegmentedControl setEnabled:(![_filters isLowpassFull]) forSegmentAtIndex:0];
     [typeBiquadSegmentedControl setEnabled:(![_filters isHighpassFull]) forSegmentAtIndex:1];
@@ -112,6 +118,7 @@
         
         biquadControl.showOnlyFreq = YES;
         biquadControl.hidden = NO;
+        biquadCoefControl.hidden = YES;
         
     } else if (type == BIQUAD_PARAMETRIC){
         
@@ -121,6 +128,7 @@
         
         biquadControl.showOnlyFreq = NO;
         biquadControl.hidden = NO;
+        biquadCoefControl.hidden = YES;
         
     } else if (type == BIQUAD_ALLPASS) {
         
@@ -130,6 +138,7 @@
         
         biquadControl.showOnlyFreq = YES;
         biquadControl.hidden = NO;
+        biquadCoefControl.hidden = YES;
         
     } else if (type == BIQUAD_USER){ // off biquad
         
@@ -138,6 +147,7 @@
         typeBiquadSegmentedControl.selectedSegmentIndex = 4;
         
         biquadControl.hidden = YES;
+        biquadCoefControl.hidden = NO;
         
     } else {
         filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"OFF BIQUAD #%d", _filters.activeBiquadIndex];
@@ -145,6 +155,7 @@
         typeBiquadSegmentedControl.selectedSegmentIndex = 5;
         
         biquadControl.hidden = YES;
+        biquadCoefControl.hidden = YES;
     }
     
     [filtersView setNeedsDisplay];
@@ -179,7 +190,8 @@
     [typeBiquadSegmentedControl setFrame:CGRectMake(0.1 * width, top + 0.52 * height,
                                                     0.8 * width, 0.1 * height)];
     
-    biquadControl.frame = CGRectMake(0, top + 0.65 * height, self.view.frame.size.width, 0.3 * height);
+    biquadControl.frame = CGRectMake(0, top + 0.65 * height, width, 0.3 * height);
+    biquadCoefControl.frame = CGRectMake(0.1 * width, top + 0.65 * height, 0.8 * width, 0.3 * height);
 }
 
 - (void) viewWillLayoutSubviewsLandscape {
@@ -190,6 +202,7 @@
     filterTypeControl.hidden = YES;
     typeBiquadSegmentedControl.hidden = YES;
     biquadControl.hidden = YES;
+    biquadCoefControl.hidden = YES;
     
     [filtersView setFrame:CGRectMake(0, top, width, height)];
     [filtersView setNeedsDisplay];
@@ -254,7 +267,6 @@
             NSLog(@"PEQ");
  
             b.enabled = [_filters isPEQEnabled];
-            b.biquadParam.order = BIQUAD_ORDER_2;
             b.biquadParam.type = BIQUAD_PARAMETRIC;
             
             if (prevType != BIQUAD_ALLPASS) {
@@ -271,7 +283,6 @@
             NSLog(@"AP");
             
             b.enabled = YES;
-            b.biquadParam.order = BIQUAD_ORDER_2;
             b.biquadParam.type = BIQUAD_ALLPASS;
             
             if (prevType != BIQUAD_PARAMETRIC) {
@@ -288,7 +299,6 @@
             NSLog(@"USER");
 
             b.enabled = YES;
-            b.biquadParam.order = BIQUAD_ORDER_2;
             b.biquadParam.type = BIQUAD_USER;
             
             [b sendWithResponse:YES];
@@ -298,7 +308,6 @@
             NSLog(@"OFF");
             
             b.enabled = YES;
-            b.biquadParam.order = BIQUAD_ORDER_2;
             b.biquadParam.type = BIQUAD_OFF;
             
             [b sendWithResponse:YES];
@@ -350,6 +359,7 @@
 
 - (void) didKeyboardEnter:(NumValueControl *) valControl {
     [biquadControl updateValueControl:valControl];
+    [biquadCoefControl updateCoefValueControl:valControl];
     [self didKeyboardClose];
     
 }
