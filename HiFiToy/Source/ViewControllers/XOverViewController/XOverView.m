@@ -248,7 +248,7 @@
     
     CGContextSetLineWidth(context, 2.0);
     
-    BiquadType_t type = [[_filters getActiveBiquad] biquadParam].type;
+    BiquadType_t type = [[_filters getActiveBiquad] type];
     
     if (type == BIQUAD_HIGHPASS) {
         CGContextSetStrokeColorWithColor(context, [[UIColor redColor] CGColor]);

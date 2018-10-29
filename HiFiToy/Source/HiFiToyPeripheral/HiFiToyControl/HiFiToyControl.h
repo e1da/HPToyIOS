@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "BleDriver.h"
 #import "HiFiToyObject.h"
+#import "HiFiToyPreset.h"
 
-#define HIFI_TOY_VERSION            10
+#define HIFI_TOY_VERSION            11
 #define CC2540_PAGE_SIZE            2048
 #define ATTACH_PAGE_OFFSET          (3 * CC2540_PAGE_SIZE)//3 page
 
@@ -48,7 +49,7 @@
 
 //adv command (save/restore to/from storage)
 - (void) restoreFactorySettings;
-- (void) sendDSPConfig:(NSData *)data;
+- (void) storePresetToDSP:(HiFiToyPreset *) preset;
 
 - (void) getDspDataWithOffset:(uint16_t)offset;
 

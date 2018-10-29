@@ -27,10 +27,14 @@ typedef struct {
 } PassFilter_t;
 
 typedef struct {
-    uint8_t             addr[8];        //0x00
-    PassFilter_t        filter;         //0x08
-    uint8_t             nc;
-} PassFilterPacket_t;                   //size == 13
+    StereoBiquadAddr_t biquadAddr[4];
+} StereoPassFilterAddr_t;
+
+typedef struct {
+    StereoPassFilterAddr_t  addr;   //0x00
+    PassFilter_t            filter; //0x08
+    uint8_t                 nc;
+} PassFilterPacket_t;               //size == 13
 #pragma options align=reset
 
 @interface PassFilter : NSObject <NSCopying>

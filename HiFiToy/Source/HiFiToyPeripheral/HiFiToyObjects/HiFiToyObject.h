@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "XmlData.h"
 #import "XmlParserWrapper.h"
+#import "BiquadParam.h"
 
 #define FS 96000
 
@@ -30,19 +31,21 @@ typedef struct {
 #pragma options align=reset
 
 #pragma pack(1)
-typedef struct {
-    uint8_t             i2cAddr;
-    uint8_t             successWriteFlag;
-    uint16_t            version;
-    uint32_t            pairingCode;
-    AudioSource_t       audioSource;
-    uint8_t             reserved[3];
-    EnergyConfig_t      energy;
+typedef struct {                            // offset
+    uint8_t             i2cAddr;            // 0x00
+    uint8_t             successWriteFlag;   // 0x01
+    uint16_t            version;            // 0x02
+    uint32_t            pairingCode;        // 0x04
+    AudioSource_t       audioSource;        // 0x08
+    uint8_t             reserved[3];        // 0x09
+    EnergyConfig_t      energy;             // 0x0C
+    BiquadType_t        biquadTypes[7];     // 0x18
+    uint8_t             reserved1;          //
     
-    uint16_t            dataBufLength;
-    uint16_t            dataBytesLength;
-    DataBufHeader_t     firstDataBuf;
-} HiFiToyPeripheral_t;
+    uint16_t            dataBufLength;      // 0x20
+    uint16_t            dataBytesLength;    // 0x22
+    DataBufHeader_t     firstDataBuf;       // 0x24
+} HiFiToyPeripheral_t;                      // size = 38dec
 #pragma options align=reset
 
 

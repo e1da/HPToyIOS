@@ -10,7 +10,6 @@
 		D301F0772172554900E181C6 /* FloatUtility.h in Sources */ = {isa = PBXBuildFile; fileRef = D30FF884216D49DE007FA50D /* FloatUtility.h */; };
 		D301F078217255C500E181C6 /* FloatUtility.h in Sources */ = {isa = PBXBuildFile; fileRef = D30FF884216D49DE007FA50D /* FloatUtility.h */; };
 		D301F079217255C500E181C6 /* FloatUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D30FF885216D49DE007FA50D /* FloatUtility.c */; };
-		D301F07E2172871E00E181C6 /* Biquad.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F07C2172871D00E181C6 /* Biquad.m */; };
 		D301F081217F479200E181C6 /* BiquadParam.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F080217F479200E181C6 /* BiquadParam.m */; };
 		D301F085218213BF00E181C6 /* NumValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F083218213BF00E181C6 /* NumValueControl.m */; };
 		D301F091218246EB00E181C6 /* BiquadValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F090218246EB00E181C6 /* BiquadValueControl.m */; };
@@ -107,8 +106,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D301F07C2172871D00E181C6 /* Biquad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Biquad.m; sourceTree = "<group>"; };
-		D301F07D2172871E00E181C6 /* Biquad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Biquad.h; sourceTree = "<group>"; };
 		D301F07F217F479200E181C6 /* BiquadParam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BiquadParam.h; sourceTree = "<group>"; };
 		D301F080217F479200E181C6 /* BiquadParam.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadParam.m; sourceTree = "<group>"; };
 		D301F083218213BF00E181C6 /* NumValueControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumValueControl.m; sourceTree = "<group>"; };
@@ -568,8 +565,6 @@
 		D39C3CBD20BEB65A00BDC1A0 /* HiFiToyObjects */ = {
 			isa = PBXGroup;
 			children = (
-				D301F07D2172871E00E181C6 /* Biquad.h */,
-				D301F07C2172871D00E181C6 /* Biquad.m */,
 				D30FF88A216FA8E8007FA50D /* PassFilter.h */,
 				D30FF88B216FA8E8007FA50D /* PassFilter.m */,
 				D301F07F217F479200E181C6 /* BiquadParam.h */,
@@ -777,7 +772,6 @@
 				D33A253E20BFF674008A94EF /* Number88.h in Sources */,
 				D379127A20D3C55B0089962D /* DrcView.m in Sources */,
 				D33A255E20C6AEBB008A94EF /* HiFiToyDeviceList.m in Sources */,
-				D301F07E2172871E00E181C6 /* Biquad.m in Sources */,
 				D33A253F20BFF674008A94EF /* Number523.h in Sources */,
 				D33A257420C94459008A94EF /* AppDelegate.m in Sources */,
 				D33A254020BFF674008A94EF /* Number923.h in Sources */,

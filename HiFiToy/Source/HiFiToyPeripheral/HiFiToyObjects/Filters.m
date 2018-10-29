@@ -121,7 +121,7 @@
         
         [biquad.biquadParam setBorderMaxFreq:20000 minFreq:20];
         
-        biquad.biquadParam.type     = BIQUAD_PARAMETRIC;
+        biquad.type     = BIQUAD_PARAMETRIC;
         biquad.biquadParam.freq     = 100 * (i + 1);
         biquad.biquadParam.qFac     = 1.41f;
         biquad.biquadParam.dbVolume = 0.0f;
@@ -182,8 +182,16 @@
     _activeBiquadIndex = activeBiquadIndex;
 }
 
+- (BiquadType_t *) getBiquadTypes {
+    BiquadType_t * types = malloc(7 * sizeof(BiquadType_t));
+    for (int i = 0; i < 7; i++) {
+        types[i] = biquads[i].type;
+    }
+    return types;
+}
+
 - (void) nextActiveBiquadIndex {
-    BiquadType_t type = [[self getBiquadAtIndex:_activeBiquadIndex] biquadParam].type;
+    BiquadType_t type = [[self getBiquadAtIndex:_activeBiquadIndex] type];
     BiquadType_t nextType;
     BiquadLL * b;
     int counter = 0;
@@ -195,7 +203,7 @@
         if (_activeBiquadIndex > 6) _activeBiquadIndex = 0;
         
         b = [self getBiquadAtIndex:_activeBiquadIndex];
-        nextType = b.biquadParam.type;
+        nextType = b.type;
         
     } while (((type == BIQUAD_LOWPASS) && (nextType == BIQUAD_LOWPASS)) ||
              ((type == BIQUAD_HIGHPASS) && (nextType == BIQUAD_HIGHPASS)) ||
@@ -207,7 +215,7 @@
 }
 
 - (void) prevActiveBiquadIndex {
-    BiquadType_t type = [[self getBiquadAtIndex:_activeBiquadIndex] biquadParam].type;
+    BiquadType_t type = [[self getBiquadAtIndex:_activeBiquadIndex] type];
     BiquadType_t nextType;
     BiquadLL * b;
     int counter = 0;
@@ -219,7 +227,7 @@
         if (_activeBiquadIndex > 6) _activeBiquadIndex = 6;
         
         b = [self getBiquadAtIndex:_activeBiquadIndex];
-        nextType = b.biquadParam.type;
+        nextType = b.type;
         
     } while (((type == BIQUAD_LOWPASS) && (nextType == BIQUAD_LOWPASS)) ||
              ((type == BIQUAD_HIGHPASS) && (nextType == BIQUAD_HIGHPASS)) ||
@@ -252,7 +260,7 @@
     for (int i = 0 ; i < 7; i++) {
         BiquadLL * b = [self getBiquadAtIndex:i];
         
-        if (b.biquadParam.type == type) {
+        if (b.type == type) {
             
             if (biquads) {
                 [biquads addObject:b];
@@ -348,7 +356,7 @@
         BiquadLL * b = [self getFreeBiquad];
         if (b) {
             b.enabled = YES;
-            b.biquadParam.type = type;
+            b.type = type;
             b.biquadParam.freq = freq;
         }
         
@@ -358,10 +366,10 @@
         
         if ((b0) && (b1)) {
             b0.enabled = YES;
-            b0.biquadParam.type = type;
+            b0.type = type;
             b0.biquadParam.freq = freq;
             b1.enabled = YES;
-            b1.biquadParam.type = type;
+            b1.type = type;
             b1.biquadParam.freq = freq;
         }
     } else {
@@ -407,7 +415,7 @@
         BiquadLL * b = [biquads objectAtIndex:i];
         
         b.enabled = [self isPEQEnabled];
-        b.biquadParam.type = BIQUAD_PARAMETRIC;
+        b.type = BIQUAD_PARAMETRIC;
         
         int freq = [self getBetterNewFreq];
         b.biquadParam.freq = (freq != -1) ? freq : 100;
@@ -532,6 +540,11 @@
 }
 
 - (BOOL)importData:(NSData *)data {
+    HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
+    for (int i = 0; i < 7; i++) {
+        biquads[i].type = HiFiToy->biquadTypes[i];
+    }
+    
     for (int i = 0; i < 7; i++) {
         if (![biquads[i] importData:data]) {
             return NO;

@@ -135,17 +135,16 @@
     NSString * title = nil;
     
     BiquadLL * b = [_filters getActiveBiquad];
-    BiquadType_t type = b.biquadParam.type;
     
-    if (type == BIQUAD_LOWPASS) {
+    if (b.type == BIQUAD_LOWPASS) {
         PassFilter * lp = [_filters getLowpass];
         title = [NSString stringWithFormat:@"LP:%@", [lp getInfo]];
-    } else if (type == BIQUAD_HIGHPASS) {
+    } else if (b.type == BIQUAD_HIGHPASS) {
         PassFilter * hp = [_filters getHighpass];
         title = [NSString stringWithFormat:@"HP:%@", [hp getInfo]];
-    } else if (type == BIQUAD_PARAMETRIC) {
+    } else if (b.type == BIQUAD_PARAMETRIC) {
         title = [NSString stringWithFormat:@"PEQ%d:%@", _filters.activeBiquadIndex, [b getInfo]];
-    } else if (type == BIQUAD_ALLPASS) {
+    } else if (b.type == BIQUAD_ALLPASS) {
         title = [NSString stringWithFormat:@"AP%d:%@", _filters.activeBiquadIndex, [b getInfo]];
     } else {
         title = @"Filters";
@@ -234,8 +233,9 @@
     lastScaleFactor = recognizer.scale;
 
     BiquadLL * b = [_filters getActiveBiquad];
+    if (b.type != BIQUAD_PARAMETRIC) return;
+    
     BiquadParam * p = b.biquadParam;
-    if (p.type != BIQUAD_PARAMETRIC) return;
     
     p.qFac /= currentScaleFactor;
     
@@ -286,9 +286,8 @@
         [_filters nextActiveBiquadIndex];
         
         BiquadLL * b = [_filters getActiveBiquad];
-        BiquadType_t t = b.biquadParam.type;
         
-        if ((t != BIQUAD_LOWPASS) && (t != BIQUAD_HIGHPASS) && (t != BIQUAD_PARAMETRIC) && (t != BIQUAD_ALLPASS)) {
+        if ((b.type != BIQUAD_LOWPASS) && (b.type != BIQUAD_HIGHPASS) && (b.type != BIQUAD_PARAMETRIC) && (b.type != BIQUAD_ALLPASS)) {
             continue;
         }
         
@@ -303,7 +302,7 @@
 
 - (void) moved:(BiquadLL *)biquad translation:(CGPoint)translation {
     BiquadParam * bParam = biquad.biquadParam;
-    if (( bParam.type == BIQUAD_OFF) || (( bParam.type == BIQUAD_USER))) return;
+    if (( biquad.type == BIQUAD_OFF) || (( biquad.type == BIQUAD_USER))) return;
     
     float dx = (translation.x -  prev_translation.x) / 2;
     float dy = translation.y -  prev_translation.y;
@@ -321,8 +320,8 @@
         //NSLog(@"dx=%f delta=%f", dx, delta_freq);
         
         if (fabs(delta_freq) >= 1.0) {
-            if (( bParam.type == BIQUAD_HIGHPASS) || ( bParam.type == BIQUAD_LOWPASS)) {
-                PassFilter * f = ( bParam.type == BIQUAD_LOWPASS) ? [_filters getLowpass] : [_filters getHighpass];
+            if (( biquad.type == BIQUAD_HIGHPASS) || ( biquad.type == BIQUAD_LOWPASS)) {
+                PassFilter * f = ( biquad.type == BIQUAD_LOWPASS) ? [_filters getLowpass] : [_filters getHighpass];
                 
                 int newFreq = [f Freq] + delta_freq;
                 [f setFreq:newFreq];
@@ -340,25 +339,25 @@
     prev_translation.x = translation.x;
     
     
-    if ((bParam.type == BIQUAD_HIGHPASS) || (bParam.type == BIQUAD_LOWPASS))  {
+    if ((biquad.type == BIQUAD_HIGHPASS) || (biquad.type == BIQUAD_LOWPASS))  {
 
         if (!xHysteresisFlag) {
             
             if (dy < -100 ){
-                [_filters downOrderFor: bParam.type]; // decrement order
+                [_filters downOrderFor: biquad.type]; // decrement order
                 
                 yHysteresisFlag = YES;
                 prev_translation.y = translation.y;
                 
             } else if (dy > 100 ){
-                [_filters upOrderFor: bParam.type]; // increment order
+                [_filters upOrderFor: biquad.type]; // increment order
                 
                 yHysteresisFlag = YES;
                 prev_translation.y = translation.y;
             }
             
         }
-    } else if (bParam.type == BIQUAD_PARAMETRIC) {
+    } else if (biquad.type == BIQUAD_PARAMETRIC) {
         
         if (((fabs(translation.y) > [self.xOverView getHeight] * 0.1) || (yHysteresisFlag)) && (!xHysteresisFlag)){
             yHysteresisFlag = YES;
@@ -375,8 +374,7 @@
 
 /* ----------------------- check cross Filters's freq ------------------------------*/
 - (BOOL) checkCrossParamFilters:(BiquadLL *)biquad
-                        point_x: (float)point_x
-{
+                        point_x: (float)point_x {
     if (abs((int)(point_x - [xOverView freqToPixel:biquad.biquadParam.freq])) < 15){
         return YES;
         
@@ -386,8 +384,7 @@
 
 - (BOOL) checkCrossPassFilters:(int)start_x
                          end_x:(int)end_x
-                     tap_point:(CGPoint)tap_point
-{
+                     tap_point:(CGPoint)tap_point {
     BOOL result = NO;
     
     for (int i = start_x; i < end_x; i++){
@@ -404,17 +401,14 @@
     return result;
 }
 
-- (BOOL) checkCross:(BiquadLL *)biquad tap_point:(CGPoint)tap_point
-{
-    //BOOL result = NO;
-    BiquadType_t type = biquad.biquadParam.type;
-    
-    if (type == BIQUAD_HIGHPASS) {
+- (BOOL) checkCross:(BiquadLL *)biquad tap_point:(CGPoint)tap_point {
+
+    if (biquad.type == BIQUAD_HIGHPASS) {
         int start_x = [xOverView freqToPixel:xOverView.minFreq];
         int end_x = [xOverView getHighPassBorderPix];
         return [self checkCrossPassFilters:start_x end_x:end_x tap_point:tap_point];
         
-    } else if (type == BIQUAD_LOWPASS) {
+    } else if (biquad.type == BIQUAD_LOWPASS) {
         
         int start_x = [xOverView getLowPassBorderPix];
         int end_x = [xOverView freqToPixel:xOverView.maxFreq];

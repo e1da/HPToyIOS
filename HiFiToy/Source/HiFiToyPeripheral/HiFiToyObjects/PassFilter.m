@@ -26,47 +26,57 @@
 
 /*---------------------- create method -----------------------------*/
 + (PassFilter *)initWithBiquads:(NSArray<BiquadLL *> *)biquads withType:(PassFilterType_t)type {
-    BiquadParam * b;
-    BiquadParam_t p;
+    BiquadLL * b;
+    uint16_t freq;
     
-    p.type = (type == BIQUAD_LOWPASS) ? BIQUAD_LOWPASS : BIQUAD_HIGHPASS;
+    type = (type == BIQUAD_LOWPASS) ? BIQUAD_LOWPASS : BIQUAD_HIGHPASS;
     if ((biquads) && (biquads.count > 0)) {
-        p.freq = [[biquads objectAtIndex:0] biquadParam].freq;
+        freq = [[biquads objectAtIndex:0] biquadParam].freq;
     } else {
-        p.freq = 0;
+        freq = (type == BIQUAD_LOWPASS) ? 20000 : 20;
     }
-    p.dbVolume = 0.0;
     
     if (biquads) {
         switch (biquads.count) {
             case 1:
-                b = [[biquads objectAtIndex:0] biquadParam];
-                p.qFac = 0.71f;
-                [b setBiquadParam:p];
+                b = [biquads objectAtIndex:0];
+                b.type = type;
+                b.biquadParam.freq = freq;
+                b.biquadParam.qFac = 0.71f;
                 break;
                 
             case 2:
-                b = [[biquads objectAtIndex:0] biquadParam];
-                p.qFac = 0.54f;
-                [b setBiquadParam:p];
-                b = [[biquads objectAtIndex:1] biquadParam];
-                p.qFac = 1.31f;
-                [b setBiquadParam:p];
+                b = [biquads objectAtIndex:0];
+                b.type = type;
+                b.biquadParam.freq = freq;
+                b.biquadParam.qFac = 0.54f;
+                
+                b = [biquads objectAtIndex:1];
+                b.type = type;
+                b.biquadParam.freq = freq;
+                b.biquadParam.qFac = 1.31f;
                 break;
                 
             case 4:
-                b = [[biquads objectAtIndex:0] biquadParam];
-                p.qFac = 0.90f;
-                [b setBiquadParam:p];
-                b = [[biquads objectAtIndex:1] biquadParam];
-                p.qFac = 2.65f;
-                [b setBiquadParam:p];
-                b = [[biquads objectAtIndex:0] biquadParam];
-                p.qFac = 0.51f;
-                [b setBiquadParam:p];
-                b = [[biquads objectAtIndex:1] biquadParam];
-                p.qFac = 0.60f;
-                [b setBiquadParam:p];
+                b = [biquads objectAtIndex:0];
+                b.type = type;
+                b.biquadParam.freq = freq;
+                b.biquadParam.qFac = 0.90f;
+                
+                b = [biquads objectAtIndex:1];
+                b.type = type;
+                b.biquadParam.freq = freq;
+                b.biquadParam.qFac = 2.65f;
+                
+                b = [biquads objectAtIndex:0];
+                b.type = type;
+                b.biquadParam.freq = freq;
+                b.biquadParam.qFac = 0.51f;
+                
+                b = [biquads objectAtIndex:1];
+                b.type = type;
+                b.biquadParam.freq = freq;
+                b.biquadParam.qFac = 0.60f;
                 break;
             default:
                 biquads = nil;
@@ -136,15 +146,14 @@
     
     if (_biquads) {
         for (int i = 0; i < _biquads.count; i++) {
-            BiquadParam * p = [[_biquads objectAtIndex:i] biquadParam];
-            p.type = type;
+            [[_biquads objectAtIndex:i] setType:type];
         }
     }
 }
 
 -(PassFilterType_t) getType {
     if ((_biquads) && (_biquads.count > 0)) {
-        return [[_biquads objectAtIndex:0] biquadParam].type;
+        return [[_biquads objectAtIndex:0] type];
     }
     return BIQUAD_OFF;
 }
@@ -219,11 +228,11 @@
 - (void) sendWithResponse:(BOOL)response {
 
     PassFilterPacket_t packet;
-    memset(&packet.addr, 0, 4);
+    memset(&packet.addr, 0, sizeof(StereoPassFilterAddr_t));
     
     for (int i = 0; i < _biquads.count; i++) {
-        packet.addr[i * 2]      = [[_biquads objectAtIndex:i] address0];
-        packet.addr[i * 2 + 1]  = [[_biquads objectAtIndex:i] address1];
+        packet.addr.biquadAddr[i].ch0 = [[_biquads objectAtIndex:i] address0];
+        packet.addr.biquadAddr[i].ch1 = [[_biquads objectAtIndex:i] address1];
     }
     packet.filter.order = [self getOrder];
     packet.filter.type  = [self getType];

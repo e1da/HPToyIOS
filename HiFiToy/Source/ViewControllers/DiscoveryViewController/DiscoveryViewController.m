@@ -57,6 +57,9 @@
 {
     [super viewDidLoad];
     
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredForeground)
                                                  name: UIApplicationWillEnterForegroundNotification

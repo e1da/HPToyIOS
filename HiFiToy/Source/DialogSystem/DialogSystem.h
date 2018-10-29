@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HiFiToyObject.h"
+#import "BiquadLL.h"
 
 @interface DialogSystem : NSObject
 
@@ -32,4 +33,5 @@
 - (void) showImportPresetDialog;
 
 - (void) showEnergySyncDialog:(EnergyConfig_t)energy;
+- (void) showBiquadCoefSyncDialog:(BiquadLL *)biquad;
 @end

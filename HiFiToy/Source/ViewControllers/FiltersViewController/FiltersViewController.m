@@ -32,8 +32,8 @@
     
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    UINavigationItem * topItem = self.navigationController.navigationBar.topItem;
-    topItem.title = @"";
+    //UINavigationItem * topItem = self.navigationController.navigationBar.topItem;
+    //topItem.title = @"";
     
     self.title = @"Filter menu";
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
@@ -88,8 +88,10 @@
 }
 
 - (void) updateSubviews {
+    _filters.activeNullLP = NO;
+    _filters.activeNullHP = NO;
+    
     BiquadLL * b = [_filters getActiveBiquad];
-    BiquadType_t type = b.biquadParam.type;
     
     [biquadControl update];
     [biquadCoefControl update];
@@ -97,7 +99,7 @@
     [typeBiquadSegmentedControl setEnabled:(![_filters isLowpassFull]) forSegmentAtIndex:0];
     [typeBiquadSegmentedControl setEnabled:(![_filters isHighpassFull]) forSegmentAtIndex:1];
     
-    if (type == BIQUAD_HIGHPASS) {
+    if (b.type == BIQUAD_HIGHPASS) {
         PassFilter * p = [_filters getHighpass];
        
         int dbOnOctave[4] = {0, 12, 24, 48};// db/oct
@@ -108,7 +110,7 @@
         biquadControl.showOnlyFreq = YES;
         biquadControl.hidden = NO;
         
-    } else if (type == BIQUAD_LOWPASS) {
+    } else if (b.type == BIQUAD_LOWPASS) {
         PassFilter * p = [_filters getLowpass];
         
         int dbOnOctave[4] = {0, 12, 24, 48};// db/oct
@@ -120,7 +122,7 @@
         biquadControl.hidden = NO;
         biquadCoefControl.hidden = YES;
         
-    } else if (type == BIQUAD_PARAMETRIC){
+    } else if (b.type == BIQUAD_PARAMETRIC){
         
         filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"PARAMETRIC #%d", _filters.activeBiquadIndex];
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
@@ -130,7 +132,7 @@
         biquadControl.hidden = NO;
         biquadCoefControl.hidden = YES;
         
-    } else if (type == BIQUAD_ALLPASS) {
+    } else if (b.type == BIQUAD_ALLPASS) {
         
         filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"ALLPASS #%d", _filters.activeBiquadIndex];
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
@@ -140,7 +142,7 @@
         biquadControl.hidden = NO;
         biquadCoefControl.hidden = YES;
         
-    } else if (type == BIQUAD_USER){ // off biquad
+    } else if (b.type == BIQUAD_USER){ // off biquad
         
         filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"USER BIQUAD #%d", _filters.activeBiquadIndex];
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
@@ -224,7 +226,7 @@
 - (void) changeTypeFilter:(UISegmentedControl *) segmentControl {
     
     BiquadLL * b = [_filters getActiveBiquad];
-    BiquadType_t prevType = b.biquadParam.type;
+    BiquadType_t prevType = b.type;
     
     switch (segmentControl.selectedSegmentIndex) {
         case 0:
@@ -237,7 +239,7 @@
             int freq = (lp) ? lp.Freq : 20000;
                 
             b.enabled = YES;
-            b.biquadParam.type = BIQUAD_LOWPASS;
+            b.type = BIQUAD_LOWPASS;
             b.biquadParam.freq = freq;
                 
             lp = [_filters getLowpass];
@@ -255,7 +257,7 @@
             int freq = (hp) ? hp.Freq : 20;
             
             b.enabled = YES;
-            b.biquadParam.type = BIQUAD_HIGHPASS;
+            b.type = BIQUAD_HIGHPASS;
             b.biquadParam.freq = freq;
             
             hp = [_filters getHighpass];
@@ -267,7 +269,7 @@
             NSLog(@"PEQ");
  
             b.enabled = [_filters isPEQEnabled];
-            b.biquadParam.type = BIQUAD_PARAMETRIC;
+            b.type = BIQUAD_PARAMETRIC;
             
             if (prevType != BIQUAD_ALLPASS) {
                 int freq = [_filters getBetterNewFreq];
@@ -283,7 +285,7 @@
             NSLog(@"AP");
             
             b.enabled = YES;
-            b.biquadParam.type = BIQUAD_ALLPASS;
+            b.type = BIQUAD_ALLPASS;
             
             if (prevType != BIQUAD_PARAMETRIC) {
                 int freq = [_filters getBetterNewFreq];
@@ -299,7 +301,7 @@
             NSLog(@"USER");
 
             b.enabled = YES;
-            b.biquadParam.type = BIQUAD_USER;
+            b.type = BIQUAD_USER;
             
             [b sendWithResponse:YES];
             break;
@@ -308,7 +310,7 @@
             NSLog(@"OFF");
             
             b.enabled = YES;
-            b.biquadParam.type = BIQUAD_OFF;
+            b.type = BIQUAD_OFF;
             
             [b sendWithResponse:YES];
             break;

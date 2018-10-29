@@ -219,6 +219,10 @@
     hiFiToyConfig.energy.auxTimeout120ms    = 2500; // 2500 * 120ms = 300s = 5min
     hiFiToyConfig.energy.usbTimeout120ms    = 0;    // not used
     
+    BiquadType_t * types = [preset.filters getBiquadTypes];
+    memcpy(&hiFiToyConfig.biquadTypes, types, 7 * sizeof(BiquadType_t));
+    free(types);
+    
     hiFiToyConfig.dataBufLength     = [self getDataBufLength:defaultPresetData];
     hiFiToyConfig.dataBytesLength   = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + defaultPresetData.length;
     
@@ -250,24 +254,33 @@
     [self setInitDsp];
 }
     
-- (void) sendDSPConfig:(NSData *)data
+- (void) storePresetToDSP:(HiFiToyPreset *) preset
 {
     if (![self isConnected]) return;
     
     //show progress dialog
     [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Save Configuration", @"")];
     
+    NSData * data = [preset getBinary];
+    
+    //fill biquqad types
+    BiquadType_t * types = [preset.filters getBiquadTypes];
+    memcpy(&hiFiToyConfig.biquadTypes, types, 7 * sizeof(BiquadType_t));
+    free(types);
+    
+    //fill buf and bytes length
     hiFiToyConfig.dataBufLength     = [self getDataBufLength:data];
     hiFiToyConfig.dataBytesLength   = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + data.length;
     
-    uint16_t length = data.length + sizeof(hiFiToyConfig.dataBufLength) + sizeof(hiFiToyConfig.dataBytesLength);
-    uint16_t offset = offsetof(HiFiToyPeripheral_t, dataBufLength);
+    uint8_t typesLength = 8; // 7 biquads + 1 reserved byte
+    uint16_t length = data.length + sizeof(hiFiToyConfig.dataBufLength) + sizeof(hiFiToyConfig.dataBytesLength) + typesLength;
+    uint16_t offset = offsetof(HiFiToyPeripheral_t, biquadTypes);
     
     NSLog(@"Send DSP Config L=%dbytes, B=%dbufs", hiFiToyConfig.dataBytesLength, hiFiToyConfig.dataBufLength);
     
     uint8_t * sendData = malloc(length);
-    memcpy(sendData, &hiFiToyConfig.dataBufLength, 4);
-    memcpy(sendData + 4, data.bytes, data.length);
+    memcpy(sendData, &hiFiToyConfig.biquadTypes, 12);
+    memcpy(sendData + 12, data.bytes, data.length);
     
     [self sendWriteFlag:0];
 
@@ -477,8 +490,9 @@
                     [self updateAudioSource];
                 } else {
                     NSLog(@"GET_VERSION_FAIL");
-                    HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
-                    [preset saveToHiFiToyPeripheral];
+                    /*HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
+                    [preset saveToHiFiToyPeripheral];*/
+                    [self restoreFactorySettings];
                 }
                 break;
             }

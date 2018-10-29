@@ -136,10 +136,11 @@
                                                  Freq:60 Qfac:0.0 dbVolume:0.0];*/
     
     BiquadLL * loudnessBiquad = [BiquadLL initWithAddress:LOUDNESS_BIQUAD_REG];
+    loudnessBiquad.type = BIQUAD_BANDPASS;
+    
     BiquadParam * p = loudnessBiquad.biquadParam;
     
     [p setBorderMaxFreq:150 minFreq:30];
-    p.type = BIQUAD_BANDPASS;
     p.freq = 60;
     p.qFac = 0;
     p.dbVolume = 0;
@@ -231,7 +232,7 @@
 {
     HiFiToyControl * hiFiToyControl = [HiFiToyControl sharedInstance];
     
-    [hiFiToyControl sendDSPConfig:[self getBinary]];
+    [hiFiToyControl storePresetToDSP:self];
 }
 
 //get binary for save to dsp
@@ -267,6 +268,7 @@
 {
     static uint8_t * data;
     static int length = 0;
+    static HiFiToyPeripheral_t hiFiToyConfig;
     
     NSData * paramData = (NSData *)[notification object];
     
@@ -276,14 +278,61 @@
     }
     
     if (paramAddress == 0) {
-        HiFiToyPeripheral_t * hiFiToyConfig = (HiFiToyPeripheral_t *)paramData.bytes;
+        /*HiFiToyPeripheral_t * hiFiToyConfig = (HiFiToyPeripheral_t *)paramData.bytes;
         length = hiFiToyConfig->dataBytesLength;
         
         if (data) free(data);
-        data = malloc(length);
+        data = malloc(length);*/
+        
+        memcpy(&hiFiToyConfig, paramData.bytes, 20);
+        paramAddress = 20;
+        [[HiFiToyControl sharedInstance] getDspDataWithOffset:paramAddress];
+        
+    } else {
+        
+        if (paramAddress == 20) {
+            memcpy((uint8_t *)&hiFiToyConfig + 20, paramData.bytes, sizeof(HiFiToyPeripheral_t) - 20);
+            
+            length = hiFiToyConfig.dataBytesLength;
+        
+            if (data) free(data);
+            data = malloc(length);
+            
+            length -= 20;
+            memcpy(data, &hiFiToyConfig, 20);
+        }
+    
+            
+        DialogSystem * dialog = [DialogSystem sharedInstance];
+            
+        if (length > 20) {
+            length -= 20;
+            memcpy(&data[paramAddress], paramData.bytes, 20);
+            paramAddress += 20;
+            
+            if ([dialog isProgressDialogVisible]) {
+                dialog.progressController.message = [NSString stringWithFormat:@"Left %d packets.", length / 20];
+            }
+            
+            [[HiFiToyControl sharedInstance] getDspDataWithOffset:paramAddress];
+            
+        } else {
+            memcpy(&data[paramAddress], paramData.bytes, length);
+            paramAddress += length;
+            
+            [[NSNotificationCenter defaultCenter] removeObserver:self];
+            
+            if ([dialog isProgressDialogVisible]) {
+                [dialog dismissProgressDialog];
+            }
+            
+            NSData * d = [NSData dataWithBytes:data length:paramAddress];
+            [self importData:d];
+            free(data);
+        }
     }
     
-    if (length > 20) {
+    /*if (length > 20) {
         memcpy(&data[paramAddress], paramData.bytes, 20);
         paramAddress += 20;
     } else {
@@ -310,7 +359,7 @@
         NSData * d = [NSData dataWithBytes:data length:paramAddress];
         [self importData:d];
         free(data);
-    }
+    }*/
   
 }
 

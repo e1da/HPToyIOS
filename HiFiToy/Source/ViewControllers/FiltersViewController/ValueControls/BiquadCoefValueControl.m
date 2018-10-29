@@ -7,6 +7,7 @@
 //
 
 #import "BiquadCoefValueControl.h"
+#import "DialogSystem.h"
 
 @implementation BiquadCoefValueControl
 
@@ -18,6 +19,15 @@
         b2Label = [self createValueControlWithLabel:@"B2:"];
         a1Label = [self createValueControlWithLabel:@"A1:"];
         a2Label = [self createValueControlWithLabel:@"A2:"];
+        
+        syncButton = [[UIButton alloc] init];
+        FilterLabel * f = [[FilterLabel alloc] initWithText:@"BIQUAD SYNC" withFontSize:20];
+        //syncButton.layer.borderWidth = 2.0f;
+        //syncButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        //f.textColor = [UIColor purpleColor];
+        [syncButton setAttributedTitle:f.attributedText forState:UIControlStateNormal];
+        [syncButton addTarget:self action:@selector(pressSync) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:syncButton];
     }
     return self;
 }
@@ -46,6 +56,8 @@
     b2Label.frame = CGRectMake(0,           2 * height / 3, width / 2, height / 3);
     a1Label.frame = CGRectMake(width / 2,   0,              width / 2, height / 3);
     a2Label.frame = CGRectMake(width / 2,   height / 3,     width / 2, height / 3);
+    
+    syncButton.frame = CGRectMake(width / 2, 2 * height / 3, width / 2, height / 3);
 }
 
 - (void) update {
@@ -97,6 +109,11 @@
     if (_delegate) {
         [_delegate showKeyboardWithValue:control];
     }
+}
+
+- (void) pressSync {
+    NSLog(@"press sync");
+    [[DialogSystem sharedInstance] showBiquadCoefSyncDialog:[_filters getActiveBiquad]];
 }
 
 @end

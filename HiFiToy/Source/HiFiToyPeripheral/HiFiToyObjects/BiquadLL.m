@@ -36,6 +36,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
         self.biquadParam.delegate = self;
         self.hiddenGui = NO;
         self.enabled = YES;
+        self.type = BIQUAD_OFF;
     }
     return self;
 }
@@ -50,6 +51,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     [encoder encodeInt:self.address0 forKey:@"keyAddress0"];
     [encoder encodeInt:self.address1 forKey:@"keyAddress1"];
     
+    [encoder encodeInt:self.type forKey:@"keyType"];
     [encoder encodeBytes:(uint8_t *)&_coef length:sizeof(BiquadCoef_t) forKey:@"keyCoef"];
     
     BiquadParamBorder_t b = self.biquadParam.border;
@@ -64,11 +66,13 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
 - (BiquadLL *) initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if (self) {
-        self.hiddenGui = [decoder decodeBoolForKey:@"keyHiddenGui"];
-        self.enabled = YES;
+        _hiddenGui = [decoder decodeBoolForKey:@"keyHiddenGui"];
+        _enabled = YES;
         
         self.address0 = [decoder decodeIntForKey:@"keyAddress0"];
         self.address1 = [decoder decodeIntForKey:@"keyAddress1"];
+        
+        _type = [decoder decodeIntForKey:@"keyType"];
         
         NSUInteger size = sizeof(BiquadCoef_t);
         const uint8_t * p = [decoder decodeBytesForKey:@"keyCoef" returnedLength:&size];
@@ -82,7 +86,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
         b.maxDbVol = [decoder decodeFloatForKey:@"keyMaxDbVol"];
         b.minDbVol = [decoder decodeFloatForKey:@"keyMinDbVol"];
         
-        _biquadParam = [BiquadParam initWithCoef:_coef withBorder:b];
+        _biquadParam = [BiquadParam initWithCoef:_coef withBorder:b withType:_type];
         _biquadParam.delegate = self;
         
     }
@@ -101,6 +105,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     
     copyBiquad.address0 = self.address0;
     copyBiquad.address1 = self.address1;
+    copyBiquad.type = self.type;
     copyBiquad.coef = self.coef; //copy biquad param too
     
     return copyBiquad;
@@ -118,6 +123,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
         
         if ((self.address0 == temp.address0) &&
             (self.address1 == temp.address1) &&
+            (self.type == temp.type) &&
             (isBiquadCoefEqual(self.coef, temp.coef)) &&
             
             (b.maxFreq == b.maxFreq) &&
@@ -156,9 +162,15 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
 
 
 //setters/getters
+- (void) setType:(BiquadType_t)type {
+    _type = type;
+    //[self.biquadParam updateWithCoef:_coef withType:type];
+    [self didUpdateBiquadParam:self.biquadParam];
+}
+
 - (void) setCoef:(BiquadCoef_t)coef {
     _coef = coef;
-    [self.biquadParam updateWithCoef:coef];
+    [self.biquadParam updateWithCoef:coef withType:self.type];
 }
 
 
@@ -170,7 +182,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     
     float s = sinf(w0), c = cosf(w0);
     
-    switch (param.type){
+    switch (self.type){
         case BIQUAD_LOWPASS:
             alpha = s / (2 * param.qFac);
             a0 =  1 + alpha;
@@ -241,7 +253,22 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
 /* ------------------ math --------------------*/
 - (double) getAFR:(double)freqX {
     if ((!self.hiddenGui) && (self.enabled)) {
-        return [self.biquadParam getAFR:freqX];
+
+        switch (self.type) {
+            case BIQUAD_LOWPASS:
+                return [self.biquadParam get_LPF:freqX];
+                
+            case BIQUAD_HIGHPASS:
+                return [self.biquadParam get_HPF:freqX];
+                
+            case BIQUAD_PARAMETRIC:
+                return [self.biquadParam get_PeakingEQ:freqX];
+                
+            case BIQUAD_OFF:
+                return 1.0f;
+            default:
+                return 1.0f;
+        }
     }
     return 1.0;
 }
@@ -249,7 +276,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
 //info string
 -(NSString *)getInfo {
     if (self.enabled) {
-        switch (self.biquadParam.type) {
+        switch (self.type) {
             case BIQUAD_LOWPASS:
             case BIQUAD_HIGHPASS:
             case BIQUAD_BANDPASS:
@@ -273,24 +300,48 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
 
 
 //send packet to
-- (void) sendWithResponse:(BOOL)response
-{
+- (void) sendCoefWithResponse:(BOOL)response {
+    BiquadCoefPacket_t packet;
+    packet.addr.ch0 = self.address0;
+    packet.addr.ch1 = self.address1;
+    packet.bCoef    = self.coef;
+    
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(BiquadCoefPacket_t)];
+    
+    //send data
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
+}
+
+- (void) sendBiquadWithResponse:(BOOL)response {
     BiquadPacket_t packet;
-    
-    packet.addr[0]          = self.address0;
-    packet.addr[1]          = self.address1;
-    
+     
+    packet.addr.ch0          = self.address0;
+    packet.addr.ch1          = self.address1;
+     
     if (self.enabled) {
-        packet.biquad       = [_biquadParam getBiquadParam];
+        packet.biquad.order     = BIQUAD_ORDER_2;
+        packet.biquad.type      = self.type;
+        packet.biquad.freq      = self.biquadParam.freq;
+        packet.biquad.qFac      = self.biquadParam.qFac;
+        packet.biquad.dbVolume  = self.biquadParam.dbVolume;
+     
     } else {
-        BiquadParam * p     = [[BiquadParam alloc] init]; //init off biquad
-        packet.biquad       = [p getBiquadParam];
+        packet.biquad.order     = BIQUAD_ORDER_2;
+        packet.biquad.type      = BIQUAD_OFF;
     }
     
     NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(BiquadPacket_t)];
-    
     //send data
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
+}
+
+- (void) sendWithResponse:(BOOL)response
+{
+    if (self.type == BIQUAD_USER) {
+        [self sendCoefWithResponse:response];
+    } else {
+        [self sendBiquadWithResponse:response];
+    }
 }
 
 /*===========================================================================
@@ -334,6 +385,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
             _coef.a1 = _523toFloat(reverseNumber523(number[3]));
             _coef.a2 = _523toFloat(reverseNumber523(number[4]));
             
+            [self.biquadParam updateWithCoef:_coef withType:self.type];
             return YES;
         }
         dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
@@ -348,6 +400,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     BiquadParamBorder_t b = _biquadParam.border;
     
     [xmlData addElementWithName:@"HiddenGui" withIntValue:self.hiddenGui];
+    [xmlData addElementWithName:@"Type" withIntValue:self.type];
     
     [xmlData addElementWithName:@"MaxFreq" withIntValue:b.maxFreq];
     [xmlData addElementWithName:@"MinFreq" withIntValue:b.minFreq];
@@ -392,6 +445,11 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     
     if ([elementName isEqualToString:@"HiddenGui"]){
         self.hiddenGui = [string boolValue];
+        count++;
+    }
+    
+    if ([elementName isEqualToString:@"Type"]){
+        _type = [string intValue];
         count++;
     }
     
@@ -450,12 +508,12 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
                    parser:(XmlParserWrapper *)xmlParser {
     
     if ([elementName isEqualToString:@"Biquad"]){
-        if (count != 12){
+        if (count != 13){
             xmlParser.error = [NSString stringWithFormat:
                                @"Biquad=%@. Import from xml is not success. ",
                                [[NSNumber numberWithInt:self.address0] stringValue] ];
         } else {
-            [_biquadParam updateWithCoef:_coef];
+            [_biquadParam updateWithCoef:_coef withType:self.type];
         }
         NSLog(@"%@", [self getInfo]);
         [xmlParser popDelegate];

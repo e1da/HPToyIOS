@@ -89,12 +89,12 @@
     BiquadParam * bParam = biquad.biquadParam;
     
     if (control == freqControl) {
-        if (biquad.biquadParam.type == BIQUAD_LOWPASS) {
+        if (biquad.type == BIQUAD_LOWPASS) {
             PassFilter * lp = [_filters getLowpass];
             [lp setFreq:control.numValue];
             [lp sendWithResponse:YES];
             
-        } else if (biquad.biquadParam.type == BIQUAD_HIGHPASS){
+        } else if (biquad.type == BIQUAD_HIGHPASS){
             PassFilter * hp = [_filters getHighpass];
             [hp setFreq:control.numValue];
             [hp sendWithResponse:YES];
@@ -147,12 +147,12 @@
             newFreq = bParam.freq + delta;
         }
         
-        if (biquad.biquadParam.type == BIQUAD_LOWPASS) {
+        if (biquad.type == BIQUAD_LOWPASS) {
             PassFilter * lp = [_filters getLowpass];
             [lp setFreq:newFreq];
             [lp sendWithResponse:YES];
             
-        } else if (biquad.biquadParam.type == BIQUAD_HIGHPASS){
+        } else if (biquad.type == BIQUAD_HIGHPASS){
             PassFilter * hp = [_filters getHighpass];
             [hp setFreq:newFreq];
             [hp sendWithResponse:YES];
@@ -200,12 +200,12 @@
             newFreq = bParam.freq - delta;
         }
         
-        if (biquad.biquadParam.type == BIQUAD_LOWPASS) {
+        if (biquad.type == BIQUAD_LOWPASS) {
             PassFilter * lp = [_filters getLowpass];
             [lp setFreq:newFreq];
             [lp sendWithResponse:YES];
             
-        } else if (biquad.biquadParam.type == BIQUAD_HIGHPASS){
+        } else if (biquad.type == BIQUAD_HIGHPASS){
             PassFilter * hp = [_filters getHighpass];
             [hp setFreq:newFreq];
             [hp sendWithResponse:YES];

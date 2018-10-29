@@ -22,7 +22,6 @@ bool isCoefEqual(float c0, float c1) {
         BiquadParamBorder_t b = {20000, 20, 10.0, 0.1, 12.0, -36.0};
         self.border = b;
         
-        self.type = BIQUAD_OFF;
         self.freq = 100;
         self.qFac = 1.41f;
         self.dbVolume = 0.0f;
@@ -30,21 +29,19 @@ bool isCoefEqual(float c0, float c1) {
     return self;
 }
 
-+ (BiquadParam *) initWithCoef:(BiquadCoef_t)coef withBorder:(BiquadParamBorder_t)border{
++ (BiquadParam *) initWithCoef:(BiquadCoef_t)coef withBorder:(BiquadParamBorder_t)border withType:(BiquadType_t)type {
     BiquadParam * instance = [[BiquadParam alloc] init];
 
     instance.border = border;
-    [instance updateWithCoef:coef];
+    [instance updateWithCoef:coef withType:type];
     return instance;
 }
 
 
-- (void) updateWithCoef:(BiquadCoef_t)coef {
-    _type = [self getTypeFromCoef:coef];
-
+- (void) updateWithCoef:(BiquadCoef_t)coef withType:(BiquadType_t)type{
     float arg, w0;
 
-    switch (self.type){
+    switch (type){
         case BIQUAD_LOWPASS:
             arg = 2 * coef.b1 / coef.a1 + 1;
             if ((arg < 1.0f) && (arg > -1.0f)) break;
@@ -109,8 +106,7 @@ bool isCoefEqual(float c0, float c1) {
     BiquadParam * copyParam = [[[self class] allocWithZone:zone] init];
     
     copyParam.border = self.border;
-    
-    copyParam.type = self.type;
+ 
     copyParam.freq = self.freq;
     copyParam.qFac = self.qFac;
     copyParam.dbVolume = self.dbVolume;
@@ -129,8 +125,7 @@ bool isCoefEqual(float c0, float c1) {
         BiquadParamBorder_t bTemp = temp.border;
         BiquadParamBorder_t b = self.border;
         
-        if ((self.type == temp.type) &&
-            (self.freq == temp.freq) &&
+        if ((self.freq == temp.freq) &&
             (isFloatNull(self.qFac - temp.qFac)) &&
             (isFloatNull(self.dbVolume - temp.dbVolume)) &&
             
@@ -148,7 +143,7 @@ bool isCoefEqual(float c0, float c1) {
     return NO;
 }
 
-- (BiquadType_t) getTypeFromCoef:(BiquadCoef_t)coef {
+/*- (BiquadType_t) getTypeFromCoef:(BiquadCoef_t)coef {
     
     if ( (isCoefEqual(coef.b0, 1.0f)) && (isFloatNull(coef.b1)) && (isFloatNull(coef.b2)) &&
         (isFloatNull(coef.a1)) && (isFloatNull(coef.a2)) ) {
@@ -176,7 +171,7 @@ bool isCoefEqual(float c0, float c1) {
 - (void) setType:(BiquadType_t)type {
     _type = type;
     if (_delegate) [_delegate didUpdateBiquadParam:self];
-}
+}*/
 
 - (void) setFreq:(uint16_t)freq {
     if (freq > self.border.maxFreq) freq = self.border.maxFreq;
@@ -219,24 +214,23 @@ bool isCoefEqual(float c0, float c1) {
     if (_delegate) [_delegate didUpdateBiquadParam:self];
 }
 
-- (void) setBiquadParam:(BiquadParam_t)p {
-    _type = p.type;
+/*- (void) setBiquadParam:(BiquadParam_t)p {
     _freq = p.freq;
     _qFac = p.qFac;
     _dbVolume = p.dbVolume;
     
     if (_delegate) [_delegate didUpdateBiquadParam:self];
-}
+}*/
 
-- (BiquadParam_t) getBiquadParam {
+/*- (BiquadParam_t) getBiquadParam {
     BiquadParam_t p;
-    p.type = _type;
+
     p.freq = _freq;
     p.qFac = _qFac;
     p.dbVolume = _dbVolume;
     
     return p;
-}
+}*/
 
 
 //border setter function
@@ -279,25 +273,6 @@ bool isCoefEqual(float c0, float c1) {
     
     
     return  sqrt(pow(A1, 2) + pow(A2, 2)) / B;
-}
-
-- (double) getAFR:(double)freqX {
-    switch (self.type) {
-        case BIQUAD_LOWPASS:
-            return [self get_LPF:freqX];
-            
-        case BIQUAD_HIGHPASS:
-            return [self get_HPF:freqX];
-            
-        case BIQUAD_PARAMETRIC:
-            return [self get_PeakingEQ:freqX];
-            
-        case BIQUAD_OFF:
-            return 1.0f;
-        default:
-            return 1.0f;
-    }
-    
 }
 
 

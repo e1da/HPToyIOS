@@ -11,6 +11,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef enum : uint8_t {
+    BIQUAD_ORDER_1,
+    BIQUAD_ORDER_2
+} BiquadOrder_t;
+
+typedef enum : uint8_t {
     BIQUAD_LOWPASS      = 2,
     BIQUAD_HIGHPASS     = 1,
     BIQUAD_OFF          = 0,
@@ -40,6 +45,7 @@ typedef struct {
 
 
 typedef struct {
+    BiquadOrder_t   order;
     BiquadType_t    type;
     uint16_t        freq;
     float           qFac;
@@ -60,7 +66,6 @@ extern bool isCoefEqual(float c0, float c1);
 
 @property (nonatomic) id <BiquadParamDelegate> delegate;
 
-@property (nonatomic)   BiquadType_t    type;
 @property (nonatomic)   uint16_t        freq;
 @property (nonatomic)   float           qFac;
 @property (nonatomic)   float           dbVolume;
@@ -68,21 +73,20 @@ extern bool isCoefEqual(float c0, float c1);
 //border property
 @property (nonatomic)   BiquadParamBorder_t border;
 
-+ (BiquadParam *)       initWithCoef:(BiquadCoef_t)coef withBorder:(BiquadParamBorder_t)border;
-- (void)                updateWithCoef:(BiquadCoef_t)coef;
++ (BiquadParam *)       initWithCoef:(BiquadCoef_t)coef withBorder:(BiquadParamBorder_t)border withType:(BiquadType_t)type;
+- (void)                updateWithCoef:(BiquadCoef_t)coef withType:(BiquadType_t)type;
 
 - (double)              getFreqPercent;
 - (void)                setFreqPercent:(double)percent;
-
-- (void)                setBiquadParam:(BiquadParam_t)p;
-- (BiquadParam_t)       getBiquadParam;
 
 - (void) setBorderMaxFreq:(int)maxFreq minFreq:(int)minFreq;
 - (void) setBorderMaxQ:(double)maxQ minQfac:(double)minQ;
 - (void) setBorderMaxDbVol:(double)maxDbVol minDbVolume:(double)minDbVol;
 
 // math calculation
-- (double) getAFR:(double)freqX;
+- (double) get_LPF:(double)freqX;
+- (double) get_HPF:(double)freqX;
+- (double) get_PeakingEQ:(double)freqX;
 
 @end
 

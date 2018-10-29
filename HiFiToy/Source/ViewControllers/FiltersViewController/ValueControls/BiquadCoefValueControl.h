@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
     NumValueControl * b2Label;
     NumValueControl * a1Label;
     NumValueControl * a2Label;
+    UIButton * syncButton;
 }
 
 @property (nonatomic) id <BiquadCoefValueControlDelegate> delegate;
