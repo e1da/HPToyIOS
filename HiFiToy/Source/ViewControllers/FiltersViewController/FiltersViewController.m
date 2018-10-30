@@ -240,6 +240,7 @@
             int freq = (lp) ? lp.Freq : 20000;
                 
             b.enabled = YES;
+            b.order = BIQUAD_ORDER_2;
             b.type = BIQUAD_LOWPASS;
             b.biquadParam.freq = freq;
                 
@@ -258,6 +259,7 @@
             int freq = (hp) ? hp.Freq : 20;
             
             b.enabled = YES;
+            b.order = BIQUAD_ORDER_2;
             b.type = BIQUAD_HIGHPASS;
             b.biquadParam.freq = freq;
             
@@ -270,6 +272,7 @@
             NSLog(@"PEQ");
  
             b.enabled = [_filters isPEQEnabled];
+            b.order = BIQUAD_ORDER_2;
             b.type = BIQUAD_PARAMETRIC;
             
             if (prevType != BIQUAD_ALLPASS) {
@@ -286,6 +289,7 @@
             NSLog(@"AP");
             
             b.enabled = YES;
+            b.order = BIQUAD_ORDER_1;
             b.type = BIQUAD_ALLPASS;
             
             if (prevType != BIQUAD_PARAMETRIC) {
@@ -302,6 +306,7 @@
             NSLog(@"USER");
 
             b.enabled = YES;
+            //b.order = BIQUAD_ORDER_2;
             b.type = BIQUAD_USER;
             
             [b sendWithResponse:YES];
@@ -311,6 +316,7 @@
             NSLog(@"OFF");
             
             b.enabled = YES;
+            b.order = BIQUAD_ORDER_2;
             b.type = BIQUAD_OFF;
             
             [b sendWithResponse:YES];

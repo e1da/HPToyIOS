@@ -73,8 +73,9 @@ extern bool isCoefEqual(float c0, float c1);
 //border property
 @property (nonatomic)   BiquadParamBorder_t border;
 
-+ (BiquadParam *)       initWithCoef:(BiquadCoef_t)coef withBorder:(BiquadParamBorder_t)border withType:(BiquadType_t)type;
-- (void)                updateWithCoef:(BiquadCoef_t)coef withType:(BiquadType_t)type;
++ (BiquadParam *)       initWithCoef:(BiquadCoef_t)coef withBorder:(BiquadParamBorder_t)border
+                           withOrder:(BiquadOrder_t)order withType:(BiquadType_t)type;
+- (void)                updateWithCoef:(BiquadCoef_t)coef withOrder:(BiquadOrder_t)order withType:(BiquadType_t)type;
 
 - (double)              getFreqPercent;
 - (void)                setFreqPercent:(double)percent;

@@ -40,6 +40,7 @@ extern bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1);
 @property (nonatomic) int     address0;
 @property (nonatomic) int     address1; //if == 0 then off else stereo (2nd channel)
 
+@property (nonatomic) BiquadOrder_t order;
 @property (nonatomic) BiquadType_t  type;
 @property (nonatomic) BiquadCoef_t  coef;
 @property (nonatomic) BiquadParam * biquadParam;

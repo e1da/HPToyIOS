@@ -36,6 +36,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
         self.biquadParam.delegate = self;
         self.hiddenGui = NO;
         self.enabled = YES;
+        self.order = BIQUAD_ORDER_2;
         self.type = BIQUAD_OFF;
     }
     return self;
@@ -51,6 +52,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     [encoder encodeInt:self.address0 forKey:@"keyAddress0"];
     [encoder encodeInt:self.address1 forKey:@"keyAddress1"];
     
+    [encoder encodeInt:self.order forKey:@"keyOrder"];
     [encoder encodeInt:self.type forKey:@"keyType"];
     [encoder encodeBytes:(uint8_t *)&_coef length:sizeof(BiquadCoef_t) forKey:@"keyCoef"];
     
@@ -72,6 +74,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
         self.address0 = [decoder decodeIntForKey:@"keyAddress0"];
         self.address1 = [decoder decodeIntForKey:@"keyAddress1"];
         
+        _order = [decoder decodeIntForKey:@"keyOrder"];
         _type = [decoder decodeIntForKey:@"keyType"];
         
         NSUInteger size = sizeof(BiquadCoef_t);
@@ -86,7 +89,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
         b.maxDbVol = [decoder decodeFloatForKey:@"keyMaxDbVol"];
         b.minDbVol = [decoder decodeFloatForKey:@"keyMinDbVol"];
         
-        _biquadParam = [BiquadParam initWithCoef:_coef withBorder:b withType:_type];
+        _biquadParam = [BiquadParam initWithCoef:_coef withBorder:b withOrder:self.order withType:_type];
         _biquadParam.delegate = self;
         
     }
@@ -105,6 +108,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     
     copyBiquad.address0 = self.address0;
     copyBiquad.address1 = self.address1;
+    copyBiquad.order = self.order;
     copyBiquad.type = self.type;
     copyBiquad.coef = self.coef; //copy biquad param too
     
@@ -123,6 +127,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
         
         if ((self.address0 == temp.address0) &&
             (self.address1 == temp.address1) &&
+            (self.order == temp.order) &&
             (self.type == temp.type) &&
             (isBiquadCoefEqual(self.coef, temp.coef)) &&
             
@@ -160,17 +165,28 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     
 }
 
+- (void) updateOrder {
+    if ( (isFloatNull(_coef.b2)) && (isFloatNull(_coef.a2)) && (!isFloatNull(_coef.b0)) && (!isFloatNull(_coef.b1)) && (!isFloatNull(_coef.a1)) ) {
+        _order = BIQUAD_ORDER_1;
+    } else {
+        _order = BIQUAD_ORDER_2;
+    }
+}
 
 //setters/getters
+- (void) setOrder:(BiquadOrder_t)order {
+    _order = order;
+    [self didUpdateBiquadParam:self.biquadParam];
+}
+
 - (void) setType:(BiquadType_t)type {
     _type = type;
-    //[self.biquadParam updateWithCoef:_coef withType:type];
     [self didUpdateBiquadParam:self.biquadParam];
 }
 
 - (void) setCoef:(BiquadCoef_t)coef {
     _coef = coef;
-    [self.biquadParam updateWithCoef:coef withType:self.type];
+    [self.biquadParam updateWithCoef:coef withOrder:self.order withType:self.type];
 }
 
 
@@ -180,68 +196,102 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     float bandwidth = 1.41f;
     float alpha, a0;
     
+    if (self.type == BIQUAD_USER) return;
+    
     float s = sinf(w0), c = cosf(w0);
     
-    switch (self.type){
-        case BIQUAD_LOWPASS:
-            alpha = s / (2 * param.qFac);
-            a0 =  1 + alpha;
-            _coef.a1 =  2 * c / (a0);
-            _coef.a2 =  (1 - alpha) / (-a0);
-            _coef.b0 =  (1 - c) / (2 * a0);
-            _coef.b1 =  (1 - c) / a0;
-            _coef.b2 =  (1 - c) / (2 * a0);
-            break;
-        case BIQUAD_HIGHPASS:
-            alpha = s / (2 * param.qFac);
-            a0 =  1 + alpha;
-            _coef.a1 =  2 * c / (a0);
-            _coef.a2 =  (1 - alpha) / (-a0);
-            _coef.b0 =  (1 + c) / (2 * a0);
-            _coef.b1 =  (1 + c) / (-a0);
-            _coef.b2 =  (1 + c) / (2 * a0);
-            break;
-        case BIQUAD_PARAMETRIC:
-            ampl = powf(10, param.dbVolume / 40);
-            alpha = s / (2 * param.qFac);
-            a0 =  1 + alpha / ampl;
-            _coef.a1 =  2 * c / a0;
-            _coef.a2 =  (1 - alpha / ampl) / (-a0);
-            _coef.b0 =  (1 + alpha * ampl) / a0;
-            _coef.b1 =  (2 * c) / (-a0);
-            _coef.b2 =  (1 - alpha * ampl) / a0;
-            break;
-        case BIQUAD_ALLPASS:
-            alpha = s / (2 * param.qFac);
-            a0 =   1 + alpha;
-            _coef.a1 =  2 * c / (a0);
-            _coef.a2 =  (1 - alpha) / (-a0);
-            _coef.b0 =  (1 - alpha) / a0;
-            _coef.b1 =  2 * c / (-a0);
-            _coef.b2 =  (1 + alpha) / a0;
-            break;
-        case BIQUAD_BANDPASS:
-            //ln(2) / 2 = 0.3465735902
-            alpha = s * sinh( 0.3465735902 * bandwidth * w0 / s);
+    if (self.order == BIQUAD_ORDER_2){
+        switch (self.type){
+            case BIQUAD_LOWPASS:
+                alpha = s / (2 * param.qFac);
+                a0 =  1 + alpha;
+                _coef.a1 =  2 * c / (a0);
+                _coef.a2 =  (1 - alpha) / (-a0);
+                _coef.b0 =  (1 - c) / (2 * a0);
+                _coef.b1 =  (1 - c) / a0;
+                _coef.b2 =  (1 - c) / (2 * a0);
+                break;
+            case BIQUAD_HIGHPASS:
+                alpha = s / (2 * param.qFac);
+                a0 =  1 + alpha;
+                _coef.a1 =  2 * c / (a0);
+                _coef.a2 =  (1 - alpha) / (-a0);
+                _coef.b0 =  (1 + c) / (2 * a0);
+                _coef.b1 =  (1 + c) / (-a0);
+                _coef.b2 =  (1 + c) / (2 * a0);
+                break;
+            case BIQUAD_PARAMETRIC:
+                ampl = powf(10, param.dbVolume / 40);
+                alpha = s / (2 * param.qFac);
+                a0 =  1 + alpha / ampl;
+                _coef.a1 =  2 * c / a0;
+                _coef.a2 =  (1 - alpha / ampl) / (-a0);
+                _coef.b0 =  (1 + alpha * ampl) / a0;
+                _coef.b1 =  (2 * c) / (-a0);
+                _coef.b2 =  (1 - alpha * ampl) / a0;
+                break;
+            case BIQUAD_ALLPASS:
+                alpha = s / (2 * param.qFac);
+                a0 =   1 + alpha;
+                _coef.a1 =  2 * c / (a0);
+                _coef.a2 =  (1 - alpha) / (-a0);
+                _coef.b0 =  (1 - alpha) / a0;
+                _coef.b1 =  2 * c / (-a0);
+                _coef.b2 =  (1 + alpha) / a0;
+                break;
+            case BIQUAD_BANDPASS:
+                //ln(2) / 2 = 0.3465735902
+                alpha = s * sinh( 0.3465735902 * bandwidth * w0 / s);
                 
-            a0 =   1 + alpha;
-            _coef.a1 =   2 * c / a0;
-            _coef.a2 =   (1 - alpha) / (-a0);
-            _coef.b0 =   alpha / a0;
-            _coef.b1 =   0;
-            _coef.b2 =  -alpha / a0;
-            break;
-        case BIQUAD_OFF:
-            _coef.b0 =  1.0f;
-            _coef.b1 =  0.0f;
-            _coef.b2 =  0.0f;
-            _coef.a1 =  0.0f;
-            _coef.a2 =  0.0f;
-            break;
-        default:
-            break;
+                a0 =   1 + alpha;
+                _coef.a1 =   2 * c / a0;
+                _coef.a2 =   (1 - alpha) / (-a0);
+                _coef.b0 =   alpha / a0;
+                _coef.b1 =   0;
+                _coef.b2 =  -alpha / a0;
+                break;
+            case BIQUAD_OFF:
+                _coef.b0 =  1.0f;
+                _coef.b1 =  0.0f;
+                _coef.b2 =  0.0f;
+                _coef.a1 =  0.0f;
+                _coef.a2 =  0.0f;
+                break;
+            default:
+                break;
+        }
+    } else {//order == BIQUAD_ORDER_1
+        _coef.a2 = 0;
+        _coef.b2 = 0;
+        
+        switch (self.type){
+            case BIQUAD_LOWPASS:
+                _coef.a1 = pow(2.7, -w0);
+                _coef.b0 = 1.0 - _coef.a1;
+                //WARNING b1 = ???
+                break;
+            case BIQUAD_HIGHPASS:
+                _coef.a1 = pow(2.7, -w0);
+                _coef.b0 = _coef.a1;
+                _coef.b1 = -_coef.a1;
+                break;
+            case BIQUAD_ALLPASS:
+                _coef.a1 = pow(2.7, -w0);
+                _coef.b0 = -_coef.a1;
+                _coef.b1 = 1.0;
+                break;
+            case BIQUAD_OFF:
+                _coef.b0 =  1.0f;
+                _coef.b1 =  0.0f;
+                _coef.b2 =  0.0f;
+                _coef.a1 =  0.0f;
+                _coef.a2 =  0.0f;
+                break;
+            default:
+                break;
+        }
+        
     }
- 
 }
 
 - (void) setEnabled:(BOOL)enabled {
@@ -252,7 +302,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
 }
 /* ------------------ math --------------------*/
 - (double) getAFR:(double)freqX {
-    if ((!self.hiddenGui) && (self.enabled)) {
+    if ( (!self.hiddenGui) && (self.enabled) && (self.order == BIQUAD_ORDER_2) ) {
 
         switch (self.type) {
             case BIQUAD_LOWPASS:
@@ -319,7 +369,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     packet.addr.ch1          = self.address1;
      
     if (self.enabled) {
-        packet.biquad.order     = BIQUAD_ORDER_2;
+        packet.biquad.order     = self.order;
         packet.biquad.type      = self.type;
         packet.biquad.freq      = self.biquadParam.freq;
         packet.biquad.qFac      = self.biquadParam.qFac;
@@ -385,7 +435,8 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
             _coef.a1 = _523toFloat(reverseNumber523(number[3]));
             _coef.a2 = _523toFloat(reverseNumber523(number[4]));
             
-            [self.biquadParam updateWithCoef:_coef withType:self.type];
+            [self updateOrder];
+            [self.biquadParam updateWithCoef:_coef withOrder:self.order withType:self.type];
             return YES;
         }
         dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
@@ -400,6 +451,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     BiquadParamBorder_t b = _biquadParam.border;
     
     [xmlData addElementWithName:@"HiddenGui" withIntValue:self.hiddenGui];
+    [xmlData addElementWithName:@"Order" withIntValue:self.order];
     [xmlData addElementWithName:@"Type" withIntValue:self.type];
     
     [xmlData addElementWithName:@"MaxFreq" withIntValue:b.maxFreq];
@@ -445,6 +497,11 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     
     if ([elementName isEqualToString:@"HiddenGui"]){
         self.hiddenGui = [string boolValue];
+        count++;
+    }
+    
+    if ([elementName isEqualToString:@"Order"]){
+        _order = [string intValue];
         count++;
     }
     
@@ -508,12 +565,12 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
                    parser:(XmlParserWrapper *)xmlParser {
     
     if ([elementName isEqualToString:@"Biquad"]){
-        if (count != 13){
+        if (count != 14){
             xmlParser.error = [NSString stringWithFormat:
                                @"Biquad=%@. Import from xml is not success. ",
                                [[NSNumber numberWithInt:self.address0] stringValue] ];
         } else {
-            [_biquadParam updateWithCoef:_coef withType:self.type];
+            [_biquadParam updateWithCoef:_coef withOrder:self.order withType:self.type];
         }
         NSLog(@"%@", [self getInfo]);
         [xmlParser popDelegate];
