@@ -61,6 +61,7 @@
     
     self.navigationItem.backBarButtonItem.title = @"Back";
     self.navigationItem.leftItemsSupplementBackButton = YES;
+    [self.view setBackgroundColor:[UIColor darkGrayColor]];
     
     //create Button
     UIButton *addButton = [UIButton buttonWithType:UIButtonTypeInfoLight];

@@ -69,8 +69,8 @@
         b0Label.numValue = b.coef.b0;
         b1Label.numValue = b.coef.b1;
         b2Label.numValue = b.coef.b2;
-        a1Label.numValue = b.coef.a1;
-        a2Label.numValue = b.coef.a2;
+        a1Label.numValue = -b.coef.a1;
+        a2Label.numValue = -b.coef.a2;
     }
     
     //if (_delegate) [_delegate updateBiquadValueControl];
@@ -94,10 +94,10 @@
         coef.b2 = control.numValue;
         
     } else if (control == a1Label) {
-        coef.a1 = control.numValue;
+        coef.a1 = -control.numValue;
         
     } else if (control == a2Label) {
-        coef.a2 = control.numValue;
+        coef.a2 = -control.numValue;
         
     }
     

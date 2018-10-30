@@ -48,7 +48,7 @@
 
 - (void)initSubviews {
     filtersView = [[XOverView alloc] init];
-    [filtersView setBackgroundColor:[UIColor whiteColor]];
+    //[filtersView setBackgroundColor:[UIColor whiteColor]];
     //configure XOverView
     filtersView.maxFreq = 30000;
     filtersView.minFreq = 20;
@@ -109,6 +109,7 @@
         
         biquadControl.showOnlyFreq = YES;
         biquadControl.hidden = NO;
+        biquadCoefControl.hidden = YES;
         
     } else if (b.type == BIQUAD_LOWPASS) {
         PassFilter * p = [_filters getLowpass];

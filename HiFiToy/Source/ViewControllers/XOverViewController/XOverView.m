@@ -22,6 +22,7 @@
         self.maxFreq = 20000;
         self.minFreq = 10;
         
+        self.backgroundColor = [UIColor darkGrayColor];
     }
     return self;
 }
@@ -179,14 +180,16 @@
 - (void) drawGridUnits:(CGContextRef)context
 {
     //prepare font and style for horizontal symbols
-    UIFont *font = [UIFont fontWithName:@"Palatino-Roman" size:14.0];
+    UIFont *font = [UIFont fontWithName:@"ArialRoundedMTBold" size:12.0];
+    //UIFont *font = [UIFont fontWithName:@"Palatino-Roman" size:14.0];
     NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     style.alignment = NSTextAlignmentCenter;
+    
     
     NSMutableDictionary * attr = [[NSMutableDictionary alloc] init];
     [attr setObject:style forKey:NSParagraphStyleAttributeName];
     [attr setObject:font forKey:NSFontAttributeName];
-    
+    [attr setObject:[UIColor lightGrayColor] forKey:NSForegroundColorAttributeName];
     //draw freq units
     //int drawFreqUnits[7] = {20, 50, 100, 500, 1000, 10000, 20000};
     
@@ -221,7 +224,8 @@
     
     
     //prepare font and style for vertical symbols
-    font = [UIFont fontWithName:@"Palatino-Roman" size:12.0];
+    font = [UIFont fontWithName:@"ArialRoundedMTBold" size:10.0];
+    //font = [UIFont fontWithName:@"Palatino-Roman" size:12.0];
     style.alignment = NSTextAlignmentRight;
     
     [attr setObject:style forKey:NSParagraphStyleAttributeName];
@@ -240,6 +244,33 @@
 }
 
 
+- (void) drawAfr:(CGContextRef)context withPoints:(NSMutableData *)points {
+    if ((!points) || (points.length < 2 * sizeof(CGPoint)) ) return;
+    
+    unsigned long size = points.length / sizeof(CGPoint);
+    CGPoint * p = (CGPoint *)points.bytes;
+    
+    CGPoint firstPoint = p[0];
+    firstPoint.y = [self dbToPixel:-30];
+    CGPoint lastPoint = p[size - 1];
+    lastPoint.y = [self dbToPixel:-30];
+    
+    [points appendBytes:&lastPoint length:sizeof(CGPoint)];
+    [points appendBytes:&firstPoint length:sizeof(CGPoint)];
+    
+    UIColor * c = [UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:0.1];
+    CGContextSetFillColorWithColor(context, [c CGColor]);
+    
+    CGContextAddLines(context, (CGPoint *)points.bytes, size + 2);
+    CGContextDrawPath(context, kCGPathFill);
+    
+    CGContextAddLines(context, (CGPoint *)points.bytes, size);
+    CGContextDrawPath(context, kCGPathStroke);
+    
+    
+    
+}
+
 - (void) drawFilters:(CGContextRef)context
 {
     int highpass_freq_pix = 0;
@@ -251,61 +282,52 @@
     BiquadType_t type = [[_filters getActiveBiquad] type];
     
     if (type == BIQUAD_HIGHPASS) {
-        CGContextSetStrokeColorWithColor(context, [[UIColor redColor] CGColor]);
+        CGContextSetStrokeColorWithColor(context, [[UIColor orangeColor] CGColor]);
         
-        //if (self.xover.hp.order != FILTER_ORDER_0) {
-            highpass_freq_pix = [self getHighPassBorderPix];
-        /*} else {
-            ParamFilter * param = [self.xover.params paramWithMinFreq];
-            highpass_freq_pix = [self freqToPixel:param.freq];
-        }*/
-        
+        highpass_freq_pix = [self getHighPassBorderPix];
+
     } else {
-        CGContextSetStrokeColorWithColor(context, [[UIColor blueColor] CGColor]);
+        CGContextSetStrokeColorWithColor(context, [[UIColor lightGrayColor] CGColor]);
         
         if (type == BIQUAD_LOWPASS){
-            //if (self.xover.lp.order != FILTER_ORDER_0) {
-                lowpass_freq_pix = [self getLowPassBorderPix];
-            /*} else {
-                ParamFilter * param = [self.xover.params paramWithMaxFreq];
-                lowpass_freq_pix = [self freqToPixel:param.freq];
-            }*/
+            lowpass_freq_pix = [self getLowPassBorderPix];
         }
     }
     
-    bool start = NO;
     double i = border_left;
+    
+    //get points
+    NSMutableData * points = [[NSMutableData alloc] init];
     
     while (i <= width - border_right){
         double y = [self.filters getAFR:[self pixelToFreq:i] ];
         
         if ((i > highpass_freq_pix) && (type == BIQUAD_HIGHPASS) && (!change_color_flag)){
-            CGContextDrawPath(context, kCGPathStroke);
+            CGPoint p = CGPointMake(i, [ self dbToPixel:(20.0f * log10(y)) ]);
+            [points appendBytes:&p length:sizeof(CGPoint)];
+            [self drawAfr:context withPoints:points];
+            points = [[NSMutableData alloc] init];
             
             change_color_flag = YES;
-            start = NO;
-            CGContextSetStrokeColorWithColor(context, [[UIColor blueColor] CGColor]);
+            CGContextSetStrokeColorWithColor(context, [[UIColor lightGrayColor] CGColor]);
         }
         if ((i > lowpass_freq_pix) && (type == BIQUAD_LOWPASS) && (!change_color_flag)){
-            CGContextDrawPath(context, kCGPathStroke);
+            CGPoint p = CGPointMake(i, [ self dbToPixel:(20.0f * log10(y)) ]);
+            [points appendBytes:&p length:sizeof(CGPoint)];
+            [self drawAfr:context withPoints:points];
+            points = [[NSMutableData alloc] init];
             
             change_color_flag = YES;
-            start = NO;
-            CGContextSetStrokeColorWithColor(context, [[UIColor redColor] CGColor]);
+            CGContextSetStrokeColorWithColor(context, [[UIColor orangeColor] CGColor]);
         }
         
         if (y > CLIP_DB){
-            if (!start){
-                start = YES;
-                CGContextMoveToPoint(context, (float)i, [ self dbToPixel:(20.0f * log10(y)) ] );
-            } else {
-                CGContextAddLineToPoint(context, (float)i, [ self dbToPixel:(20.0f * log10(y)) ] );
-            }
+            CGPoint p = CGPointMake(i, [ self dbToPixel:(20.0f * log10(y)) ]);
+            [points appendBytes:&p length:sizeof(CGPoint)];
         }
         i++;
     }
-    
-    CGContextDrawPath(context, kCGPathStroke);
+    [self drawAfr:context withPoints:points];
     
     [self drawFreqLineForParamFilters:(CGContextRef)context];
     [self drawFreqLineForAllpassFilters:(CGContextRef)context];
@@ -320,7 +342,8 @@
 
 - (void) drawFreqLineForAllpassFilters:(CGContextRef)context {
     NSArray<BiquadLL *> * allpass = [_filters getBiquadsWithType:BIQUAD_ALLPASS];
-    [self drawFreqLineForBiquads:allpass withColor:[UIColor purpleColor] withContext:context];
+    UIColor * c = [UIColor colorWithRed:0.0 green:0.5 blue:0.5 alpha:1.0];
+    [self drawFreqLineForBiquads:allpass withColor:c withContext:context];
 }
 
 - (void) drawFreqLineForBiquads:(NSArray<BiquadLL *> *)biquads withColor:(UIColor *)color withContext:(CGContextRef)context{
@@ -332,7 +355,7 @@
         if (!b.enabled) continue;
         
         if ((b == [_filters getActiveBiquad]) && (!_filters.activeNullLP) && (!_filters.activeNullHP)){
-            CGContextSetStrokeColorWithColor(context, [[UIColor redColor] CGColor]);
+            CGContextSetStrokeColorWithColor(context, [[UIColor orangeColor] CGColor]);
             CGContextSetLineWidth(context, 3.0);
         } else {
             CGContextSetStrokeColorWithColor(context, [color CGColor]);
@@ -360,7 +383,7 @@
     
     if (![_filters getLowpass]) {
         if (_filters.activeNullLP) {
-            CGContextSetFillColorWithColor(context, [[UIColor redColor] CGColor]);
+            CGContextSetFillColorWithColor(context, [[UIColor orangeColor] CGColor]);
         } else {
             CGContextSetFillColorWithColor(context, [[UIColor brownColor] CGColor]);
         }
@@ -376,7 +399,7 @@
     }
     if (![_filters getHighpass]) {
         if (_filters.activeNullHP) {
-            CGContextSetFillColorWithColor(context, [[UIColor redColor] CGColor]);
+            CGContextSetFillColorWithColor(context, [[UIColor orangeColor] CGColor]);
         } else {
             CGContextSetFillColorWithColor(context, [[UIColor brownColor] CGColor]);
         }
