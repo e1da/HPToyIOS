@@ -18,10 +18,41 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <sections>
+                            <tableViewSection headerTitle="AUDIO SOURCE" id="Lx0-T0-WnI">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="jQo-a0-1cq">
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jQo-a0-1cq" id="Bel-0d-BLO">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="j0Z-Rx-Gig">
+                                                    <rect key="frame" x="16" y="16" width="343" height="29"/>
+                                                    <segments>
+                                                        <segment title="USB"/>
+                                                        <segment title="AUX"/>
+                                                        <segment title="AUTO"/>
+                                                    </segments>
+                                                    <connections>
+                                                        <action selector="changeAudioSource:" destination="pGg-6v-bdr" eventType="valueChanged" id="iBe-76-5WY"/>
+                                                    </connections>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="j0Z-Rx-Gig" firstAttribute="leading" secondItem="Bel-0d-BLO" secondAttribute="leadingMargin" id="S9I-pb-lh7"/>
+                                                <constraint firstItem="j0Z-Rx-Gig" firstAttribute="centerY" secondItem="Bel-0d-BLO" secondAttribute="centerYWithinMargins" id="kvQ-Kh-w9v"/>
+                                                <constraint firstItem="j0Z-Rx-Gig" firstAttribute="trailing" secondItem="Bel-0d-BLO" secondAttribute="trailingMargin" id="rXt-4S-IRO"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                             <tableViewSection headerTitle="VOLUME CONTROL" id="8wx-wx-P3M">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="DpU-7E-ML1">
-                                        <rect key="frame" x="0.0" y="55.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="163.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DpU-7E-ML1" id="KPb-CW-Pgy">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
@@ -47,7 +78,7 @@
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="FFD-0S-D0O">
-                                        <rect key="frame" x="0.0" y="115.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="223.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FFD-0S-D0O" id="QCL-u8-tpc">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
@@ -73,7 +104,7 @@
                             <tableViewSection headerTitle="BASS TREBLE CONTROL" id="2yC-Es-Ui6">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="Exk-zl-jm9">
-                                        <rect key="frame" x="0.0" y="223.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="331.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Exk-zl-jm9" id="ced-Tc-1dF">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
@@ -99,7 +130,7 @@
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="Trf-7A-bij">
-                                        <rect key="frame" x="0.0" y="283.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="391.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Trf-7A-bij" id="7Sc-Fd-UK2">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
@@ -121,7 +152,7 @@
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="26O-VP-Yiz">
-                                        <rect key="frame" x="0.0" y="343.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="451.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="26O-VP-Yiz" id="Dsg-vL-Tae">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
@@ -147,7 +178,7 @@
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="kYT-n6-vgj">
-                                        <rect key="frame" x="0.0" y="403.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="511.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kYT-n6-vgj" id="Ore-xr-yL6">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
@@ -173,7 +204,7 @@
                             <tableViewSection headerTitle="LOUDNESS CONTROL" id="bSU-qm-dLW">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="YhX-q1-98V">
-                                        <rect key="frame" x="0.0" y="511.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="619.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YhX-q1-98V" id="Qi6-0Q-vbl">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
@@ -199,7 +230,7 @@
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="xk4-zi-IVV">
-                                        <rect key="frame" x="0.0" y="571.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="679.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xk4-zi-IVV" id="0Mt-xP-RNf">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
@@ -221,7 +252,7 @@
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="j6d-Km-GvX">
-                                        <rect key="frame" x="0.0" y="631.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="739.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="j6d-Km-GvX" id="j9a-kC-3vr">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
@@ -247,7 +278,7 @@
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="G6N-Y3-YWR">
-                                        <rect key="frame" x="0.0" y="691.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="799.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="G6N-Y3-YWR" id="V6t-wR-vEy">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
@@ -273,7 +304,7 @@
                             <tableViewSection headerTitle="FILTERS CONTROL" id="bmV-1a-QgZ">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="Y7e-Bx-80z">
-                                        <rect key="frame" x="0.0" y="799.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="907.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Y7e-Bx-80z" id="8ib-ms-lGX">
                                             <rect key="frame" x="0.0" y="0.0" width="349" height="59.5"/>
@@ -293,7 +324,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="xM3-Di-3x7">
-                                        <rect key="frame" x="0.0" y="859.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="967.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xM3-Di-3x7" id="B7G-0C-wAZ">
                                             <rect key="frame" x="0.0" y="0.0" width="349" height="59.5"/>
@@ -317,7 +348,7 @@
                             <tableViewSection headerTitle="COMPRESSOR CONTROL" id="Y2N-RJ-5of">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="lA4-tK-po0">
-                                        <rect key="frame" x="0.0" y="967.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="1075.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lA4-tK-po0" id="kLf-r1-xTr">
                                             <rect key="frame" x="0.0" y="0.0" width="349" height="59.5"/>
@@ -341,7 +372,7 @@
                             <tableViewSection id="c8l-Fk-pq5">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="MSg-a2-KQz">
-                                        <rect key="frame" x="0.0" y="1057.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="1165.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MSg-a2-KQz" id="hxc-gn-AFH">
                                             <rect key="frame" x="0.0" y="0.0" width="349" height="59.5"/>
@@ -377,6 +408,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="audioSourceSegment_outl" destination="j0Z-Rx-Gig" id="6is-zp-w15"/>
                         <outlet property="bassLabel_outl" destination="lHO-bK-6rE" id="H3a-rk-g6u"/>
                         <outlet property="bassSlider_outl" destination="6b9-Kz-Xq6" id="y9p-xX-rOV"/>
                         <outlet property="gainLabel_outl" destination="hoJ-Di-7b4" id="QTm-hZ-O2H"/>
@@ -862,37 +894,6 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="AUDIO SOURCE" id="Lx0-T0-WnI">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="jQo-a0-1cq">
-                                        <rect key="frame" x="0.0" y="443" width="375" height="60"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jQo-a0-1cq" id="Bel-0d-BLO">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="j0Z-Rx-Gig">
-                                                    <rect key="frame" x="16" y="16" width="343" height="29"/>
-                                                    <segments>
-                                                        <segment title="USB"/>
-                                                        <segment title="AUX"/>
-                                                        <segment title="AUTO"/>
-                                                    </segments>
-                                                    <connections>
-                                                        <action selector="changeAudioSource:" destination="Sm8-0F-sj5" eventType="valueChanged" id="7KY-Y5-rCZ"/>
-                                                    </connections>
-                                                </segmentedControl>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="j0Z-Rx-Gig" firstAttribute="leading" secondItem="Bel-0d-BLO" secondAttribute="leadingMargin" id="S9I-pb-lh7"/>
-                                                <constraint firstItem="j0Z-Rx-Gig" firstAttribute="centerY" secondItem="Bel-0d-BLO" secondAttribute="centerYWithinMargins" id="kvQ-Kh-w9v"/>
-                                                <constraint firstItem="j0Z-Rx-Gig" firstAttribute="trailing" secondItem="Bel-0d-BLO" secondAttribute="trailingMargin" id="rXt-4S-IRO"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="Sm8-0F-sj5" id="GzY-xI-Ylk"/>
@@ -904,7 +905,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="UUIDLabel_outl" destination="QBP-P6-jnA" id="OxM-s6-SHa"/>
-                        <outlet property="audioSourceSegment_outl" destination="j0Z-Rx-Gig" id="GSw-qX-jfw"/>
                         <outlet property="nameLabel_outl" destination="1yK-jZ-GpR" id="S5D-Sh-xOi"/>
                     </connections>
                 </tableViewController>

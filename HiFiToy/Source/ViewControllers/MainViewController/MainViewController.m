@@ -74,6 +74,7 @@
 }
 
 - (void) setupOutlets{
+    _audioSourceSegment_outl.selectedSegmentIndex = hiFiToyControl.audioSource;
     self.volumeTitle_outl.textColor = [UIColor blackColor];
     self.gainLabel_outl.textColor = [UIColor blackColor];
     self.gainLabel_outl.text = [hiFiToyPreset.masterVolume getInfo];
@@ -98,25 +99,28 @@
     
     switch (section){
         case 0:
-            tittleSection = @"VOLUME CONTROL";
+            tittleSection = @"AUDIO SOURCE";
             break;
         case 1:
+            tittleSection = @"VOLUME CONTROL";
+            break;
+        case 2:
             tittleSection = @"BASS TREBLE CONTROL";
             buttonVisibleFlag = YES;
             break;
-        case 2:
+        case 3:
             tittleSection = @"LOUDNESS CONTROL";
             buttonVisibleFlag = YES;
             break;
-        case 3:
+        case 4:
             tittleSection = @"FILTERS CONTROL";
             buttonVisibleFlag = YES;
             break;
-        case 4:
+        case 5:
             tittleSection = @"COMPRESSOR CONTROL";
             buttonVisibleFlag = YES;
             break;
-        case 5:
+        case 6:
             break;
     }
     
@@ -151,18 +155,21 @@
  
     switch (button.tag) {
         case 0://VOLUME
+            msgString = @"Audio source info";
+            break;
+        case 1://VOLUME
             msgString = @"Volume info";
             break;
-        case 1://BASS TREBLE
+        case 2://BASS TREBLE
             msgString = @"Bass and Treble info";
             break;
-        case 2://LOUDNESS
+        case 3://LOUDNESS
             msgString = @"Loudness info";
             break;
-        case 3://FILTERS
+        case 4://FILTERS
             msgString = @"Filters let you fully control up to 7 Biquads: Parametric EQs, LPF and HPF, both are Butterworth 2 or 4 order. PEQ On/Off button bypassing PEQ's";
             break;
-        case 4://DRC
+        case 5://DRC
             msgString = @"Compressor info";
             break;
         default:
@@ -212,6 +219,10 @@
 /*-----------------------------------------------------------------------------------------
  Events from outlet
  -----------------------------------------------------------------------------------------*/
+- (IBAction)changeAudioSource:(id)sender {
+    hiFiToyControl.audioSource = self.audioSourceSegment_outl.selectedSegmentIndex;
+}
+
 - (IBAction)setGainSlider:(id)sender
 {
     [hiFiToyPreset.masterVolume setDbPercent:self.gainSlider_outl.value];

@@ -243,28 +243,47 @@
 
 }
 
-
-- (void) drawAfr:(CGContextRef)context withPoints:(NSMutableData *)points {
+- (void) drawAfr:(CGContextRef)context withPoints:(NSMutableData *)points withComplement:(FillViewComplement_t) complement {
     if ((!points) || (points.length < 2 * sizeof(CGPoint)) ) return;
     
     unsigned long size = points.length / sizeof(CGPoint);
     CGPoint * p = (CGPoint *)points.bytes;
     
     CGPoint firstPoint = p[0];
-    firstPoint.y = [self dbToPixel:-30];
+    firstPoint.y = [self dbToPixel:0];
     CGPoint lastPoint = p[size - 1];
-    lastPoint.y = [self dbToPixel:-30];
+    lastPoint.y = [self dbToPixel:0];
     
     [points appendBytes:&lastPoint length:sizeof(CGPoint)];
     [points appendBytes:&firstPoint length:sizeof(CGPoint)];
+    //update p pointer after append new points
+    p = (CGPoint *)points.bytes;
     
     UIColor * c = [UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:0.1];
     CGContextSetFillColorWithColor(context, [c CGColor]);
     
-    CGContextAddLines(context, (CGPoint *)points.bytes, size + 2);
+    CGContextAddLines(context, p, size + 2);
     CGContextDrawPath(context, kCGPathFill);
     
-    CGContextAddLines(context, (CGPoint *)points.bytes, size);
+    if ((complement == LEFT_COMPLEMENT) || (complement == BOTH_COMPLEMENT)) {
+        CGRect rect = CGRectMake([self freqToPixel:self.minFreq], [self dbToPixel:0],
+                                 p[0].x - [self freqToPixel:self.minFreq], [self dbToPixel:-30] - [self dbToPixel:0]);
+        
+        CGContextAddRect(context, rect);
+        CGContextDrawPath(context, kCGPathFill);
+    }
+    if ((complement == RIGHT_COMPLEMENT) || (complement == BOTH_COMPLEMENT)) {
+        CGPoint lP = p[size - 1];
+        CGRect rect = CGRectMake([self freqToPixel:self.maxFreq], [self dbToPixel:0],
+                                 lP.x - [self freqToPixel:self.maxFreq], [self dbToPixel:-30] - [self dbToPixel:0]);
+        
+        CGContextAddRect(context, rect);
+        CGContextDrawPath(context, kCGPathFill);
+    }
+    
+    
+    //draw stroke
+    CGContextAddLines(context, p, size);
     CGContextDrawPath(context, kCGPathStroke);
     
     
@@ -275,7 +294,6 @@
 {
     int highpass_freq_pix = 0;
     int lowpass_freq_pix = 0;
-    BOOL change_color_flag = NO;
     
     CGContextSetLineWidth(context, 2.0);
     
@@ -293,31 +311,27 @@
             lowpass_freq_pix = [self getLowPassBorderPix];
         }
     }
-    
-    double i = border_left;
-    
+
     //get points
     NSMutableData * points = [[NSMutableData alloc] init];
     
-    while (i <= width - border_right){
+    for (int i = border_left; i <= width - border_right; i++) {
         double y = [self.filters getAFR:[self pixelToFreq:i] ];
         
-        if ((i > highpass_freq_pix) && (type == BIQUAD_HIGHPASS) && (!change_color_flag)){
+        if ((i == highpass_freq_pix) && (type == BIQUAD_HIGHPASS)){
             CGPoint p = CGPointMake(i, [ self dbToPixel:(20.0f * log10(y)) ]);
             [points appendBytes:&p length:sizeof(CGPoint)];
-            [self drawAfr:context withPoints:points];
+            [self drawAfr:context withPoints:points withComplement:LEFT_COMPLEMENT];
             points = [[NSMutableData alloc] init];
             
-            change_color_flag = YES;
             CGContextSetStrokeColorWithColor(context, [[UIColor lightGrayColor] CGColor]);
         }
-        if ((i > lowpass_freq_pix) && (type == BIQUAD_LOWPASS) && (!change_color_flag)){
+        if ((i == lowpass_freq_pix) && (type == BIQUAD_LOWPASS)){
             CGPoint p = CGPointMake(i, [ self dbToPixel:(20.0f * log10(y)) ]);
             [points appendBytes:&p length:sizeof(CGPoint)];
-            [self drawAfr:context withPoints:points];
+            [self drawAfr:context withPoints:points withComplement:LEFT_COMPLEMENT];
             points = [[NSMutableData alloc] init];
             
-            change_color_flag = YES;
             CGContextSetStrokeColorWithColor(context, [[UIColor orangeColor] CGColor]);
         }
         
@@ -325,9 +339,16 @@
             CGPoint p = CGPointMake(i, [ self dbToPixel:(20.0f * log10(y)) ]);
             [points appendBytes:&p length:sizeof(CGPoint)];
         }
-        i++;
+        
     }
-    [self drawAfr:context withPoints:points];
+    
+    FillViewComplement_t com;
+    if ( (type == BIQUAD_HIGHPASS) || (type == BIQUAD_LOWPASS) ){
+        com = RIGHT_COMPLEMENT;
+    } else {
+        com = BOTH_COMPLEMENT;
+    }
+    [self drawAfr:context withPoints:points withComplement:com];
     
     [self drawFreqLineForParamFilters:(CGContextRef)context];
     [self drawFreqLineForAllpassFilters:(CGContextRef)context];

@@ -18,6 +18,7 @@
 }
 
 //outlets
+@property (weak, nonatomic) IBOutlet UISegmentedControl *audioSourceSegment_outl;
 @property (weak, nonatomic) IBOutlet UILabel *volumeTitle_outl;
 @property (weak, nonatomic) IBOutlet UILabel *gainLabel_outl;
 @property (weak, nonatomic) IBOutlet UISlider *gainSlider_outl;
@@ -30,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *loudnessGainSlider_outl;
 @property (weak, nonatomic) IBOutlet UILabel *loudnessLabel_outl;
 @property (weak, nonatomic) IBOutlet UISlider *loudnessSlider_outl;
+- (IBAction)changeAudioSource:(id)sender;
 
 //actions
 - (IBAction)setGainSlider:(id)sender;
