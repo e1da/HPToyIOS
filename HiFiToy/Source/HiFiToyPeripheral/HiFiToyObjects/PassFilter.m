@@ -226,7 +226,8 @@
 
 //send to dsp
 - (void) sendWithResponse:(BOOL)response {
-
+    if (!self.biquads) return;
+    
     PassFilterPacket_t packet;
     memset(&packet.addr, 0, sizeof(StereoPassFilterAddr_t));
     

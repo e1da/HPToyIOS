@@ -19,7 +19,6 @@
     
     FilterTypeControl * filterTypeControl;
     UISegmentedControl * typeBiquadSegmentedControl;
-    BiquadValueControl * biquadControl;
     BiquadCoefValueControl * biquadCoefControl;
 }
 
@@ -32,8 +31,6 @@
     
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    //UINavigationItem * topItem = self.navigationController.navigationBar.topItem;
-    //topItem.title = @"";
     
     self.title = @"Filter menu";
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
@@ -47,9 +44,8 @@
 }
 
 - (void)initSubviews {
-    filtersView = [[XOverView alloc] init];
-    //[filtersView setBackgroundColor:[UIColor whiteColor]];
     //configure XOverView
+    filtersView = [[XOverView alloc] init];
     filtersView.maxFreq = 30000;
     filtersView.minFreq = 20;
     
@@ -70,16 +66,11 @@
     [filterTypeControl.nextBtn addTarget:self action:@selector(changeFilter:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:filterTypeControl];
     
-    NSArray * types = [NSArray arrayWithObjects:@"LP", @"HP", @"Param", @"AllPass", @"User", @"Off", nil];
+    NSArray * types = [NSArray arrayWithObjects:@"Gui", @"Text", nil];
     typeBiquadSegmentedControl = [[UISegmentedControl alloc] initWithItems:types];
     [typeBiquadSegmentedControl setTintColor:[UIColor lightGrayColor]];
     [typeBiquadSegmentedControl addTarget:self action:@selector(changeTypeFilter:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:typeBiquadSegmentedControl];
-    
-    biquadControl = [[BiquadValueControl alloc] init];
-    biquadControl.delegate = self;
-    biquadControl.filters = self.filters;
-    [self.view addSubview:biquadControl];
     
     biquadCoefControl = [[BiquadCoefValueControl alloc] init];
     biquadCoefControl.delegate = self;
@@ -93,13 +84,23 @@
     
     BiquadLL * b = [_filters getActiveBiquad];
     
-    [biquadControl update];
     [biquadCoefControl update];
     
-    [typeBiquadSegmentedControl setEnabled:(![_filters isLowpassFull]) forSegmentAtIndex:0];
-    [typeBiquadSegmentedControl setEnabled:(![_filters isHighpassFull]) forSegmentAtIndex:1];
+    filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"BIQUAD #%d", _filters.activeBiquadIndex + 1];
+    filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
     
-    if (b.type == BIQUAD_HIGHPASS) {
+    if (b.type == BIQUAD_USER) {
+        typeBiquadSegmentedControl.selectedSegmentIndex = 1;
+        biquadCoefControl.hidden = NO;
+        
+    } else {
+        typeBiquadSegmentedControl.selectedSegmentIndex = 0;
+        biquadCoefControl.hidden = YES;
+    }
+    //[typeBiquadSegmentedControl setEnabled:(![_filters isLowpassFull]) forSegmentAtIndex:0];
+    //[typeBiquadSegmentedControl setEnabled:(![_filters isHighpassFull]) forSegmentAtIndex:1];
+    
+    /*if (b.type == BIQUAD_HIGHPASS) {
         PassFilter * p = [_filters getHighpass];
        
         int dbOnOctave[4] = {0, 12, 24, 48};// db/oct
@@ -107,8 +108,6 @@
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 1;
         
-        biquadControl.showOnlyFreq = YES;
-        biquadControl.hidden = NO;
         biquadCoefControl.hidden = YES;
         
     } else if (b.type == BIQUAD_LOWPASS) {
@@ -119,8 +118,6 @@
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 0;
         
-        biquadControl.showOnlyFreq = YES;
-        biquadControl.hidden = NO;
         biquadCoefControl.hidden = YES;
         
     } else if (b.type == BIQUAD_PARAMETRIC){
@@ -129,8 +126,6 @@
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 2;
         
-        biquadControl.showOnlyFreq = NO;
-        biquadControl.hidden = NO;
         biquadCoefControl.hidden = YES;
         
     } else if (b.type == BIQUAD_ALLPASS) {
@@ -139,8 +134,6 @@
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 3;
         
-        biquadControl.showOnlyFreq = YES;
-        biquadControl.hidden = NO;
         biquadCoefControl.hidden = YES;
         
     } else if (b.type == BIQUAD_USER){ // off biquad
@@ -148,8 +141,7 @@
         filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"USER BIQUAD #%d", _filters.activeBiquadIndex];
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 4;
-        
-        biquadControl.hidden = YES;
+
         biquadCoefControl.hidden = NO;
         
     } else {
@@ -157,9 +149,8 @@
         filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
         typeBiquadSegmentedControl.selectedSegmentIndex = 5;
         
-        biquadControl.hidden = YES;
         biquadCoefControl.hidden = YES;
-    }
+    }*/
     
     [filtersView setNeedsDisplay];
 }
@@ -190,10 +181,9 @@
     
     [filterTypeControl setFrame:CGRectMake(0, top + 0.4 * height, width, 0.1 * height)];
     
-    [typeBiquadSegmentedControl setFrame:CGRectMake(0.1 * width, top + 0.52 * height,
-                                                    0.8 * width, 0.1 * height)];
+    [typeBiquadSegmentedControl setFrame:CGRectMake(0.3 * width, top + 0.52 * height,
+                                                    0.4 * width, 0.1 * height)];
     
-    biquadControl.frame = CGRectMake(0, top + 0.65 * height, width, 0.3 * height);
     biquadCoefControl.frame = CGRectMake(0.1 * width, top + 0.65 * height, 0.8 * width, 0.3 * height);
 }
 
@@ -204,7 +194,6 @@
     
     filterTypeControl.hidden = YES;
     typeBiquadSegmentedControl.hidden = YES;
-    biquadControl.hidden = YES;
     biquadCoefControl.hidden = YES;
     
     [filtersView setFrame:CGRectMake(0, top, width, height)];
@@ -215,10 +204,12 @@
 - (void) changeFilter:(UIButton *)btn {
     
     if ([btn.titleLabel.text isEqualToString:@"\u2329"]) { // press prev button
-        [_filters prevActiveBiquadIndex];
+        //[_filters prevActiveBiquadIndex];
+        [_filters decActiveBiquadIndex];
         [self updateSubviews];
     } else if ([btn.titleLabel.text isEqualToString:@"\u232A"]) { // press next button
-        [_filters nextActiveBiquadIndex];
+        //[_filters nextActiveBiquadIndex];
+        [_filters incActiveBiquadIndex];
         [self updateSubviews];
     }
 }
@@ -230,6 +221,37 @@
     BiquadType_t prevType = b.type;
     
     switch (segmentControl.selectedSegmentIndex) {
+        case 0: //gui
+        {
+            if (prevType != BIQUAD_USER) return;
+            
+            b.enabled = [_filters isPEQEnabled];
+            b.order = BIQUAD_ORDER_2;
+            b.type = BIQUAD_PARAMETRIC;
+            
+            if (prevType != BIQUAD_ALLPASS) {
+                int freq = [_filters getBetterNewFreq];
+                b.biquadParam.freq = (freq != -1) ? freq : 100;
+            }
+            b.biquadParam.qFac = 1.41f;
+            b.biquadParam.dbVolume = 0.0f;
+            
+            [b sendWithResponse:YES];
+            break;
+        }
+        case 1: //text
+        {
+            if (prevType == BIQUAD_USER) return;
+            
+            b.enabled = YES;
+            //b.order = BIQUAD_ORDER_2;
+            b.type = BIQUAD_USER;
+            
+            [b sendWithResponse:YES];
+            break;
+        }
+    }
+    /*switch (segmentControl.selectedSegmentIndex) {
         case 0:
         {
             NSLog(@"LP");
@@ -321,7 +343,7 @@
             
             [b sendWithResponse:YES];
             break;
-    }
+    }*/
     
     if (prevType == BIQUAD_HIGHPASS) {
         PassFilter * pass = [_filters getHighpass];
@@ -367,7 +389,6 @@
 }
 
 - (void) didKeyboardEnter:(NumValueControl *) valControl {
-    [biquadControl updateValueControl:valControl];
     [biquadCoefControl updateCoefValueControl:valControl];
     [self didKeyboardClose];
     

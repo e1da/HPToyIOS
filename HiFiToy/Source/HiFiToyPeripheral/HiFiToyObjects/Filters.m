@@ -190,6 +190,18 @@
     return types;
 }
 
+- (void) incActiveBiquadIndex {
+    if (++_activeBiquadIndex > 6) _activeBiquadIndex = 0;
+}
+
+- (void) decActiveBiquadIndex {
+    if (_activeBiquadIndex == 0) {
+        _activeBiquadIndex = 6;
+    } else {
+        _activeBiquadIndex--;
+    }
+}
+
 - (void) nextActiveBiquadIndex {
     BiquadType_t type = [[self getBiquadAtIndex:_activeBiquadIndex] type];
     BiquadType_t nextType;
@@ -422,6 +434,8 @@
         
         b.biquadParam.qFac = 1.41f;
         b.biquadParam.dbVolume = 0.0f;
+        
+        [b sendWithResponse:YES];
     }
     
     //get lp biquads
