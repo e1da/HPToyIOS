@@ -86,11 +86,14 @@
 }
 
 - (void) setNumValue:(double)numValue {
+    if (*((uint8_t *)&numValue + 7) == 0x80) numValue = 0.0;
+        
     _numValue = numValue;
     
     if (([self isOnlyPositive]) && (self.numValue < 0)) {
         _numValue = 0;
     }
+    
     [self updateValueView];
 }
 

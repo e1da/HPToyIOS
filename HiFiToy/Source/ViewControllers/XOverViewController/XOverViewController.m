@@ -177,7 +177,40 @@
 
 - (IBAction)longPressHandle:(UILongPressGestureRecognizer *)recognizer
 {
-    [self selectActiveFilter:recognizer];
+    static BOOL update = NO;
+    
+    //[self selectActiveFilter:recognizer];
+    if ((_filters.activeNullLP) || (_filters.activeNullLP)) return;
+    
+    CGPoint tap_point = [recognizer locationInView:recognizer.view];
+    BiquadLL * b = [_filters getActiveBiquad];
+    
+    if ((!update) && ([self checkCrossParamFilters:b point_x:tap_point.x])) {
+        if (b.type == BIQUAD_PARAMETRIC) {
+            b.enabled = YES;
+            b.order = BIQUAD_ORDER_1;
+            b.type = BIQUAD_ALLPASS;
+            
+            [b sendWithResponse:YES];
+            update = YES;
+            [self refreshView];
+        } else if ((b.type == BIQUAD_ALLPASS) ) {
+            b.enabled = [_filters isPEQEnabled];
+            b.order = BIQUAD_ORDER_2;
+            b.type = BIQUAD_PARAMETRIC;
+            b.biquadParam.qFac = 1.41f;
+            b.biquadParam.dbVolume = 0.0f;
+            
+            [b sendWithResponse:YES];
+            update = YES;
+            [self refreshView];
+        }
+    }
+    
+    if (recognizer.state == UIGestureRecognizerStateEnded){
+        update = NO;
+    }
+    
 }
 
 //change Freq Order dbVolume
