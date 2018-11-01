@@ -144,9 +144,9 @@
         PassFilter * hp = [_filters getHighpass];
         title = [NSString stringWithFormat:@"HP:%@", [hp getInfo]];
     } else if (b.type == BIQUAD_PARAMETRIC) {
-        title = [NSString stringWithFormat:@"PEQ%d:%@", _filters.activeBiquadIndex, [b getInfo]];
+        title = [NSString stringWithFormat:@"PEQ%d:%@", _filters.activeBiquadIndex + 1, [b getInfo]];
     } else if (b.type == BIQUAD_ALLPASS) {
-        title = [NSString stringWithFormat:@"AP%d:%@", _filters.activeBiquadIndex, [b getInfo]];
+        title = [NSString stringWithFormat:@"APF%d:%@", _filters.activeBiquadIndex + 1, [b getInfo]];
     } else {
         title = @"Filters";
     }

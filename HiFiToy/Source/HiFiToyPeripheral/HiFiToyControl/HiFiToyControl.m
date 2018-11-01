@@ -282,6 +282,10 @@
     memcpy(sendData, &hiFiToyConfig.biquadTypes, 12);
     memcpy(sendData + 12, data.bytes, data.length);
     
+    /*for (int i = 0; i < length; i+=4) {
+        printf("%2.2x %2.2x %2.2x %2.2x ", sendData[i + 0], sendData[i + 1], sendData[i + 2], sendData[i + 3]);
+    }*/
+    
     [self sendWriteFlag:0];
 
     //send data (used ATTACH_PAGE)

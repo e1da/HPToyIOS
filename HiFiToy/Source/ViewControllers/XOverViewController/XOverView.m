@@ -363,7 +363,7 @@
 
 - (void) drawFreqLineForAllpassFilters:(CGContextRef)context {
     NSArray<BiquadLL *> * allpass = [_filters getBiquadsWithType:BIQUAD_ALLPASS];
-    UIColor * c = [UIColor colorWithRed:0.0 green:0.5 blue:0.5 alpha:1.0];
+    UIColor * c = [UIColor colorWithRed:0.2 green:0.5 blue:1.0 alpha:0.5];
     [self drawFreqLineForBiquads:allpass withColor:c withContext:context];
 }
 

@@ -294,12 +294,6 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     }
 }
 
-- (void) setEnabled:(BOOL)enabled {
-    if (_enabled != enabled) {
-        _enabled = enabled;
-        [self sendWithResponse:YES];
-    }
-}
 /* ------------------ math --------------------*/
 - (double) getAFR:(double)freqX {
     if ( (!self.hiddenGui) && (self.enabled) && (self.order == BIQUAD_ORDER_2) ) {

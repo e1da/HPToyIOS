@@ -452,7 +452,12 @@
 
 - (BOOL) isPEQEnabled {
     BOOL result = YES;
-    NSArray<BiquadLL *> * biquads = [self getBiquadsWithType:BIQUAD_PARAMETRIC];
+    
+    NSMutableArray<BiquadLL *> * biquads = [[NSMutableArray alloc] init];
+    [biquads addObjectsFromArray:[self getBiquadsWithType:BIQUAD_PARAMETRIC]];
+    [biquads addObjectsFromArray:[self getBiquadsWithType:BIQUAD_ALLPASS]];
+    
+    if ((!biquads) || (!biquads.count) ) return NO;
     
     for (int i = 0; i < biquads.count; i++) {
         BiquadLL * b = [biquads objectAtIndex:i];
@@ -465,7 +470,10 @@
     if (!result) {
         for (int i = 0; i < biquads.count; i++) {
             BiquadLL * b = [biquads objectAtIndex:i];
-            b.enabled = NO;
+            if (b.enabled) {
+                b.enabled = NO;
+                [b sendWithResponse:YES];
+            }
         }
     }
     return result;
@@ -473,11 +481,17 @@
 
 //set enablend and send to dsp
 - (void) setPEQEnabled:(BOOL)enabled {
-    NSArray<BiquadLL *> * biquads = [self getBiquadsWithType:BIQUAD_PARAMETRIC];
+    //NSArray<BiquadLL *> * biquads = [self getBiquadsWithType:BIQUAD_PARAMETRIC];
+    NSMutableArray<BiquadLL *> * biquads = [[NSMutableArray alloc] init];
+    [biquads addObjectsFromArray:[self getBiquadsWithType:BIQUAD_PARAMETRIC]];
+    [biquads addObjectsFromArray:[self getBiquadsWithType:BIQUAD_ALLPASS]];
  
     for (int i = 0; i < biquads.count; i++) {
         BiquadLL * b = [biquads objectAtIndex:i];
-        b.enabled = enabled;
+        if (b.enabled != enabled) {
+            b.enabled = enabled;
+            [b sendWithResponse:YES];
+        }
     }
     
     BiquadLL * b = [self getBiquadAtIndex:self.activeBiquadIndex];
