@@ -161,16 +161,16 @@
             msgString = @"Volume info";
             break;
         case 2://BASS TREBLE
-            msgString = @"Bass and Treble info";
+            msgString = @"Classical HiFi knobs implemented with shelving filters";
             break;
         case 3://LOUDNESS
-            msgString = @"Loudness info";
+            msgString = @"Fletcher-Munson loudness curves are implemented. You can control the Loudness boost frequency and Dry/Wet slider position defines less/more effect.";
             break;
         case 4://FILTERS
-            msgString = @"Filters let you fully control up to 7 Biquads: Parametric EQs, LPF and HPF, both are Butterworth 2 or 4 order. PEQ On/Off button bypassing PEQ's";
+            msgString = @"Filters let you fully control up to 7 Biquads: Parametric EQs, All-pass Filters, Text biquad mode, LPF and HPF, both are Butterworth 2 or 4 order. PEQ On/Off button bypassing PEQ's and All-pass Filters.";
             break;
         case 5://DRC
-            msgString = @"Compressor info";
+            msgString = @"Flexible Compressor/Expander dynamic range control. Required some basic understanding to modify parameters successfully.";
             break;
         default:
             break;

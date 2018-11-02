@@ -34,4 +34,6 @@
 
 - (void) showEnergySyncDialog:(EnergyConfig_t)energy;
 - (void) showBiquadCoefSyncDialog:(BiquadLL *)biquad;
+
+- (void) showBiquadCoefWarning;
 @end

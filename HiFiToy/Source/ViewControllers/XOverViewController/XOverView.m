@@ -358,16 +358,24 @@
 
 - (void) drawFreqLineForParamFilters:(CGContextRef)context {
     NSArray<BiquadLL *> * params = [_filters getBiquadsWithType:BIQUAD_PARAMETRIC];
-    [self drawFreqLineForBiquads:params withColor:[UIColor brownColor] withContext:context];
+    [self drawFreqLineForBiquads:params
+                       withColor:[UIColor brownColor] withSelectColor:[UIColor orangeColor]
+                     withContext:context];
 }
 
 - (void) drawFreqLineForAllpassFilters:(CGContextRef)context {
     NSArray<BiquadLL *> * allpass = [_filters getBiquadsWithType:BIQUAD_ALLPASS];
     UIColor * c = [UIColor colorWithRed:0.2 green:0.5 blue:1.0 alpha:0.5];
-    [self drawFreqLineForBiquads:allpass withColor:c withContext:context];
+    UIColor * sc = [UIColor colorWithRed:0.2 green:0.5 blue:1.0 alpha:1.0];
+    [self drawFreqLineForBiquads:allpass
+                       withColor:c withSelectColor:sc
+                     withContext:context];
 }
 
-- (void) drawFreqLineForBiquads:(NSArray<BiquadLL *> *)biquads withColor:(UIColor *)color withContext:(CGContextRef)context{
+- (void) drawFreqLineForBiquads:(NSArray<BiquadLL *> *)biquads
+                      withColor:(UIColor *)color
+                withSelectColor:(UIColor *)selColor
+                    withContext:(CGContextRef)context{
     if (!biquads) return;
     
     for (int i = 0; i < biquads.count; i++) {
@@ -376,7 +384,7 @@
         if (!b.enabled) continue;
         
         if ((b == [_filters getActiveBiquad]) && (!_filters.activeNullLP) && (!_filters.activeNullHP)){
-            CGContextSetStrokeColorWithColor(context, [[UIColor orangeColor] CGColor]);
+            CGContextSetStrokeColorWithColor(context, [selColor CGColor]);
             CGContextSetLineWidth(context, 3.0);
         } else {
             CGContextSetStrokeColorWithColor(context, [color CGColor]);

@@ -19,6 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FiltersViewController : UIViewController <NumKeyboardDelegate, BiquadValueControlDelegate, BiquadCoefValueControlDelegate> {
 
+    UITapGestureRecognizer *        tapGesture;
+    UILongPressGestureRecognizer *  longPressGesture;
+    UIPanGestureRecognizer *        panGesture;
+    UIPinchGestureRecognizer *      pinchGesture;
 }
 
 @property Filters * filters;

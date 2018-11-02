@@ -12,14 +12,21 @@
 #import "FilterLabel.h"
 #import "FilterTypeControl.h"
 #import "XOverView.h"
+#import "DialogSystem.h"
 
 
 @interface FiltersViewController () {
+    UIBarButtonItem * peqButton;
     XOverView * filtersView;
     
     FilterTypeControl * filterTypeControl;
     UISegmentedControl * typeBiquadSegmentedControl;
     BiquadCoefValueControl * biquadCoefControl;
+    
+    CGPoint prev_translation;
+    double delta_freq;
+    BOOL xHysteresisFlag;
+    BOOL yHysteresisFlag;
 }
 
 @end
@@ -32,8 +39,8 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    self.title = @"Filter menu";
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
+    [self initGestures];
     [self initSubviews];
     
 }
@@ -44,9 +51,42 @@
     
 }
 
+- (void) initGestures {
+    tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapHandler:)];
+    tapGesture.numberOfTapsRequired = 2;
+    longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressHandler:)];
+    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panHandler:)];
+    pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchHandler:)];
+}
+
+- (void) setEnabledGestures:(BOOL) enabled{
+    tapGesture.enabled = enabled;
+    longPressGesture.enabled = enabled;
+    panGesture.enabled = enabled;
+    pinchGesture.enabled = enabled;
+}
+
 - (void)initSubviews {
+    //init info button
+    UIButton * infoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+    infoButton.frame = CGRectMake(self.view.frame.size.width - 60, 10, 20, 20);
+    [infoButton addTarget:self action:@selector(showInfo:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *infoBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
+    //create peq on/off button
+    peqButton = [[UIBarButtonItem alloc] init];
+    peqButton.target = self;
+    peqButton.action = @selector(setPeqFlag);
+    peqButton.title = ([self.filters isPEQEnabled]) ? @"PEQ On" : @"PEQ Off";
+    
+    //add buttons to bar
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:infoBarButtonItem, peqButton, nil];
+    
     //configure XOverView
     filtersView = [[XOverView alloc] init];
+    [filtersView addGestureRecognizer:tapGesture];
+    [filtersView addGestureRecognizer:longPressGesture];
+    [filtersView addGestureRecognizer:panGesture];
+    [filtersView addGestureRecognizer:pinchGesture];
     filtersView.maxFreq = 30000;
     filtersView.minFreq = 20;
     
@@ -80,16 +120,20 @@
 }
 
 - (void) updateSubviews {
-    _filters.activeNullLP = NO;
-    _filters.activeNullHP = NO;
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if ((orientation == UIInterfaceOrientationPortrait) ||
+        (orientation == UIInterfaceOrientationPortraitUpsideDown)) {
+        _filters.activeNullLP = NO;
+        _filters.activeNullHP = NO;
+    }
     
-    BiquadLL * b = [_filters getActiveBiquad];
-    
+    [self setTitleInfo];
     [biquadCoefControl update];
     
     filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"BIQUAD #%d", _filters.activeBiquadIndex + 1];
     filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
     
+    BiquadLL * b = [_filters getActiveBiquad];
     if (b.type == BIQUAD_USER) {
         typeBiquadSegmentedControl.selectedSegmentIndex = 1;
         biquadCoefControl.hidden = NO;
@@ -98,62 +142,60 @@
         typeBiquadSegmentedControl.selectedSegmentIndex = 0;
         biquadCoefControl.hidden = YES;
     }
-    //[typeBiquadSegmentedControl setEnabled:(![_filters isLowpassFull]) forSegmentAtIndex:0];
-    //[typeBiquadSegmentedControl setEnabled:(![_filters isHighpassFull]) forSegmentAtIndex:1];
-    
-    /*if (b.type == BIQUAD_HIGHPASS) {
-        PassFilter * p = [_filters getHighpass];
-       
-        int dbOnOctave[4] = {0, 12, 24, 48};// db/oct
-        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"HIGHPASS %ddb/oct", dbOnOctave[[p getOrder]]];
-        filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
-        typeBiquadSegmentedControl.selectedSegmentIndex = 1;
-        
-        biquadCoefControl.hidden = YES;
-        
-    } else if (b.type == BIQUAD_LOWPASS) {
-        PassFilter * p = [_filters getLowpass];
-        
-        int dbOnOctave[4] = {0, 12, 24, 48};// db/oct
-        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"LOWPASS %ddb/oct", dbOnOctave[[p getOrder]]];
-        filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
-        typeBiquadSegmentedControl.selectedSegmentIndex = 0;
-        
-        biquadCoefControl.hidden = YES;
-        
-    } else if (b.type == BIQUAD_PARAMETRIC){
-        
-        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"PARAMETRIC #%d", _filters.activeBiquadIndex];
-        filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
-        typeBiquadSegmentedControl.selectedSegmentIndex = 2;
-        
-        biquadCoefControl.hidden = YES;
-        
-    } else if (b.type == BIQUAD_ALLPASS) {
-        
-        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"ALLPASS #%d", _filters.activeBiquadIndex];
-        filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
-        typeBiquadSegmentedControl.selectedSegmentIndex = 3;
-        
-        biquadCoefControl.hidden = YES;
-        
-    } else if (b.type == BIQUAD_USER){ // off biquad
-        
-        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"USER BIQUAD #%d", _filters.activeBiquadIndex];
-        filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
-        typeBiquadSegmentedControl.selectedSegmentIndex = 4;
-
-        biquadCoefControl.hidden = NO;
-        
-    } else {
-        filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"OFF BIQUAD #%d", _filters.activeBiquadIndex];
-        filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
-        typeBiquadSegmentedControl.selectedSegmentIndex = 5;
-        
-        biquadCoefControl.hidden = YES;
-    }*/
     
     [filtersView setNeedsDisplay];
+}
+
+- (void) showInfo:(UIButton *)button
+{
+    NSString * msgString;
+    
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if ((orientation == UIInterfaceOrientationPortrait) ||
+        (orientation == UIInterfaceOrientationPortraitUpsideDown)) {
+        
+        msgString = @"Info for portrait orientation";
+    } else {
+        msgString = @"To select the filter, please double tap on it. Horizontal slide changes a frequency, vertical one controls PEQ's gain or LPF/HPF's order. Zoom-in/out to control Q of PEQ. Holding on tap at the selected PEQ turns that into the APF for phase alignment. To get the biquad text entering mode, hold your iPhone upright.";
+    }
+    
+    [[DialogSystem sharedInstance] showAlert:msgString];
+}
+
+- (void) setPeqFlag {
+    
+    BOOL enabled = [self.filters isPEQEnabled];
+    [self.filters setPEQEnabled:!enabled];
+    peqButton.title = ([self.filters isPEQEnabled]) ? @"PEQ On" : @"PEQ Off";
+    
+    [self updateSubviews];
+}
+
+
+- (void) setTitleInfo {
+    
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if ((orientation == UIInterfaceOrientationPortrait) ||
+        (orientation == UIInterfaceOrientationPortraitUpsideDown)) {
+        self.title = @"Filters menu";
+        return;
+    }
+    
+    BiquadLL * b = [_filters getActiveBiquad];
+    
+    if (b.type == BIQUAD_LOWPASS) {
+        PassFilter * lp = [_filters getLowpass];
+        self.title = [NSString stringWithFormat:@"LP:%@", [lp getInfo]];
+    } else if (b.type == BIQUAD_HIGHPASS) {
+        PassFilter * hp = [_filters getHighpass];
+        self.title = [NSString stringWithFormat:@"HP:%@", [hp getInfo]];
+    } else if (b.type == BIQUAD_PARAMETRIC) {
+        self.title = [NSString stringWithFormat:@"PEQ%d:%@", _filters.activeBiquadIndex + 1, [b getInfo]];
+    } else if (b.type == BIQUAD_ALLPASS) {
+        self.title = [NSString stringWithFormat:@"APF%d:%@", _filters.activeBiquadIndex + 1, [b getInfo]];
+    } else {
+        self.title = @"Filters menu";
+    }
 }
 
 - (void) viewWillLayoutSubviews {
@@ -162,8 +204,10 @@
         (orientation== UIInterfaceOrientationLandscapeRight)) {
         
         [self viewWillLayoutSubviewsLandscape];
+        [self setEnabledGestures:YES];
     } else {
         [self viewWillLayoutSubviewsPortrait];
+        [self setEnabledGestures:NO];
         
     }
     
@@ -196,6 +240,7 @@
     filterTypeControl.hidden = YES;
     typeBiquadSegmentedControl.hidden = YES;
     biquadCoefControl.hidden = YES;
+    [self updateSubviews];
     
     [filtersView setFrame:CGRectMake(0, top, width, height)];
     [filtersView setNeedsDisplay];
@@ -244,6 +289,8 @@
         {
             if (prevType == BIQUAD_USER) return;
             
+            [[DialogSystem sharedInstance] showBiquadCoefWarning];
+            
             b.enabled = YES;
             //b.order = BIQUAD_ORDER_2;
             b.type = BIQUAD_USER;
@@ -252,100 +299,7 @@
             break;
         }
     }
-    /*switch (segmentControl.selectedSegmentIndex) {
-        case 0:
-        {
-            NSLog(@"LP");
-            
-            if ([_filters isLowpassFull]) break;
-            
-            PassFilter * lp = [_filters getLowpass];
-            int freq = (lp) ? lp.Freq : 20000;
-                
-            b.enabled = YES;
-            b.order = BIQUAD_ORDER_2;
-            b.type = BIQUAD_LOWPASS;
-            b.biquadParam.freq = freq;
-                
-            lp = [_filters getLowpass];
-            [lp sendWithResponse:YES];
-            
-            break;
-        }
-        case 1:
-        {
-            NSLog(@"HP");
-            
-            if ([_filters isHighpassFull]) break;
-            
-            PassFilter * hp = [_filters getHighpass];
-            int freq = (hp) ? hp.Freq : 20;
-            
-            b.enabled = YES;
-            b.order = BIQUAD_ORDER_2;
-            b.type = BIQUAD_HIGHPASS;
-            b.biquadParam.freq = freq;
-            
-            hp = [_filters getHighpass];
-            [hp sendWithResponse:YES];
-            
-            break;
-        }
-        case 2:
-            NSLog(@"PEQ");
- 
-            b.enabled = [_filters isPEQEnabled];
-            b.order = BIQUAD_ORDER_2;
-            b.type = BIQUAD_PARAMETRIC;
-            
-            if (prevType != BIQUAD_ALLPASS) {
-                int freq = [_filters getBetterNewFreq];
-                b.biquadParam.freq = (freq != -1) ? freq : 100;
-            }
-            b.biquadParam.qFac = 1.41f;
-            b.biquadParam.dbVolume = 0.0f;
-            
-            [b sendWithResponse:YES];
-            break;
-            
-        case 3:
-            NSLog(@"AP");
-            
-            b.enabled = YES;
-            b.order = BIQUAD_ORDER_1;
-            b.type = BIQUAD_ALLPASS;
-            
-            if (prevType != BIQUAD_PARAMETRIC) {
-                int freq = [_filters getBetterNewFreq];
-                b.biquadParam.freq = (freq != -1) ? freq : 100;
-                b.biquadParam.qFac = 1.41f;
-            }
-            b.biquadParam.dbVolume = 0.0f;
-            
-            [b sendWithResponse:YES];
-            break;
-            
-        case 4:
-            NSLog(@"USER");
-
-            b.enabled = YES;
-            //b.order = BIQUAD_ORDER_2;
-            b.type = BIQUAD_USER;
-            
-            [b sendWithResponse:YES];
-            break;
-            
-        case 5:
-            NSLog(@"OFF");
-            
-            b.enabled = YES;
-            b.order = BIQUAD_ORDER_2;
-            b.type = BIQUAD_OFF;
-            
-            [b sendWithResponse:YES];
-            break;
-    }*/
-    
+  
     if (prevType == BIQUAD_HIGHPASS) {
         PassFilter * pass = [_filters getHighpass];
         if (pass) [pass sendWithResponse:YES];
@@ -407,5 +361,280 @@
     }
     [self updateSubviews];
 }
+
+//gesture handlers
+- (void) doubleTapHandler:(UITapGestureRecognizer *)recognizer {
+    [self selectActiveFilter:recognizer];
+}
+
+- (void) longPressHandler:(UILongPressGestureRecognizer *)recognizer {
+    static BOOL update = NO;
+    
+    if ((_filters.activeNullLP) || (_filters.activeNullLP)) return;
+    
+    CGPoint tap_point = [recognizer locationInView:recognizer.view];
+    BiquadLL * b = [_filters getActiveBiquad];
+    
+    if ((!update) && ([self checkCrossParamFilters:b point_x:tap_point.x])) {
+        if (b.type == BIQUAD_PARAMETRIC) {
+            b.enabled = YES;
+            b.order = BIQUAD_ORDER_1;
+            b.type = BIQUAD_ALLPASS;
+            
+            [b sendWithResponse:YES];
+            update = YES;
+            [self updateSubviews];
+        } else if ((b.type == BIQUAD_ALLPASS) ) {
+            b.enabled = [_filters isPEQEnabled];
+            b.order = BIQUAD_ORDER_2;
+            b.type = BIQUAD_PARAMETRIC;
+            b.biquadParam.qFac = 1.41f;
+            b.biquadParam.dbVolume = 0.0f;
+            
+            [b sendWithResponse:YES];
+            update = YES;
+            [self updateSubviews];
+        }
+    }
+    
+    if (recognizer.state == UIGestureRecognizerStateEnded){
+        update = NO;
+    }
+}
+
+- (void) panHandler:(UIPanGestureRecognizer *)recognizer {
+    CGPoint translation = [recognizer translationInView:recognizer.view];
+    
+    if (recognizer.state == UIGestureRecognizerStateBegan){
+        prev_translation = translation;
+        
+        xHysteresisFlag = NO;
+        yHysteresisFlag = NO;
+        delta_freq = 0;
+    }
+    
+    
+    if (_filters.activeNullLP) {
+        float dy = translation.y -  prev_translation.y;
+        
+        if (dy > 100 ){
+            [_filters upOrderFor:BIQUAD_LOWPASS]; // increment order
+            prev_translation.y = translation.y;
+        }
+        
+    } else if (_filters.activeNullHP) {
+        float dy = translation.y -  prev_translation.y;
+        
+        if (dy > 100 ){
+            [_filters upOrderFor:BIQUAD_HIGHPASS]; // increment order
+            prev_translation.y = translation.y;
+        }
+        
+    } else {
+        [self moved:[_filters getActiveBiquad]  translation:translation];
+        
+    }
+    
+    //display refresh
+    [self updateSubviews];
+}
+
+- (void) pinchHandler:(UIPinchGestureRecognizer *)recognizer {
+    static double lastScaleFactor;
+    
+    if (recognizer.state == UIGestureRecognizerStateBegan){
+        lastScaleFactor = 1.0f;
+    }
+    
+    double currentScaleFactor = recognizer.scale / lastScaleFactor;
+    lastScaleFactor = recognizer.scale;
+    
+    BiquadLL * b = [_filters getActiveBiquad];
+    if (b.type != BIQUAD_PARAMETRIC) return;
+    
+    BiquadParam * p = b.biquadParam;
+    
+    p.qFac /= currentScaleFactor;
+    
+    //send to dsp cc2540
+    [b sendWithResponse:NO];
+    
+    //display refresh
+    [self updateSubviews];
+}
+
+- (void ) selectActiveFilter:(UIGestureRecognizer *)recognizer
+{
+    CGPoint tap_point = [recognizer locationInView:recognizer.view];
+    
+    int tempIndex = _filters.activeBiquadIndex;
+    
+    if (![self.filters getLowpass]) {
+        CGPoint p = CGPointMake([filtersView freqToPixel:filtersView.maxFreq],
+                                [filtersView dbToPixel:[self.filters getAFR:filtersView.maxFreq]]);
+        
+        //check cross
+        if ( (abs((int)(p.x - tap_point.x)) < 30) && (abs((int)(p.y - tap_point.y)) < 30) ) {
+            self.filters.activeNullLP = YES;
+            [self updateSubviews];
+            return;
+        } else {
+            self.filters.activeNullLP = NO;
+        }
+    }
+    if (![self.filters getHighpass]) {
+        CGPoint tap_point = [recognizer locationInView:recognizer.view];
+        CGPoint p = CGPointMake([filtersView freqToPixel:filtersView.minFreq],
+                                [filtersView dbToPixel:[self.filters getAFR:filtersView.minFreq]]);
+        
+        //check cross
+        if ( (abs((int)(p.x - tap_point.x)) < 30) && (abs((int)(p.y - tap_point.y)) < 30) ) {
+            self.filters.activeNullHP = YES;
+            [self updateSubviews];
+            return;
+        } else {
+            self.filters.activeNullHP = NO;
+        }
+    }
+    
+    
+    for (int u = 0; u < [_filters getBiquadLength]; u++){
+        [_filters nextActiveBiquadIndex];
+        
+        BiquadLL * b = [_filters getActiveBiquad];
+        
+        if ((b.type != BIQUAD_LOWPASS) && (b.type != BIQUAD_HIGHPASS) && (b.type != BIQUAD_PARAMETRIC) && (b.type != BIQUAD_ALLPASS)) {
+            continue;
+        }
+        
+        if ([self checkCross:b tap_point:tap_point]){
+            [self updateSubviews];
+            return;
+        }
+    }
+    _filters.activeBiquadIndex = tempIndex;
+}
+
+- (void) moved:(BiquadLL *)biquad translation:(CGPoint)translation {
+    BiquadParam * bParam = biquad.biquadParam;
+    if (( biquad.type == BIQUAD_OFF) || (( biquad.type == BIQUAD_USER))) return;
+    
+    float dx = (translation.x -  prev_translation.x) / 2;
+    float dy = translation.y -  prev_translation.y;
+    
+    //update freq
+    if (((fabs(translation.x) > [filtersView getWidth] * 0.05) || (xHysteresisFlag)) && (!yHysteresisFlag)) {
+        xHysteresisFlag = YES;
+        
+        double t;
+        delta_freq = modf(delta_freq, &t);//get fraction part
+        
+        double freqPix = [filtersView freqToPixel:biquad.biquadParam.freq];
+        delta_freq += [filtersView pixelToFreq:(freqPix + dx)] -  bParam.freq;
+        
+        //NSLog(@"dx=%f delta=%f", dx, delta_freq);
+        
+        if (fabs(delta_freq) >= 1.0) {
+            if (( biquad.type == BIQUAD_HIGHPASS) || ( biquad.type == BIQUAD_LOWPASS)) {
+                PassFilter * f = ( biquad.type == BIQUAD_LOWPASS) ? [_filters getLowpass] : [_filters getHighpass];
+                
+                int newFreq = [f Freq] + delta_freq;
+                [f setFreq:newFreq];
+                //ble send
+                [f sendWithResponse:NO];
+                
+            } else {//parametric allpass
+                bParam.freq += delta_freq;
+                //ble send
+                [biquad sendWithResponse:NO];
+            }
+        }
+        
+    }
+    prev_translation.x = translation.x;
+    
+    
+    if ((biquad.type == BIQUAD_HIGHPASS) || (biquad.type == BIQUAD_LOWPASS))  {
+        
+        if (!xHysteresisFlag) {
+            
+            if (dy < -100 ){
+                [_filters downOrderFor: biquad.type]; // decrement order
+                
+                yHysteresisFlag = YES;
+                prev_translation.y = translation.y;
+                
+            } else if (dy > 100 ){
+                [_filters upOrderFor: biquad.type]; // increment order
+                
+                yHysteresisFlag = YES;
+                prev_translation.y = translation.y;
+            }
+            
+        }
+    } else if (biquad.type == BIQUAD_PARAMETRIC) {
+        
+        if (((fabs(translation.y) > [filtersView getHeight] * 0.1) || (yHysteresisFlag)) && (!xHysteresisFlag)){
+            yHysteresisFlag = YES;
+            
+            float newVolInPix = [filtersView dbToPixel:bParam.dbVolume] + dy / 4.0f;
+            bParam.dbVolume = [filtersView pixelToDb:newVolInPix];
+            //ble send
+            [biquad sendWithResponse:NO];
+            
+        }
+        prev_translation.y = translation.y;
+    }
+}
+
+/* ----------------------- check cross Filters's freq ------------------------------*/
+- (BOOL) checkCrossParamFilters:(BiquadLL *)biquad
+                        point_x: (float)point_x {
+    if (abs((int)(point_x - [filtersView freqToPixel:biquad.biquadParam.freq])) < 15){
+        return YES;
+        
+    }
+    return NO;
+}
+
+- (BOOL) checkCrossPassFilters:(int)start_x
+                         end_x:(int)end_x
+                     tap_point:(CGPoint)tap_point {
+    BOOL result = NO;
+    
+    for (int i = start_x; i < end_x; i++){
+        double y = [self.filters getAFR:[filtersView pixelToFreq:i]];
+        
+        if (sqrt(pow(tap_point.x - i, 2) +
+                 pow(tap_point.y - [filtersView dbToPixel:( 20.0f * log10(y) )], 2)) < 20){
+            result = YES;
+            break;
+        }
+        
+    }
+    
+    return result;
+}
+
+- (BOOL) checkCross:(BiquadLL *)biquad tap_point:(CGPoint)tap_point {
+    
+    if (biquad.type == BIQUAD_HIGHPASS) {
+        int start_x = [filtersView freqToPixel:filtersView.minFreq];
+        int end_x = [filtersView getHighPassBorderPix];
+        return [self checkCrossPassFilters:start_x end_x:end_x tap_point:tap_point];
+        
+    } else if (biquad.type == BIQUAD_LOWPASS) {
+        
+        int start_x = [filtersView getLowPassBorderPix];
+        int end_x = [filtersView freqToPixel:filtersView.maxFreq];
+        return [self checkCrossPassFilters:start_x end_x:end_x tap_point:tap_point];
+        
+    }
+    
+    //parametric, allpasa
+    return [self checkCrossParamFilters:biquad point_x:tap_point.x];
+}
+
+
 
 @end

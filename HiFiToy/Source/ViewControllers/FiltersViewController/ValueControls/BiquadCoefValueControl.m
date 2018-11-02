@@ -22,9 +22,6 @@
         
         syncButton = [[UIButton alloc] init];
         FilterLabel * f = [[FilterLabel alloc] initWithText:@"BIQUAD SYNC" withFontSize:20];
-        //syncButton.layer.borderWidth = 2.0f;
-        //syncButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        //f.textColor = [UIColor purpleColor];
         [syncButton setAttributedTitle:f.attributedText forState:UIControlStateNormal];
         [syncButton addTarget:self action:@selector(pressSync) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:syncButton];

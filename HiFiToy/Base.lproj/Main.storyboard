@@ -303,34 +303,14 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="FILTERS CONTROL" id="bmV-1a-QgZ">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="Y7e-Bx-80z">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="xM3-Di-3x7">
                                         <rect key="frame" x="0.0" y="907.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Y7e-Bx-80z" id="8ib-ms-lGX">
-                                            <rect key="frame" x="0.0" y="0.0" width="349" height="59.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Filters" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u9N-my-aeg">
-                                                    <rect key="frame" x="20" y="19.5" width="224" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <connections>
-                                            <segue destination="FBZ-tn-Uuz" kind="push" identifier="showXOverMenu" id="CIx-I1-Z8R"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="xM3-Di-3x7">
-                                        <rect key="frame" x="0.0" y="967.5" width="375" height="60"/>
-                                        <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xM3-Di-3x7" id="B7G-0C-wAZ">
-                                            <rect key="frame" x="0.0" y="0.0" width="349" height="59.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="341" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Filters_NewUI" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m4F-UT-qib">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Filters" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m4F-UT-qib">
                                                     <rect key="frame" x="20" y="19.5" width="224" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
@@ -348,7 +328,7 @@
                             <tableViewSection headerTitle="COMPRESSOR CONTROL" id="Y2N-RJ-5of">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="lA4-tK-po0">
-                                        <rect key="frame" x="0.0" y="1075.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="1015.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lA4-tK-po0" id="kLf-r1-xTr">
                                             <rect key="frame" x="0.0" y="0.0" width="349" height="59.5"/>
@@ -372,7 +352,7 @@
                             <tableViewSection id="c8l-Fk-pq5">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="MSg-a2-KQz">
-                                        <rect key="frame" x="0.0" y="1165.5" width="375" height="60"/>
+                                        <rect key="frame" x="0.0" y="1105.5" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MSg-a2-KQz" id="hxc-gn-AFH">
                                             <rect key="frame" x="0.0" y="0.0" width="349" height="59.5"/>
@@ -553,7 +533,7 @@
             </objects>
             <point key="canvasLocation" x="2057.5999999999999" y="1029.9850074962519"/>
         </scene>
-        <!--Energy manager-->
+        <!--Auto Off and Clipping-->
         <scene sceneID="TuG-AP-Kho">
             <objects>
                 <tableViewController id="6kr-dX-XmY" customClass="EnergyViewController" sceneMemberID="viewController">
@@ -672,7 +652,7 @@
                             <outlet property="delegate" destination="6kr-dX-XmY" id="EPb-c8-cSi"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Energy manager" id="Bgv-2o-1Hg">
+                    <navigationItem key="navigationItem" title="Auto Off and Clipping" id="Bgv-2o-1Hg">
                         <barButtonItem key="rightBarButtonItem" title="Sync" id="Fjs-uW-zyn">
                             <connections>
                                 <action selector="syncEnergyConfig:" destination="6kr-dX-XmY" id="bgn-hn-isZ"/>
@@ -879,7 +859,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="341" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Energy manager" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BJ6-FC-BO7">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Auto Off and Clipping" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BJ6-FC-BO7">
                                                     <rect key="frame" x="15" y="18" width="240" height="26"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
@@ -1356,6 +1336,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                     </view>
                     <navigationItem key="navigationItem" id="Qoa-YE-0O2"/>
                 </viewController>
@@ -1459,7 +1440,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="faG-pk-fhu"/>
+        <segue reference="Z6d-f1-hK3"/>
         <segue reference="dBA-2p-FmV"/>
     </inferredMetricsTieBreakers>
 </document>
