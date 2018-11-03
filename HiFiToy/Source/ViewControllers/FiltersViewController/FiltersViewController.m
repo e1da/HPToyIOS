@@ -13,6 +13,7 @@
 #import "FilterTypeControl.h"
 #import "XOverView.h"
 #import "DialogSystem.h"
+#import "CoefWarningController.h"
 
 
 @interface FiltersViewController () {
@@ -49,6 +50,14 @@
     [super viewWillAppear:animated];
     [self updateSubviews];
     
+}
+
+- (BOOL) isCoefWarningEnabled {
+    id flag = [[NSUserDefaults standardUserDefaults] objectForKey:@"BiquadCoefWarningKey"];
+    if (flag) {
+        return ![[NSUserDefaults standardUserDefaults] boolForKey:@"BiquadCoefWarningKey"];
+    }
+    return YES;
 }
 
 - (void) initGestures {
@@ -214,7 +223,7 @@
 }
 
 - (void) viewWillLayoutSubviewsPortrait {
-    int top = self.navigationController.navigationBar.frame.size.height + 20;
+    int top = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
     int width = self.view.frame.size.width;
     int height = self.view.frame.size.height - top;
     
@@ -229,11 +238,12 @@
     [typeBiquadSegmentedControl setFrame:CGRectMake(0.3 * width, top + 0.52 * height,
                                                     0.4 * width, 0.1 * height)];
     
-    biquadCoefControl.frame = CGRectMake(0.1 * width, top + 0.65 * height, 0.8 * width, 0.3 * height);
+    biquadCoefControl.frame = CGRectMake(0.05 * width, top + 0.65 * height, 0.9 * width, 0.3 * height);
 }
 
 - (void) viewWillLayoutSubviewsLandscape {
-    int top = self.navigationController.navigationBar.frame.size.height;
+    int top = self.navigationController.navigationBar.frame.size.height +
+                [UIApplication sharedApplication].statusBarFrame.size.height;
     int width = self.view.frame.size.width;
     int height = self.view.frame.size.height - top;
     
@@ -289,7 +299,9 @@
         {
             if (prevType == BIQUAD_USER) return;
             
-            [[DialogSystem sharedInstance] showBiquadCoefWarning];
+            if ([self isCoefWarningEnabled]) {
+                [self showCoefWarning];
+            }
             
             b.enabled = YES;
             //b.order = BIQUAD_ORDER_2;
@@ -360,6 +372,13 @@
         }
     }
     [self updateSubviews];
+}
+
+- (void) showCoefWarning {
+    CoefWarningController * coefWarningController = [[CoefWarningController alloc] init];
+
+    coefWarningController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    [self presentViewController:coefWarningController animated:YES completion:nil];
 }
 
 //gesture handlers

@@ -79,6 +79,8 @@
 		D39C3CE320BEDD9D00BDC1A0 /* Number88.c in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CE020BEDD9D00BDC1A0 /* Number88.c */; };
 		D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CE120BEDD9D00BDC1A0 /* Number923.c */; };
 		D39F551A215E34070017DF48 /* FiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39F5519215E34070017DF48 /* FiltersViewController.m */; };
+		D3BBD4FB218DC1DD00FFDB86 /* CoefWarningController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3BBD4FA218DC1DD00FFDB86 /* CoefWarningController.m */; };
+		D3BBD4FE218DC20300FFDB86 /* DontShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = D3BBD4FD218DC20300FFDB86 /* DontShowView.m */; };
 		D3E97AB12157F08200C98402 /* EnergyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E97AB02157F08200C98402 /* EnergyViewController.m */; };
 		D3F63295214C172A00340314 /* HiFiToyIcon87.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F63288214C172900340314 /* HiFiToyIcon87.png */; };
 		D3F63296214C172A00340314 /* HiFiToyIcon120.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F63289214C172900340314 /* HiFiToyIcon120.png */; };
@@ -230,6 +232,10 @@
 		D39C3CE120BEDD9D00BDC1A0 /* Number923.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Number923.c; sourceTree = "<group>"; };
 		D39F5518215E34070017DF48 /* FiltersViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FiltersViewController.h; sourceTree = "<group>"; };
 		D39F5519215E34070017DF48 /* FiltersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FiltersViewController.m; sourceTree = "<group>"; };
+		D3BBD4F9218DC1DD00FFDB86 /* CoefWarningController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoefWarningController.h; sourceTree = "<group>"; };
+		D3BBD4FA218DC1DD00FFDB86 /* CoefWarningController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoefWarningController.m; sourceTree = "<group>"; };
+		D3BBD4FC218DC20300FFDB86 /* DontShowView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DontShowView.h; sourceTree = "<group>"; };
+		D3BBD4FD218DC20300FFDB86 /* DontShowView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DontShowView.m; sourceTree = "<group>"; };
 		D3E97AAF2157F08200C98402 /* EnergyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EnergyViewController.h; sourceTree = "<group>"; };
 		D3E97AB02157F08200C98402 /* EnergyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EnergyViewController.m; sourceTree = "<group>"; };
 		D3F63288214C172900340314 /* HiFiToyIcon87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HiFiToyIcon87.png; sourceTree = "<group>"; };
@@ -621,6 +627,7 @@
 		D39F5517215E33D00017DF48 /* FiltersViewController */ = {
 			isa = PBXGroup;
 			children = (
+				D3BBD4F8218DC1DD00FFDB86 /* CoefWarning */,
 				D301F082218213BF00E181C6 /* ValueControls */,
 				D39F5518215E34070017DF48 /* FiltersViewController.h */,
 				D39F5519215E34070017DF48 /* FiltersViewController.m */,
@@ -632,6 +639,17 @@
 				D301F096218353D700E181C6 /* CoefButton.m */,
 			);
 			path = FiltersViewController;
+			sourceTree = "<group>";
+		};
+		D3BBD4F8218DC1DD00FFDB86 /* CoefWarning */ = {
+			isa = PBXGroup;
+			children = (
+				D3BBD4F9218DC1DD00FFDB86 /* CoefWarningController.h */,
+				D3BBD4FA218DC1DD00FFDB86 /* CoefWarningController.m */,
+				D3BBD4FC218DC20300FFDB86 /* DontShowView.h */,
+				D3BBD4FD218DC20300FFDB86 /* DontShowView.m */,
+			);
+			path = CoefWarning;
 			sourceTree = "<group>";
 		};
 		D3E97AAE2157F06500C98402 /* EnergyViewController */ = {
@@ -766,11 +784,13 @@
 				D301F0772172554900E181C6 /* FloatUtility.h in Sources */,
 				D33A258220C952CD008A94EF /* FoundCell.m in Sources */,
 				D33A259820CA93B1008A94EF /* PresetViewController.m in Sources */,
+				D3BBD4FE218DC20300FFDB86 /* DontShowView.m in Sources */,
 				D379126320D111B80089962D /* XOverViewController.m in Sources */,
 				D33A259B20CA9538008A94EF /* PresetCell.m in Sources */,
 				D33A254320C064A9008A94EF /* TAS5558.h in Sources */,
 				D33A253E20BFF674008A94EF /* Number88.h in Sources */,
 				D379127A20D3C55B0089962D /* DrcView.m in Sources */,
+				D3BBD4FB218DC1DD00FFDB86 /* CoefWarningController.m in Sources */,
 				D33A255E20C6AEBB008A94EF /* HiFiToyDeviceList.m in Sources */,
 				D33A253F20BFF674008A94EF /* Number523.h in Sources */,
 				D33A257420C94459008A94EF /* AppDelegate.m in Sources */,
@@ -982,7 +1002,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HC834Q5NUC;
 				INFOPLIST_FILE = HiFiToy/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1000,7 +1020,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HC834Q5NUC;
 				INFOPLIST_FILE = HiFiToy/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

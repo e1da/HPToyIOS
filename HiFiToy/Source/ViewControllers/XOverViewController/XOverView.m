@@ -109,15 +109,24 @@
     height = (int)[self bounds].size.height;
     width = (int)[self bounds].size.width;
     
-    //check iphone x
+    //check iphone x, xr, xs, xs max for landscape orientation
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone ){
         CGSize screenSize = [[UIScreen mainScreen] bounds].size;
         //NSLog(@"%f %f", screenSize.width, screenSize.height);
-        if ((screenSize.width == 812) || (screenSize.height == 812)){
+        if (screenSize.width == 812) { // x, xs
+            border_right = 55;
+            border_left = 55;
+            border_bottom = 40;
+        } else if (screenSize.width == 896) { // xr, xs max
+            border_right = 55;
+            border_left = 55;
+            border_bottom = 40;
+        }
+        /*if ((screenSize.width == 812) || (screenSize.height == 812)){
             border_right = 55;
             border_left = 30;
             border_bottom = 40;
-        }
+        }*/
     }
     
     /*	a_coef*log10(MAX_FREQ)+b_coef = width - border_right
