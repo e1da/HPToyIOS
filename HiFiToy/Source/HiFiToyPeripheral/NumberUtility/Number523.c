@@ -7,6 +7,24 @@
 
 #include "Number523.h"
 
+float getMaxFloatFor523() {
+    float max = 16.0f;
+    uint32_t temp = *((uint32_t *)&max) - 1;
+    return *((float *)&temp);
+}
+
+float getMinFloatFor523() {
+    return -16.0f;
+}
+
+void checkFloatFor523(float * num) {
+    float max = getMaxFloatFor523();
+    float min = getMinFloatFor523();
+    
+    if (*num > max) *num = max;
+    if (*num < min) *num = min;
+}
+
 Number523_t to523(float number){
     return (Number523_t)((float)number * 0x800000);
 }

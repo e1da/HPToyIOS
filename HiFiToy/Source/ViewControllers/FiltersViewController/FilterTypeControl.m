@@ -20,8 +20,9 @@
         self.prevBtn = [self addButtonWithTitle:@"\u2329" withColor:[UIColor whiteColor] withBackColor:[UIColor clearColor]];
         self.nextBtn = [self addButtonWithTitle:@"\u232A" withColor:[UIColor whiteColor] withBackColor:[UIColor clearColor]];
         
-        self.titleLabel = [[FilterLabel alloc] initWithText:@"ERROR" withFontSize:20.0];
-        self.titleLabel.textColor = [UIColor orangeColor];
+        self.titleLabel = [[FilterLabel alloc] initWithText:@"ERROR" withFontSize:16.0];
+        UIColor * c = [UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:0.5];
+        self.titleLabel.textColor = c;//[UIColor orangeColor];
         [self addSubview:self.titleLabel];
     }
     return self;
@@ -33,9 +34,9 @@
     int width = frame.size.width;
     int height = frame.size.height;
     
-    [self.prevBtn setFrame:CGRectMake(   0,              0, 0.2 * width, height)];
-    [self.nextBtn setFrame:CGRectMake(   0.8 * width,    0, 0.2 * width, height)];
-    [self.titleLabel setFrame:CGRectMake(0.2 * width,    0, 0.6 * width, height)];
+    [self.prevBtn setFrame:CGRectMake(   0,              0, 0.25 * width, height)];
+    [self.nextBtn setFrame:CGRectMake(   0.75 * width,    0, 0.25 * width, height)];
+    [self.titleLabel setFrame:CGRectMake(0.25 * width,    0, 0.5 * width, height)];
 }
 
 - (UIButton *) addButtonWithTitle:(NSString *)title

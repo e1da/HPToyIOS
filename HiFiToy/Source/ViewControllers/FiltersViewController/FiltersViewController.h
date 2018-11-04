@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-@interface FiltersViewController : UIViewController <NumKeyboardDelegate, BiquadValueControlDelegate, BiquadCoefValueControlDelegate> {
+@interface FiltersViewController : UIViewController <NumKeyboardDelegate, BiquadCoefValueControlDelegate> {
 
     UITapGestureRecognizer *        tapGesture;
     UILongPressGestureRecognizer *  longPressGesture;

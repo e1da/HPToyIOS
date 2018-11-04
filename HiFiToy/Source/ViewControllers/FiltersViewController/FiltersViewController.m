@@ -19,20 +19,33 @@
 @interface FiltersViewController () {
     UIBarButtonItem * peqButton;
     XOverView * filtersView;
-    
-    FilterTypeControl * filterTypeControl;
-    UISegmentedControl * typeBiquadSegmentedControl;
     BiquadCoefValueControl * biquadCoefControl;
     
     CGPoint prev_translation;
     double delta_freq;
     BOOL xHysteresisFlag;
     BOOL yHysteresisFlag;
+    
+    BOOL showBiquadText;
 }
 
 @end
 
 @implementation FiltersViewController
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskLandscape;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationLandscapeLeft;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -41,13 +54,26 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
+    showBiquadText = NO;
+    
     [self initGestures];
     [self initSubviews];
     
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+    //[super viewWillAppear:animated];
+    UIApplication* application = [UIApplication sharedApplication];
+    if (application.statusBarOrientation != UIInterfaceOrientationLandscapeLeft)
+    {
+        UIViewController *c = [[UIViewController alloc]init];
+        [c.view setBackgroundColor:[UIColor blackColor]];
+        [self.navigationController presentViewController:c animated:NO completion:^{
+            [self.navigationController dismissViewControllerAnimated:YES completion:^{
+            }];
+        }];
+    }
+    
     [self updateSubviews];
     
 }
@@ -81,14 +107,21 @@
     infoButton.frame = CGRectMake(self.view.frame.size.width - 60, 10, 20, 20);
     [infoButton addTarget:self action:@selector(showInfo:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *infoBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
+    
     //create peq on/off button
     peqButton = [[UIBarButtonItem alloc] init];
     peqButton.target = self;
     peqButton.action = @selector(setPeqFlag);
     peqButton.title = ([self.filters isPEQEnabled]) ? @"PEQ On" : @"PEQ Off";
     
+    //init info button
+    UIBarButtonItem * showTextButton = [[UIBarButtonItem alloc] init];
+    showTextButton.target = self;
+    showTextButton.action = @selector(setShowTextBiquad);
+    showTextButton.title = @"       \u232A";
+    
     //add buttons to bar
-    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:infoBarButtonItem, peqButton, nil];
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:showTextButton, infoBarButtonItem, peqButton, nil];
     
     //configure XOverView
     filtersView = [[XOverView alloc] init];
@@ -110,17 +143,6 @@
     filtersView.filters = self.filters;
     
     [self.view addSubview:filtersView];
-
-    filterTypeControl = [[FilterTypeControl alloc] init];
-    [filterTypeControl.prevBtn addTarget:self action:@selector(changeFilter:) forControlEvents:UIControlEventTouchUpInside];
-    [filterTypeControl.nextBtn addTarget:self action:@selector(changeFilter:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:filterTypeControl];
-    
-    NSArray * types = [NSArray arrayWithObjects:@"Gui", @"Text", nil];
-    typeBiquadSegmentedControl = [[UISegmentedControl alloc] initWithItems:types];
-    [typeBiquadSegmentedControl setTintColor:[UIColor lightGrayColor]];
-    [typeBiquadSegmentedControl addTarget:self action:@selector(changeTypeFilter:) forControlEvents:UIControlEventValueChanged];
-    [self.view addSubview:typeBiquadSegmentedControl];
     
     biquadCoefControl = [[BiquadCoefValueControl alloc] init];
     biquadCoefControl.delegate = self;
@@ -139,20 +161,12 @@
     [self setTitleInfo];
     [biquadCoefControl update];
     
-    filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"BIQUAD #%d", _filters.activeBiquadIndex + 1];
-    filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
-    
-    BiquadLL * b = [_filters getActiveBiquad];
-    if (b.type == BIQUAD_USER) {
-        typeBiquadSegmentedControl.selectedSegmentIndex = 1;
-        biquadCoefControl.hidden = NO;
-        
-    } else {
-        typeBiquadSegmentedControl.selectedSegmentIndex = 0;
-        biquadCoefControl.hidden = YES;
-    }
-    
     [filtersView setNeedsDisplay];
+}
+
+- (void) setShowTextBiquad {
+    showBiquadText = !showBiquadText;
+    [self.view setNeedsLayout];
 }
 
 - (void) showInfo:(UIButton *)button
@@ -227,18 +241,10 @@
     int width = self.view.frame.size.width;
     int height = self.view.frame.size.height - top;
     
-    filterTypeControl.hidden = NO;
-    typeBiquadSegmentedControl.hidden = NO;
     [self updateSubviews];
     
     [filtersView setFrame:CGRectMake(0, top, width, 0.4 * height)];
-    
-    [filterTypeControl setFrame:CGRectMake(0, top + 0.4 * height, width, 0.1 * height)];
-    
-    [typeBiquadSegmentedControl setFrame:CGRectMake(0.3 * width, top + 0.52 * height,
-                                                    0.4 * width, 0.1 * height)];
-    
-    biquadCoefControl.frame = CGRectMake(0.05 * width, top + 0.65 * height, 0.9 * width, 0.3 * height);
+    biquadCoefControl.frame = CGRectMake(0.05 * width, top + 0.4 * height, 0.9 * width, 0.5 * height);
 }
 
 - (void) viewWillLayoutSubviewsLandscape {
@@ -247,85 +253,21 @@
     int width = self.view.frame.size.width;
     int height = self.view.frame.size.height - top;
     
-    filterTypeControl.hidden = YES;
-    typeBiquadSegmentedControl.hidden = YES;
-    biquadCoefControl.hidden = YES;
     [self updateSubviews];
     
-    [filtersView setFrame:CGRectMake(0, top, width, height)];
-    [filtersView setNeedsDisplay];
-}
-
-/* --------------------------------------------- Change filters method --------------------------------------------------- */
-- (void) changeFilter:(UIButton *)btn {
-    
-    if ([btn.titleLabel.text isEqualToString:@"\u2329"]) { // press prev button
-        //[_filters prevActiveBiquadIndex];
-        [_filters decActiveBiquadIndex];
-        [self updateSubviews];
-    } else if ([btn.titleLabel.text isEqualToString:@"\u232A"]) { // press next button
-        //[_filters nextActiveBiquadIndex];
-        [_filters incActiveBiquadIndex];
-        [self updateSubviews];
+    if (showBiquadText) {
+        [filtersView setFrame:CGRectMake(0, top, width - 250, height)];
+        biquadCoefControl.hidden = NO;
+        biquadCoefControl.frame = CGRectMake(width - 250, top + 20 , 200, height - 40);
+    } else {
+        [filtersView setFrame:CGRectMake(0, top, width, height)];
+        biquadCoefControl.hidden = YES;
     }
-}
-
-/* --------------------------------------------- Change filters method --------------------------------------------------- */
-- (void) changeTypeFilter:(UISegmentedControl *) segmentControl {
-    
-    BiquadLL * b = [_filters getActiveBiquad];
-    BiquadType_t prevType = b.type;
-    
-    switch (segmentControl.selectedSegmentIndex) {
-        case 0: //gui
-        {
-            if (prevType != BIQUAD_USER) return;
-            
-            b.enabled = [_filters isPEQEnabled];
-            b.order = BIQUAD_ORDER_2;
-            b.type = BIQUAD_PARAMETRIC;
-            
-            if (prevType != BIQUAD_ALLPASS) {
-                int freq = [_filters getBetterNewFreq];
-                b.biquadParam.freq = (freq != -1) ? freq : 100;
-            }
-            b.biquadParam.qFac = 1.41f;
-            b.biquadParam.dbVolume = 0.0f;
-            
-            [b sendWithResponse:YES];
-            break;
-        }
-        case 1: //text
-        {
-            if (prevType == BIQUAD_USER) return;
-            
-            if ([self isCoefWarningEnabled]) {
-                [self showCoefWarning];
-            }
-            
-            b.enabled = YES;
-            //b.order = BIQUAD_ORDER_2;
-            b.type = BIQUAD_USER;
-            
-            [b sendWithResponse:YES];
-            break;
-        }
-    }
-  
-    if (prevType == BIQUAD_HIGHPASS) {
-        PassFilter * pass = [_filters getHighpass];
-        if (pass) [pass sendWithResponse:YES];
-        
-    } else if (prevType == BIQUAD_LOWPASS) {
-        PassFilter * pass = [_filters getLowpass];
-        if (pass) [pass sendWithResponse:YES];
-    }
-    
-    [self updateSubviews];
 }
 
 /* ----------------------------------- Keyboard methods (change NumValueControl) ----------------------------------------- */
-- (void) updateBiquadValueControl {
+-(void) updateBiquadCoefValueControl {
+    [self setTitleInfo];
     [filtersView setNeedsDisplay];
 }
 
@@ -554,13 +496,33 @@
         //NSLog(@"dx=%f delta=%f", dx, delta_freq);
         
         if (fabs(delta_freq) >= 1.0) {
-            if (( biquad.type == BIQUAD_HIGHPASS) || ( biquad.type == BIQUAD_LOWPASS)) {
-                PassFilter * f = ( biquad.type == BIQUAD_LOWPASS) ? [_filters getLowpass] : [_filters getHighpass];
+  
+            if ( biquad.type == BIQUAD_HIGHPASS) {
+                PassFilter * hp = [_filters getHighpass];
+                int lpFreq = [[_filters getLowpass] Freq];
                 
-                int newFreq = [f Freq] + delta_freq;
-                [f setFreq:newFreq];
-                //ble send
-                [f sendWithResponse:NO];
+                int newFreq = [hp Freq] + delta_freq;
+                if (newFreq > lpFreq) newFreq = lpFreq;
+                
+                if ([hp Freq] != newFreq) {
+                    [hp setFreq:newFreq];
+                    //ble send
+                    [hp sendWithResponse:NO];
+                }
+                
+            } else if ( biquad.type == BIQUAD_LOWPASS) {
+                PassFilter * lp = [_filters getLowpass];
+                int hpFreq = [[_filters getHighpass] Freq];
+                
+                int newFreq = [lp Freq] + delta_freq;
+                if (newFreq < hpFreq) newFreq = hpFreq;
+                
+                if ([lp Freq] != newFreq) {
+                    [lp setFreq:newFreq];
+                    //ble send
+                    [lp sendWithResponse:NO];
+                }
+                
                 
             } else {//parametric allpass
                 bParam.freq += delta_freq;

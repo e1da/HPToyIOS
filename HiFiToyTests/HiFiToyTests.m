@@ -195,4 +195,5 @@ extern bool isFloatDiffLessThan(float f0, float f1, float maxDiff);
     
     XCTAssertTrue([p isEqual:pc]);
 }
+
 @end

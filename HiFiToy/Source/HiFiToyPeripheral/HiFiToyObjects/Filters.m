@@ -192,6 +192,8 @@
 
 - (void) incActiveBiquadIndex {
     if (++_activeBiquadIndex > 6) _activeBiquadIndex = 0;
+    _activeNullHP = NO;
+    _activeNullLP = NO;
 }
 
 - (void) decActiveBiquadIndex {
@@ -200,6 +202,8 @@
     } else {
         _activeBiquadIndex--;
     }
+    _activeNullHP = NO;
+    _activeNullLP = NO;
 }
 
 - (void) nextActiveBiquadIndex {

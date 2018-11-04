@@ -12,6 +12,8 @@
 
 typedef int32_t Number523_t;
 
+void checkFloatFor523(float * num);
+
 extern Number523_t to523(float number);
 extern Number523_t to523Reverse(float number);
 

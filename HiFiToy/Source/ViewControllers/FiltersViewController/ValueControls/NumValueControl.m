@@ -111,7 +111,8 @@
 
 - (void) updateValueView {
     FilterLabel * f = [[FilterLabel alloc] initWithText:[self getStringValue] withFontSize:_valueFontSize];
-    f.textColor = [UIColor orangeColor];
+    UIColor * c = [UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:0.5];
+    f.textColor = c;//[UIColor orangeColor];
     [valButton setAttributedTitle:f.attributedText forState:UIControlStateNormal];
     
 }
@@ -166,7 +167,7 @@
         case NumberTypeDouble:
             return [NSString stringWithFormat:@"%0.2f", self.numValue ];
         case NumberTypeMaxReal:
-            return [NSString stringWithFormat:@"%0.4f", self.numValue ];
+            return [NSString stringWithFormat:@"%0.6f", self.numValue ];
     }
     return nil;
 }

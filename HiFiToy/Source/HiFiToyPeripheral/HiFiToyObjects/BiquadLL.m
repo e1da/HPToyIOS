@@ -184,8 +184,16 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     [self didUpdateBiquadParam:self.biquadParam];
 }
 
+
 - (void) setCoef:(BiquadCoef_t)coef {
     _coef = coef;
+ 
+    checkFloatFor523(&_coef.b0);
+    checkFloatFor523(&_coef.b1);
+    checkFloatFor523(&_coef.b2);
+    checkFloatFor523(&_coef.a1);
+    checkFloatFor523(&_coef.a2);
+    
     [self.biquadParam updateWithCoef:coef withOrder:self.order withType:self.type];
 }
 

@@ -55,6 +55,7 @@
 		D33A25A420CABC9C008A94EF /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */; };
 		D33A25A820CABF19008A94EF /* DeviceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A620CABF19008A94EF /* DeviceList.plist */; };
 		D33A25A920CABF19008A94EF /* PresetList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A720CABF19008A94EF /* PresetList.plist */; };
+		D3571E34218F335500A99CB8 /* KeyboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = D3571E33218F335500A99CB8 /* KeyboardView.m */; };
 		D379126320D111B80089962D /* XOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126220D111B80089962D /* XOverViewController.m */; };
 		D379126620D1153F0089962D /* XOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126520D1153F0089962D /* XOverView.m */; };
 		D379127720D3C2CE0089962D /* DrcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127620D3C2CE0089962D /* DrcViewController.m */; };
@@ -188,6 +189,8 @@
 		D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		D33A25A620CABF19008A94EF /* DeviceList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceList.plist; sourceTree = "<group>"; };
 		D33A25A720CABF19008A94EF /* PresetList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PresetList.plist; sourceTree = "<group>"; };
+		D3571E32218F335500A99CB8 /* KeyboardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardView.h; sourceTree = "<group>"; };
+		D3571E33218F335500A99CB8 /* KeyboardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyboardView.m; sourceTree = "<group>"; };
 		D379126120D111B80089962D /* XOverViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XOverViewController.h; sourceTree = "<group>"; };
 		D379126220D111B80089962D /* XOverViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XOverViewController.m; sourceTree = "<group>"; };
 		D379126420D1153F0089962D /* XOverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XOverView.h; sourceTree = "<group>"; };
@@ -281,6 +284,7 @@
 				D301F090218246EB00E181C6 /* BiquadValueControl.m */,
 				D301F09221834FDF00E181C6 /* BiquadCoefValueControl.h */,
 				D301F09321834FDF00E181C6 /* BiquadCoefValueControl.m */,
+				D3BBD4F8218DC1DD00FFDB86 /* CoefWarning */,
 			);
 			path = ValueControls;
 			sourceTree = "<group>";
@@ -292,6 +296,8 @@
 				D30FF86E2163AB4D007FA50D /* NumKeyboardController.m */,
 				D30FF86F2163AB4D007FA50D /* KeyboardButton.h */,
 				D30FF86D2163AB4D007FA50D /* KeyboardButton.m */,
+				D3571E32218F335500A99CB8 /* KeyboardView.h */,
+				D3571E33218F335500A99CB8 /* KeyboardView.m */,
 			);
 			path = NumberKeyboard;
 			sourceTree = "<group>";
@@ -627,7 +633,6 @@
 		D39F5517215E33D00017DF48 /* FiltersViewController */ = {
 			isa = PBXGroup;
 			children = (
-				D3BBD4F8218DC1DD00FFDB86 /* CoefWarning */,
 				D301F082218213BF00E181C6 /* ValueControls */,
 				D39F5518215E34070017DF48 /* FiltersViewController.h */,
 				D39F5519215E34070017DF48 /* FiltersViewController.m */,
@@ -840,6 +845,7 @@
 				D3E97AB12157F08200C98402 /* EnergyViewController.m in Sources */,
 				D33A255820C68B92008A94EF /* HiFiToyPresetList.m in Sources */,
 				D30FF8712163AB4D007FA50D /* NumKeyboardController.m in Sources */,
+				D3571E34218F335500A99CB8 /* KeyboardView.m in Sources */,
 				D33A257120C943F5008A94EF /* DialogSystem.m in Sources */,
 				D30FF88C216FA8E8007FA50D /* PassFilter.m in Sources */,
 			);
