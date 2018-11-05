@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) showKeyboardWithValue:(NumValueControl *)valControl;
 - (void) updateBiquadCoefValueControl;
+- (void) showTextBiquad;
 
 @end;
 

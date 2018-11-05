@@ -193,9 +193,7 @@
         {
             if (prevType == BIQUAD_USER) return;
             
-           /* if ([self isCoefWarningEnabled]) {
-                [self showCoefWarning];
-            }*/
+            if (_delegate) [_delegate showTextBiquad];
             
             b.enabled = YES;
             //b.order = BIQUAD_ORDER_2;

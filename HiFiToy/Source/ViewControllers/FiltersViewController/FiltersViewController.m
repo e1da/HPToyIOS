@@ -18,6 +18,7 @@
 
 @interface FiltersViewController () {
     UIBarButtonItem * peqButton;
+    UIBarButtonItem * showTextButton;
     XOverView * filtersView;
     BiquadCoefValueControl * biquadCoefControl;
     
@@ -78,14 +79,6 @@
     
 }
 
-- (BOOL) isCoefWarningEnabled {
-    id flag = [[NSUserDefaults standardUserDefaults] objectForKey:@"BiquadCoefWarningKey"];
-    if (flag) {
-        return ![[NSUserDefaults standardUserDefaults] boolForKey:@"BiquadCoefWarningKey"];
-    }
-    return YES;
-}
-
 - (void) initGestures {
     tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapHandler:)];
     tapGesture.numberOfTapsRequired = 2;
@@ -115,7 +108,7 @@
     peqButton.title = ([self.filters isPEQEnabled]) ? @"PEQ On" : @"PEQ Off";
     
     //init info button
-    UIBarButtonItem * showTextButton = [[UIBarButtonItem alloc] init];
+    showTextButton = [[UIBarButtonItem alloc] init];
     showTextButton.target = self;
     showTextButton.action = @selector(setShowTextBiquad);
     showTextButton.title = @"       \u232A";
@@ -166,6 +159,7 @@
 
 - (void) setShowTextBiquad {
     showBiquadText = !showBiquadText;
+    showTextButton.title = showBiquadText ? @"       \u2329" : @"       \u232A";
     [self.view setNeedsLayout];
 }
 
@@ -314,6 +308,20 @@
         }
     }
     [self updateSubviews];
+}
+
+- (void) showTextBiquad {
+    if ([self isCoefWarningEnabled]) {
+        [self showCoefWarning];
+    }
+}
+
+- (BOOL) isCoefWarningEnabled {
+    id flag = [[NSUserDefaults standardUserDefaults] objectForKey:@"BiquadCoefWarningKey"];
+    if (flag) {
+        return ![[NSUserDefaults standardUserDefaults] boolForKey:@"BiquadCoefWarningKey"];
+    }
+    return YES;
 }
 
 - (void) showCoefWarning {
@@ -499,10 +507,10 @@
   
             if ( biquad.type == BIQUAD_HIGHPASS) {
                 PassFilter * hp = [_filters getHighpass];
-                int lpFreq = [[_filters getLowpass] Freq];
+                PassFilter * lp = [_filters getLowpass];
                 
                 int newFreq = [hp Freq] + delta_freq;
-                if (newFreq > lpFreq) newFreq = lpFreq;
+                if ((lp) && (newFreq > [lp Freq])) newFreq = [lp Freq];
                 
                 if ([hp Freq] != newFreq) {
                     [hp setFreq:newFreq];
@@ -512,10 +520,10 @@
                 
             } else if ( biquad.type == BIQUAD_LOWPASS) {
                 PassFilter * lp = [_filters getLowpass];
-                int hpFreq = [[_filters getHighpass] Freq];
+                PassFilter *  hp = [_filters getHighpass];
                 
                 int newFreq = [lp Freq] + delta_freq;
-                if (newFreq < hpFreq) newFreq = hpFreq;
+                if ((hp) && (newFreq < [hp Freq])) newFreq = [hp Freq];
                 
                 if ([lp Freq] != newFreq) {
                     [lp setFreq:newFreq];
