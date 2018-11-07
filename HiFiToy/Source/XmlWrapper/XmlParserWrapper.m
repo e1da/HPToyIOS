@@ -38,6 +38,11 @@
     
     _error = nil;
     [xmlParser parse];
+    
+    NSError * e = [xmlParser parserError];
+    if (e) {
+        NSLog(@"%@", e.localizedDescription);
+    }
 }
 
 - (void)stop {

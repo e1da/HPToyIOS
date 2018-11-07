@@ -602,7 +602,7 @@
     
     XmlData * filtersXmlData = [[XmlData alloc] init];
     NSDictionary * dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                           [[NSNumber numberWithInt:self.address0] stringValue], @"Address0",
+                           [[NSNumber numberWithInt:self.address0] stringValue], @"Address",
                            [[NSNumber numberWithInt:self.address1] stringValue], @"Address1", nil];
     
     
@@ -639,7 +639,7 @@
 - (void)didEndXmlElement:(NSString *)elementName parser:(XmlParserWrapper *)xmlParser {
     if ([elementName isEqualToString:@"Filters"]){
         
-        if (count == 7){
+        if (count != 7){
             xmlParser.error = [NSString stringWithFormat:
                                @"Filters=%@. Import from xml is not success. ",
                                [[NSNumber numberWithInt:[self address]] stringValue] ];

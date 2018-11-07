@@ -524,7 +524,7 @@
 
 - (void) finishedParsing:(NSString *)error {
     if (error){
-        NSString * errorString = [NSString stringWithFormat:@"Import preset is not success. %@", error ];
+        NSString * errorString = [NSString stringWithFormat:@"Import preset is not success. %@ error", error ];
         [[DialogSystem sharedInstance] showAlert:errorString];
         
     } else {

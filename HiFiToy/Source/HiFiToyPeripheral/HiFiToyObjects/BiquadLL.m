@@ -471,7 +471,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     
     XmlData * biquadXmlData = [[XmlData alloc] init];
     NSDictionary * dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                           [[NSNumber numberWithInt:self.address0] stringValue], @"Address0",
+                           [[NSNumber numberWithInt:self.address0] stringValue], @"Address",
                            [[NSNumber numberWithInt:self.address1] stringValue], @"Address1", nil];
     
     

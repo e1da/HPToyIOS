@@ -100,6 +100,7 @@
     switch (section){
         case 0:
             tittleSection = @"AUDIO SOURCE";
+            buttonVisibleFlag = YES;
             break;
         case 1:
             tittleSection = @"VOLUME CONTROL";
@@ -155,7 +156,7 @@
  
     switch (button.tag) {
         case 0://VOLUME
-            msgString = @"Audio source info";
+            msgString = @"If the USB input selected, the amp is ready for 16-24/44.1-192 USB high-res audio, and after USB-host is off, it will be auto-switched to standby. If selected AUTO, after USB-host is off, the amp will be auto-switched to AUX input. AUX input could be either optical SPDIF or BT aptx stream, depends on which option is installed. After 5 minutes AUX input level less than Auto-Off threshold, the amp goes to standby. The wakeup event could be smartphone app connecting or USB-host On.";
             break;
         case 1://VOLUME
             msgString = @"Volume info";
