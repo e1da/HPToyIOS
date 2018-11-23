@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "BleDriver.h"
-#import "HiFiToyObject.h"
 #import "HiFiToyPreset.h"
 
 #define HIFI_TOY_VERSION            11

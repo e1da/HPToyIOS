@@ -28,6 +28,13 @@
     return UIInterfaceOrientationPortrait;
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.tableView.backgroundColor = [UIColor darkGrayColor];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -36,6 +43,11 @@
     drc = preset.drc;
     
     [self setupOutlets];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.backgroundColor = [UIColor darkGrayColor];
 }
 
 - (void) setupOutlets{

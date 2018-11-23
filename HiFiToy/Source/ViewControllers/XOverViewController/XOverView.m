@@ -7,7 +7,6 @@
 //
 
 #import "XOverView.h"
-#import "HiFiToyPreset.h"
 
 /*==========================================================================================
  SubFilterView Implementation

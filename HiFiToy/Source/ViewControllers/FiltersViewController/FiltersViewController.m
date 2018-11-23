@@ -7,10 +7,6 @@
 //
 
 #import "FiltersViewController.h"
-#import "AdvSlider.h"
-#import "NumValueControl.h"
-#import "FilterLabel.h"
-#import "FilterTypeControl.h"
 #import "XOverView.h"
 #import "DialogSystem.h"
 #import "CoefWarningController.h"

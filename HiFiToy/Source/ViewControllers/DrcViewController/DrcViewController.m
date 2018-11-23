@@ -32,6 +32,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [self.view setBackgroundColor:[UIColor darkGrayColor]];
+    self.drcView.backgroundColor = [UIColor darkGrayColor];
+    
     HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
     drc = preset.drc;
     
@@ -43,10 +46,16 @@
     self.drcView.activePoint = 2;
     
     _enabledSlider_outl.value = [drc getEnabledChannel:0];
+    _enabledLabel_outl.textColor = [_enabledLabel_outl.textColor colorWithAlphaComponent:0.5 + _enabledSlider_outl.value * 0.5];
     _enabledLabel_outl.text = [NSString stringWithFormat:@"%d%%", (int)(_enabledSlider_outl.value * 100)];
     
     [self refreshView];
   
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.backgroundColor = [UIColor darkGrayColor];
 }
 
 - (void) setTitleInfo
@@ -79,6 +88,7 @@
 {
     [drc setEnabled:_enabledSlider_outl.value forChannel:0];
     [drc setEnabled:_enabledSlider_outl.value forChannel:1];
+    _enabledLabel_outl.textColor = [_enabledLabel_outl.textColor colorWithAlphaComponent:0.5 + _enabledSlider_outl.value * 0.5];
     _enabledLabel_outl.text = [NSString stringWithFormat:@"%d%%", (int)(_enabledSlider_outl.value * 100)];
     
     [drc sendEnabledForChannel:0 withResponse:NO];

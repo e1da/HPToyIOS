@@ -24,6 +24,8 @@
         self.minDbX = POINT0_INPUT_DB - 24;
         self.initHeight = 0;
         
+        self.backgroundColor = [UIColor darkGrayColor];
+        
     }
     return self;
 }
@@ -146,7 +148,7 @@
     CGContextDrawPath(context, kCGPathStroke);
     
     //draw 1.0 compressor line
-    CGContextSetStrokeColorWithColor(context, [[UIColor brownColor] CGColor]);
+    /*CGContextSetStrokeColorWithColor(context, [[UIColor grayColor] CGColor]);
     CGContextSetAlpha(context, 1.0f);
     CGContextSetLineWidth(context, 2.0);
     
@@ -158,19 +160,20 @@
     
     CGContextDrawPath(context, kCGPathStroke);
     
-    CGContextSetLineDash(context, 0.0, dashes, 0);
+    CGContextSetLineDash(context, 0.0, dashes, 0);*/
 }
 
 - (void) drawGridUnits:(CGContextRef)context
 {
     //prepare font and style for horizontal symbols
-    UIFont *font = [UIFont fontWithName:@"Palatino-Roman" size:12.0];
+    UIFont *font = [UIFont fontWithName:@"ArialRoundedMTBold" size:12.0];
     NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     style.alignment = NSTextAlignmentCenter;
     
     NSMutableDictionary * attr = [[NSMutableDictionary alloc] init];
     [attr setObject:style forKey:NSParagraphStyleAttributeName];
     [attr setObject:font forKey:NSFontAttributeName];
+    [attr setObject:[UIColor lightGrayColor] forKey:NSForegroundColorAttributeName];
     
     for (int i = self.maxDbX; i > self.minDbX; i -= DB_STEP_X){
         
@@ -182,7 +185,9 @@
     }
     
     //prepare font and style for vertical symbols
+    font = [UIFont fontWithName:@"ArialRoundedMTBold" size:10.0];
     style.alignment = NSTextAlignmentRight;
+    [attr setObject:font forKey:NSFontAttributeName];
     [attr setObject:style forKey:NSParagraphStyleAttributeName];
 
     for (int i = self.maxDbY; i > self.minDbY; i -= DB_STEP_Y){
@@ -203,53 +208,87 @@
     
 }
 
+- (void) drawDrcGraph:(CGContextRef)context withPoints:(NSMutableData *)points {
+    if ((!points) || (points.length < 2 * sizeof(CGPoint)) ) return;
+    
+    unsigned long size = points.length / sizeof(CGPoint);
+    CGPoint * p = (CGPoint *)points.bytes;
+    
+    CGPoint firstPoint = p[0];
+    firstPoint.y = [self dbToPixelY:self.minDbY];
+    CGPoint lastPoint = p[size - 1];
+    lastPoint.y = [self dbToPixelY:self.minDbY];
+    
+    [points appendBytes:&lastPoint length:sizeof(CGPoint)];
+    [points appendBytes:&firstPoint length:sizeof(CGPoint)];
+    //update p pointer after append new points
+    p = (CGPoint *)points.bytes;
+    
+    UIColor * c = [UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:0.1];
+    CGContextSetFillColorWithColor(context, [c CGColor]);
+    
+    CGContextAddLines(context, p, size + 2);
+    CGContextDrawPath(context, kCGPathFill);
+    
+    //draw stroke
+    CGContextSetLineWidth(context, 2.0);
+    CGContextSetStrokeColorWithColor(context, [[UIColor lightGrayColor] CGColor]);
+    CGContextAddLines(context, p, size);
+    CGContextDrawPath(context, kCGPathStroke);
+    
+    
+    
+}
+
 - (void) drawDrc:(CGContextRef)context
 {
     HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
     DrcCoef * drc = preset.drc.coef17;
     
-    /*NSLog(@"%f %f", drc.point0.inputDb, drc.point0.outputDb);
-    NSLog(@"%f %f", drc.point1.inputDb, drc.point1.outputDb);
-    NSLog(@"%f %f", drc.point2.inputDb, drc.point2.outputDb);
-    NSLog(@"%f %f", drc.point3.inputDb, drc.point3.outputDb);*/
+    //draw drc graphic
+    NSMutableData * points = [[NSMutableData alloc] init];
+    CGPoint p[4] = { CGPointMake([self dbToPixelX:drc.point0.inputDb], [self dbToPixelY:drc.point0.outputDb]),
+                        CGPointMake([self dbToPixelX:drc.point1.inputDb], [self dbToPixelY:drc.point1.outputDb]),
+                        CGPointMake([self dbToPixelX:drc.point2.inputDb], [self dbToPixelY:drc.point2.outputDb]),
+                        CGPointMake([self dbToPixelX:drc.point3.inputDb], [self dbToPixelY:drc.point3.outputDb]) };
     
-    //draw lines
-    CGContextSetStrokeColorWithColor(context, [[UIColor blueColor] CGColor]);
-    CGContextSetLineWidth(context, 3.0);
-    
-    CGContextMoveToPoint(context, [self dbToPixelX:drc.point0.inputDb], [self dbToPixelY:drc.point0.outputDb]);
-    CGContextAddLineToPoint(context, [self dbToPixelX:drc.point1.inputDb], [self dbToPixelY:drc.point1.outputDb]);
-    CGContextAddLineToPoint(context, [self dbToPixelX:drc.point2.inputDb], [self dbToPixelY:drc.point2.outputDb]);
-    CGContextAddLineToPoint(context, [self dbToPixelX:drc.point3.inputDb], [self dbToPixelY:drc.point3.outputDb]);
-    
-    CGContextDrawPath(context, kCGPathStroke);
+    [points appendBytes:&p length:4 * sizeof(CGPoint)];
+    [self drawDrcGraph:context withPoints:points];
     
     //draw points
     if (self.activePoint == 0) {
-        CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 1.0);
+        //CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 1.0);
+        CGContextSetFillColorWithColor(context, [[UIColor orangeColor] CGColor]);
     } else {
-        CGContextSetRGBFillColor(context, 0.0, 0.0, 1.0, 1.0);
+        //CGContextSetRGBFillColor(context, 0.0, 0.0, 1.0, 1.0);
+        CGContextSetFillColorWithColor(context, [[UIColor brownColor] CGColor]);
     }
     CGContextFillEllipseInRect(context, CGRectMake([self dbToPixelX:drc.point0.inputDb] - 5, [self dbToPixelY:drc.point0.outputDb] - 5, 10, 10));
     
     if (self.activePoint == 1) {
-        CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 1.0);
+        //CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 1.0);
+        CGContextSetFillColorWithColor(context, [[UIColor orangeColor] CGColor]);
     } else {
-        CGContextSetRGBFillColor(context, 0.0, 0.0, 1.0, 1.0);
+        //CGContextSetRGBFillColor(context, 0.0, 0.0, 1.0, 1.0);
+        CGContextSetFillColorWithColor(context, [[UIColor brownColor] CGColor]);
     }
     CGContextFillEllipseInRect(context, CGRectMake([self dbToPixelX:drc.point1.inputDb] - 5, [self dbToPixelY:drc.point1.outputDb] - 5, 10, 10));
     
     if (self.activePoint == 2) {
-        CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 1.0);
+        //CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 1.0);
+        CGContextSetFillColorWithColor(context, [[UIColor orangeColor] CGColor]);
     } else {
-        CGContextSetRGBFillColor(context, 0.0, 0.0, 1.0, 1.0);
+        //CGContextSetRGBFillColor(context, 0.0, 0.0, 1.0, 1.0);
+        CGContextSetFillColorWithColor(context, [[UIColor brownColor] CGColor]);
     }
     CGContextFillEllipseInRect(context, CGRectMake([self dbToPixelX:drc.point2.inputDb] - 5, [self dbToPixelY:drc.point2.outputDb] - 5, 10, 10));
     
     if (self.activePoint == 3) {
-        CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 1.0);
+        //CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 1.0);
+        CGContextSetFillColorWithColor(context, [[UIColor orangeColor] CGColor]);
     } else {
-        CGContextSetRGBFillColor(context, 0.0, 0.0, 1.0, 1.0);
+        //CGContextSetRGBFillColor(context, 0.0, 0.0, 1.0, 1.0);
+        CGContextSetFillColorWithColor(context, [[UIColor brownColor] CGColor]);
     }
     CGContextFillEllipseInRect(context, CGRectMake([self dbToPixelX:drc.point3.inputDb] - 5, [self dbToPixelY:drc.point3.outputDb] - 5, 10, 10));
     

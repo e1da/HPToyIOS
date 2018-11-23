@@ -8,9 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "NumKeyboardController.h"
-#import "HiFiToyObject.h"
 #import "Filters.h"
-#import "BiquadValueControl.h"
 #import "BiquadCoefValueControl.h"
 
 NS_ASSUME_NONNULL_BEGIN
