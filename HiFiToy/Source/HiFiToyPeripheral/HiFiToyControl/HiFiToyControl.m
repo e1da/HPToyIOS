@@ -377,6 +377,11 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"KeyfobDidFoundNotification" object:nil];
 }
 
+- (void) keyfobMacAddrError {
+    NSLog(@"keyfobMacAddrError ");
+    [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Mac address is not correct and device is not certified! Please contact your distributor.", @"")];
+}
+
 -(void) keyfobDidConnected
 {
     NSLog(@"keyfobDidConnected");

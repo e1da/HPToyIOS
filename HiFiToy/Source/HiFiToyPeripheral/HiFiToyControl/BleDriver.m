@@ -427,6 +427,7 @@
 {
     if (error) {
         NSLog(@"%@", error.description);
+        if (_communicationDelegate) [_communicationDelegate keyfobMacAddrError];
         return;
     }
     

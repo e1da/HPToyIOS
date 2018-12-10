@@ -51,6 +51,8 @@ typedef enum : uint8_t {
 
 -(void) keyfobDidFound;
 
+- (void) keyfobMacAddrError;
+
 -(void) keyfobDidConnected;
 -(void) keyfobDidFailConnect;
 -(void) keyfobDidDisconnected;
