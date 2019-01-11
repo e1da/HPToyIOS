@@ -18,8 +18,8 @@ typedef struct{
 } DataBufHeader_t;
 
 typedef enum : uint8_t {
-    USB, AUX, AUTO
-} AudioSource_t;
+    PCM9211_SPDIF_SOURCE, PCM9211_USB_SOURCE, PCM9211_BT_SOURCE,
+} PCM9211Source_t;
 
 #pragma pack(1)
 typedef struct {
@@ -36,7 +36,7 @@ typedef struct {                            // offset
     uint8_t             successWriteFlag;   // 0x01
     uint16_t            version;            // 0x02
     uint32_t            pairingCode;        // 0x04
-    AudioSource_t       audioSource;        // 0x08
+    PCM9211Source_t     audioSource;        // 0x08
     uint8_t             reserved[3];        // 0x09
     EnergyConfig_t      energy;             // 0x0C
     BiquadType_t        biquadTypes[7];     // 0x18

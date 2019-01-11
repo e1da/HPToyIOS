@@ -21,7 +21,7 @@
         bleDriver = [[BleDriver alloc] init];
         [bleDriver resetCoreBleManager];
         bleDriver.communicationDelegate = self;
-        _audioSource = AUTO;
+        _audioSource = PCM9211_USB_SOURCE;
     }
     
     return self;
@@ -154,7 +154,7 @@
     [self sendDataToDsp:data withResponse:YES];
 }
 
-- (void) setAudioSource:(AudioSource_t)audioSource
+- (void) setAudioSource:(PCM9211Source_t)audioSource
 {
     _audioSource = audioSource;
     

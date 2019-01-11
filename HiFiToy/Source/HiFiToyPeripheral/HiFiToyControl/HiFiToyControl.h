@@ -20,7 +20,7 @@
     
 }
 
-@property (nonatomic) AudioSource_t audioSource;
+@property (nonatomic) PCM9211Source_t audioSource;
 
 + (HiFiToyControl *)sharedInstance;
 

@@ -30,9 +30,9 @@
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="j0Z-Rx-Gig">
                                                     <rect key="frame" x="16" y="16" width="343" height="29"/>
                                                     <segments>
+                                                        <segment title="S/PDIF"/>
                                                         <segment title="USB"/>
-                                                        <segment title="AUX"/>
-                                                        <segment title="AUTO"/>
+                                                        <segment title="BT"/>
                                                     </segments>
                                                     <connections>
                                                         <action selector="changeAudioSource:" destination="pGg-6v-bdr" eventType="valueChanged" id="iBe-76-5WY"/>
@@ -1453,7 +1453,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Z6d-f1-hK3"/>
+        <segue reference="faG-pk-fhu"/>
         <segue reference="dBA-2p-FmV"/>
     </inferredMetricsTieBreakers>
 </document>
