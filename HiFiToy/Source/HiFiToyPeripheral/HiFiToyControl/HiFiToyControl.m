@@ -394,16 +394,6 @@
         [[DialogSystem sharedInstance] dismissAlert];
     }
     
-    
-    //Enable FeedBack Info notification
-    [bleDriver notification:0xFFF0 characteristicUUID:0xFFF3 on:YES];
-    
-    //Enable FeedBack Param Data notification
-    [bleDriver notification:0xFFF0 characteristicUUID:0xFFF4 on:YES];
-    
-    //Enable Volume detector notification
-    [bleDriver notification:0xFFF0 characteristicUUID:0xFFF2 on:YES];
-    
     //send pairing code
     HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
     [self startPairedProccess:device.pairingCode];

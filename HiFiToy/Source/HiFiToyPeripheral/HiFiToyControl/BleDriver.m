@@ -370,6 +370,11 @@
             NSLog(@"%@", c.UUID.UUIDString);
         }
         
+        //Enable FeedBack Info notification
+        [self notification:0xFFF0 characteristicUUID:0xFFF2 on:YES];
+        //Enable FeedBack Param Data notification
+        [self notification:0xFFF0 characteristicUUID:0xFFF3 on:YES];
+        
         if (self.communicationDelegate){
             [self.communicationDelegate keyfobDidConnected];
         }
@@ -416,7 +421,7 @@
     
     UInt16 characteristicUUID = [self CBUUIDToInt:characteristic.UUID];
     
-    if ((characteristicUUID == 0xFFF3) || (characteristicUUID == 0xFFF4)) {
+    if ((characteristicUUID == 0xFFF2) || (characteristicUUID == 0xFFF3)) {
         if (self.communicationDelegate){
             [self.communicationDelegate keyfobDidUpdateValue:characteristic.value];
         }

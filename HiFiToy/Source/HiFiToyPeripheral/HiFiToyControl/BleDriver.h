@@ -73,7 +73,6 @@ typedef enum : uint8_t {
 @interface BleDriver : NSObject <CBCentralManagerDelegate, CBPeripheralDelegate>
 
 @property (nonatomic,assign) id <BleCommunicationDelegate> communicationDelegate;
-//@property (nonatomic,assign) id <FeedBackParamDataDelegate> paramDataDelegate;
 
 @property (nonatomic, readonly) BleState_t state;
 
