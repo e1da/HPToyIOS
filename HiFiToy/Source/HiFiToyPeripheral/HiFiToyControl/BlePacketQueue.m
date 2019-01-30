@@ -11,45 +11,26 @@
 
 @implementation BlePacketQueue
 
-- (void) clear
-{
-    if (blePacketsArray != nil){
-        [blePacketsArray removeAllObjects];
+- (id) init {
+    self = [super init];
+    if (self) {
+        blePacketsArray = [[NSMutableArray alloc] init];
     }
-    blePacketsArray = nil;
-    
+    return self;
 }
 
-- (int) size
-{
+- (void) clear {
+    [blePacketsArray removeAllObjects];
+}
+
+- (int) size {
     return (int)blePacketsArray.count;
 }
 
-/*-(uint8_t) getAddressInPacket:(BlePacket *)packet
-{
-    DataBufHeader_t * header = (DataBufHeader_t *)packet.data.bytes;
-    return header->addr;
-}
-
--(uint8_t) getLengthInPacket:(BlePacket *)packet
-{
-    DataBufHeader_t * header = (DataBufHeader_t *)packet.data.bytes;
-    return header->length;
-}*/
-
-- (void) addPacket:(BlePacket*)blePacket
-{
+- (void) addPacket:(BlePacket*)blePacket {
     
-    if ([blePacket response]){// == YES
-        //add packet to queue
-        if (blePacketsArray == nil){
-            blePacketsArray = [NSMutableArray arrayWithObject:blePacket];
-        } else {
-            [blePacketsArray addObject:blePacket];
-        }
-    } else {// == NO
-        BOOL add_status = NO;
-        
+    if ([blePacket response] == NO) {
+
         DataBufHeader_t * headerBlePacket = (DataBufHeader_t *)blePacket.data.bytes;
         
         for (long i = blePacketsArray.count - 1; i > 0; i--){
@@ -61,63 +42,28 @@
                 (headerBlePacket->length == headerPack->length)) {
                 
                 [blePacketsArray replaceObjectAtIndex:i withObject:blePacket];
-                add_status = YES;
-                break;
+                return;
             }
         }
-        
-        
-        /*for (long i = blePacketsArray.count - 1; i > 0; i--){
-            BlePacket* pack = [blePacketsArray objectAtIndex:i];
-            if (pack.response == NO){
-                [blePacketsArray replaceObjectAtIndex:i withObject:blePacket];
-                add_status = YES;
-                break;
-            }
-        }*/
-        
-        if (add_status == NO){//
-            //add packet to queue
-            if (blePacketsArray == nil){
-                blePacketsArray = [NSMutableArray arrayWithObject:blePacket];
-            } else {
-                [blePacketsArray addObject:blePacket];
-            }
-            
-        }
-        
     }
     
-    
+
+    //add packet to queue
+    [blePacketsArray addObject:blePacket];
 }
 
 - (void) addPacketWithCharacteristic:(CBCharacteristic*)characteristic
                                 data:(NSData *)data
-                            response:(BOOL)response
-{
+                            response:(BOOL)response {
     [self addPacket:[BlePacket initWithPacket:characteristic data:data response:response]];
 }
 
-
-
-
-- (BlePacket *) getFirstPacket
-{
-    BlePacket* firstPacket = nil;
-    
-    if (blePacketsArray != nil){
-        firstPacket = [blePacketsArray firstObject];
-    }
-    
-    return firstPacket;
-    
+- (BlePacket *) getFirstPacket {
+    return [blePacketsArray firstObject];
 }
 
-- (void) removeFirstPacket
-{
-    if (blePacketsArray != nil){
-        [blePacketsArray removeObjectAtIndex:0];
-    }
+- (void) removeFirstPacket {
+    [blePacketsArray removeObjectAtIndex:0];
 }
 
 - (void) print
