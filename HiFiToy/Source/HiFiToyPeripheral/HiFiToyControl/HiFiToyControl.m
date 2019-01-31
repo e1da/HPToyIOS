@@ -19,7 +19,6 @@
     self = [super init];
     if (self){
         bleDriver = [[BleDriver alloc] init];
-        [bleDriver resetCoreBleManager];
         bleDriver.communicationDelegate = self;
         _audioSource = PCM9211_USB_SOURCE;
     }

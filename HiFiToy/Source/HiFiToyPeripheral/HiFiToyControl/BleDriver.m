@@ -23,9 +23,9 @@
 - (id) init {
     self = [super init];
     if (self) {
-        [self initBlePacketQueue];
+        CM = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
         
-        _state = BLE_DISCONNECTED;
+        blePacketQueue = [[BlePacketQueue alloc] init];
         nameFindingBle = @"";
     }
     return self;
@@ -85,23 +85,8 @@
     return @"Not connected";
 }
 
-- (void) initBlePacketQueue {
-    blePacketQueue = [[BlePacketQueue alloc] init];
-    [blePacketQueue clear];
-}
-
-//reset core ble manager, clear ble packet queue
-- (int) resetCoreBleManager
-{
-    CM = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
-    
-    [self initBlePacketQueue];
-    return 0;
-}
-
 -(int) findBLEPeripheralsWithName:(NSString*)name {
     nameFindingBle = name;
-    _state = BLE_DISCOVERING;
     
     if (CM.state  != CBManagerStatePoweredOn) {
         NSLog(@"CoreBluetooth not correctly initialized!");
@@ -124,13 +109,7 @@
     return 0;
 }
 
-//stop find (discovery) peripherals
-- (void) stopFindBLEPeripherals
-{
-    if (_state == BLE_DISCOVERING) {
-        _state = BLE_DISCONNECTED;
-    }
-    
+- (void) stopFindBLEPeripherals {
     if ([CM isScanning]) {
         [CM stopScan];
         NSLog(@"Stopped discovering!");
@@ -152,8 +131,6 @@
         
         NSLog(@"Disconnecting peripheral!");
     }
-    
-    _state = BLE_DISCONNECTED;
 }
 
 //connect to peripheral
@@ -166,10 +143,7 @@
             [self disconnectPeripheral];
         }
     }
-    _state = BLE_CONNECTING;
-    
-    //init ble packet system
-    [self initBlePacketQueue];
+    [blePacketQueue clear];
     
     NSLog(@"Connecting to peripheral with UUID : %@", peripheral.identifier.UUIDString);
     [CM connectPeripheral:peripheral options:nil];
@@ -304,8 +278,6 @@
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
     NSLog(@"Connection to peripheral with UUID : %@ successfull", peripheral.identifier.UUIDString);
-    
-    _state = BLE_CONNECTED;
     
     _activePeripheral = peripheral;
     _activePeripheral.delegate = self;
