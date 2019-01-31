@@ -12,6 +12,7 @@
 @interface HiFiToyDevice : NSObject <NSCoding>
 
 //main property
+@property NSString * uuid;
 @property NSString * name;
 @property uint32_t pairingCode;
 
@@ -19,8 +20,8 @@
 @property (nonatomic)   NSString * activeKeyPreset;
 
 //methods
-- (void)loadDefaultDspDevice;
-
+- (void) setDefault;
 - (HiFiToyPreset *) getActivePreset;
+- (NSString *) getShortUUIDString;
 
 @end

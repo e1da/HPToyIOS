@@ -55,7 +55,7 @@
     if (!self.hiFiToyDevice) return;
     
     _nameLabel_outl.text = self.hiFiToyDevice.name;
-    _UUIDLabel_outl.text = [[HiFiToyDeviceList sharedInstance] getActiveDeviceInfo];
+    _UUIDLabel_outl.text = [self.hiFiToyDevice getShortUUIDString];
 }
 
 /*-----------------------------------------------------------------------------------------

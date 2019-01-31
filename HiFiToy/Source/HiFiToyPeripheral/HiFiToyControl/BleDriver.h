@@ -71,13 +71,12 @@ typedef enum : uint8_t {
 -(void) readValue: (int)serviceUUID characteristicUUID:(int)characteristicUUID;
 -(void) notification:(int)serviceUUID characteristicUUID:(int)characteristicUUID on:(BOOL)on;
 
--(int) findBLEPeripheralsWithName:(NSString*)name;
+-(int)  findBLEPeripheralsWithName:(NSString*)name;
 -(void) stopFindBLEPeripherals;
 
 -(void) connectPeripheral:(CBPeripheral *)peripheral;
 -(void) disconnectPeripheral;
 
--(NSString *) getUUIDString;
 -(BOOL) isConnected;
 
 @end

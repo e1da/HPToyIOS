@@ -73,18 +73,6 @@
     [_activePeripheral setNotifyValue:on forCharacteristic:characteristic];
 }
 
-- (NSString *) getUUIDString
-{
-    if ([self isConnected]){
-        NSString *uuidString = self.activePeripheral.identifier.UUIDString;
-        return [uuidString substringFromIndex:(uuidString.length - 15)];
-    } else {
-        return @"Not connected";
-    }
-    
-    return @"Not connected";
-}
-
 -(int) findBLEPeripheralsWithName:(NSString*)name {
     nameFindingBle = name;
     

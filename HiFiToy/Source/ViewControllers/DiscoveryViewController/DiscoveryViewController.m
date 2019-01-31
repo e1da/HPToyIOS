@@ -174,8 +174,8 @@
             
             if (![hiFiToyDeviceList findNameForUUID:uuidString]){
                 HiFiToyDevice *device = [[HiFiToyDevice alloc] init];
-                [device loadDefaultDspDevice];
-                device.name = [uuidString substringFromIndex:(uuidString.length - 15)];
+                device.uuid = uuidString;
+                device.name = [device getShortUUIDString];
                 [hiFiToyDeviceList updateForUUID:uuidString withDevice:device];
             }
             
@@ -190,9 +190,7 @@
         
         if (![hiFiToyDeviceList findNameForUUID:@"demo"]){
             HiFiToyDevice *device = [[HiFiToyDevice alloc] init];
-            [device loadDefaultDspDevice];
-            device.name = @"demo";
-            [hiFiToyDeviceList updateForUUID:@"demo" withDevice:device];
+            [hiFiToyDeviceList updateForUUID:device.uuid withDevice:device];
         }
         
         if (cell == nil) {
