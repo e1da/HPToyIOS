@@ -20,7 +20,6 @@
     if (self){
         bleDriver = [[BleDriver alloc] init];
         bleDriver.communicationDelegate = self;
-        _audioSource = PCM9211_USB_SOURCE;
         
         _foundHiFiToyDevices = [[NSMutableArray alloc] init];
         _activeHiFiToyDevice = [[HiFiToyDeviceList sharedInstance] getDeviceWithUUID:@"demo"];
@@ -160,28 +159,6 @@
     [self sendDataToDsp:data withResponse:YES];
 }
 
-- (void) setAudioSource:(PCM9211Source_t)audioSource
-{
-    _audioSource = audioSource;
-    
-    CommonPacket_t packet;
-    packet.cmd = SET_AUDIO_SOURCE;
-    packet.data[0] = audioSource;
-    
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [self sendDataToDsp:data withResponse:YES];
-}
-
-- (void) updateAudioSource
-{
-    CommonPacket_t packet;
-    
-    packet.cmd = GET_AUDIO_SOURCE;
-    
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [self sendDataToDsp:data withResponse:YES];
-}
-
 - (void) sendEnergyConfig:(EnergyConfig_t)energy
 {
     NSData *data = [[NSData alloc] initWithBytes:&energy length:sizeof(EnergyConfig_t)];
@@ -217,7 +194,7 @@
     hiFiToyConfig.successWriteFlag  = 0x00; //must be assign '0' before sendFactorySettings
     hiFiToyConfig.version           = HIFI_TOY_VERSION;
     hiFiToyConfig.pairingCode       = _activeHiFiToyDevice.pairingCode;
-    hiFiToyConfig.audioSource       = _audioSource;
+    hiFiToyConfig.audioSource       = _activeHiFiToyDevice.audioSource;
     
     hiFiToyConfig.energy.highThresholdDb    = 0;    // 0
     hiFiToyConfig.energy.lowThresholdDb     = -55;  // -55
@@ -500,7 +477,7 @@
                 
                 if (version == HIFI_TOY_VERSION) {
                     NSLog(@"GET_VERSION_OK");
-                    [self updateAudioSource];
+                    [_activeHiFiToyDevice updateAudioSource];
                 } else {
                     NSLog(@"GET_VERSION_FAIL");
                     /*HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
@@ -518,8 +495,8 @@
                 break;
             case GET_AUDIO_SOURCE:
             {
-                _audioSource = data[1];
-                NSLog(@"GET_AUDIO_SOURCE %d", _audioSource);
+                _activeHiFiToyDevice.audioSource = data[1];
+                NSLog(@"GET_AUDIO_SOURCE %d", _activeHiFiToyDevice.audioSource);
                 [self getChecksumParamData];
                 break;
             }

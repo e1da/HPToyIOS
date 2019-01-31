@@ -74,7 +74,7 @@
 }
 
 - (void) setupOutlets{
-    _audioSourceSegment_outl.selectedSegmentIndex = hiFiToyControl.audioSource;
+    _audioSourceSegment_outl.selectedSegmentIndex = hiFiToyDevice.audioSource;
     self.volumeTitle_outl.textColor = [UIColor blackColor];
     self.gainLabel_outl.textColor = [UIColor blackColor];
     self.gainLabel_outl.text = [hiFiToyPreset.masterVolume getInfo];
@@ -221,7 +221,8 @@
  Events from outlet
  -----------------------------------------------------------------------------------------*/
 - (IBAction)changeAudioSource:(id)sender {
-    hiFiToyControl.audioSource = self.audioSourceSegment_outl.selectedSegmentIndex;
+    hiFiToyDevice.audioSource = self.audioSourceSegment_outl.selectedSegmentIndex;
+    [hiFiToyDevice sendAudioSource];
 }
 
 - (IBAction)setGainSlider:(id)sender

@@ -9,6 +9,7 @@
 #import "HiFiToyDevice.h"
 #import "HiFiToyPresetList.h"
 #import "DialogSystem.h"
+#import "HiFiToyControl.h"
 
 @implementation HiFiToyDevice
 
@@ -29,6 +30,8 @@
         self.name = [decoder decodeObjectForKey:@"name"];
         self.pairingCode = [decoder decodeIntForKey:@"pairingCode"];
         self.activeKeyPreset = [decoder decodeObjectForKey:@"activeKeyPreset"];
+        
+        self.audioSource = PCM9211_USB_SOURCE;
     }
     return self;
 }
@@ -46,6 +49,7 @@
     self.name = @"Default";
     self.pairingCode = 0;
     self.activeKeyPreset = @"DefaultPreset";
+    self.audioSource = PCM9211_USB_SOURCE;
 }
 
 - (HiFiToyPreset *) getActivePreset
@@ -82,6 +86,26 @@
     } else {
         NSLog(@"Import and current presets are equals!");
     }
+}
+
+- (void) sendAudioSource {
+ 
+    CommonPacket_t packet;
+    packet.cmd = SET_AUDIO_SOURCE;
+    packet.data[0] = _audioSource;
+    
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
+}
+
+- (void) updateAudioSource
+{
+    CommonPacket_t packet;
+    
+    packet.cmd = GET_AUDIO_SOURCE;
+    
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
 }
 
 @end

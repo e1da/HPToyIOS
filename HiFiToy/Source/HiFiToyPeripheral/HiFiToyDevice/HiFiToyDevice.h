@@ -16,6 +16,9 @@
 @property NSString * name;
 @property uint32_t pairingCode;
 
+//audio source
+@property (nonatomic) PCM9211Source_t audioSource;
+
 //preset property
 @property (nonatomic)   NSString * activeKeyPreset;
 
@@ -24,6 +27,9 @@
 - (HiFiToyPreset *) getActivePreset;
 - (NSString *) getShortUUIDString;
 
--(void) checkPresetChecksum:(uint16_t) checksum;
+- (void) checkPresetChecksum:(uint16_t) checksum;
+
+- (void) sendAudioSource;
+- (void) updateAudioSource;
 
 @end

@@ -15,6 +15,39 @@
 #define CC2540_PAGE_SIZE            2048
 #define ATTACH_PAGE_OFFSET          (3 * CC2540_PAGE_SIZE)//3 page
 
+typedef enum : uint8_t {
+    ESTABLISH_PAIR      = 0x00,
+    SET_PAIR_CODE       = 0x01,
+    SET_WRITE_FLAG      = 0x02,
+    GET_WRITE_FLAG      = 0x03,
+    GET_VERSION         = 0x04,
+    GET_CHECKSUM        = 0x05,
+    INIT_DSP            = 0x06,
+    SET_AUDIO_SOURCE    = 0x07,
+    GET_AUDIO_SOURCE    = 0x08,
+    
+    //feedback msg
+    CLIP_DETECTION              = 0xFD,
+    OTW_DETECTION               = 0xFE,
+    PARAM_CONNECTION_ENABLED    = 0xFF
+    
+} CommonCmd_t;
+
+typedef struct {
+    uint8_t cmd;
+    uint8_t data[4];
+} CommonPacket_t;
+
+typedef struct {
+    uint8_t addr;
+    uint8_t length;
+    uint8_t data[18];
+} Packet_t;
+
+typedef enum : uint8_t {
+    PAIR_NO, PAIR_YES
+} PairStatus_t;
+
 @interface HiFiToyControl : NSObject <BleCommunicationDelegate> {
     BleDriver * bleDriver;
     HiFiToyPeripheral_t hiFiToyConfig;
@@ -24,10 +57,7 @@
 @property (nonatomic, readonly) NSMutableArray * foundHiFiToyDevices;
 @property (nonatomic, readonly) HiFiToyDevice * activeHiFiToyDevice;
 
-@property (nonatomic) PCM9211Source_t audioSource;
-
 + (HiFiToyControl *)sharedInstance;
-
 
 - (BOOL) isConnected;
 - (void) startDiscovery;
@@ -46,7 +76,6 @@
 - (void) getVersion;
 - (void) getChecksumParamData;
 - (void) setInitDsp;
-- (void) updateAudioSource;
 - (void) sendEnergyConfig:(EnergyConfig_t)energy;
 - (void) getEnergyConfig;
 
