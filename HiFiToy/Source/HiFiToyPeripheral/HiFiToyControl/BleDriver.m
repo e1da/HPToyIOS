@@ -13,8 +13,6 @@
     CBCentralManager *CM;
     
     BlePacketQueue * blePacketQueue;
-    BOOL bleBusy;
-    
     NSString * nameFindingBle;
 }
 
@@ -22,8 +20,7 @@
 
 @implementation BleDriver
 
-- (id) init
-{
+- (id) init {
     self = [super init];
     if (self) {
         [self initBlePacketQueue];
@@ -35,8 +32,7 @@
 }
 
 //write to CC2540
--(void) writeValue:(int)serviceUUID characteristicUUID:(int)characteristicUUID data:(NSData *)data response:(BOOL)response
-{
+-(void) writeValue:(int)serviceUUID characteristicUUID:(int)characteristicUUID data:(NSData *)data response:(BOOL)response {
     
     CBCharacteristic * characteristic = [self getCharacteristicFromServiceUUID:serviceUUID characteristicUUID:characteristicUUID];
     if (!characteristic) return;
@@ -47,9 +43,8 @@
     [blePacketQueue addPacketWithCharacteristic:characteristic data:data response:response];
     //[blePacketQueue print];
     
-    if (bleBusy == NO){
+    if ([blePacketQueue size] == 1) {
         
-        bleBusy = YES;
         BlePacket * packet = [blePacketQueue getFirstPacket];
         
         //NSLog(@"%@", [packet description]);
@@ -60,8 +55,7 @@
 
 
 //read from CC2540
--(void) readValue: (int)serviceUUID characteristicUUID:(int)characteristicUUID
-{
+-(void) readValue: (int)serviceUUID characteristicUUID:(int)characteristicUUID {
     
     CBCharacteristic * characteristic = [self getCharacteristicFromServiceUUID:serviceUUID characteristicUUID:characteristicUUID];
     if (!characteristic) return;
@@ -71,8 +65,7 @@
 
 
 //CC2540 enabled/disabled notification
--(void) notification:(int)serviceUUID characteristicUUID:(int)characteristicUUID on:(BOOL)on
-{
+-(void) notification:(int)serviceUUID characteristicUUID:(int)characteristicUUID on:(BOOL)on {
     
     CBCharacteristic * characteristic = [self getCharacteristicFromServiceUUID:serviceUUID characteristicUUID:characteristicUUID];
     if (!characteristic) return;
@@ -92,22 +85,9 @@
     return @"Not connected";
 }
 
-- (BOOL) isConnected
-{
-    if (_activePeripheral == nil) return NO;
-    
-    if (_activePeripheral.state == CBPeripheralStateConnected) {
-        return YES;
-    }
-    
-    return NO;
-}
-
 - (void) initBlePacketQueue {
     blePacketQueue = [[BlePacketQueue alloc] init];
     [blePacketQueue clear];
-    
-    bleBusy = NO;
 }
 
 //reset core ble manager, clear ble packet queue
@@ -119,13 +99,11 @@
     return 0;
 }
 
-//find (discovery) peripherals
--(int) findBLEPeripheralsWithName:(NSString*)name
-{
-    _state = BLE_DISCOVERING;
+-(int) findBLEPeripheralsWithName:(NSString*)name {
     nameFindingBle = name;
+    _state = BLE_DISCOVERING;
     
-    if (CM.state  != CBCentralManagerStatePoweredOn) {
+    if (CM.state  != CBManagerStatePoweredOn) {
         NSLog(@"CoreBluetooth not correctly initialized!");
         NSLog(@"State = %d (%s)\r\n", (int)self->CM.state, [self centralManagerStateToString:CM.state]);
         return -1;
@@ -137,17 +115,13 @@
         [_peripherals removeAllObjects];
     }
     
-    //nameFindingBle = name;
-    //_state = BLE_DISCOVERING;
-    
-    /*NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:TRUE],CBCentralManagerScanOptionAllowDuplicatesKey, nil];*/
-    
+
     NSLog(@"Start discovering!");
     
     CBUUID *su = [self IntToCBUUID:0xFFF0];
-    [CM scanForPeripheralsWithServices:[NSArray arrayWithObject:su] options:0/*options*/]; // Start scanning
+    [CM scanForPeripheralsWithServices:[NSArray arrayWithObject:su] options:0]; // Start scanning
     
-    return 0; // Started scanning OK !
+    return 0;
 }
 
 //stop find (discovery) peripherals
@@ -161,6 +135,10 @@
         [CM stopScan];
         NSLog(@"Stopped discovering!");
     }
+}
+
+- (BOOL) isConnected {
+    return ( (_activePeripheral) && (_activePeripheral.state == CBPeripheralStateConnected) );
 }
 
 //disconnect to peripheral
@@ -198,20 +176,19 @@
 }
 
 //convert CentralManger state to string
-- (const char *) centralManagerStateToString: (int)state
-{
+- (const char *) centralManagerStateToString: (int)state {
     switch(state) {
-        case CBCentralManagerStateUnknown:
+        case CBManagerStateUnknown:
             return "State unknown (CBCentralManagerStateUnknown)";
-        case CBCentralManagerStateResetting:
+        case CBManagerStateResetting:
             return "State resetting (CBCentralManagerStateUnknown)";
-        case CBCentralManagerStateUnsupported:
+        case CBManagerStateUnsupported:
             return "State BLE unsupported (CBCentralManagerStateResetting)";
-        case CBCentralManagerStateUnauthorized:
+        case CBManagerStateUnauthorized:
             return "State unauthorized (CBCentralManagerStateUnauthorized)";
-        case CBCentralManagerStatePoweredOff:
+        case CBManagerStatePoweredOff:
             return "State BLE powered off (CBCentralManagerStatePoweredOff)";
-        case CBCentralManagerStatePoweredOn:
+        case CBManagerStatePoweredOn:
             return "State powered up and ready (CBCentralManagerStatePoweredOn)";
         default:
             return "State unknown";
@@ -220,30 +197,27 @@
 }
 
 //utility
--(UInt16) swap:(UInt16)s
-{
+-(UInt16) swap:(UInt16)s {
     UInt16 temp = s << 8;
     temp |= (s >> 8);
     return temp;
 }
 
--(CBUUID *) IntToCBUUID:(UInt16)val
-{
+-(CBUUID *) IntToCBUUID:(UInt16)val {
     val = [self swap:val];
     NSData *d = [[NSData alloc] initWithBytes:(char *)&val length:2];
     return [CBUUID UUIDWithData:d];
 }
 
--(UInt16) CBUUIDToInt:(CBUUID *) UUID
-{
+-(UInt16) CBUUIDToInt:(CBUUID *) UUID {
     char b1[16];
     [UUID.data getBytes:b1 length:16];
     return ((b1[0] << 8) | b1[1]);
 }
 
 //Find Service and Characteristic from uuid
--(CBService *) findServiceFromUUID:(CBUUID *)UUID p:(CBPeripheral *)p
-{
+-(CBService *) findServiceFromUUID:(CBUUID *)UUID p:(CBPeripheral *)p {
+    
     for(int i = 0; i < p.services.count; i++) {
         CBService *s = [p.services objectAtIndex:i];
         if ([s.UUID.data isEqualToData:UUID.data]) return s;
@@ -251,8 +225,8 @@
     return nil; //Service not found on this peripheral
 }
 
--(CBCharacteristic *) findCharacteristicFromUUID:(CBUUID *)UUID service:(CBService*)service
-{
+-(CBCharacteristic *) findCharacteristicFromUUID:(CBUUID *)UUID service:(CBService*)service {
+    
     for(int i=0; i < service.characteristics.count; i++) {
         CBCharacteristic *c = [service.characteristics objectAtIndex:i];
         if ([c.UUID.data isEqualToData:UUID.data]) return c;
@@ -261,8 +235,8 @@
 }
 
 -(CBCharacteristic *) getCharacteristicFromServiceUUID:(int)serviceUUID
-                                    characteristicUUID:(int)characteristicUUID
-{
+                                    characteristicUUID:(int)characteristicUUID {
+    
     if (!_activePeripheral) return nil;
     
     CBUUID *su = [self IntToCBUUID:serviceUUID];
@@ -289,7 +263,7 @@
           (int)central.state,
           [self centralManagerStateToString:central.state]);
     
-    if ((_state == BLE_DISCOVERING) && (central.state == 5)) {
+    if ((CM.isScanning) && (central.state == CBManagerStatePoweredOn)) {
         [self findBLEPeripheralsWithName:nameFindingBle];
     }
 }
@@ -444,15 +418,11 @@
         [blePacketQueue removeFirstPacket];
                 
         if ([blePacketQueue size] != 0){// if queue isn`t empty
-            
-            bleBusy = YES;
             //get first packet
             BlePacket *packet = [blePacketQueue getFirstPacket];
             //send packet
             [self.activePeripheral writeValue:packet.data forCharacteristic:packet.characteristic type:CBCharacteristicWriteWithResponse];
 
-        } else {
-            bleBusy = NO;
         }
         
         if (self.communicationDelegate){
