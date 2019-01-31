@@ -24,4 +24,6 @@
 - (HiFiToyPreset *) getActivePreset;
 - (NSString *) getShortUUIDString;
 
+-(void) checkPresetChecksum:(uint16_t) checksum;
+
 @end

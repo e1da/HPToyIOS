@@ -514,8 +514,7 @@
                 uint16_t checksum = 0;
                 memcpy(&checksum, data + 1, 2);
                 
-                [self comparePreset:checksum];
-                
+                [_activeHiFiToyDevice checkPresetChecksum:checksum];
                 break;
             case GET_AUDIO_SOURCE:
             {
@@ -542,18 +541,6 @@
     } else if (value.length == 20) { // Get data from storage
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"GetDataNotification" object:value];
-    }
-}
-
--(void) comparePreset:(uint16_t) checksum
-{
-    HiFiToyPreset * preset = [_activeHiFiToyDevice getActivePreset];
-    NSLog(@"Checksum app preset = %x, Peripheral preset = %x", preset.checkSum, checksum);
-    
-    if (preset.checkSum != checksum) {
-        [[DialogSystem sharedInstance] showImportPresetDialog];
-    } else {
-        NSLog(@"Import and current presets are equals!");
     }
 }
 

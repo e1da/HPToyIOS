@@ -8,6 +8,7 @@
 
 #import "HiFiToyDevice.h"
 #import "HiFiToyPresetList.h"
+#import "DialogSystem.h"
 
 @implementation HiFiToyDevice
 
@@ -70,6 +71,17 @@
     }
     
     return _uuid;
+}
+
+-(void) checkPresetChecksum:(uint16_t) checksum {
+    HiFiToyPreset * preset = [self getActivePreset];
+    NSLog(@"Checksum app preset = %x, Peripheral preset = %x", preset.checkSum, checksum);
+    
+    if (preset.checkSum != checksum) {
+        [[DialogSystem sharedInstance] showImportPresetDialog];
+    } else {
+        NSLog(@"Import and current presets are equals!");
+    }
 }
 
 @end
