@@ -10,7 +10,9 @@
 #import "BlePacketQueue.h"
 
 @interface BleDriver() {
-    CBCentralManager *CM;
+    CBCentralManager * CM;
+    NSMutableArray * peripherals;
+    CBPeripheral * activePeripheral;
     
     BlePacketQueue * blePacketQueue;
     NSString * nameFindingBle;
@@ -26,6 +28,8 @@
         CM = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
         
         blePacketQueue = [[BlePacketQueue alloc] init];
+        peripherals = [[NSMutableArray alloc] init];
+        activePeripheral = nil;
         nameFindingBle = @"";
     }
     return self;
@@ -48,7 +52,7 @@
         BlePacket * packet = [blePacketQueue getFirstPacket];
         
         //NSLog(@"%@", [packet description]);
-        [_activePeripheral writeValue:packet.data forCharacteristic:packet.characteristic type:CBCharacteristicWriteWithResponse];
+        [activePeripheral writeValue:packet.data forCharacteristic:packet.characteristic type:CBCharacteristicWriteWithResponse];
     }
     
 }
@@ -60,7 +64,7 @@
     CBCharacteristic * characteristic = [self getCharacteristicFromServiceUUID:serviceUUID characteristicUUID:characteristicUUID];
     if (!characteristic) return;
     
-    [_activePeripheral readValueForCharacteristic:characteristic];
+    [activePeripheral readValueForCharacteristic:characteristic];
 }
 
 
@@ -70,24 +74,18 @@
     CBCharacteristic * characteristic = [self getCharacteristicFromServiceUUID:serviceUUID characteristicUUID:characteristicUUID];
     if (!characteristic) return;
     
-    [_activePeripheral setNotifyValue:on forCharacteristic:characteristic];
+    [activePeripheral setNotifyValue:on forCharacteristic:characteristic];
 }
 
 -(int) findBLEPeripheralsWithName:(NSString*)name {
     nameFindingBle = name;
+    [peripherals removeAllObjects];
     
     if (CM.state  != CBManagerStatePoweredOn) {
         NSLog(@"CoreBluetooth not correctly initialized!");
         NSLog(@"State = %d (%s)\r\n", (int)self->CM.state, [self centralManagerStateToString:CM.state]);
         return -1;
     }
-    
-    if (!_peripherals){
-        _peripherals = [[NSMutableArray alloc] init];
-    } else {
-        [_peripherals removeAllObjects];
-    }
-    
 
     NSLog(@"Start discovering!");
     
@@ -105,36 +103,50 @@
 }
 
 - (BOOL) isConnected {
-    return ( (_activePeripheral) && (_activePeripheral.state == CBPeripheralStateConnected) );
+    return ( (activePeripheral) && (activePeripheral.state == CBPeripheralStateConnected) );
 }
 
 //disconnect to peripheral
-- (void) disconnectPeripheral
-{
-    [self stopFindBLEPeripherals];
-    
-    if (_activePeripheral){
-        [CM cancelPeripheralConnection:_activePeripheral];
-        _activePeripheral = nil;
-        
+- (void) disconnect {
+    if ([self isConnected]){
+        [CM cancelPeripheralConnection:activePeripheral];
         NSLog(@"Disconnecting peripheral!");
     }
+    activePeripheral = nil;
 }
 
 //connect to peripheral
-- (void) connectPeripheral:(CBPeripheral *)peripheral
-{
+- (void) connect:(CBPeripheral *)peripheral {
     if ([self isConnected]) {
-        if (_activePeripheral == peripheral) {
+        if (activePeripheral == peripheral) {
             return;
         } else {
-            [self disconnectPeripheral];
+            [self disconnect];
         }
     }
     [blePacketQueue clear];
     
     NSLog(@"Connecting to peripheral with UUID : %@", peripheral.identifier.UUIDString);
     [CM connectPeripheral:peripheral options:nil];
+}
+
+- (CBPeripheral *) findPeripheralWithUUID:(NSString *) uuid {
+    for (int i = 0; i < peripherals.count; i++) {
+        CBPeripheral * p = [peripherals objectAtIndex:i];
+        if ([p.identifier.UUIDString isEqualToString:uuid]) {
+            return p;
+        }
+    }
+    return nil;
+}
+
+- (void) connectWithUUID:(NSString *)peripheralUUID {
+    CBPeripheral * peripheral = [self findPeripheralWithUUID:peripheralUUID];
+    if (peripheral) {
+        [self connect:peripheral];
+    } else {
+        [self disconnect];
+    }
 }
 
 //convert CentralManger state to string
@@ -199,20 +211,20 @@
 -(CBCharacteristic *) getCharacteristicFromServiceUUID:(int)serviceUUID
                                     characteristicUUID:(int)characteristicUUID {
     
-    if (!_activePeripheral) return nil;
+    if (![self isConnected]) return nil;
     
     CBUUID *su = [self IntToCBUUID:serviceUUID];
     CBUUID *cu = [self IntToCBUUID:characteristicUUID];
     
-    CBService *service = [self findServiceFromUUID:su p:_activePeripheral];
+    CBService *service = [self findServiceFromUUID:su p:activePeripheral];
     if (!service) {
-        NSLog(@"Could not find service with UUID %@ on peripheral with UUID %@", su.UUIDString, _activePeripheral.identifier.UUIDString);
+        NSLog(@"Could not find service with UUID %@ on peripheral with UUID %@", su.UUIDString, activePeripheral.identifier.UUIDString);
         return nil;
     }
     CBCharacteristic *characteristic = [self findCharacteristicFromUUID:cu service:service];
     if (!characteristic) {
         NSLog(@"Could not find characteristic with UUID %@ on service with UUID %@ on peripheral with UUID %@",
-              cu.UUIDString, su.UUIDString, _activePeripheral.identifier.UUIDString);
+              cu.UUIDString, su.UUIDString, activePeripheral.identifier.UUIDString);
         return nil;
     }
     
@@ -240,26 +252,18 @@
     //check DSP Name
     if (([peripheralAdvertName isEqualToString:nameFindingBle]) ||
         ([nameFindingBle isEqualToString:@"ALL_PERIPHERAL"])){
-        peripheral.delegate = self;
         
-        if (!_peripherals){ //if peripheral array empty
-            _peripherals = [[NSMutableArray alloc] initWithObjects:peripheral,nil];
-            
-        } else { //if peripheral array > 0
-            for(int i = 0; i < _peripherals.count; i++) {
-                CBPeripheral *p = [_peripherals objectAtIndex:i];
-                if ([p.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
-                    [_peripherals replaceObjectAtIndex:i withObject:peripheral];
-                    NSLog(@"Duplicate UUID found updating ...");
-                    return;
-                }
-            }
-            
-            [_peripherals addObject:peripheral];
+        //check duplicate peripheral
+        if ([self findPeripheralWithUUID:peripheral.identifier.UUIDString]) {
+            NSLog(@"Skip duplicate peripheral.");
+            return;
         }
-        NSLog(@"New UUID, adding.");
         
-        if (_communicationDelegate) [_communicationDelegate keyfobDidFound];
+        peripheral.delegate = self;
+        [peripherals addObject:peripheral];
+        NSLog(@"Add new CBPeripheral");
+        
+        if (_communicationDelegate) [_communicationDelegate keyfobDidFound:peripheral.identifier.UUIDString];
     }
     
 }
@@ -267,11 +271,11 @@
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
     NSLog(@"Connection to peripheral with UUID : %@ successfull", peripheral.identifier.UUIDString);
     
-    _activePeripheral = peripheral;
-    _activePeripheral.delegate = self;
+    activePeripheral = peripheral;
+    activePeripheral.delegate = self;
     
     CBUUID *su = [self IntToCBUUID:0xFFF0];
-    [self.activePeripheral discoverServices:[NSArray arrayWithObject:su]];
+    [activePeripheral discoverServices:[NSArray arrayWithObject:su]];
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
@@ -280,14 +284,14 @@
         [self.communicationDelegate keyfobDidFailConnect];
     }
     
-    _activePeripheral = nil;
+    activePeripheral = nil;
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    if (_activePeripheral){//re-connect
-        [self connectPeripheral:self.activePeripheral];
-        _activePeripheral = nil;
+    if (activePeripheral){//re-connect
+        [self connect:activePeripheral];
+        activePeripheral = nil;
     }
     
     if (self.communicationDelegate){
@@ -381,7 +385,7 @@
             //get first packet
             BlePacket *packet = [blePacketQueue getFirstPacket];
             //send packet
-            [self.activePeripheral writeValue:packet.data forCharacteristic:packet.characteristic type:CBCharacteristicWriteWithResponse];
+            [activePeripheral writeValue:packet.data forCharacteristic:packet.characteristic type:CBCharacteristicWriteWithResponse];
 
         }
         

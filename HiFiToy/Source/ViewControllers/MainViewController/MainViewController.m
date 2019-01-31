@@ -67,7 +67,7 @@
 {
     [super viewWillAppear:animated];
     
-    hiFiToyDevice = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
+    hiFiToyDevice = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
     hiFiToyPreset = [hiFiToyDevice getActivePreset];
     
     [self setupOutlets];

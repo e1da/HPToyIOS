@@ -995,7 +995,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="pGg-6v-bdr" kind="push" identifier="DemoConnectSegue" id="dBA-2p-FmV"/>
+                                    <segue destination="pGg-6v-bdr" kind="push" identifier="ConnectSegue" id="dBA-2p-FmV"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

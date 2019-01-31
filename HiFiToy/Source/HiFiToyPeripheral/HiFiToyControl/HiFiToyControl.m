@@ -21,6 +21,9 @@
         bleDriver = [[BleDriver alloc] init];
         bleDriver.communicationDelegate = self;
         _audioSource = PCM9211_USB_SOURCE;
+        
+        _foundHiFiToyDevices = [[NSMutableArray alloc] init];
+        _activeHiFiToyDevice = [[HiFiToyDeviceList sharedInstance] getDeviceWithUUID:@"demo"];
     }
     
     return self;
@@ -37,21 +40,18 @@
     return sharedInstance;
 }
 
-- (NSMutableArray *) getPeripherals
-{
-    return bleDriver.peripherals;
-}
-
 - (BOOL) isConnected
 {
-    return [bleDriver isConnected];
+    return ( (_activeHiFiToyDevice) && ([bleDriver isConnected]) );
 }
 
 - (void) startDiscovery
 {
-    if ([bleDriver isConnected]) {
-        [bleDriver disconnectPeripheral];
+    [_foundHiFiToyDevices removeAllObjects];
 
+    if ([bleDriver isConnected]) {
+        [_foundHiFiToyDevices addObject:_activeHiFiToyDevice];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"KeyfobDidFoundNotification" object:nil];
     }
     [bleDriver findBLEPeripheralsWithName:@"HiFiToyPeripheral"];
 }
@@ -61,14 +61,21 @@
     [bleDriver stopFindBLEPeripherals];
 }
 
-- (void) connect:(CBPeripheral *)p
+- (void) connect:(HiFiToyDevice *) device
 {
-    [bleDriver connectPeripheral:p];
+    _activeHiFiToyDevice = device;
+    [bleDriver connectWithUUID:device.uuid];
+}
+
+- (void) demoConnect
+{
+    [self connect:[[HiFiToyDeviceList sharedInstance] getDeviceWithUUID:@"demo"]];
 }
 
 - (void) disconnect
 {
-    [bleDriver disconnectPeripheral];
+    _activeHiFiToyDevice = [[HiFiToyDeviceList sharedInstance] getDeviceWithUUID:@"demo"];
+    [bleDriver disconnect];
 }
 
 //base send command
@@ -197,9 +204,8 @@
     [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Save Configuration", @"")];
     
     //get default preset data
-    HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
-    [device setActiveKeyPreset:@"DefaultPreset"];
-    HiFiToyPreset * preset = [device getActivePreset];
+    _activeHiFiToyDevice.activeKeyPreset = @"DefaultPreset";
+    HiFiToyPreset * preset = [_activeHiFiToyDevice getActivePreset];
     
     [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
     
@@ -210,7 +216,7 @@
     hiFiToyConfig.i2cAddr           = I2C_ADDR;
     hiFiToyConfig.successWriteFlag  = 0x00; //must be assign '0' before sendFactorySettings
     hiFiToyConfig.version           = HIFI_TOY_VERSION;
-    hiFiToyConfig.pairingCode       = [[HiFiToyDeviceList sharedInstance] getActiveDevice].pairingCode;
+    hiFiToyConfig.pairingCode       = _activeHiFiToyDevice.pairingCode;
     hiFiToyConfig.audioSource       = _audioSource;
     
     hiFiToyConfig.energy.highThresholdDb    = 0;    // 0
@@ -371,8 +377,18 @@
 }
 
 /*------------------------------- BleCommunication delegate -----------------------------------*/
--(void) keyfobDidFound
+-(void) keyfobDidFound:(NSString *)peripheralUUID
 {
+    HiFiToyDevice *device = [[HiFiToyDeviceList sharedInstance] getDeviceWithUUID:peripheralUUID];
+    if (!device){
+        device = [[HiFiToyDevice alloc] init];
+        device.uuid = peripheralUUID;
+        device.name = [device getShortUUIDString];
+        [[HiFiToyDeviceList sharedInstance] setDevice:device withUUID:device.uuid];
+    }
+    
+    [_foundHiFiToyDevices addObject:device];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"KeyfobDidFoundNotification" object:nil];
 }
 
@@ -394,8 +410,7 @@
     }
     
     //send pairing code
-    HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
-    [self startPairedProccess:device.pairingCode];
+    [self startPairedProccess:_activeHiFiToyDevice.pairingCode];
 }
 
 -(void) keyfobDidFailConnect
@@ -532,7 +547,7 @@
 
 -(void) comparePreset:(uint16_t) checksum
 {
-    HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
+    HiFiToyPreset * preset = [_activeHiFiToyDevice getActivePreset];
     NSLog(@"Checksum app preset = %x, Peripheral preset = %x", preset.checkSum, checksum);
     
     if (preset.checkSum != checksum) {

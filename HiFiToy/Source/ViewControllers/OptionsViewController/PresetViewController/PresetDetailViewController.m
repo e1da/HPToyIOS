@@ -7,6 +7,7 @@
 //
 
 #import "PresetDetailViewController.h"
+#import "HiFiToyControl.h"
 #import "HiFiToyDeviceList.h"
 
 @implementation PresetDetailViewController
@@ -59,7 +60,7 @@
 
 - (IBAction)editNamePreset:(id)sender
 {
-    NSString *activePresetKey = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] activeKeyPreset];
+    NSString *activePresetKey = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] activeKeyPreset];
     NSString *tempPresetKey = [self.hiFiToyPreset.presetName copy];
     
     [self.hiFiToyPreset rename:_name_outl.text];
@@ -67,7 +68,7 @@
     //if current preset is active we must re-change activeKeyPreset
     //becuse he is change in rename: method
     if ([activePresetKey isEqualToString:tempPresetKey]){
-        HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
+        HiFiToyDevice * device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
         device.activeKeyPreset = self.hiFiToyPreset.presetName;
         [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
     }

@@ -14,8 +14,6 @@
 
 @interface DiscoveryViewController(){
     //UIAlertView *connectingAlert;
-    
-    HiFiToyDevice * hiFiToyDevice;
 }
 
 - (void) showHint:(UIButton *)button;
@@ -75,31 +73,13 @@
     
     
     hiFiToyControl = [HiFiToyControl sharedInstance];
-    hiFiToyDeviceList = [HiFiToyDeviceList sharedInstance];
     
 }
 
 - (void) handleEnteredForeground
 {
-    if (![hiFiToyControl isConnected]){
-        /*[dspControl.peripherals removeAllObjects];
-        [self.tableView reloadData];
-        
-        [NSTimer scheduledTimerWithTimeInterval:(float)1.0 target:self selector:@selector(scanTimer:) userInfo:nil repeats:NO];*/
-        
-        [hiFiToyControl startDiscovery];
-        [self.tableView reloadData];
-    }
-}
-
-- (void) scanTimer:(NSTimer *)timer {
-    /*[dspControl disconnectPeripheral];
-    [dspControl.peripherals removeAllObjects];
-    
-    [dspControl findBLEPeripheralsWithName:@"HiFiToy"];*/
     [hiFiToyControl startDiscovery];
     [self.tableView reloadData];
-    
 }
 
 - (void)dealloc {
@@ -129,7 +109,7 @@
 {
     switch (section){
         case 0:
-            if (![hiFiToyControl getPeripherals].count){
+            if (!hiFiToyControl.foundHiFiToyDevices.count){
                 return @"Devices found: none";
             } else {
                 return @"Devices found:";
@@ -147,7 +127,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     switch (section){
-        case 0: return [hiFiToyControl getPeripherals].count;
+        case 0: return hiFiToyControl.foundHiFiToyDevices.count;
         case 1: return 1;
     }
     return 0;
@@ -156,49 +136,25 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *tableIdentifier;
-    UITableViewCell *cell;
-    NSArray * peripherals = [hiFiToyControl getPeripherals];
+    FoundCell * foundCell = [tableView dequeueReusableCellWithIdentifier:@"FoundCell"];
+    if (!foundCell) {
+        foundCell = [[FoundCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FoundCell"];
+    }
     
     if (indexPath.section == 0){
-        FoundCell *foundCell;
-        tableIdentifier = @"FoundCell";
-        foundCell = [tableView dequeueReusableCellWithIdentifier:tableIdentifier];
-        
-        if (foundCell == nil) {
-            foundCell = [[FoundCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:tableIdentifier];
-        }
-        if (indexPath.row < peripherals.count){
-            CBPeripheral *peripheral = [peripherals objectAtIndex:indexPath.row];
-            NSString *uuidString = peripheral.identifier.UUIDString;
+        if (indexPath.row < hiFiToyControl.foundHiFiToyDevices.count){
+            HiFiToyDevice * hiFiToyDevice = [hiFiToyControl.foundHiFiToyDevices objectAtIndex:indexPath.row];
+            foundCell.DspFoundUdid_outl.text = hiFiToyDevice.name;
             
-            if (![hiFiToyDeviceList findNameForUUID:uuidString]){
-                HiFiToyDevice *device = [[HiFiToyDevice alloc] init];
-                device.uuid = uuidString;
-                device.name = [device getShortUUIDString];
-                [hiFiToyDeviceList updateForUUID:uuidString withDevice:device];
-            }
-            
-            foundCell.DspFoundUdid_outl.text = [[hiFiToyDeviceList findNameForUUID:uuidString] name];
         } else {
             foundCell.DspFoundUdid_outl.text = @"err";
         }
-        cell = foundCell;
+        
     } else {
-        tableIdentifier = @"DemoCell";
-        cell = [tableView dequeueReusableCellWithIdentifier:tableIdentifier];
-        
-        if (![hiFiToyDeviceList findNameForUUID:@"demo"]){
-            HiFiToyDevice *device = [[HiFiToyDevice alloc] init];
-            [hiFiToyDeviceList updateForUUID:device.uuid withDevice:device];
-        }
-        
-        if (cell == nil) {
-            cell = [[DemoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:tableIdentifier];
-        }
+        foundCell.DspFoundUdid_outl.text = @"Demo Mode";
     }
     
-    return cell;
+    return foundCell;
 }
 
 /*------------------------------------ Prepare for segue ---------------------------------------*/
@@ -207,33 +163,23 @@
     if ([segue.identifier isEqualToString:@"ConnectSegue"]) {
         
         NSIndexPath *selectedIndexPath = [self.tableView indexPathForCell:sender];
-        NSArray * peripherals = [hiFiToyControl getPeripherals];
         
-        if ((selectedIndexPath.section == 0) && (selectedIndexPath.row < peripherals.count)){
+        if ((selectedIndexPath.section == 0) && (selectedIndexPath.row < hiFiToyControl.foundHiFiToyDevices.count)){
             
-            CBPeripheral * p = [peripherals objectAtIndex:selectedIndexPath.row];
+            HiFiToyDevice * device = [hiFiToyControl.foundHiFiToyDevices objectAtIndex:selectedIndexPath.row];
             
             [[HiFiToyPresetList sharedInstance] openPresetListFromFile];//update preset
-            [hiFiToyControl connect:p];
+            [hiFiToyControl connect:device];
             
             //for re-connect draw connectingAlert
             //[self showConnectAlert];
             
-            [hiFiToyDeviceList setActiveDeviceWithKey:p.identifier.UUIDString];
-            
         } else {//demomode
-            [hiFiToyControl disconnect];
-            [hiFiToyDeviceList setActiveDeviceWithKey:@"demo"];
+            [[HiFiToyPresetList sharedInstance] openPresetListFromFile];//update preset
+            [hiFiToyControl demoConnect];
         }
-        
-        
     }
-    if ([segue.identifier isEqualToString:@"DemoConnectSegue"]) {
-        
-        [hiFiToyControl disconnect];
-        [hiFiToyDeviceList setActiveDeviceWithKey:@"demo"];
-    }
-    
+
     [hiFiToyControl stopDiscovery];
 }
 

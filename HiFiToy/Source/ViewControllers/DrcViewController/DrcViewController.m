@@ -7,7 +7,7 @@
 //
 
 #import "DrcViewController.h"
-#import "HiFiToyDeviceList.h"
+#import "HiFiToyControl.h"
 #import "HiFiToyPreset.h"
 
 
@@ -35,7 +35,7 @@
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
     self.drcView.backgroundColor = [UIColor darkGrayColor];
     
-    HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
+    HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] getActivePreset];
     drc = preset.drc;
     
     self.drcView.maxDbX = drc.coef17.point3.inputDb;

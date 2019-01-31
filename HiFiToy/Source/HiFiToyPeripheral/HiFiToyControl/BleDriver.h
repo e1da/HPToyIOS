@@ -45,9 +45,9 @@ typedef enum : uint8_t {
 /*--------------------------- TIBleCommunicationDelegate Protocol ----------------------------------------*/
 @protocol BleCommunicationDelegate
 
--(void) keyfobDidFound;
+-(void) keyfobDidFound:(NSString *)peripheralUUID;
 
-- (void) keyfobMacAddrError;
+-(void) keyfobMacAddrError;
 
 -(void) keyfobDidConnected;
 -(void) keyfobDidFailConnect;
@@ -64,9 +64,6 @@ typedef enum : uint8_t {
 
 @property (nonatomic,assign) id <BleCommunicationDelegate> communicationDelegate;
 
-@property (nonatomic, readonly) NSMutableArray * peripherals;
-@property (nonatomic, readonly) CBPeripheral * activePeripheral;
-
 -(void) writeValue:(int)serviceUUID characteristicUUID:(int)characteristicUUID data:(NSData *)data response:(BOOL)response;
 -(void) readValue: (int)serviceUUID characteristicUUID:(int)characteristicUUID;
 -(void) notification:(int)serviceUUID characteristicUUID:(int)characteristicUUID on:(BOOL)on;
@@ -74,8 +71,8 @@ typedef enum : uint8_t {
 -(int)  findBLEPeripheralsWithName:(NSString*)name;
 -(void) stopFindBLEPeripherals;
 
--(void) connectPeripheral:(CBPeripheral *)peripheral;
--(void) disconnectPeripheral;
+-(void) disconnect;
+-(void) connectWithUUID:(NSString *)peripheralUUID;
 
 -(BOOL) isConnected;
 

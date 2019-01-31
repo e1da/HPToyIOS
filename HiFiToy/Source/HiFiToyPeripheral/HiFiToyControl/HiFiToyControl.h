@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "BleDriver.h"
 #import "HiFiToyPreset.h"
+#import "HiFiToyDevice.h"
 
 #define HIFI_TOY_VERSION            11
 #define CC2540_PAGE_SIZE            2048
@@ -20,16 +21,19 @@
     
 }
 
+@property (nonatomic, readonly) NSMutableArray * foundHiFiToyDevices;
+@property (nonatomic, readonly) HiFiToyDevice * activeHiFiToyDevice;
+
 @property (nonatomic) PCM9211Source_t audioSource;
 
 + (HiFiToyControl *)sharedInstance;
 
-- (NSMutableArray *) getPeripherals;
 
 - (BOOL) isConnected;
 - (void) startDiscovery;
 - (void) stopDiscovery;
-- (void) connect:(CBPeripheral *)p;
+- (void) connect:(HiFiToyDevice *) device;
+- (void) demoConnect;
 - (void) disconnect;
 
 //base send command

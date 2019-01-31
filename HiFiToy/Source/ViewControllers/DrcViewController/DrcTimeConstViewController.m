@@ -7,7 +7,7 @@
 //
 
 #import "DrcTimeConstViewController.h"
-#import "HiFiToyDeviceList.h"
+#import "HiFiToyControl.h"
 
 @implementation DrcTimeConstViewController
 
@@ -39,7 +39,7 @@
 {
     [super viewWillAppear:animated];
     
-    HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
+    HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] getActivePreset];
     drc = preset.drc;
     
     [self setupOutlets];

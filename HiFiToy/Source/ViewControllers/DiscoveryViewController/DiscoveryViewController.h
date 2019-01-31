@@ -8,13 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "HiFiToyControl.h"
-#import "HiFiToyDeviceList.h"
 
 @interface DiscoveryViewController : UITableViewController <UIAlertViewDelegate> {
     HiFiToyControl * hiFiToyControl;
-    HiFiToyDeviceList * hiFiToyDeviceList;
 }
-
-- (void) keyfobDidFound;
 
 @end

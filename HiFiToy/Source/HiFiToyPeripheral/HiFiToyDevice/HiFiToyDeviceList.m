@@ -10,21 +10,32 @@
 
 @implementation HiFiToyDeviceList
 
+- (id) init {
+    self = [super init];
+    if (self) {
+        if ([self openDeviceListFromFile]) {
+            if (![self getDeviceWithUUID:@"demo"]) {
+                HiFiToyDevice * device = [[HiFiToyDevice alloc] init];
+                [self setDevice:device withUUID:device.uuid];
+            }
+        } else {
+            HiFiToyDevice * device = [[HiFiToyDevice alloc] init];
+            [self setDevice:device withUUID:device.uuid];
+        }
+    }
+    
+    return self;
+}
 /*==========================================================================================
  NSCoding protocol implementation
  ==========================================================================================*/
 - (void) encodeWithCoder:(NSCoder *)encoder {
-    [encoder encodeObject:self.keyActiveDevice forKey:@"keyActiveDevice"];
     [encoder encodeObject:self.deviceList forKey:@"keyDeviceList"];
-    
-    
-    
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if (self) {
-        _keyActiveDevice = [decoder decodeObjectForKey:@"keyActiveDevice"];
         _deviceList = [decoder decodeObjectForKey:@"keyDeviceList"];
     }
     return self;
@@ -37,19 +48,12 @@
     NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                               NSUserDomainMask, YES) objectAtIndex:0];
     plistPath = [rootPath stringByAppendingPathComponent:@"DeviceList.plist"];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) return NO;
         
-        NSData * data = [NSData dataWithContentsOfFile:plistPath];
-        HiFiToyDeviceList * deviceListTemp = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        _keyActiveDevice = deviceListTemp.keyActiveDevice;
-        _deviceList = deviceListTemp.deviceList;
-        
-        return YES;
-    } else {
-        
-        return NO;
-        
-    }
+    NSData * data = [NSData dataWithContentsOfFile:plistPath];
+    HiFiToyDeviceList * deviceListTemp = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    _deviceList = deviceListTemp.deviceList;
+
     return YES;
 }
 
@@ -78,13 +82,11 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[HiFiToyDeviceList alloc] init];
-        // Do any other initialisation stuff here
-        [sharedInstance openDeviceListFromFile];
     });
     return sharedInstance;
 }
 
--(void)updateForUUID:(NSString*)UUIDString withDevice:(HiFiToyDevice*) device
+-(void) setDevice:(HiFiToyDevice *)device withUUID:(NSString*)UUIDString
 {
     if (!_deviceList){
         _deviceList = [NSMutableDictionary dictionaryWithObject:device forKey:UUIDString];
@@ -97,21 +99,10 @@
 }
 
 /* return (null) if not exist */
--(HiFiToyDevice *)findNameForUUID:(NSString*)UUIDString
+-(HiFiToyDevice *)getDeviceWithUUID:(NSString*)UUIDString
 {
     return (HiFiToyDevice*)[_deviceList objectForKey:UUIDString];
     
-}
-
--(HiFiToyDevice *)getActiveDevice
-{
-    return (HiFiToyDevice*)[_deviceList objectForKey:_keyActiveDevice];
-}
-
--(HiFiToyDevice *)setActiveDeviceWithKey:(NSString *) keyDevice
-{
-    _keyActiveDevice = keyDevice;
-    return [self getActiveDevice];
 }
 
 -(void) description{
@@ -123,17 +114,6 @@
         NSLog(@"%@ %@ %x", (NSString *)[keys objectAtIndex:i], device.name, device.pairingCode);
         
     }
-}
-
-- (NSString *) getActiveDeviceInfo
-{
-    if (_keyActiveDevice) {
-        if (_keyActiveDevice.length > 15) {
-            return [_keyActiveDevice substringFromIndex:(_keyActiveDevice.length - 15)];
-        }
-        return _keyActiveDevice;
-    }
-    return @"";
 }
 
 

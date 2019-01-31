@@ -145,7 +145,7 @@
                                                              return;
                                                          }
                                                          
-                                                         HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
+                                                         HiFiToyDevice * device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
                                                          if (device.pairingCode != [oldPairCode.text intValue]) {
                                                              [self showAlert:@"Old pair code is not true. Change pair code is not success."];
                                                              return;
@@ -190,7 +190,7 @@
                                                          UITextField *pairCode = self.alertController.textFields.lastObject;
                                                          
                                                          if (![pairCode.text isEqualToString:@""]) {
-                                                             HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
+                                                             HiFiToyDevice * device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
                                                              device.pairingCode = [pairCode.text intValue];
                                                              [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
                                                              
@@ -222,7 +222,7 @@
                                                     preferredStyle:UIAlertControllerStyleAlert];
     [_alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         //textField.keyboardType = UIKeyboardTypeNumberPad;
-        HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
+        HiFiToyDevice * device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
         textField.text = device.name;
     }];
     
@@ -234,7 +234,7 @@
                                                      handler:^(UIAlertAction * _Nonnull action) {
                                                          UITextField *name = self.alertController.textFields.firstObject;
                                                          if (![name.text isEqualToString:@""]) {
-                                                             HiFiToyDevice * device = [[HiFiToyDeviceList sharedInstance] getActiveDevice];
+                                                             HiFiToyDevice * device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
                                                              device.name = name.text;
                                                              
                                                              [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
@@ -264,7 +264,7 @@
                                                            message:NSLocalizedString(@"Import preset from HiFi Toy?", @"")
                                                     preferredStyle:UIAlertControllerStyleAlert];
     
-    HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
+    HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] getActivePreset];
     HiFiToyPreset * tempPreset = [preset copy];
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"

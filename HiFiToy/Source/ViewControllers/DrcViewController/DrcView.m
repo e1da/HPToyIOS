@@ -7,7 +7,7 @@
 //
 
 #import "DrcView.h"
-#import "HiFiToyDeviceList.h"
+#import "HiFiToyControl.h"
 #import "HiFiToyPreset.h"
 #import "Drc.h"
 
@@ -242,7 +242,7 @@
 
 - (void) drawDrc:(CGContextRef)context
 {
-    HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
+    HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] getActivePreset];
     DrcCoef * drc = preset.drc.coef17;
     
     //draw drc graphic
