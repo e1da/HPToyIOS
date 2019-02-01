@@ -16,6 +16,8 @@
     
     BlePacketQueue * blePacketQueue;
     NSString * nameFindingBle;
+    
+    BOOL needStartDiscovery;
 }
 
 @end
@@ -31,6 +33,8 @@
         peripherals = [[NSMutableArray alloc] init];
         activePeripheral = nil;
         nameFindingBle = @"";
+        
+        needStartDiscovery = NO;
     }
     return self;
 }
@@ -84,6 +88,7 @@
     if (CM.state  != CBManagerStatePoweredOn) {
         NSLog(@"CoreBluetooth not correctly initialized!");
         NSLog(@"State = %d (%s)\r\n", (int)self->CM.state, [self centralManagerStateToString:CM.state]);
+        needStartDiscovery = YES;
         return -1;
     }
 
@@ -237,7 +242,8 @@
           (int)central.state,
           [self centralManagerStateToString:central.state]);
     
-    if ((CM.isScanning) && (central.state == CBManagerStatePoweredOn)) {
+    if ((needStartDiscovery) && (central.state == CBManagerStatePoweredOn)) {
+        needStartDiscovery = NO;
         [self findBLEPeripheralsWithName:nameFindingBle];
     }
 }
