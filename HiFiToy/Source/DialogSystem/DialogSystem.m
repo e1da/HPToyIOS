@@ -81,17 +81,18 @@
 {
     UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
     
-    if (_progressController) {
-        
-        [self dismissProgressDialog];
-        _progressController = nil;
+    if ([self isProgressDialogVisible]){
+        //_progressController.title = title;
+        //[self dismissProgressDialog];
+        //_progressController = nil;
+    } else {
+    
+        _progressController = [UIAlertController alertControllerWithTitle:title
+                                                                  message:@"Left ??? packets"
+                                                           preferredStyle:UIAlertControllerStyleAlert];
+    
+        [navigation.viewControllers.lastObject presentViewController:_progressController animated:YES completion:nil];
     }
-    
-    _progressController = [UIAlertController alertControllerWithTitle:title
-                                                           message:@"Left ??? packets"
-                                                    preferredStyle:UIAlertControllerStyleAlert];
-    
-    [navigation.viewControllers.lastObject presentViewController:_progressController animated:YES completion:nil];
 }
 
 - (void) showNewPairCodeInput
@@ -270,14 +271,14 @@
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
                                                            style:UIAlertActionStyleDestructive
                                                          handler:^(UIAlertAction * _Nonnull action) {
-                                                             [preset saveToHiFiToyPeripheral];
+                                                             [preset storeToPeripheral];
                                                          }];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok"
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * _Nonnull action) {
                                                          
                                                          
-                                                         [tempPreset importFromHiFiToyPeripheral];
+                                                         [tempPreset importFromPeripheral];
                                 
                                                      }];
     

@@ -83,6 +83,40 @@
     [bleDriver writeValue:0xFFF0 characteristicUUID:0xFFF1 data:data response:response];
 }
 
+//this method used attach page
+- (void) sendBufToDsp:(uint8_t*)data withLength:(uint16_t)length withOffset:(uint16_t)offsetInDspData; {
+    
+    //init vars
+    uint16_t l = CC2540_PAGE_SIZE - offsetInDspData % CC2540_PAGE_SIZE;
+    if (length < l) l = length;
+    
+    uint16_t offset = 0;
+    
+    do {
+        //send to attach buf
+        for (int i = 0; i < l; i += 16){
+            //send word offset and data bytes
+            [self send16BytesWithOffset:((ATTACH_PAGE_OFFSET + i) >> 2) data:&data[offset + i]];
+        }
+        //move attach pg -> dsp data
+        [self moveAttachPgToDspData:(offset + offsetInDspData) length:l];
+        
+        //update
+        offset += l;
+        l = length - offset;
+        if (l > CC2540_PAGE_SIZE) l = CC2540_PAGE_SIZE;
+        
+        //condition
+    } while (offset < length);
+}
+
+//get 20 bytes from DSP_Data[offset]
+- (void) getDspDataWithOffset:(uint16_t)offset
+{
+    NSData * offsetData = [NSData dataWithBytes:&offset length:2];
+    [self sendDataToDsp:offsetData withResponse:YES];
+}
+
 //sys command
 - (void) sendNewPairingCode:(uint32_t) pairing_code
 {
@@ -159,123 +193,6 @@
     [self sendDataToDsp:data withResponse:YES];
 }
 
-//adv command (save/restore to/from storage)
-- (void) restoreFactorySettings
-{
-    if (![self isConnected]) return;
-    
-    //show progress dialog
-    [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Save Configuration", @"")];
-    
-    //get default preset data
-    _activeHiFiToyDevice.activeKeyPreset = @"DefaultPreset";
-    HiFiToyPreset * preset = [_activeHiFiToyDevice getActivePreset];
-    
-    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-    
-    //[preset saveToHiFiToyPeripheral];
-    NSData * defaultPresetData = [preset getBinary];
-    
-    //fill HiFiToyConfig_t structure
-    HiFiToyPeripheral_t hiFiToyConfig;
-    hiFiToyConfig.i2cAddr           = I2C_ADDR;
-    hiFiToyConfig.successWriteFlag  = 0x00; //must be assign '0' before sendFactorySettings
-    hiFiToyConfig.version           = HIFI_TOY_VERSION;
-    hiFiToyConfig.pairingCode       = _activeHiFiToyDevice.pairingCode;
-    hiFiToyConfig.audioSource       = _activeHiFiToyDevice.audioSource;
-    
-    hiFiToyConfig.energy.highThresholdDb    = 0;    // 0
-    hiFiToyConfig.energy.lowThresholdDb     = -55;  // -55
-    hiFiToyConfig.energy.auxTimeout120ms    = 2500; // 2500 * 120ms = 300s = 5min
-    hiFiToyConfig.energy.usbTimeout120ms    = 0;    // not used
-    
-    BiquadType_t * types = [preset.filters getBiquadTypes];
-    memcpy(&hiFiToyConfig.biquadTypes, types, 7 * sizeof(BiquadType_t));
-    free(types);
-    
-    hiFiToyConfig.dataBufLength     = [self getDataBufLength:defaultPresetData];
-    hiFiToyConfig.dataBytesLength   = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + defaultPresetData.length;
-    
-    NSLog(@"Restore factory L=%dbytes, B=%dbufs", hiFiToyConfig.dataBytesLength, hiFiToyConfig.dataBufLength);
-    
-    uint8_t * sendData = malloc(hiFiToyConfig.dataBytesLength);
-    
-    //fill binary data
-    memcpy(sendData, &hiFiToyConfig, sizeof(HiFiToyPeripheral_t));
-    memcpy(sendData + offsetof(HiFiToyPeripheral_t, firstDataBuf), defaultPresetData.bytes, defaultPresetData.length);
-    
-    
-    //send data
-    for (int i = 0; i < hiFiToyConfig.dataBytesLength; i += 16){
-        //send word offset and data bytes
-        [self send16BytesWithOffset:(i >> 2) data:&sendData[i]];
-        
-        /*for (int u = 0; u < 16; u++){
-         printf("%02x ", sendData[i + u]);
-         
-         }
-         printf("\n");*/
-    }
-    free(sendData);
-    
-    //set write_flag = 1, i.e write is success
-    [self sendWriteFlag:1];
-    //
-    [self setInitDsp];
-}
-    
-- (void) storePresetToDSP:(HiFiToyPreset *) preset
-{
-    if (![self isConnected]) return;
-    
-    //show progress dialog
-    [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Save Configuration", @"")];
-    
-    HiFiToyPeripheral_t hiFiToyConfig;
-    NSData * data = [preset getBinary];
-    
-    //fill biquqad types
-    BiquadType_t * types = [preset.filters getBiquadTypes];
-    memcpy(&hiFiToyConfig.biquadTypes, types, 7 * sizeof(BiquadType_t));
-    free(types);
-    
-    //fill buf and bytes length
-    hiFiToyConfig.dataBufLength     = [self getDataBufLength:data];
-    hiFiToyConfig.dataBytesLength   = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + data.length;
-    
-    uint8_t typesLength = 8; // 7 biquads + 1 reserved byte
-    uint16_t length = data.length + sizeof(hiFiToyConfig.dataBufLength) + sizeof(hiFiToyConfig.dataBytesLength) + typesLength;
-    uint16_t offset = offsetof(HiFiToyPeripheral_t, biquadTypes);
-    
-    NSLog(@"Send DSP Config L=%dbytes, B=%dbufs", hiFiToyConfig.dataBytesLength, hiFiToyConfig.dataBufLength);
-    
-    uint8_t * sendData = malloc(length);
-    memcpy(sendData, &hiFiToyConfig.biquadTypes, 12);
-    memcpy(sendData + 12, data.bytes, data.length);
-    
-    /*for (int i = 0; i < length; i+=4) {
-        printf("%2.2x %2.2x %2.2x %2.2x ", sendData[i + 0], sendData[i + 1], sendData[i + 2], sendData[i + 3]);
-    }*/
-    
-    [self sendWriteFlag:0];
-
-    //send data (used ATTACH_PAGE)
-    [self sendBufToDspDataWithOffset:offset data:sendData length:length];
-    free(sendData);
-    
-    //set write_flag = 1, i.e write is success
-    [self sendWriteFlag:1];
-    //
-    [self setInitDsp];
-}
-
-//get 20 bytes from DSP_Data[offset]
-- (void) getDspDataWithOffset:(uint16_t)offset
-{
-    NSData * offsetData = [NSData dataWithBytes:&offset length:2];
-    [self sendDataToDsp:offsetData withResponse:YES];
-}
-
 /*--------------------------------Private Service Function------------------------------------*/
 
 //send 16 bytes to DSP_Data[offset]
@@ -298,48 +215,6 @@
     
     NSData * data = [[NSData alloc] initWithBytes:packet4 length:4];
     [self sendDataToDsp:data withResponse:YES];
-}
-
-//this method used attach page
-//return real send length of buf
-- (void) sendBufToDspDataWithOffset:(uint16_t)offsetInDspData data:(uint8_t*)data length:(uint16_t)length{
-    
-    //init vars
-    uint16_t l = CC2540_PAGE_SIZE - offsetInDspData % CC2540_PAGE_SIZE;
-    if (length < l) l = length;
-    
-    uint16_t offset = 0;
-    
-    do {
-        //send to attach buf
-        for (int i = 0; i < l; i += 16){
-            //send word offset and data bytes
-            [self send16BytesWithOffset:((ATTACH_PAGE_OFFSET + i) >> 2) data:&data[offset + i]];
-        }
-        //move attach pg -> dsp data
-        [self moveAttachPgToDspData:(offset + offsetInDspData) length:l];
-        
-        //update
-        offset += l;
-        l = length - offset;
-        if (l > CC2540_PAGE_SIZE) l = CC2540_PAGE_SIZE;
-        
-        //condition
-    } while (offset < length);
-}
-
--(uint16_t) getDataBufLength:(NSData *)data
-{
-    DataBufHeader_t * dataBufHeader = (DataBufHeader_t *)data.bytes;
-    
-    uint16_t counter = 0;
-    
-    while (((uint8_t *)dataBufHeader -  (uint8_t *)data.bytes) < data.length) {
-        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + dataBufHeader->length + sizeof(DataBufHeader_t));
-        counter++;
-    }
-    
-    return counter;
 }
 
 /*------------------------------- BleCommunication delegate -----------------------------------*/
@@ -420,6 +295,8 @@
         
         CommonCmd_t feedbackMsg = data[0];
         if (feedbackMsg == GET_ENERGY_CONFIG) {
+            NSLog(@"GET_ENERGY_CONFIG");
+            
             EnergyConfig_t * energy = (EnergyConfig_t *)&data[1];
             _activeHiFiToyDevice.energyConfig = *energy;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateEnergyConfigNotification" object:nil];
@@ -467,7 +344,7 @@
                     NSLog(@"CHECK_FIRMWARE_FAIL");
                     
                     /*[[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Dsp Firmware is corrupted! Press 'Restore Factory Settings' for solving problem!", @"")];*/
-                    [self restoreFactorySettings];
+                    [_activeHiFiToyDevice restoreFactory];
                     
                 }
                 break;
@@ -481,9 +358,7 @@
                     [_activeHiFiToyDevice updateAudioSource];
                 } else {
                     NSLog(@"GET_VERSION_FAIL");
-                    /*HiFiToyPreset * preset = [[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset];
-                    [preset saveToHiFiToyPeripheral];*/
-                    [self restoreFactorySettings];
+                    [_activeHiFiToyDevice restoreFactory];
                 }
                 break;
             }

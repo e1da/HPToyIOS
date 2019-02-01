@@ -11,7 +11,7 @@
 #import "HiFiToyControl.h"
 
 @interface OptionsViewController : UITableViewController {
-    HiFiToyControl *hiFiToyControl;
+
 }
 
 //dspDevice

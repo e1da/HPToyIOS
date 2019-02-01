@@ -22,36 +22,29 @@
     return YES;
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskPortrait;
 }
 
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
-{
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
     return UIInterfaceOrientationPortrait;
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    hiFiToyControl = [HiFiToyControl sharedInstance];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [self setupOutlets];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [self setupOutlets];
 }
 
 
-- (void) setupOutlets
-{
+- (void) setupOutlets {
     if (!self.hiFiToyDevice) return;
     
     _nameLabel_outl.text = self.hiFiToyDevice.name;
@@ -61,8 +54,7 @@
 /*-----------------------------------------------------------------------------------------
  Table Row select method
  -----------------------------------------------------------------------------------------*/
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0){
         if (indexPath.row == 0){//change pairing code
@@ -84,10 +76,7 @@
                                                                style:UIAlertActionStyleDefault
                                                              handler:^(UIAlertAction * _Nonnull action) {
                                                                  
-                                                                 HiFiToyControl * control = [HiFiToyControl sharedInstance];
-                                                                 //if ([control isConnected]) {
-                                                                     [control restoreFactorySettings];
-                                                                 //}
+                                                                 [self.hiFiToyDevice restoreFactory];
                                                             }];
             
             [alertController addAction:cancelAction];
@@ -108,8 +97,7 @@
 /*-----------------------------------------------------------------------------------------
  Prepare for segue
  -----------------------------------------------------------------------------------------*/
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showNameEdit"]) {
         DeviceNameViewController *destination = (DeviceNameViewController*)segue.destinationViewController;
         destination.hiFiToyDevice = self.hiFiToyDevice;

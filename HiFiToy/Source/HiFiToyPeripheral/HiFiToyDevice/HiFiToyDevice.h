@@ -37,4 +37,6 @@
 - (void) sendEnergyConfig;
 - (void) updateEnergyConfig;
 
+- (void) restoreFactory;
+
 @end

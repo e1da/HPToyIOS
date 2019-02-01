@@ -138,7 +138,7 @@
             [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
             
             //[[self.hiFiToyDevice getActivePreset] sendWithResponse:YES];
-            [[self.hiFiToyDevice getActivePreset] saveToHiFiToyPeripheral];
+            [[self.hiFiToyDevice getActivePreset] storeToPeripheral];
             
         }
         
@@ -182,7 +182,7 @@
                                                          [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
                                                          
                                                          //[[self.hiFiToyDevice getActivePreset] sendWithResponse:YES];
-                                                         [[self.hiFiToyDevice getActivePreset] saveToHiFiToyPeripheral];
+                                                         [[self.hiFiToyDevice getActivePreset] storeToPeripheral];
                                                          
                                                          [self.tableView reloadData];
                                                      }];
@@ -226,7 +226,7 @@
     self.hiFiToyDevice.activeKeyPreset = newPreset.presetName;
     [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
     
-    [[self.hiFiToyDevice getActivePreset] saveToHiFiToyPeripheral];
+    [[self.hiFiToyDevice getActivePreset] storeToPeripheral];
     
     [self.tableView reloadData];
 }

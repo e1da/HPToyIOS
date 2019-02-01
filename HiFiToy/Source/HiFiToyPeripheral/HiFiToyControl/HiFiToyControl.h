@@ -67,6 +67,9 @@ typedef enum : uint8_t {
 
 //base send command
 - (void) sendDataToDsp:(NSData *)data withResponse:(BOOL)response;
+- (void) sendBufToDsp:(uint8_t*)data withLength:(uint16_t)length withOffset:(uint16_t)offsetInDspData;
+- (void) getDspDataWithOffset:(uint16_t)offset;
+
 //sys command
 - (void) sendNewPairingCode:(uint32_t) pairing_code;
 - (void) startPairedProccess:(uint32_t) pairing_code;
@@ -76,10 +79,6 @@ typedef enum : uint8_t {
 - (void) getChecksumParamData;
 - (void) setInitDsp;
 
-//adv command (save/restore to/from storage)
-- (void) restoreFactorySettings;
-- (void) storePresetToDSP:(HiFiToyPreset *) preset;
 
-- (void) getDspDataWithOffset:(uint16_t)offset;
 
 @end

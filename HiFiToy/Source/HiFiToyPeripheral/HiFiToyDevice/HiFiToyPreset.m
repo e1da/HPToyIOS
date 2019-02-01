@@ -227,14 +227,6 @@
     return self.presetName;
 }
 
-//save preset
--(void)saveToHiFiToyPeripheral
-{
-    HiFiToyControl * hiFiToyControl = [HiFiToyControl sharedInstance];
-    
-    [hiFiToyControl storePresetToDSP:self];
-}
-
 //get binary for save to dsp
 - (NSData *) getBinary
 {
@@ -250,7 +242,69 @@
     return data;
 }
 
-- (void) importFromHiFiToyPeripheral
+-(uint16_t) getDataBufLength:(NSData *)data
+{
+    DataBufHeader_t * dataBufHeader = (DataBufHeader_t *)data.bytes;
+    
+    uint16_t counter = 0;
+    
+    while (((uint8_t *)dataBufHeader -  (uint8_t *)data.bytes) < data.length) {
+        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + dataBufHeader->length + sizeof(DataBufHeader_t));
+        counter++;
+    }
+    
+    return counter;
+}
+
+//save preset
+-(void)storeToPeripheral
+{
+    HiFiToyControl * hiFiToyControl = [HiFiToyControl sharedInstance];
+    
+    if (![hiFiToyControl isConnected]) return;
+    
+    //show progress dialog
+    [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Save Preset", @"")];
+    
+    HiFiToyPeripheral_t hiFiToyConfig;
+    NSData * data = [self getBinary];
+    
+    //fill biquqad types
+    BiquadType_t * types = [self.filters getBiquadTypes]; // get 7 BiquadTypes
+    memcpy(&hiFiToyConfig.biquadTypes, types, 7 * sizeof(BiquadType_t));
+    free(types);
+    
+    //fill buf and bytes length
+    hiFiToyConfig.dataBufLength     = [self getDataBufLength:data];
+    hiFiToyConfig.dataBytesLength   = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + data.length;
+    
+    uint8_t typesLength = sizeof(BiquadType_t) + 1; // 7 biquads + 1 reserved byte
+    uint16_t presetLength = data.length + sizeof(hiFiToyConfig.dataBufLength) + sizeof(hiFiToyConfig.dataBytesLength) + typesLength;
+
+    
+    NSLog(@"Send DSP Config L=%dbytes, B=%dbufs", hiFiToyConfig.dataBytesLength, hiFiToyConfig.dataBufLength);
+    
+    uint8_t * sendData = malloc(presetLength);
+    memcpy(sendData, &hiFiToyConfig.biquadTypes, 12);
+    memcpy(sendData + 12, data.bytes, data.length);
+    
+    /*for (int i = 0; i < length; i+=4) {
+     printf("%2.2x %2.2x %2.2x %2.2x ", sendData[i + 0], sendData[i + 1], sendData[i + 2], sendData[i + 3]);
+     }*/
+    
+    [hiFiToyControl sendWriteFlag:0];
+    
+    //send data (used ATTACH_PAGE)
+    [hiFiToyControl sendBufToDsp:sendData withLength:presetLength withOffset:offsetof(HiFiToyPeripheral_t, biquadTypes)];
+    free(sendData);
+    
+    //set write_flag = 1, i.e write is success
+    [hiFiToyControl sendWriteFlag:1];
+    //
+    [hiFiToyControl setInitDsp];
+}
+
+- (void) importFromPeripheral
 {
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(getParamData:)

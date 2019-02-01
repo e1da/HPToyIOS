@@ -8,8 +8,10 @@
 
 #import "HiFiToyDevice.h"
 #import "HiFiToyPresetList.h"
+#import "HiFiToyDeviceList.h"
 #import "DialogSystem.h"
 #import "HiFiToyControl.h"
+#import "TAS5558.h"
 
 @implementation HiFiToyDevice
 
@@ -56,8 +58,8 @@
 
 - (void) setDefaultEnergyConfig {
     _energyConfig.highThresholdDb = 0;
-    _energyConfig.lowThresholdDb = 0;
-    _energyConfig.auxTimeout120ms = 0;
+    _energyConfig.lowThresholdDb = -55;
+    _energyConfig.auxTimeout120ms = 2500; // 2500 * 120ms = 300s = 5min
     _energyConfig.usbTimeout120ms = 0;
 }
 
@@ -130,6 +132,37 @@
     
     NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
+}
+
+- (void) restoreFactory {
+    //set default preset and save to file
+    self.activeKeyPreset = @"DefaultPreset";
+    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+    
+    if (![[HiFiToyControl sharedInstance] isConnected]) return;
+    
+    //show progress dialog
+    [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Restore factory", @"")];
+
+    //fill HiFiToyConfig_t structure
+    HiFiToyPeripheral_t hiFiToyConfig;
+    hiFiToyConfig.i2cAddr           = I2C_ADDR;
+    hiFiToyConfig.successWriteFlag  = 0x00; //must be assign '0' before sendFactorySettings
+    hiFiToyConfig.version           = HIFI_TOY_VERSION;
+    hiFiToyConfig.pairingCode       = _pairingCode;
+    hiFiToyConfig.audioSource       = _audioSource = PCM9211_USB_SOURCE;
+    
+    [self setDefaultEnergyConfig];
+    hiFiToyConfig.energy = _energyConfig;
+    
+    //store to peripheral first pat of HiFiToyPeripheral_t
+    [[HiFiToyControl sharedInstance] sendBufToDsp:(uint8_t *)&hiFiToyConfig
+                                       withLength:offsetof(HiFiToyPeripheral_t, biquadTypes)
+                                       withOffset:0];
+    
+    //store second part of HiFiToyPeripheral_t and preset and setInitDsp
+    HiFiToyPreset * preset = [self getActivePreset];
+    [preset storeToPeripheral];
 }
 
 @end
