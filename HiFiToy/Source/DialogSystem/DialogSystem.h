@@ -32,7 +32,7 @@
 
 - (void) showImportPresetDialog;
 
-- (void) showEnergySyncDialog:(EnergyConfig_t)energy;
+- (void) showEnergySyncDialog;
 - (void) showBiquadCoefSyncDialog:(BiquadLL *)biquad;
 
 @end

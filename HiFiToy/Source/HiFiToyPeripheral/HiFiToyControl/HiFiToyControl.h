@@ -25,6 +25,7 @@ typedef enum : uint8_t {
     INIT_DSP            = 0x06,
     SET_AUDIO_SOURCE    = 0x07,
     GET_AUDIO_SOURCE    = 0x08,
+    GET_ENERGY_CONFIG   = 0x09,
     
     //feedback msg
     CLIP_DETECTION              = 0xFD,
@@ -49,9 +50,7 @@ typedef enum : uint8_t {
 } PairStatus_t;
 
 @interface HiFiToyControl : NSObject <BleCommunicationDelegate> {
-    BleDriver * bleDriver;
-    HiFiToyPeripheral_t hiFiToyConfig;
-    
+    BleDriver * bleDriver;    
 }
 
 @property (nonatomic, readonly) NSMutableArray * foundHiFiToyDevices;
@@ -76,8 +75,6 @@ typedef enum : uint8_t {
 - (void) getVersion;
 - (void) getChecksumParamData;
 - (void) setInitDsp;
-- (void) sendEnergyConfig:(EnergyConfig_t)energy;
-- (void) getEnergyConfig;
 
 //adv command (save/restore to/from storage)
 - (void) restoreFactorySettings;

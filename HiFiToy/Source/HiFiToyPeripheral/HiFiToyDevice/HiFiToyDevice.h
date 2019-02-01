@@ -18,6 +18,8 @@
 
 //audio source
 @property (nonatomic) PCM9211Source_t audioSource;
+//energy config
+@property (nonatomic) EnergyConfig_t energyConfig;
 
 //preset property
 @property (nonatomic)   NSString * activeKeyPreset;
@@ -31,5 +33,8 @@
 
 - (void) sendAudioSource;
 - (void) updateAudioSource;
+
+- (void) sendEnergyConfig;
+- (void) updateEnergyConfig;
 
 @end

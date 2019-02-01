@@ -159,19 +159,6 @@
     [self sendDataToDsp:data withResponse:YES];
 }
 
-- (void) sendEnergyConfig:(EnergyConfig_t)energy
-{
-    NSData *data = [[NSData alloc] initWithBytes:&energy length:sizeof(EnergyConfig_t)];
-    [self sendDataToDsp:data withResponse:YES];
-}
-
-//async request. need GetDataNotification implement
-- (void) getEnergyConfig
-{
-    uint16_t offset = offsetof(HiFiToyPeripheral_t, energy);
-    [self getDspDataWithOffset:offset];
-}
-
 //adv command (save/restore to/from storage)
 - (void) restoreFactorySettings
 {
@@ -190,6 +177,7 @@
     NSData * defaultPresetData = [preset getBinary];
     
     //fill HiFiToyConfig_t structure
+    HiFiToyPeripheral_t hiFiToyConfig;
     hiFiToyConfig.i2cAddr           = I2C_ADDR;
     hiFiToyConfig.successWriteFlag  = 0x00; //must be assign '0' before sendFactorySettings
     hiFiToyConfig.version           = HIFI_TOY_VERSION;
@@ -243,6 +231,7 @@
     //show progress dialog
     [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Save Configuration", @"")];
     
+    HiFiToyPeripheral_t hiFiToyConfig;
     NSData * data = [preset getBinary];
     
     //fill biquqad types
@@ -425,9 +414,21 @@
 
 -(void) keyfobDidUpdateValue:(NSData *) value
 {
-    if (value.length == 9) {
-        uint8_t data[9];
-        [value getBytes:&data length:9];
+    if (value.length == 13) { // get energy config
+        uint8_t data[value.length];
+        [value getBytes:&data length:value.length];
+        
+        CommonCmd_t feedbackMsg = data[0];
+        if (feedbackMsg == GET_ENERGY_CONFIG) {
+            EnergyConfig_t * energy = (EnergyConfig_t *)&data[1];
+            _activeHiFiToyDevice.energyConfig = *energy;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateEnergyConfigNotification" object:nil];
+        }
+    }
+    
+    if (value.length == 4) {
+        uint8_t data[4];
+        [value getBytes:&data length:4];
         
         CommonCmd_t feedbackMsg = data[0];
         uint8_t status = data[1];
@@ -515,8 +516,9 @@
             default:
                 break;
         }
-    } else if (value.length == 20) { // Get data from storage
-        
+    }
+    
+    if (value.length == 20) { // Get data from storage
         [[NSNotificationCenter defaultCenter] postNotificationName:@"GetDataNotification" object:value];
     }
 }

@@ -287,7 +287,7 @@
     [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
 }
 
-- (void) showEnergySyncDialog:(EnergyConfig_t)energy
+- (void) showEnergySyncDialog
 {
     UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
     
@@ -308,7 +308,7 @@
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * _Nonnull action) {
                                                          
-                                                         [[HiFiToyControl sharedInstance] sendEnergyConfig:energy];
+                                                         [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] sendEnergyConfig];
                                                          [self showAlert:@"Energy manager is syncronized."];
                                                      }];
     

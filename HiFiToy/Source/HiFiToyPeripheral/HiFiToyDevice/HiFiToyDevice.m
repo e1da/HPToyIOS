@@ -32,6 +32,7 @@
         self.activeKeyPreset = [decoder decodeObjectForKey:@"activeKeyPreset"];
         
         self.audioSource = PCM9211_USB_SOURCE;
+        [self setDefaultEnergyConfig];
     }
     return self;
 }
@@ -50,6 +51,14 @@
     self.pairingCode = 0;
     self.activeKeyPreset = @"DefaultPreset";
     self.audioSource = PCM9211_USB_SOURCE;
+    [self setDefaultEnergyConfig];
+}
+
+- (void) setDefaultEnergyConfig {
+    _energyConfig.highThresholdDb = 0;
+    _energyConfig.lowThresholdDb = 0;
+    _energyConfig.auxTimeout120ms = 0;
+    _energyConfig.usbTimeout120ms = 0;
 }
 
 - (HiFiToyPreset *) getActivePreset
@@ -98,11 +107,26 @@
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
 }
 
-- (void) updateAudioSource
-{
+- (void) updateAudioSource {
     CommonPacket_t packet;
     
     packet.cmd = GET_AUDIO_SOURCE;
+    
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
+}
+
+- (void) sendEnergyConfig {
+    NSData *data = [[NSData alloc] initWithBytes:&_energyConfig length:sizeof(EnergyConfig_t)];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
+}
+
+//async request. need GetDataNotification implement
+- (void) updateEnergyConfig {
+    //uint16_t offset = offsetof(HiFiToyPeripheral_t, energy);
+    //[self getDspDataWithOffset:offset];
+    CommonPacket_t packet;
+    packet.cmd = GET_ENERGY_CONFIG;
     
     NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];

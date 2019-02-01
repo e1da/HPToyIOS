@@ -12,10 +12,9 @@
 
 #define MAX_THRESHOLD_DB    0.0f
 #define MIN_THRESHOLD_DB    -120.0f
-#define MAX_TIMEOUT_MS      60000 // 60seconds
 
 @interface EnergyViewController () {
-    EnergyConfig_t energyConfig;
+    HiFiToyDevice * device;
 }
 
 @end
@@ -24,76 +23,66 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(didUpdateEnergyConfig:)
+                                                 name: @"UpdateEnergyConfigNotification"
+                                               object: nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if ([[HiFiToyControl sharedInstance] isConnected]) {
-        [[NSNotificationCenter defaultCenter] addObserver: self
-                                                 selector: @selector(didGetEnergyConfig:)
-                                                     name: @"GetDataNotification"
-                                                   object: nil];
-        
-        [[HiFiToyControl sharedInstance] getEnergyConfig];
-    } else {
-        [self setupOutlets];
-    }
+    device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
+    [self setupOutlets];
+    [device updateEnergyConfig];
 }
 
-- (void) didGetEnergyConfig:(NSNotification*)notification {
-    //remove observer
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    //get data and fill energyConfig struct
-    NSData * data = (NSData *)[notification object];
-    
-    if (data.length == 20) {
-        memcpy(&energyConfig, data.bytes, sizeof(EnergyConfig_t));
-        [self setupOutlets];
-        
-    } else {
-        [[DialogSystem sharedInstance] showAlert:@"Import energy config is not success."];
-    }
-    
+- (void) didUpdateEnergyConfig:(NSNotification*)notification {
+    [self setupOutlets];
 }
 
-- (void) checkEnergyBorders:(EnergyConfig_t) energy {
-    if (energy.highThresholdDb > MAX_THRESHOLD_DB) energy.highThresholdDb = MAX_THRESHOLD_DB;
-    if (energy.highThresholdDb < MIN_THRESHOLD_DB) energy.highThresholdDb = MIN_THRESHOLD_DB;
-    if (energy.lowThresholdDb > MAX_THRESHOLD_DB) energy.lowThresholdDb = MAX_THRESHOLD_DB;
-    if (energy.lowThresholdDb < MIN_THRESHOLD_DB) energy.lowThresholdDb = MIN_THRESHOLD_DB;
-    if (energy.auxTimeout120ms > MAX_TIMEOUT_MS / 120) energy.auxTimeout120ms = MAX_TIMEOUT_MS / 120;
-    if (energy.usbTimeout120ms > MAX_TIMEOUT_MS / 120) energy.usbTimeout120ms = MAX_TIMEOUT_MS / 120;
+- (void) checkEnergyBorders:(EnergyConfig_t *) energy {
+    
+    if (energy->highThresholdDb > MAX_THRESHOLD_DB) energy->highThresholdDb = MAX_THRESHOLD_DB;
+    if (energy->highThresholdDb < MIN_THRESHOLD_DB) energy->highThresholdDb = MIN_THRESHOLD_DB;
+    if (energy->lowThresholdDb > MAX_THRESHOLD_DB) energy->lowThresholdDb = MAX_THRESHOLD_DB;
+    if (energy->lowThresholdDb < MIN_THRESHOLD_DB) energy->lowThresholdDb = MIN_THRESHOLD_DB;
 }
 
 - (void) setupOutlets{
-    [self checkEnergyBorders:energyConfig];
+    EnergyConfig_t energy = device.energyConfig;
+    [self checkEnergyBorders:&energy];
+    device.energyConfig = energy;
     
-    self.autoOffLabel_outl.text = [NSString stringWithFormat:@"%ddB", (int)energyConfig.lowThresholdDb];
-    self.autoOffSlider_outl.value = (energyConfig.lowThresholdDb - MIN_THRESHOLD_DB) / (MAX_THRESHOLD_DB - MIN_THRESHOLD_DB);
-    self.clipLabel_outl.text = [NSString stringWithFormat:@"%ddB", (int)energyConfig.highThresholdDb];
-    self.clipSlider_outl.value = (energyConfig.highThresholdDb - MIN_THRESHOLD_DB) / (MAX_THRESHOLD_DB - MIN_THRESHOLD_DB);
+    self.autoOffLabel_outl.text = [NSString stringWithFormat:@"%ddB", (int)energy.lowThresholdDb];
+    self.autoOffSlider_outl.value = (energy.lowThresholdDb - MIN_THRESHOLD_DB) / (MAX_THRESHOLD_DB - MIN_THRESHOLD_DB);
+    self.clipLabel_outl.text = [NSString stringWithFormat:@"%ddB", (int)energy.highThresholdDb];
+    self.clipSlider_outl.value = (energy.highThresholdDb - MIN_THRESHOLD_DB) / (MAX_THRESHOLD_DB - MIN_THRESHOLD_DB);
 }
 
 - (IBAction)setClipThreshold_outl:(id)sender {
-    energyConfig.highThresholdDb = (MAX_THRESHOLD_DB - MIN_THRESHOLD_DB) * self.clipSlider_outl.value + MIN_THRESHOLD_DB;
-    self.clipLabel_outl.text = [NSString stringWithFormat:@"%ddB", (int)energyConfig.highThresholdDb];
+    EnergyConfig_t energy = device.energyConfig;
+    energy.highThresholdDb = (MAX_THRESHOLD_DB - MIN_THRESHOLD_DB) * self.clipSlider_outl.value + MIN_THRESHOLD_DB;
+    self.clipLabel_outl.text = [NSString stringWithFormat:@"%ddB", (int)energy.highThresholdDb];
+
+    device.energyConfig = energy;
 }
 
 - (IBAction)setAutoOffThreshold:(id)sender {
-    energyConfig.lowThresholdDb = (MAX_THRESHOLD_DB - MIN_THRESHOLD_DB) * self.autoOffSlider_outl.value + MIN_THRESHOLD_DB;
-    self.autoOffLabel_outl.text = [NSString stringWithFormat:@"%ddB", (int)energyConfig.lowThresholdDb];
+    EnergyConfig_t energy = device.energyConfig;
+    energy.lowThresholdDb = (MAX_THRESHOLD_DB - MIN_THRESHOLD_DB) * self.autoOffSlider_outl.value + MIN_THRESHOLD_DB;
+    self.autoOffLabel_outl.text = [NSString stringWithFormat:@"%ddB", (int)energy.lowThresholdDb];
+    
+    device.energyConfig = energy;
 }
 
 - (IBAction)syncEnergyConfig:(id)sender {
-    [[DialogSystem sharedInstance] showEnergySyncDialog:energyConfig];
+    [[DialogSystem sharedInstance] showEnergySyncDialog];
     
 }
 
