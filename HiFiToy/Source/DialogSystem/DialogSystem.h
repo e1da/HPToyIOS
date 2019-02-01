@@ -28,7 +28,6 @@
 
 - (void) showNewPairCodeInput;
 - (void) showPairCodeInput;
-- (void) showDeviceNameInput;
 
 - (void) showImportPresetDialog;
 

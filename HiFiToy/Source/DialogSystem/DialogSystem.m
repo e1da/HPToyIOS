@@ -208,49 +208,6 @@
     [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
 }
 
-- (void) showDeviceNameInput
-{
-    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
-    
-    if (_alertController) {
-        
-        [self dismissAlert];
-        _alertController = nil;
-    }
-    
-    _alertController = [UIAlertController alertControllerWithTitle:@"Device name"
-                                                           message:NSLocalizedString(@"Please input new device name!", @"")
-                                                    preferredStyle:UIAlertControllerStyleAlert];
-    [_alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        //textField.keyboardType = UIKeyboardTypeNumberPad;
-        HiFiToyDevice * device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
-        textField.text = device.name;
-    }];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                           style:UIAlertActionStyleDestructive
-                                                         handler:nil];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok"
-                                                       style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction * _Nonnull action) {
-                                                         UITextField *name = self.alertController.textFields.firstObject;
-                                                         if (![name.text isEqualToString:@""]) {
-                                                             HiFiToyDevice * device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
-                                                             device.name = name.text;
-                                                             
-                                                             [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-                                                             
-                                                         } else {
-                                                             [navigation.viewControllers.lastObject presentViewController:self.alertController animated:YES completion:nil];
-                                                         }
-                                                     }];
-    
-    [_alertController addAction:cancelAction];
-    [_alertController addAction:okAction];
-    
-    [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
-}
-
 - (void) showImportPresetDialog
 {
     UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;

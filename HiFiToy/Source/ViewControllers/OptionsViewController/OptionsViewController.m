@@ -39,11 +39,6 @@
     [self setupOutlets];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [self setupOutlets];
-}
-
-
 - (void) setupOutlets {
     if (!self.hiFiToyDevice) return;
     
@@ -57,10 +52,33 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0){
-        if (indexPath.row == 0){//change pairing code
+        if (indexPath.row == 0){//change device name
             
-            [[DialogSystem sharedInstance] showDeviceNameInput];
-            [self setupOutlets];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Device name"
+                                                                   message:NSLocalizedString(@"Please input new device name!", @"")
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                textField.text = self.hiFiToyDevice.name;
+            }];
+            
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                   style:UIAlertActionStyleDestructive
+                                                                 handler:nil];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
+                                                             handler:^(UIAlertAction * _Nonnull action) {
+                                                                 UITextField *name = alertController.textFields.firstObject;
+                                                                 if (![name.text isEqualToString:@""]) {
+                                                                     self.hiFiToyDevice.name = name.text;
+                                                                     [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+                                                                     
+                                                                     [self setupOutlets];
+                                                                 }
+                                                             }];
+            
+            [alertController addAction:cancelAction];
+            [alertController addAction:okAction];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
         }
         
         if (indexPath.row == 2){//restore factory settings
