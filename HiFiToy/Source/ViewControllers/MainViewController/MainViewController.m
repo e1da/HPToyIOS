@@ -56,6 +56,11 @@
                                                  name:@"ClipDetectionNotification"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(didUpdateAudioSource)
+                                                 name: @"UpdateAudioSourceNotification"
+                                               object: nil];
+    
     hiFiToyControl = [HiFiToyControl sharedInstance];
 }
 
@@ -71,6 +76,10 @@
     hiFiToyPreset = [hiFiToyDevice getActivePreset];
     
     [self setupOutlets];
+}
+
+- (void) didUpdateAudioSource {
+    _audioSourceSegment_outl.selectedSegmentIndex = hiFiToyDevice.audioSource;
 }
 
 - (void) setupOutlets{

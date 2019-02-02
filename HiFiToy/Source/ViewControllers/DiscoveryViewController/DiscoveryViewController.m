@@ -66,6 +66,7 @@
                                              selector: @selector(keyfobDidFound)
                                                  name: @"KeyfobDidFoundNotification"
                                                object: nil];
+    
     /*[[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didGetPresetImportNotification:)
                                                  name:@"PresetImportNotification"

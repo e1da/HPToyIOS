@@ -83,7 +83,14 @@
 
 -(int) findBLEPeripheralsWithName:(NSString*)name {
     nameFindingBle = name;
-    [peripherals removeAllObjects];
+    
+    if ([self isConnected]) {
+        CBPeripheral * p = activePeripheral;
+        [peripherals removeAllObjects];
+        [peripherals addObject:p];
+    } else {
+        [peripherals removeAllObjects];
+    }
     
     if (CM.state  != CBManagerStatePoweredOn) {
         NSLog(@"CoreBluetooth not correctly initialized!");

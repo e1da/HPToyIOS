@@ -373,6 +373,8 @@
             {
                 _activeHiFiToyDevice.audioSource = data[1];
                 NSLog(@"GET_AUDIO_SOURCE %d", _activeHiFiToyDevice.audioSource);
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateAudioSourceNotification" object:nil];
+                
                 [self getChecksumParamData];
                 break;
             }
