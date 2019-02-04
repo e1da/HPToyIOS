@@ -103,10 +103,13 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
+    NSString *targetName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"TargetName"];
+    int index = ([targetName isEqualToString:@"HiFiToy"]) ? (int)section : (int)section + 1;
+    
     NSString * tittleSection;
     BOOL buttonVisibleFlag = NO;
     
-    switch (section){
+    switch (index){
         case 0:
             tittleSection = @"AUDIO SOURCE";
             buttonVisibleFlag = YES;
@@ -161,25 +164,28 @@
 
 - (void) infoButtonClick:(UIButton *)button
 {
+    NSString *targetName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"TargetName"];
+    int index = ([targetName isEqualToString:@"HiFiToy"]) ? (int)button.tag : (int)button.tag + 1;
+    
     NSString * msgString = nil;
  
-    switch (button.tag) {
-        case 0://VOLUME
+    switch (index) {
+        case 0: //AUDIO SOURCE
             msgString = @"If the USB input selected, the amp is ready for 16-24/44.1-192 USB high-res audio, and after USB-host is off, it will be auto-switched to standby. If selected AUTO, after USB-host is off, the amp will be auto-switched to AUX input. AUX input could be either optical SPDIF or BT aptx stream, depends on which option is installed. After 5 minutes AUX input level less than Auto-Off threshold, the amp goes to standby. The wakeup event could be smartphone app connecting or USB-host On.";
             break;
-        case 1://VOLUME
+        case 1: //VOLUME
             msgString = @"Volume info";
             break;
-        case 2://BASS TREBLE
+        case 2: //BASS TREBLE
             msgString = @"Classical HiFi knobs implemented with shelving filters";
             break;
-        case 3://LOUDNESS
+        case 3: //LOUDNESS
             msgString = @"Fletcher-Munson loudness curves are implemented. You can control the Loudness boost frequency and Dry/Wet slider position defines less/more effect.";
             break;
-        case 4://FILTERS
+        case 4: //FILTERS
             msgString = @"Filters let you fully control up to 7 Biquads: Parametric EQs, All-pass Filters, Text biquad mode, LPF and HPF, both are Butterworth 2 or 4 order. PEQ On/Off button bypassing PEQ's and All-pass Filters.";
             break;
-        case 5://DRC
+        case 5: //DRC
             msgString = @"Flexible Compressor/Expander dynamic range control. Required some basic understanding to modify parameters successfully.";
             break;
         default:
@@ -207,20 +213,8 @@
         destination.hiFiToyDevice = hiFiToyDevice;
     }
     
-    if ([[segue identifier] isEqualToString:@"showXOverMenu"]) {
-        XOverViewController *dest = (XOverViewController * )segue.destinationViewController;
-        
-        dest.maxFreq = 30000;
-        dest.minFreq = 20;
-        
-        dest.filters = hiFiToyPreset.filters;
-    }
-    
     if ([[segue identifier] isEqualToString:@"showNewFilters"]) {
         FiltersViewController *dest = (FiltersViewController * )segue.destinationViewController;
-        
-        //dest.maxFreq = 30000;
-        //dest.minFreq = 20;
         
         dest.filters = hiFiToyPreset.filters;
     }

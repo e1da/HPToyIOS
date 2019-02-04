@@ -218,8 +218,11 @@
         _alertController = nil;
     }
     
+    NSString * bundleName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+    NSString * msg = [NSString stringWithFormat:@"Import preset from %@?", bundleName];
+    
     _alertController = [UIAlertController alertControllerWithTitle:@"Preset info"
-                                                           message:NSLocalizedString(@"Import preset from HiFi Toy?", @"")
+                                                           message:msg
                                                     preferredStyle:UIAlertControllerStyleAlert];
     
     HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] getActivePreset];

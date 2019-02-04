@@ -52,7 +52,13 @@
         [_foundHiFiToyDevices addObject:_activeHiFiToyDevice];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"KeyfobDidFoundNotification" object:nil];
     }
-    [bleDriver findBLEPeripheralsWithName:@"HiFiToyPeripheral"];
+    
+    NSString *targetName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"TargetName"];
+    if ([targetName isEqualToString:@"HPToy"]) {
+        [bleDriver findBLEPeripheralsWithName:@"HPToyPeripheral"];
+    } else {
+        [bleDriver findBLEPeripheralsWithName:@"HiFiToyPeripheral"];
+    }
 }
 
 - (void) stopDiscovery

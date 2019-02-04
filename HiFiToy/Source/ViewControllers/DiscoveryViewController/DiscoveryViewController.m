@@ -187,8 +187,9 @@
 
 - (void) showHint:(UIButton *)button
 {
-    NSString * msgString = @"This window shows all available online HiFi Toy devices, which you may choose to control. Also you can rename UUID number for any simple name in the Options/Name menu.";
-    
+    NSString * bundleName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+    NSString * msgString = [NSString stringWithFormat:@"This window shows all available online %@ devices, which you may choose to control. Also you can rename UUID number for any simple name in the Options/Name menu.", bundleName];
+
     [[DialogSystem sharedInstance] showAlert:msgString];
 }
 
