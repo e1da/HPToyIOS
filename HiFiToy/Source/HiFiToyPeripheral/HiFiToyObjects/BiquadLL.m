@@ -111,6 +111,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     copyBiquad.order = self.order;
     copyBiquad.type = self.type;
     copyBiquad.coef = self.coef; //copy biquad param too
+    copyBiquad.biquadParam = [self.biquadParam copy];
     
     return copyBiquad;
 }

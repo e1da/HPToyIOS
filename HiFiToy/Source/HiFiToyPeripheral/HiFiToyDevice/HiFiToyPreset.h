@@ -32,7 +32,7 @@
 
 - (void) initCharacteristicsPointer;
 
-+ (HiFiToyPreset *) initDefaultPreset;
++ (HiFiToyPreset *) getDefault;
 
 - (BOOL)rename:(NSString *)newName;
 

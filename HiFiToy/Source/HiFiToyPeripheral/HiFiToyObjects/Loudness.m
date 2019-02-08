@@ -26,21 +26,18 @@
 {
     self = [super init];
     if (self){
-        _LG = 0;
+        _LG = -0.5;
         _LO = 0;
         _gain = 0;
         _offset = 0;
-        /*_biquad = [Biquad initWithAddress:LOUDNESS_BIQUAD_REG
-                                    Order:BIQUAD_ORDER_2
-                                     Type:BIQUAD_BANDPASS
-                                     Freq:140 Qfac:0 dbVolume:0];*/
+        
         _biquad = [BiquadLL initWithAddress:LOUDNESS_BIQUAD_REG];
         _biquad.type = BIQUAD_BANDPASS;
         
-        BiquadParam * p = _biquad.biquadParam;
-        p.freq = 140;
-        p.qFac = 0;
-        p.dbVolume = 0;
+        [_biquad.biquadParam setBorderMaxFreq:200 minFreq:30];
+        _biquad.biquadParam.freq = 60;
+        _biquad.biquadParam.qFac = 0;
+        _biquad.biquadParam.dbVolume = 0;
     }
     
     return self;

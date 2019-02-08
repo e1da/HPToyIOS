@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D301F0772172554900E181C6 /* FloatUtility.h in Sources */ = {isa = PBXBuildFile; fileRef = D30FF884216D49DE007FA50D /* FloatUtility.h */; };
-		D301F078217255C500E181C6 /* FloatUtility.h in Sources */ = {isa = PBXBuildFile; fileRef = D30FF884216D49DE007FA50D /* FloatUtility.h */; };
-		D301F079217255C500E181C6 /* FloatUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D30FF885216D49DE007FA50D /* FloatUtility.c */; };
 		D301F081217F479200E181C6 /* BiquadParam.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F080217F479200E181C6 /* BiquadParam.m */; };
 		D301F085218213BF00E181C6 /* NumValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F083218213BF00E181C6 /* NumValueControl.m */; };
 		D301F091218246EB00E181C6 /* BiquadValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F090218246EB00E181C6 /* BiquadValueControl.m */; };
@@ -175,6 +173,9 @@
 		D35492A922086A4700063768 /* DeviceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A620CABF19008A94EF /* DeviceList.plist */; };
 		D35492AA22086A4700063768 /* PresetList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A720CABF19008A94EF /* PresetList.plist */; };
 		D35492AB22086A8B00063768 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CA320BEB50000BDC1A0 /* main.m */; };
+		D35492AE2208D21700063768 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */; };
+		D35492AF2208D39C00063768 /* FloatUtility.h in Sources */ = {isa = PBXBuildFile; fileRef = D30FF884216D49DE007FA50D /* FloatUtility.h */; };
+		D35492B02208D39C00063768 /* FloatUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D30FF885216D49DE007FA50D /* FloatUtility.c */; };
 		D3571E34218F335500A99CB8 /* KeyboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = D3571E33218F335500A99CB8 /* KeyboardView.m */; };
 		D379126320D111B80089962D /* XOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126220D111B80089962D /* XOverViewController.m */; };
 		D379126620D1153F0089962D /* XOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126520D1153F0089962D /* XOverView.m */; };
@@ -927,6 +928,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D35492AE2208D21700063768 /* LaunchScreen.storyboard in Resources */,
 				D35492A922086A4700063768 /* DeviceList.plist in Resources */,
 				D35492AA22086A4700063768 /* PresetList.plist in Resources */,
 				D3C11C3522084C2800FFA990 /* Assets.xcassets in Resources */,
@@ -1011,8 +1013,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D301F078217255C500E181C6 /* FloatUtility.h in Sources */,
-				D301F079217255C500E181C6 /* FloatUtility.c in Sources */,
+				D35492AF2208D39C00063768 /* FloatUtility.h in Sources */,
+				D35492B02208D39C00063768 /* FloatUtility.c in Sources */,
 				D39C3CAE20BEB50000BDC1A0 /* HiFiToyTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

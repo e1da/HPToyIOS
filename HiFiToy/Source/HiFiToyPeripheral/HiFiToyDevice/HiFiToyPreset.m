@@ -26,6 +26,18 @@
 
 @implementation HiFiToyPreset
 
+- (id) init {
+    self = [super init];
+    if (self) {
+        [self setDefault];
+    }
+    return self;
+}
+
++ (HiFiToyPreset *) getDefault {
+    return [[HiFiToyPreset alloc] init];
+}
+
 - (void) initCharacteristicsPointer
 {
     _characteristics = [NSArray arrayWithObjects:_filters, _masterVolume, _bassTreble, _loudness, _drc, nil];
@@ -106,12 +118,11 @@
 }
 
 //creation method
-- (void) loadDefaultPreset{
+- (void) setDefault {
     self.presetName = @"DefaultPreset";
     
     //Filters
     self.filters = [Filters initDefaultWithAddr0:BIQUAD_FILTER_REG withAddr1:(BIQUAD_FILTER_REG + 7)];
-    //self.xover = [XOver initDefaultWithAddress0:BIQUAD_FILTER_REG Address1:(BIQUAD_FILTER_REG + 7)];
     
     
     //Master Volume
@@ -131,21 +142,8 @@
     [self.bassTreble setEnabledChannel:0 Enabled:1.0];
     [self.bassTreble setEnabledChannel:1 Enabled:1.0];
     
-    //Loudness
-    /*BiquadLL * loudnessBiquad = [BiquadLL initWithAddress:LOUDNESS_BIQUAD_REG Order:BIQUAD_ORDER_2 Type:BIQUAD_BANDPASS
-                                                 Freq:60 Qfac:0.0 dbVolume:0.0];*/
-    
-    BiquadLL * loudnessBiquad = [BiquadLL initWithAddress:LOUDNESS_BIQUAD_REG];
-    loudnessBiquad.type = BIQUAD_BANDPASS;
-    
-    BiquadParam * p = loudnessBiquad.biquadParam;
-    
-    [p setBorderMaxFreq:150 minFreq:30];
-    p.freq = 60;
-    p.qFac = 0;
-    p.dbVolume = 0;
-    
-    self.loudness = [Loudness initWithOrder:loudnessBiquad LG:-0.5 LO:0.0 Gain:0.0 Offset:0.0];
+    //Loudness: LG = -0.5, LO = Gain = Offset = 0, Biquad=(BANDPASS, 140Hz = (30..200Hz))
+    self.loudness = [[Loudness alloc] init];
     
     
     //Drc
@@ -170,14 +168,6 @@
     
     [self initCharacteristicsPointer];
     [self updateChecksum];
-}
-
-+ (HiFiToyPreset *) initDefaultPreset
-{
-    HiFiToyPreset * currentInstance = [[HiFiToyPreset alloc] init];
-    [currentInstance loadDefaultPreset];
-    
-    return currentInstance;
 }
 
 - (uint8_t)address {

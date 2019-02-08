@@ -72,7 +72,7 @@
         preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:self.activeKeyPreset];
         
         if (!preset){
-            preset = [HiFiToyPreset initDefaultPreset];
+            preset = [HiFiToyPreset getDefault];
             [[HiFiToyPresetList sharedInstance] updatePreset:preset withKey:self.activeKeyPreset];
             preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:self.activeKeyPreset];
         }
