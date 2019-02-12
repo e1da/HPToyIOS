@@ -26,4 +26,5 @@ uint32_t reverseUint32(uint32_t num) ;
 - (void) sendEnergyWithResponse:(BOOL)response;
 - (void) sendAttackDecayWithResponse:(BOOL)response;
 
+- (NSString *) getEnergyDescription;
 @end

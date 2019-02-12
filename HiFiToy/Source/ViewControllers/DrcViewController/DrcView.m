@@ -139,6 +139,7 @@
         CGContextAddLineToPoint(context, (float)(width - border_right), [self dbToPixelY:i]);
         
     }
+    //draw vertical line
     for (int i = self.maxDbX; i >= self.minDbX; i -= GRID_STEP){
         CGContextMoveToPoint(context, [self dbToPixelX:i], (float)(border_top));
         CGContextAddLineToPoint(context, [self dbToPixelX:i], (float)(height - border_bottom));

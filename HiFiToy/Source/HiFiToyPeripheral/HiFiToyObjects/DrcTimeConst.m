@@ -119,6 +119,20 @@ static float uint32ToTimeMS(uint32_t time) {
     return DRC1_ENERGY_REG;
 }
 
+- (void) setEnergyMS:(float)energyMS {
+    if (energyMS < 0.05) {
+        _energyMS = 0.05;
+    } else if (energyMS < 0.1) {
+        _energyMS = (int)(energyMS / 0.05) * 0.05;
+    } else if (energyMS < 1) {
+        _energyMS = (int)(energyMS / 0.1) * 0.1;
+    } else if (energyMS < 10){
+        _energyMS = (int)energyMS;
+    } else {
+        _energyMS = (int)(energyMS / 10) * 10;
+    }
+}
+
 //info string
 -(NSString *)getInfo
 {
@@ -165,6 +179,8 @@ static float uint32ToTimeMS(uint32_t time) {
     [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
     
     uint32_t t = timeToUint32(self.energyMS);
+    NSLog(@"%f %d", _energyMS, t);
+    
     uint32_t d[2] = {reverseUint32(0x800000 - t), reverseUint32(t)};
     [data appendBytes:d length:8];
     
@@ -187,6 +203,15 @@ static float uint32ToTimeMS(uint32_t time) {
     [data appendBytes:d length:16];
     
     return data;
+}
+
+- (NSString *) getEnergyDescription {
+    if (_energyMS < 0.1) {
+        return [NSString stringWithFormat:@"%dus", (int)(_energyMS * 1000)];
+    } else if (_energyMS < 1) {
+        return [NSString stringWithFormat:@"%0.1fms", _energyMS];
+    }
+    return [NSString stringWithFormat:@"%dms", (int)_energyMS];
 }
 
 //get binary for save to dsp
