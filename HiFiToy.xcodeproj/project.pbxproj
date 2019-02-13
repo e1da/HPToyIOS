@@ -48,7 +48,6 @@
 		D33A259520CA9141008A94EF /* PairingCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259420CA9141008A94EF /* PairingCodeViewController.m */; };
 		D33A259820CA93B1008A94EF /* PresetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259720CA93B1008A94EF /* PresetViewController.m */; };
 		D33A259B20CA9538008A94EF /* PresetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259A20CA9537008A94EF /* PresetCell.m */; };
-		D33A259E20CA9571008A94EF /* PresetDetailButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259D20CA9571008A94EF /* PresetDetailButton.m */; };
 		D33A25A120CA9A2C008A94EF /* PresetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */; };
 		D33A25A420CABC9C008A94EF /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */; };
 		D33A25A820CABF19008A94EF /* DeviceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A620CABF19008A94EF /* DeviceList.plist */; };
@@ -70,8 +69,6 @@
 		D3549242220869B700063768 /* DeviceNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259120CA8FF4008A94EF /* DeviceNameViewController.m */; };
 		D3549243220869BB00063768 /* PairingCodeViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = D33A259320CA9141008A94EF /* PairingCodeViewController.h */; };
 		D3549244220869BB00063768 /* PairingCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259420CA9141008A94EF /* PairingCodeViewController.m */; };
-		D3549245220869C200063768 /* PresetDetailButton.h in Sources */ = {isa = PBXBuildFile; fileRef = D33A259C20CA9570008A94EF /* PresetDetailButton.h */; };
-		D3549246220869C200063768 /* PresetDetailButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259D20CA9571008A94EF /* PresetDetailButton.m */; };
 		D3549247220869C200063768 /* PresetCell.h in Sources */ = {isa = PBXBuildFile; fileRef = D33A259920CA9537008A94EF /* PresetCell.h */; };
 		D3549248220869C200063768 /* PresetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259A20CA9537008A94EF /* PresetCell.m */; };
 		D3549249220869C200063768 /* PresetViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = D33A259620CA93B1008A94EF /* PresetViewController.h */; };
@@ -301,8 +298,6 @@
 		D33A259720CA93B1008A94EF /* PresetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetViewController.m; sourceTree = "<group>"; };
 		D33A259920CA9537008A94EF /* PresetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresetCell.h; sourceTree = "<group>"; };
 		D33A259A20CA9537008A94EF /* PresetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresetCell.m; sourceTree = "<group>"; };
-		D33A259C20CA9570008A94EF /* PresetDetailButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresetDetailButton.h; sourceTree = "<group>"; };
-		D33A259D20CA9571008A94EF /* PresetDetailButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresetDetailButton.m; sourceTree = "<group>"; };
 		D33A259F20CA9A2C008A94EF /* PresetDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetDetailViewController.h; sourceTree = "<group>"; };
 		D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetDetailViewController.m; sourceTree = "<group>"; };
 		D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
@@ -528,8 +523,6 @@
 		D33A258E20CA8FE0008A94EF /* PresetViewController */ = {
 			isa = PBXGroup;
 			children = (
-				D33A259C20CA9570008A94EF /* PresetDetailButton.h */,
-				D33A259D20CA9571008A94EF /* PresetDetailButton.m */,
 				D33A259920CA9537008A94EF /* PresetCell.h */,
 				D33A259A20CA9537008A94EF /* PresetCell.m */,
 				D33A259620CA93B1008A94EF /* PresetViewController.h */,
@@ -990,7 +983,6 @@
 				D33A255520C5D4B3008A94EF /* HiFiToyPreset.m in Sources */,
 				D33A259220CA8FF4008A94EF /* DeviceNameViewController.m in Sources */,
 				D39C3CA420BEB50000BDC1A0 /* main.m in Sources */,
-				D33A259E20CA9571008A94EF /* PresetDetailButton.m in Sources */,
 				D33A258820CA8A00008A94EF /* OptionsViewController.m in Sources */,
 				D39C3CE320BEDD9D00BDC1A0 /* Number88.c in Sources */,
 				D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */,
@@ -1114,8 +1106,6 @@
 				D35492A6220869DB00063768 /* DrcCoef.m in Sources */,
 				D35492A7220869DB00063768 /* DrcTimeConst.h in Sources */,
 				D35492A8220869DB00063768 /* DrcTimeConst.m in Sources */,
-				D3549245220869C200063768 /* PresetDetailButton.h in Sources */,
-				D3549246220869C200063768 /* PresetDetailButton.m in Sources */,
 				D3549247220869C200063768 /* PresetCell.h in Sources */,
 				D3549248220869C200063768 /* PresetCell.m in Sources */,
 				D3549249220869C200063768 /* PresetViewController.h in Sources */,

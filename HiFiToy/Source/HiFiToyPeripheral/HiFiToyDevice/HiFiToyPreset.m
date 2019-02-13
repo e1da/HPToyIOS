@@ -8,6 +8,7 @@
 
 #import "HiFiToyPreset.h"
 #import "HiFiToyPresetList.h"
+#import "HiFiToyDeviceList.h"
 #import "HiFiToyControl.h"
 #import "DialogSystem.h"
 #import "TAS5558.h"
@@ -246,7 +247,7 @@
     return counter;
 }
 
-//save preset
+//store and import to/from peripheral
 -(void)storeToPeripheral
 {
     HiFiToyControl * hiFiToyControl = [HiFiToyControl sharedInstance];
