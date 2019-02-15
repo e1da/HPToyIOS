@@ -374,6 +374,95 @@
             </objects>
             <point key="canvasLocation" x="365.60000000000002" y="262.21889055472263"/>
         </scene>
+        <!--Merge Tool-->
+        <scene sceneID="MVk-HR-vHz">
+            <objects>
+                <tableViewController id="3Ua-Vn-Rel" customClass="MergeViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="60" estimatedRowHeight="-1" sectionHeaderHeight="20" sectionFooterHeight="10" id="Oa2-23-XRP">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BaseCell" editingAccessoryType="checkmark" id="vFw-iY-jTO" customClass="BaseCell">
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="60"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vFw-iY-jTO" id="hXt-sC-eGc">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HUA-5p-6YI">
+                                            <rect key="frame" x="20" y="17" width="250" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="label_outl" destination="HUA-5p-6YI" id="vCh-KZ-Cwv"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NavigationCell" editingAccessoryType="checkmark" id="2hn-ob-XdW" customClass="MergeNavigationViewCell">
+                                <rect key="frame" x="0.0" y="115.5" width="375" height="60"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2hn-ob-XdW" id="JUu-1s-yUh">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="29D-Ge-TT7">
+                                            <rect key="frame" x="161.5" y="18" width="52" height="24"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BMR-9T-iGV">
+                                            <rect key="frame" x="20" y="15" width="59" height="30"/>
+                                            <state key="normal" title="Previous"/>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zAJ-fZ-USa">
+                                            <rect key="frame" x="323" y="15" width="32" height="30"/>
+                                            <state key="normal" title="Next"/>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="zAJ-fZ-USa" firstAttribute="centerY" secondItem="JUu-1s-yUh" secondAttribute="centerYWithinMargins" id="2EG-n0-clg"/>
+                                        <constraint firstItem="BMR-9T-iGV" firstAttribute="leading" secondItem="JUu-1s-yUh" secondAttribute="leading" constant="20" id="5b6-yD-GX6"/>
+                                        <constraint firstItem="29D-Ge-TT7" firstAttribute="centerY" secondItem="JUu-1s-yUh" secondAttribute="centerYWithinMargins" id="BpQ-Ju-J3K"/>
+                                        <constraint firstItem="29D-Ge-TT7" firstAttribute="centerX" secondItem="JUu-1s-yUh" secondAttribute="centerXWithinMargins" id="Hie-cR-wfs"/>
+                                        <constraint firstItem="BMR-9T-iGV" firstAttribute="centerY" secondItem="JUu-1s-yUh" secondAttribute="centerYWithinMargins" id="cOd-fc-4j6"/>
+                                        <constraint firstItem="zAJ-fZ-USa" firstAttribute="trailing" secondItem="JUu-1s-yUh" secondAttribute="trailing" constant="-20" id="d7g-1r-QG4"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="itemLabel_outl" destination="29D-Ge-TT7" id="GLe-QD-uCE"/>
+                                    <outlet property="nextButton_outl" destination="zAJ-fZ-USa" id="6xn-ie-D0e"/>
+                                    <outlet property="prevButton_outl" destination="BMR-9T-iGV" id="OrM-hW-ceg"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="3Ua-Vn-Rel" id="5Dg-lQ-3PN"/>
+                            <outlet property="delegate" destination="3Ua-Vn-Rel" id="T7u-f6-cW6"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Merge Tool" id="8TV-l9-OMA">
+                        <barButtonItem key="rightBarButtonItem" title="Reset" style="plain" id="Iqx-LJ-3Ha">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="D0N-a1-V9U">
+                                <rect key="frame" x="276" y="7" width="83" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Reset"/>
+                                <connections>
+                                    <action selector="reset:" destination="3Ua-Vn-Rel" eventType="touchUpInside" id="EL4-4m-yXw"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="X50-uy-coC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="365.60000000000002" y="1029.5352323838081"/>
+        </scene>
         <!--Preset Manager-->
         <scene sceneID="bZD-Ab-jXP">
             <objects>
@@ -415,6 +504,27 @@
                                 <connections>
                                     <outlet property="presetDetailButton_outl" destination="jJu-ac-gg2" id="ZU1-eV-gfF"/>
                                     <outlet property="presetLabel_outl" destination="FGc-vE-hC5" id="wrE-bZ-eOb"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MergeToolCell" editingAccessoryType="checkmark" id="b9n-36-ewG" customClass="MergeToolCell">
+                                <rect key="frame" x="0.0" y="115.5" width="375" height="60"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="b9n-36-ewG" id="oUW-91-oOo">
+                                    <rect key="frame" x="0.0" y="0.0" width="341" height="59.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k7g-5l-us4">
+                                            <rect key="frame" x="14" y="17" width="256" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="mergeLabel_outl" destination="k7g-5l-us4" id="MfC-tZ-u2p"/>
+                                    <segue destination="3Ua-Vn-Rel" kind="push" identifier="showMergeTool" id="8J1-EW-qma"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1157,7 +1267,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Z6d-f1-hK3"/>
+        <segue reference="faG-pk-fhu"/>
         <segue reference="N5W-tT-oFi"/>
     </inferredMetricsTieBreakers>
 </document>

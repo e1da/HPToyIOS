@@ -13,6 +13,12 @@
 		D301F091218246EB00E181C6 /* BiquadValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F090218246EB00E181C6 /* BiquadValueControl.m */; };
 		D301F09421834FDF00E181C6 /* BiquadCoefValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F09321834FDF00E181C6 /* BiquadCoefValueControl.m */; };
 		D301F097218353D700E181C6 /* CoefButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F096218353D700E181C6 /* CoefButton.m */; };
+		D307EB1022147D6200ACE7A3 /* MergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D307EB0E22147D6200ACE7A3 /* MergeViewController.m */; };
+		D307EB1122147D6200ACE7A3 /* MergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D307EB0E22147D6200ACE7A3 /* MergeViewController.m */; };
+		D307EB1222147D6200ACE7A3 /* BaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D307EB0F22147D6200ACE7A3 /* BaseCell.m */; };
+		D307EB1322147D6200ACE7A3 /* BaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D307EB0F22147D6200ACE7A3 /* BaseCell.m */; };
+		D307EB162215902300ACE7A3 /* MergeNavigationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D307EB152215902300ACE7A3 /* MergeNavigationViewCell.m */; };
+		D307EB172215902300ACE7A3 /* MergeNavigationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D307EB152215902300ACE7A3 /* MergeNavigationViewCell.m */; };
 		D30FF8702163AB4D007FA50D /* KeyboardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF86D2163AB4D007FA50D /* KeyboardButton.m */; };
 		D30FF8712163AB4D007FA50D /* NumKeyboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF86E2163AB4D007FA50D /* NumKeyboardController.m */; };
 		D30FF87A21650820007FA50D /* FilterLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF87921650820007FA50D /* FilterLabel.m */; };
@@ -21,6 +27,9 @@
 		D30FF886216D49DE007FA50D /* FloatUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D30FF885216D49DE007FA50D /* FloatUtility.c */; };
 		D30FF889216E2F5C007FA50D /* Filters.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF888216E2F5C007FA50D /* Filters.m */; };
 		D30FF88C216FA8E8007FA50D /* PassFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF88B216FA8E8007FA50D /* PassFilter.m */; };
+		D32483C82214683800028514 /* MergeToolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D32483C72214683800028514 /* MergeToolCell.m */; };
+		D32483C922146B3500028514 /* MergeToolCell.h in Sources */ = {isa = PBXBuildFile; fileRef = D32483C62214683800028514 /* MergeToolCell.h */; };
+		D32483CA22146B3500028514 /* MergeToolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D32483C72214683800028514 /* MergeToolCell.m */; };
 		D33A253E20BFF674008A94EF /* Number88.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDE20BEDD9D00BDC1A0 /* Number88.h */; };
 		D33A253F20BFF674008A94EF /* Number523.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDF20BEDD9D00BDC1A0 /* Number523.h */; };
 		D33A254020BFF674008A94EF /* Number923.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CDD20BEDD9D00BDC1A0 /* Number923.h */; };
@@ -235,6 +244,12 @@
 		D301F09321834FDF00E181C6 /* BiquadCoefValueControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadCoefValueControl.m; sourceTree = "<group>"; };
 		D301F095218353D700E181C6 /* CoefButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoefButton.h; sourceTree = "<group>"; };
 		D301F096218353D700E181C6 /* CoefButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoefButton.m; sourceTree = "<group>"; };
+		D307EB0C22147D6200ACE7A3 /* BaseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseCell.h; sourceTree = "<group>"; };
+		D307EB0D22147D6200ACE7A3 /* MergeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeViewController.h; sourceTree = "<group>"; };
+		D307EB0E22147D6200ACE7A3 /* MergeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergeViewController.m; sourceTree = "<group>"; };
+		D307EB0F22147D6200ACE7A3 /* BaseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseCell.m; sourceTree = "<group>"; };
+		D307EB142215902300ACE7A3 /* MergeNavigationViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MergeNavigationViewCell.h; sourceTree = "<group>"; };
+		D307EB152215902300ACE7A3 /* MergeNavigationViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MergeNavigationViewCell.m; sourceTree = "<group>"; };
 		D30FF86C2163AB4D007FA50D /* NumKeyboardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumKeyboardController.h; sourceTree = "<group>"; };
 		D30FF86D2163AB4D007FA50D /* KeyboardButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardButton.m; sourceTree = "<group>"; };
 		D30FF86E2163AB4D007FA50D /* NumKeyboardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumKeyboardController.m; sourceTree = "<group>"; };
@@ -251,6 +266,8 @@
 		D30FF888216E2F5C007FA50D /* Filters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Filters.m; sourceTree = "<group>"; };
 		D30FF88A216FA8E8007FA50D /* PassFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassFilter.h; sourceTree = "<group>"; };
 		D30FF88B216FA8E8007FA50D /* PassFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassFilter.m; sourceTree = "<group>"; };
+		D32483C62214683800028514 /* MergeToolCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MergeToolCell.h; sourceTree = "<group>"; };
+		D32483C72214683800028514 /* MergeToolCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MergeToolCell.m; sourceTree = "<group>"; };
 		D33A254220C06481008A94EF /* TAS5558.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAS5558.h; sourceTree = "<group>"; };
 		D33A254420C140F8008A94EF /* BassTrebleChannel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BassTrebleChannel.h; sourceTree = "<group>"; };
 		D33A254520C140F8008A94EF /* BassTrebleChannel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BassTrebleChannel.m; sourceTree = "<group>"; };
@@ -412,6 +429,19 @@
 			path = ValueControls;
 			sourceTree = "<group>";
 		};
+		D307EB0B22147D0900ACE7A3 /* MergeViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D307EB0C22147D6200ACE7A3 /* BaseCell.h */,
+				D307EB0F22147D6200ACE7A3 /* BaseCell.m */,
+				D307EB0D22147D6200ACE7A3 /* MergeViewController.h */,
+				D307EB0E22147D6200ACE7A3 /* MergeViewController.m */,
+				D307EB142215902300ACE7A3 /* MergeNavigationViewCell.h */,
+				D307EB152215902300ACE7A3 /* MergeNavigationViewCell.m */,
+			);
+			path = MergeViewController;
+			sourceTree = "<group>";
+		};
 		D30FF86B2163AB4D007FA50D /* NumberKeyboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -481,6 +511,7 @@
 		D33A258420CA89E6008A94EF /* OptionsViewController */ = {
 			isa = PBXGroup;
 			children = (
+				D307EB0B22147D0900ACE7A3 /* MergeViewController */,
 				D3E97AAE2157F06500C98402 /* EnergyViewController */,
 				D33A258C20CA8FE0008A94EF /* DeviceNameViewController */,
 				D33A258D20CA8FE0008A94EF /* PairingCodeViewController */,
@@ -529,6 +560,8 @@
 				D33A259720CA93B1008A94EF /* PresetViewController.m */,
 				D33A259F20CA9A2C008A94EF /* PresetDetailViewController.h */,
 				D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */,
+				D32483C62214683800028514 /* MergeToolCell.h */,
+				D32483C72214683800028514 /* MergeToolCell.m */,
 			);
 			path = PresetViewController;
 			sourceTree = "<group>";
@@ -937,6 +970,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D301F081217F479200E181C6 /* BiquadParam.m in Sources */,
+				D307EB162215902300ACE7A3 /* MergeNavigationViewCell.m in Sources */,
 				D301F0772172554900E181C6 /* FloatUtility.h in Sources */,
 				D33A258220C952CD008A94EF /* FoundCell.m in Sources */,
 				D33A259820CA93B1008A94EF /* PresetViewController.m in Sources */,
@@ -947,11 +981,13 @@
 				D33A253E20BFF674008A94EF /* Number88.h in Sources */,
 				D379127A20D3C55B0089962D /* DrcView.m in Sources */,
 				D3BBD4FB218DC1DD00FFDB86 /* CoefWarningController.m in Sources */,
+				D32483C82214683800028514 /* MergeToolCell.m in Sources */,
 				D33A255E20C6AEBB008A94EF /* HiFiToyDeviceList.m in Sources */,
 				D33A253F20BFF674008A94EF /* Number523.h in Sources */,
 				D33A257420C94459008A94EF /* AppDelegate.m in Sources */,
 				D33A254020BFF674008A94EF /* Number923.h in Sources */,
 				D30FF8802166A0D7007FA50D /* FilterTypeControl.m in Sources */,
+				D307EB1222147D6200ACE7A3 /* BaseCell.m in Sources */,
 				D30FF889216E2F5C007FA50D /* Filters.m in Sources */,
 				D33A257A20C94865008A94EF /* DiscoveryViewController.m in Sources */,
 				D33A257D20C94875008A94EF /* MainViewController.m in Sources */,
@@ -966,6 +1002,7 @@
 				D33A259520CA9141008A94EF /* PairingCodeViewController.m in Sources */,
 				D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */,
 				D33A256420C6E173008A94EF /* BlePacket.m in Sources */,
+				D307EB1022147D6200ACE7A3 /* MergeViewController.m in Sources */,
 				D30FF8702163AB4D007FA50D /* KeyboardButton.m in Sources */,
 				D33A254620C140F8008A94EF /* BassTrebleChannel.m in Sources */,
 				D379126620D1153F0089962D /* XOverView.m in Sources */,
@@ -1015,9 +1052,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D32483C922146B3500028514 /* MergeToolCell.h in Sources */,
+				D32483CA22146B3500028514 /* MergeToolCell.m in Sources */,
 				D35492AB22086A8B00063768 /* main.m in Sources */,
 				D354924F220869DB00063768 /* NumValueControl.h in Sources */,
 				D3549250220869DB00063768 /* NumValueControl.m in Sources */,
+				D307EB1122147D6200ACE7A3 /* MergeViewController.m in Sources */,
 				D3549251220869DB00063768 /* BiquadValueControl.h in Sources */,
 				D3549252220869DB00063768 /* BiquadValueControl.m in Sources */,
 				D3549253220869DB00063768 /* BiquadCoefValueControl.h in Sources */,
@@ -1044,6 +1084,7 @@
 				D3549268220869DB00063768 /* DrcView.m in Sources */,
 				D3549269220869DB00063768 /* DrcTimeConstViewController.h in Sources */,
 				D354926A220869DB00063768 /* DrcTimeConstViewController.m in Sources */,
+				D307EB1322147D6200ACE7A3 /* BaseCell.m in Sources */,
 				D354926B220869DB00063768 /* DemoCell.h in Sources */,
 				D354926C220869DB00063768 /* DemoCell.m in Sources */,
 				D354926D220869DB00063768 /* FoundCell.h in Sources */,
@@ -1090,6 +1131,7 @@
 				D3549296220869DB00063768 /* BiquadLL.h in Sources */,
 				D3549297220869DB00063768 /* BiquadLL.m in Sources */,
 				D3549298220869DB00063768 /* Filters.h in Sources */,
+				D307EB172215902300ACE7A3 /* MergeNavigationViewCell.m in Sources */,
 				D3549299220869DB00063768 /* Filters.m in Sources */,
 				D354929A220869DB00063768 /* Volume.h in Sources */,
 				D354929B220869DB00063768 /* Volume.m in Sources */,

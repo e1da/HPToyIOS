@@ -10,6 +10,7 @@
 #import "PresetDetailViewController.h"
 #import "HiFiToyControl.h"
 #import "PresetCell.h"
+#import "MergeToolCell.h"
 
 @implementation PresetViewController
 
@@ -56,49 +57,65 @@
  UITableViewDataSource protocol
  -----------------------------------------------------------------------------------------*/
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
     
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [hiFiToyPresetList count];
+    if (section == 0) { // for preset list
+        return [hiFiToyPresetList count];
+    }
+    return 1; // for merge tool
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    PresetCell *presetCell = [tableView dequeueReusableCellWithIdentifier:@"PresetCell"];
-    
-    if (presetCell == nil) {
-        presetCell = [[PresetCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PresetCell"];
-    }
-    
-    
-    if (indexPath.row < [hiFiToyPresetList count]){
-        HiFiToyPreset *hiFiToyPreset = [hiFiToyPresetList.list.allValues objectAtIndex:indexPath.row];
-        NSString *keyPreset = [hiFiToyPresetList.list.allKeys objectAtIndex:indexPath.row];
-        
-        presetCell.presetLabel_outl.text = NSLocalizedString(hiFiToyPreset.presetName, @"");
-        presetCell.presetDetailButton_outl.tag = indexPath.row;
 
-        
-        //set color
-        if ([keyPreset compare:self.hiFiToyDevice.activeKeyPreset] == NSOrderedSame){
-            presetCell.presetLabel_outl.textColor = [UIColor blackColor];
-        } else {
-            presetCell.presetLabel_outl.textColor = [UIColor grayColor];
+    if (indexPath.section == 0) { // preset list
+        PresetCell * presetCell = [tableView dequeueReusableCellWithIdentifier:@"PresetCell"];
+        if (presetCell == nil) {
+            presetCell = [[PresetCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PresetCell"];
         }
-    } else {
-        presetCell.presetLabel_outl.text = @"err";
+    
+        if (indexPath.row < [hiFiToyPresetList count]){
+            HiFiToyPreset *hiFiToyPreset = [hiFiToyPresetList.list.allValues objectAtIndex:indexPath.row];
+            NSString *keyPreset = [hiFiToyPresetList.list.allKeys objectAtIndex:indexPath.row];
+        
+            presetCell.presetLabel_outl.text = NSLocalizedString(hiFiToyPreset.presetName, @"");
+            presetCell.presetDetailButton_outl.tag = indexPath.row;
+
+            
+            //set color
+            if ([keyPreset compare:self.hiFiToyDevice.activeKeyPreset] == NSOrderedSame){
+                presetCell.presetLabel_outl.textColor = [UIColor blackColor];
+            } else {
+                presetCell.presetLabel_outl.textColor = [UIColor grayColor];
+            }
+        } else {
+            presetCell.presetLabel_outl.text = @"err";
+        }
+        
+        return presetCell;
+        
+    } else { // merge tool
+        MergeToolCell * mergeCell = [tableView dequeueReusableCellWithIdentifier:@"MergeToolCell"];
+        if (mergeCell == nil) {
+            mergeCell = [[MergeToolCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MergeToolCell"];
+        }
+        
+        return mergeCell;
     }
     
-    return presetCell;
+    return nil;
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Detemine if it's in editing mode
-    NSString *key = [hiFiToyPresetList.list.allKeys objectAtIndex:indexPath.row];
-    if ( ([key compare:@"DefaultPreset"] != NSOrderedSame) && ([key compare:self.hiFiToyDevice.activeKeyPreset] != NSOrderedSame) ){
-        return UITableViewCellEditingStyleDelete;
+    if (indexPath.section == 0) {
+        // Detemine if it's in editing mode
+        NSString *key = [hiFiToyPresetList.list.allKeys objectAtIndex:indexPath.row];
+        if ( ([key compare:@"DefaultPreset"] != NSOrderedSame) && ([key compare:self.hiFiToyDevice.activeKeyPreset] != NSOrderedSame) ){
+            return UITableViewCellEditingStyleDelete;
+        }
     }
     
     return UITableViewCellEditingStyleNone;
@@ -133,43 +150,47 @@
 }
 
 
-//load preset
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    HiFiToyPreset * preset = [hiFiToyPresetList.list.allValues objectAtIndex:indexPath.row];
-    NSString * tempPresetKey = [hiFiToyPresetList.list.allKeys objectAtIndex:indexPath.row];
     
-    if ([self.hiFiToyDevice.activeKeyPreset isEqualToString:tempPresetKey]){
-        return;
+    if (indexPath.section == 0) { //load preset
+        HiFiToyPreset * preset = [hiFiToyPresetList.list.allValues objectAtIndex:indexPath.row];
+        NSString * tempPresetKey = [hiFiToyPresetList.list.allKeys objectAtIndex:indexPath.row];
+        
+        if ([self.hiFiToyDevice.activeKeyPreset isEqualToString:tempPresetKey]){
+            return;
+        }
+        
+        //show dialog
+        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to load '%@' preset?", @""),
+                             NSLocalizedString(preset.presetName, @"")];
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", @"")
+                                                                                 message:message
+                                                                          preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                               style:UIAlertActionStyleCancel
+                                                             handler:nil];
+        
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Yes"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             
+                                                             self.hiFiToyDevice.activeKeyPreset = tempPresetKey;
+                                                             [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+                                                             
+                                                             //[[self.hiFiToyDevice getActivePreset] sendWithResponse:YES];
+                                                             [[self.hiFiToyDevice getActivePreset] storeToPeripheral];
+                                                             
+                                                             [self.tableView reloadData];
+                                                         }];
+        
+        [alertController addAction:cancelAction];
+        [alertController addAction:okAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    } else { // open merge tool
+        
     }
-    
-    //show dialog
-    NSString *message = [NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to load '%@' preset?", @""),
-                         NSLocalizedString(preset.presetName, @"")];
-    
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", @"")
-                                                                             message:message
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                           style:UIAlertActionStyleCancel
-                                                         handler:nil];
-    
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Yes"
-                                                       style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction * _Nonnull action) {
-                                                         
-                                                         self.hiFiToyDevice.activeKeyPreset = tempPresetKey;
-                                                         [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-                                                         
-                                                         //[[self.hiFiToyDevice getActivePreset] sendWithResponse:YES];
-                                                         [[self.hiFiToyDevice getActivePreset] storeToPeripheral];
-                                                         
-                                                         [self.tableView reloadData];
-                                                     }];
-    
-    [alertController addAction:cancelAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
     
 }
 
