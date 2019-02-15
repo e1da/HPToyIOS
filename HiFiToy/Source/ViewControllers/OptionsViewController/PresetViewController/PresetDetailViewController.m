@@ -105,6 +105,10 @@
         }
     }];
     
+    if ( [shareActivity respondsToSelector:@selector(popoverPresentationController)] ) {
+        shareActivity.popoverPresentationController.barButtonItem = self.share_outl;
+    }
+    
     //show share activity
     [self presentViewController:shareActivity animated:YES completion:nil];
 }

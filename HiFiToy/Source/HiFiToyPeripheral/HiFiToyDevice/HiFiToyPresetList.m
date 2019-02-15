@@ -32,6 +32,8 @@
     NSString *plistPath;
     NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                               NSUserDomainMask, YES) objectAtIndex:0];
+    //NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    
     plistPath = [rootPath stringByAppendingPathComponent:@"PresetList.plist"];
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {

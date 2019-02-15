@@ -15,6 +15,7 @@
 @property (nonatomic) HiFiToyPreset *hiFiToyPreset;
 
 @property (weak, nonatomic) IBOutlet UITextField *name_outl;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *share_outl;
 
 - (IBAction)editNamePreset:(id)sender;
 - (IBAction)sharePreset:(id)sender;

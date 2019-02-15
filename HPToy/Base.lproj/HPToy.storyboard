@@ -605,6 +605,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="name_outl" destination="CzZ-aT-Ewh" id="fAh-Yv-J8y"/>
+                        <outlet property="share_outl" destination="BXM-ja-CrM" id="ySg-Nw-urj"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CCy-UR-nKZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
