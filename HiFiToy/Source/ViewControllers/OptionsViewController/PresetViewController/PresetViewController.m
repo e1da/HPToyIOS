@@ -78,8 +78,8 @@
         }
     
         if (indexPath.row < [hiFiToyPresetList count]){
-            HiFiToyPreset *hiFiToyPreset = [hiFiToyPresetList.list.allValues objectAtIndex:indexPath.row];
-            NSString *keyPreset = [hiFiToyPresetList.list.allKeys objectAtIndex:indexPath.row];
+            HiFiToyPreset *hiFiToyPreset = [[hiFiToyPresetList getValues] objectAtIndex:indexPath.row];
+            NSString *keyPreset = [[hiFiToyPresetList getKeys] objectAtIndex:indexPath.row];
         
             presetCell.presetLabel_outl.text = NSLocalizedString(hiFiToyPreset.presetName, @"");
             presetCell.presetDetailButton_outl.tag = indexPath.row;
@@ -112,7 +112,7 @@
 - (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         // Detemine if it's in editing mode
-        NSString *key = [hiFiToyPresetList.list.allKeys objectAtIndex:indexPath.row];
+        NSString *key = [[hiFiToyPresetList getKeys] objectAtIndex:indexPath.row];
         if ( ([key compare:@"DefaultPreset"] != NSOrderedSame) && ([key compare:self.hiFiToyDevice.activeKeyPreset] != NSOrderedSame) ){
             return UITableViewCellEditingStyleDelete;
         }
@@ -135,7 +135,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
         //[tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        NSString *key = [hiFiToyPresetList.list.allKeys objectAtIndex:indexPath.row];
+        NSString *key = [[hiFiToyPresetList getKeys] objectAtIndex:indexPath.row];
         
         if ([self.hiFiToyDevice.activeKeyPreset compare:key] == NSOrderedSame){//if remove preset is active
             return;
@@ -153,8 +153,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) { //load preset
-        HiFiToyPreset * preset = [hiFiToyPresetList.list.allValues objectAtIndex:indexPath.row];
-        NSString * tempPresetKey = [hiFiToyPresetList.list.allKeys objectAtIndex:indexPath.row];
+        HiFiToyPreset * preset = [[hiFiToyPresetList getValues] objectAtIndex:indexPath.row];
+        NSString * tempPresetKey = [[hiFiToyPresetList getKeys] objectAtIndex:indexPath.row];
         
         if ([self.hiFiToyDevice.activeKeyPreset isEqualToString:tempPresetKey]){
             return;
@@ -201,7 +201,7 @@
     if ([[segue identifier] isEqualToString:@"showPresetDetail"]) {
         PresetDetailViewController * destination = (PresetDetailViewController * )segue.destinationViewController;
 
-        NSString * presetKey = [hiFiToyPresetList.list.allKeys objectAtIndex:sender.tag];
+        NSString * presetKey = [[hiFiToyPresetList getKeys] objectAtIndex:sender.tag];
         destination.hiFiToyPreset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:presetKey];
         
     }
@@ -216,7 +216,6 @@
     newPreset.presetName = name;
     [newPreset updateChecksum];
     
-    [[HiFiToyPresetList sharedInstance] openPresetListFromFile];
     [[HiFiToyPresetList sharedInstance] updatePreset:newPreset withKey:newPreset.presetName];
     
     

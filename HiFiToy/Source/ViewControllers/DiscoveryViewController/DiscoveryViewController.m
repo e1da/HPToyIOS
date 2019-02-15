@@ -168,15 +168,12 @@
         if ((selectedIndexPath.section == 0) && (selectedIndexPath.row < hiFiToyControl.foundHiFiToyDevices.count)){
             
             HiFiToyDevice * device = [hiFiToyControl.foundHiFiToyDevices objectAtIndex:selectedIndexPath.row];
-            
-            [[HiFiToyPresetList sharedInstance] openPresetListFromFile];//update preset
             [hiFiToyControl connect:device];
             
             //for re-connect draw connectingAlert
             //[self showConnectAlert];
             
         } else {//demomode
-            [[HiFiToyPresetList sharedInstance] openPresetListFromFile];//update preset
             [hiFiToyControl demoConnect];
         }
     }

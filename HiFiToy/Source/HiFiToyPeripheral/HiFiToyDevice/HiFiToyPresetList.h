@@ -9,19 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "HiFiToyPreset.h"
 
-@interface HiFiToyPresetList : NSObject <NSCoding>
-
-//preset property
-@property (nonatomic) NSMutableDictionary *list;
-
+@interface HiFiToyPresetList : NSObject
 
 //preset methods
 + (HiFiToyPresetList *)sharedInstance;
 
--(bool) openPresetListFromFile;
--(bool) savePresetListToFile;
-
 -(NSUInteger) count;
+-(NSArray *) getValues;
+-(NSArray *) getKeys;
 -(void) removePresetWithKey:(NSString *)presetKey;
 -(void) updatePreset:(HiFiToyPreset *)preset withKey:(NSString *)presetKey;
 -(HiFiToyPreset *) getPresetWithKey:(NSString *)presetKey;

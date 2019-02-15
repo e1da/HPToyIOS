@@ -38,12 +38,6 @@ typedef enum {
 
     presetList = [HiFiToyPresetList sharedInstance];
     [self resetMergeTool];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -145,7 +139,7 @@ typedef enum {
         }
         
         if (indexPath.row < [presetList count]){
-            HiFiToyPreset * preset = [presetList.list.allValues objectAtIndex:indexPath.row];
+            HiFiToyPreset * preset = [[presetList getValues] objectAtIndex:indexPath.row];
             baseCell.label_outl.text = NSLocalizedString(preset.presetName, @"");
             
             HiFiToyPreset * cmpPreset = [self getPresetForState];
@@ -168,7 +162,7 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 1) {
-        HiFiToyPreset * preset = [presetList.list.allValues objectAtIndex:indexPath.row];
+        HiFiToyPreset * preset = [[presetList getValues] objectAtIndex:indexPath.row];
         
         switch (state) {
             case VOLUME_STATE:

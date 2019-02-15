@@ -8,26 +8,38 @@
 
 #import "HiFiToyPresetList.h"
 
+@interface HiFiToyPresetList() {
+    NSMutableDictionary *list;
+}
+@end
+
 @implementation HiFiToyPresetList
 
-/*==========================================================================================
- NSCoding protocol implementation
- ==========================================================================================*/
-- (void) encodeWithCoder:(NSCoder *)encoder {
-    [encoder encodeObject:self.list forKey:@"keyPresetList"];
-    
-}
-
-- (id)initWithCoder:(NSCoder *)decoder {
+- (id) init {
     self = [super init];
     if (self) {
-        _list = [decoder decodeObjectForKey:@"keyPresetList"];
+        list = [[NSMutableDictionary alloc] init];
+        
+        //if default preset not exists then create
+        if ( (![self openPresetListFromFile]) || (![self getPresetWithKey:@"DefaultPreset"]) ) {
+            HiFiToyPreset * p = [HiFiToyPreset getDefault];
+            [self updatePreset:p withKey:@"DefaultPreset"];
+        }
     }
     return self;
 }
 
++ (HiFiToyPresetList *)sharedInstance
+{
+    static HiFiToyPresetList *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[HiFiToyPresetList alloc] init];
+    });
+    return sharedInstance;
+}
 
--(bool) openPresetListFromFile
+-(BOOL) openPresetListFromFile
 {
     NSString *plistPath;
     NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
@@ -39,15 +51,14 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
         
         NSData * data = [NSData dataWithContentsOfFile:plistPath];
-        HiFiToyPresetList * presetListTemp = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        _list = presetListTemp.list;
-        
+        list = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         return YES;
     }
-    return YES;
+    
+    return NO;
 }
 
--(bool) savePresetListToFile
+-(BOOL) savePresetListToFile
 {
     NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                               NSUserDomainMask, YES) objectAtIndex:0];
@@ -58,7 +69,7 @@
     }
     
     // write back to file
-    BOOL result = [NSKeyedArchiver archiveRootObject:self toFile:plistPath];
+    BOOL result = [NSKeyedArchiver archiveRootObject:list toFile:plistPath];
     
     return result;
 }
@@ -68,54 +79,42 @@
 /*---------------------------------------------------------------------------------------
  PUBLIC METHODS
  --------------------------------------------------------------------------------------*/
-+ (HiFiToyPresetList *)sharedInstance
-{
-    static HiFiToyPresetList *sharedInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[HiFiToyPresetList alloc] init];
-        // Do any other initialisation stuff here
-        [sharedInstance openPresetListFromFile];
-    });
-    return sharedInstance;
+-(NSUInteger) count {
+    return list.count;
 }
 
--(NSUInteger) count
-{
-    return self.list.count;
+-(NSArray *) getValues {
+    return list.allValues;
+}
+
+-(NSArray *) getKeys {
+    return list.allKeys;
 }
 
 -(void) removePresetWithKey:(NSString *)presetKey
 {
-    [self.list removeObjectForKey:presetKey];
+    [self openPresetListFromFile];
+    [list removeObjectForKey:presetKey];
     [self savePresetListToFile];
 }
 
--(void) updatePreset:(HiFiToyPreset *)preset withKey:(NSString *)presetKey
-{
-    if (!self.list){
-        self.list = [NSMutableDictionary dictionaryWithObject:[preset copy] forKey:presetKey];
-    } else {
-        [self.list setObject:[preset copy] forKey:presetKey];
-    }
-    
+-(void) updatePreset:(HiFiToyPreset *)preset withKey:(NSString *)presetKey {
+    [self openPresetListFromFile];
+    [list setObject:[preset copy] forKey:presetKey];
     [self savePresetListToFile];
 }
 
 -(HiFiToyPreset *) getPresetWithKey:(NSString *)presetKey{
-    if (!self.list) [self openPresetListFromFile];
-
-    return (HiFiToyPreset*)[self.list objectForKey:presetKey];
+    return [list objectForKey:presetKey];
 }
 
 -(void) description{
     NSLog(@"================ PresetList =======================");
-    NSArray *keys = _list.allKeys;
-    for (int i = 0; i < _list.count; i++){
-        HiFiToyPreset *preset = [_list objectForKey:[keys objectAtIndex:i]];
+    NSArray *keys = list.allKeys;
+    for (int i = 0; i < list.count; i++){
+        HiFiToyPreset *preset = [list objectForKey:[keys objectAtIndex:i]];
         
         NSLog(@"%@ %@", (NSString *)[keys objectAtIndex:i], preset.presetName);
-        
     }
 }
 

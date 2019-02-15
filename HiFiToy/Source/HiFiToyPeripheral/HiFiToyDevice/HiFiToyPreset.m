@@ -402,7 +402,6 @@
         [self updateChecksumWithParamData:paramData];
         
         //add new import preset to list and save
-        [[HiFiToyPresetList sharedInstance] openPresetListFromFile];
         [[HiFiToyPresetList sharedInstance] updatePreset:self withKey:self.presetName];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"PresetImportNotification" object:self];
