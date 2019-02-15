@@ -216,7 +216,13 @@ typedef enum {
         if (state < COMPRESSOR_STATE) {
             state++;
         } else if (state == COMPRESSOR_STATE) {
-            [self showInputNameDialog];
+            HiFiToyPreset * mergePreset = [self merge];
+            if (mergePreset) {
+                mergePreset.presetName = [[NSDate date] descriptionWithLocale:[NSLocale systemLocale]];
+                [self showInputNameDialog:mergePreset renameFlag:NO];
+            } else {
+                [self resetMergeTool];
+            }
         }
     }
     
@@ -227,6 +233,22 @@ typedef enum {
     if (state > VOLUME_STATE) state--;
     
     [self.tableView reloadData];
+}
+
+- (HiFiToyPreset *) merge {
+    if ( (!volumeSource) || (!bassTrebleSource) || (!loudnessSource) ||
+        (!filtersSource) || (!compressorSource) ) return nil;
+    
+    HiFiToyPreset * mergePreset = [[HiFiToyPreset alloc] init];
+    mergePreset.masterVolume = [volumeSource.masterVolume copy];
+    mergePreset.bassTreble = [bassTrebleSource.bassTreble copy];
+    mergePreset.loudness = loudnessSource.loudness;
+    mergePreset.filters = [filtersSource.filters copy];
+    mergePreset.drc = [compressorSource.drc copy];
+    [mergePreset initCharacteristicsPointer];
+    [mergePreset updateChecksum];
+    
+    return mergePreset;
 }
 
 - (HiFiToyPreset *) getPresetForState {
@@ -273,12 +295,20 @@ typedef enum {
     return @"err";
 }
 
-- (void) showInputNameDialog {
+- (void) showInputNameDialog:(HiFiToyPreset *) mergePreset renameFlag:(BOOL)renameFlag {
+    NSString * s;
+    
+    if (renameFlag) {
+        s = [NSString stringWithFormat:@"Preset with name \"%@\" already exists. Please input another name.", mergePreset.presetName ];
+    } else {
+        s = @"Please input name for merge preset.";
+    }
+    
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@""
-                                                                             message:NSLocalizedString(@"Please input name for merge preset", @"")
+                                                                             message:s
                                                                       preferredStyle:UIAlertControllerStyleAlert];
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.text = [[NSDate date] descriptionWithLocale:[NSLocale systemLocale]];;
+        textField.text = mergePreset.presetName;
     }];
 
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
@@ -287,8 +317,13 @@ typedef enum {
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * _Nonnull action) {
                                                          UITextField *name = alertController.textFields.firstObject;
-                                                         if (![name.text isEqualToString:@""]) {
-                                                             
+                                                         mergePreset.presetName = (![name.text isEqualToString:@""]) ? name.text : @" ";
+                                                         
+                                                         if (![[HiFiToyPresetList sharedInstance] getPresetWithKey:name.text]) {
+                                                             [[HiFiToyPresetList sharedInstance] updatePreset:mergePreset withKey:mergePreset.presetName];
+                                                             [self.navigationController popViewControllerAnimated:YES];
+                                                         } else {
+                                                             [self showInputNameDialog:mergePreset renameFlag:YES];
                                                          }
                                                      }];
 
@@ -297,5 +332,6 @@ typedef enum {
 
     [self presentViewController:alertController animated:YES completion:nil];
 }
+
 
 @end

@@ -43,17 +43,6 @@
         _list = presetListTemp.list;
         
         return YES;
-    } else {
-        /*UIAlertView *FeedBackAlert = [[UIAlertView alloc] initWithTitle:@"Confirm"
-         message:@"Data No Exist!"
-         delegate:self
-         cancelButtonTitle:@"Ok"
-         otherButtonTitles:nil];
-         [FeedBackAlert show];*/
-        
-        
-        return NO;
-        
     }
     return YES;
 }

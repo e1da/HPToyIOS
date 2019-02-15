@@ -376,36 +376,6 @@
             free(data);
         }
     }
-    
-    /*if (length > 20) {
-        memcpy(&data[paramAddress], paramData.bytes, 20);
-        paramAddress += 20;
-    } else {
-        memcpy(&data[paramAddress], paramData.bytes, length);
-        paramAddress += length;
-    }
-    
-    DialogSystem * dialog = [DialogSystem sharedInstance];
-    if ([dialog isProgressDialogVisible]) {
-        dialog.progressController.message = [NSString stringWithFormat:@"Left %d packets.", length / 20];
-    }
-    
-    length -= 20;
-    if (length > 0) {
-        
-        [[HiFiToyControl sharedInstance] getDspDataWithOffset:paramAddress];
-    } else {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-        
-        if ([dialog isProgressDialogVisible]) {
-            [dialog dismissProgressDialog];
-        }
-        
-        NSData * d = [NSData dataWithBytes:data length:paramAddress];
-        [self importData:d];
-        free(data);
-    }*/
-  
 }
 
 - (BOOL)importData:(NSData *)data {
