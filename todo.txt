@@ -9,12 +9,12 @@
 -[bug]disconnect/reconnect when sync energy_config
 -maybe create EnergyManager class
 +[bug]app crash when export preset on iPad
--saving preset rename to sending preset
++saving preset rename to sending preset
 
 -(02/15/19)update app without environment files
 
-
--(02/13/19) create merge tool
++(02/13/19) create merge tool for HPToy
++(02/13/19) create merge tool for HiFiToy
 
 [iwoofer]
 -(02/15/19)[bug]app shoot down when export preset on iPad

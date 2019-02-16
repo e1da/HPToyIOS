@@ -255,7 +255,7 @@
     if (![hiFiToyControl isConnected]) return;
     
     //show progress dialog
-    [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Save Preset", @"")];
+    [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Sending Preset", @"")];
     
     HiFiToyPeripheral_t hiFiToyConfig;
     NSData * data = [self getBinary];
