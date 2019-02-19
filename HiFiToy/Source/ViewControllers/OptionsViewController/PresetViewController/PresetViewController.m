@@ -176,10 +176,7 @@
                                                          handler:^(UIAlertAction * _Nonnull action) {
                                                              
                                                              self.hiFiToyDevice.activeKeyPreset = tempPresetKey;
-                                                             [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-                                                             
-                                                             //[[self.hiFiToyDevice getActivePreset] sendWithResponse:YES];
-                                                             [[self.hiFiToyDevice getActivePreset] storeToPeripheral];
+                                                             [self.hiFiToyDevice.preset storeToPeripheral];
                                                              
                                                              [self.tableView reloadData];
                                                          }];
@@ -212,18 +209,15 @@
     NSString * name = [[NSDate date] descriptionWithLocale:[NSLocale systemLocale]];
     
     //add new preset to presetList
-    HiFiToyPreset *newPreset = [[self.hiFiToyDevice getActivePreset] copy];
-    newPreset.presetName = name;
-    [newPreset updateChecksum];
+    self.hiFiToyDevice.preset.presetName = name;
+    [self.hiFiToyDevice.preset updateChecksum];
     
-    [[HiFiToyPresetList sharedInstance] updatePreset:newPreset withKey:newPreset.presetName];
+    [[HiFiToyPresetList sharedInstance] updatePreset:self.hiFiToyDevice.preset withKey:name];
     
     
     //set preset active in device
-    self.hiFiToyDevice.activeKeyPreset = newPreset.presetName;
-    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-    
-    [[self.hiFiToyDevice getActivePreset] storeToPeripheral];
+    self.hiFiToyDevice.activeKeyPreset = name;
+    [self.hiFiToyDevice.preset storeToPeripheral];
     
     [self.tableView reloadData];
 }

@@ -8,7 +8,6 @@
 
 #import "HiFiToyPreset.h"
 #import "HiFiToyPresetList.h"
-#import "HiFiToyDeviceList.h"
 #import "HiFiToyControl.h"
 #import "DialogSystem.h"
 #import "TAS5558.h"
@@ -181,17 +180,18 @@
         return NO;
     }
     
-    if ([[HiFiToyPresetList sharedInstance] getPresetWithKey:newName]){
+    if ([[HiFiToyPresetList sharedInstance] isPresetExist:newName]){
         [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Preset is not renamed! Because preset with the same name does exists!", @"")];
 
         return NO;
     }
     
-    NSString * tempName = [self.presetName copy];
+    NSString * tempName = self.presetName;
     self.presetName = [newName copy];
     
     [[HiFiToyPresetList sharedInstance] updatePreset:self withKey:self.presetName];
     [[HiFiToyPresetList sharedInstance] removePresetWithKey:tempName];
+    
     
     return YES;
 }

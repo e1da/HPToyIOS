@@ -21,7 +21,7 @@
         list = [[NSMutableDictionary alloc] init];
         
         //if default preset not exists then create
-        if ( (![self openPresetListFromFile]) || (![self getPresetWithKey:@"DefaultPreset"]) ) {
+        if ( (![self openPresetListFromFile]) || ([self isPresetExist:@"DefaultPreset"] == NO) ) {
             HiFiToyPreset * p = [HiFiToyPreset getDefault];
             [self updatePreset:p withKey:@"DefaultPreset"];
         }
@@ -29,8 +29,7 @@
     return self;
 }
 
-+ (HiFiToyPresetList *)sharedInstance
-{
++ (HiFiToyPresetList *)sharedInstance {
     static HiFiToyPresetList *sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -39,8 +38,7 @@
     return sharedInstance;
 }
 
--(BOOL) openPresetListFromFile
-{
+-(BOOL) openPresetListFromFile {
     NSString *plistPath;
     NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                               NSUserDomainMask, YES) objectAtIndex:0];
@@ -58,8 +56,7 @@
     return NO;
 }
 
--(BOOL) savePresetListToFile
-{
+-(BOOL) savePresetListToFile {
     NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                               NSUserDomainMask, YES) objectAtIndex:0];
     NSString *plistPath = [rootPath stringByAppendingPathComponent:@"PresetList.plist"];
@@ -91,21 +88,22 @@
     return list.allKeys;
 }
 
--(void) removePresetWithKey:(NSString *)presetKey
-{
-    [self openPresetListFromFile];
+-(void) removePresetWithKey:(NSString *)presetKey {
     [list removeObjectForKey:presetKey];
     [self savePresetListToFile];
 }
 
 -(void) updatePreset:(HiFiToyPreset *)preset withKey:(NSString *)presetKey {
-    [self openPresetListFromFile];
     [list setObject:[preset copy] forKey:presetKey];
     [self savePresetListToFile];
 }
 
 -(HiFiToyPreset *) getPresetWithKey:(NSString *)presetKey{
-    return [list objectForKey:presetKey];
+    return [[list objectForKey:presetKey] copy];
+}
+
+-(BOOL) isPresetExist:(NSString *)presetKey {
+    return ([list objectForKey:presetKey]) ? YES : NO;
 }
 
 -(void) description{

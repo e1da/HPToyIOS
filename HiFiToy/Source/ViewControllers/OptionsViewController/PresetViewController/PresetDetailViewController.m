@@ -58,19 +58,15 @@
     }
 }
 
-- (IBAction)editNamePreset:(id)sender
-{
-    NSString *activePresetKey = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] activeKeyPreset];
+- (IBAction)editNamePreset:(id)sender {
     NSString *tempPresetKey = [self.hiFiToyPreset.presetName copy];
-    
     [self.hiFiToyPreset rename:_name_outl.text];
     
     //if current preset is active we must re-change activeKeyPreset
     //becuse he is change in rename: method
-    if ([activePresetKey isEqualToString:tempPresetKey]){
-        HiFiToyDevice * device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
-        device.activeKeyPreset = self.hiFiToyPreset.presetName;
-        [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+    HiFiToyDevice * d = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
+    if ([d.activeKeyPreset isEqualToString:tempPresetKey]) {
+        [d changeKeyPreset:self.hiFiToyPreset.presetName];
     }
     
 }

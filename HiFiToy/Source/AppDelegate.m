@@ -7,8 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "HiFiToyDeviceList.h"
-#import "HiFiToyPresetList.h"
+#import "HiFiToyPreset.h"
 
 @interface AppDelegate ()
 

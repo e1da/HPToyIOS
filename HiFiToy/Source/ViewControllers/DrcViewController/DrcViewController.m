@@ -35,7 +35,7 @@
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
     self.drcView.backgroundColor = [UIColor darkGrayColor];
     
-    HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] getActivePreset];
+    HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] preset];
     drc = preset.drc;
     
     self.drcView.maxDbX = drc.coef17.point3.inputDb;

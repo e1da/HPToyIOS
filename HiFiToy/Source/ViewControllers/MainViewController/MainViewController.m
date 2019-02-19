@@ -73,7 +73,6 @@
     [super viewWillAppear:animated];
     
     hiFiToyDevice = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
-    hiFiToyPreset = [hiFiToyDevice getActivePreset];
     
     [self setupOutlets];
 }
@@ -83,22 +82,24 @@
 }
 
 - (void) setupOutlets{
+    HiFiToyPreset * p = hiFiToyDevice.preset;
+    
     _audioSourceSegment_outl.selectedSegmentIndex = hiFiToyDevice.audioSource;
     self.volumeTitle_outl.textColor = [UIColor blackColor];
     self.gainLabel_outl.textColor = [UIColor blackColor];
-    self.gainLabel_outl.text = [hiFiToyPreset.masterVolume getInfo];
-    self.gainSlider_outl.value = [hiFiToyPreset.masterVolume getDbPercent];
+    self.gainLabel_outl.text = [p.masterVolume getInfo];
+    self.gainSlider_outl.value = [p.masterVolume getDbPercent];
     
-    self.bassLabel_outl.text = [NSString stringWithFormat:@"%ddB", hiFiToyPreset.bassTreble.bassTreble127.bassDb];
-    self.bassSlider_outl.value = [hiFiToyPreset.bassTreble.bassTreble127 getBassDbPercent];
+    self.bassLabel_outl.text = [NSString stringWithFormat:@"%ddB", p.bassTreble.bassTreble127.bassDb];
+    self.bassSlider_outl.value = [p.bassTreble.bassTreble127 getBassDbPercent];
     
-    self.trebleLabel_outl.text = [NSString stringWithFormat:@"%ddB", hiFiToyPreset.bassTreble.bassTreble127.trebleDb];
-    self.trebleSlider_outl.value = [hiFiToyPreset.bassTreble.bassTreble127 getTrebleDbPercent];
+    self.trebleLabel_outl.text = [NSString stringWithFormat:@"%ddB", p.bassTreble.bassTreble127.trebleDb];
+    self.trebleSlider_outl.value = [p.bassTreble.bassTreble127 getTrebleDbPercent];
     
-    self.loudnessGainLabel_outl.text = [hiFiToyPreset.loudness getInfo];
-    self.loudnessGainSlider_outl.value = hiFiToyPreset.loudness.gain / 2;
-    self.loudnessLabel_outl.text = [hiFiToyPreset.loudness getFreqInfo];
-    self.loudnessSlider_outl.value = [hiFiToyPreset.loudness.biquad.biquadParam getFreqPercent];
+    self.loudnessGainLabel_outl.text = [p.loudness getInfo];
+    self.loudnessGainSlider_outl.value = p.loudness.gain / 2;
+    self.loudnessLabel_outl.text = [p.loudness getFreqInfo];
+    self.loudnessSlider_outl.value = [p.loudness.biquad.biquadParam getFreqPercent];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -215,8 +216,7 @@
     
     if ([[segue identifier] isEqualToString:@"showNewFilters"]) {
         FiltersViewController *dest = (FiltersViewController * )segue.destinationViewController;
-        
-        dest.filters = hiFiToyPreset.filters;
+        dest.filters = hiFiToyDevice.preset.filters;
     }
 }
 
@@ -230,46 +230,46 @@
 
 - (IBAction)setGainSlider:(id)sender
 {
-    [hiFiToyPreset.masterVolume setDbPercent:self.gainSlider_outl.value];
-    self.gainLabel_outl.text = [hiFiToyPreset.masterVolume getInfo];
+    [hiFiToyDevice.preset.masterVolume setDbPercent:self.gainSlider_outl.value];
+    self.gainLabel_outl.text = [hiFiToyDevice.preset.masterVolume getInfo];
     
-    [hiFiToyPreset.masterVolume sendWithResponse:NO];
+    [hiFiToyDevice.preset.masterVolume sendWithResponse:NO];
 }
 
 - (IBAction)setBassSlider:(id)sender
 {
-    [hiFiToyPreset.bassTreble.bassTreble127 setBassDbPercent:self.bassSlider_outl.value];
-    self.bassLabel_outl.text = [NSString stringWithFormat:@"%ddB", hiFiToyPreset.bassTreble.bassTreble127.bassDb];
+    [hiFiToyDevice.preset.bassTreble.bassTreble127 setBassDbPercent:self.bassSlider_outl.value];
+    self.bassLabel_outl.text = [NSString stringWithFormat:@"%ddB", hiFiToyDevice.preset.bassTreble.bassTreble127.bassDb];
     
-    [hiFiToyPreset.bassTreble sendWithResponse:NO];
+    [hiFiToyDevice.preset.bassTreble sendWithResponse:NO];
 }
 
 - (IBAction)setTrebleSlider:(id)sender
 {
-    [hiFiToyPreset.bassTreble.bassTreble127 setTrebleDbPercent:self.trebleSlider_outl.value];
-    self.trebleLabel_outl.text = [NSString stringWithFormat:@"%ddB", hiFiToyPreset.bassTreble.bassTreble127.trebleDb];
+    [hiFiToyDevice.preset.bassTreble.bassTreble127 setTrebleDbPercent:self.trebleSlider_outl.value];
+    self.trebleLabel_outl.text = [NSString stringWithFormat:@"%ddB", hiFiToyDevice.preset.bassTreble.bassTreble127.trebleDb];
     
-    [hiFiToyPreset.bassTreble sendWithResponse:NO];
+    [hiFiToyDevice.preset.bassTreble sendWithResponse:NO];
 }
 
 - (IBAction)setLoudnessGainSlider:(id)sender
 {
-    hiFiToyPreset.loudness.gain = self.loudnessGainSlider_outl.value * 2;
-    self.loudnessGainLabel_outl.text = [hiFiToyPreset.loudness getInfo];
+    hiFiToyDevice.preset.loudness.gain = self.loudnessGainSlider_outl.value * 2;
+    self.loudnessGainLabel_outl.text = [hiFiToyDevice.preset.loudness getInfo];
     
-    [hiFiToyPreset.loudness sendWithResponse:NO];
+    [hiFiToyDevice.preset.loudness sendWithResponse:NO];
 }
 
 - (IBAction)setLoudnessSlider:(id)sender
 {
-    BiquadParam * p = hiFiToyPreset.loudness.biquad.biquadParam;
+    BiquadParam * p = hiFiToyDevice.preset.loudness.biquad.biquadParam;
     [p setFreqPercent:self.loudnessSlider_outl.value];
     
     //round
     p.freq = [self freqRound:p.freq];
     
-    self.loudnessLabel_outl.text = [hiFiToyPreset.loudness getFreqInfo];
-    [hiFiToyPreset.loudness.biquad sendWithResponse:NO];
+    self.loudnessLabel_outl.text = [hiFiToyDevice.preset.loudness getFreqInfo];
+    [hiFiToyDevice.preset.loudness.biquad sendWithResponse:NO];
 }
 
 
@@ -292,9 +292,7 @@
     HiFiToyPreset * preset = (HiFiToyPreset *)[notification object];
     //set import preset to active in device and save
     hiFiToyDevice.activeKeyPreset = preset.presetName;
-    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-    hiFiToyPreset = [hiFiToyDevice getActivePreset];
-    
+
     [self setupOutlets];
 }
 

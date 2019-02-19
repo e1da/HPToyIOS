@@ -31,7 +31,9 @@
         self.uuid = [decoder decodeObjectForKey:@"uuid"];
         self.name = [decoder decodeObjectForKey:@"name"];
         self.pairingCode = [decoder decodeIntForKey:@"pairingCode"];
-        self.activeKeyPreset = [decoder decodeObjectForKey:@"activeKeyPreset"];
+        
+        _activeKeyPreset = [decoder decodeObjectForKey:@"activeKeyPreset"];
+        _preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:_activeKeyPreset];
         
         self.audioSource = PCM9211_USB_SOURCE;
         [self setDefaultEnergyConfig];
@@ -51,7 +53,8 @@
     self.uuid = @"demo";
     self.name = @"Default";
     self.pairingCode = 0;
-    self.activeKeyPreset = @"DefaultPreset";
+    _activeKeyPreset = @"DefaultPreset";
+    _preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:_activeKeyPreset];
     self.audioSource = PCM9211_USB_SOURCE;
     [self setDefaultEnergyConfig];
 }
@@ -63,21 +66,21 @@
     _energyConfig.usbTimeout120ms = 0;
 }
 
-- (HiFiToyPreset *) getActivePreset
-{
-    HiFiToyPreset * preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:self.activeKeyPreset];
+- (void) setActiveKeyPreset:(NSString *)activeKeyPreset {
+    _activeKeyPreset = activeKeyPreset;
     
-    if (!preset){
-        self.activeKeyPreset = @"DefaultPreset";
-        preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:self.activeKeyPreset];
-        
-        if (!preset){
-            preset = [HiFiToyPreset getDefault];
-            [[HiFiToyPresetList sharedInstance] updatePreset:preset withKey:self.activeKeyPreset];
-            preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:self.activeKeyPreset];
-        }
+    _preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:_activeKeyPreset];
+    
+    if (!_preset){
+        _activeKeyPreset = @"DefaultPreset";
+        _preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:@"DefaultPreset"];
     }
-    return preset;
+    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+}
+
+- (void) changeKeyPreset:(NSString *)key {
+    _activeKeyPreset = key;
+    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
 }
 
 - (NSString *) getShortUUIDString {
@@ -89,10 +92,9 @@
 }
 
 -(void) checkPresetChecksum:(uint16_t) checksum {
-    HiFiToyPreset * preset = [self getActivePreset];
-    NSLog(@"Checksum app preset = %x, Peripheral preset = %x", preset.checkSum, checksum);
+    NSLog(@"Checksum app preset = %x, Peripheral preset = %x", self.preset.checkSum, checksum);
     
-    if (preset.checkSum != checksum) {
+    if (self.preset.checkSum != checksum) {
         [[DialogSystem sharedInstance] showImportPresetDialog];
     } else {
         NSLog(@"Import and current presets are equals!");
@@ -137,7 +139,6 @@
 - (void) restoreFactory {
     //set default preset and save to file
     self.activeKeyPreset = @"DefaultPreset";
-    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
     
     if (![[HiFiToyControl sharedInstance] isConnected]) return;
     
@@ -161,8 +162,7 @@
                                        withOffset:0];
     
     //store second part of HiFiToyPeripheral_t and preset and setInitDsp
-    HiFiToyPreset * preset = [self getActivePreset];
-    [preset storeToPeripheral];
+    [self.preset storeToPeripheral];
 }
 
 @end

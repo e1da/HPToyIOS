@@ -243,7 +243,7 @@
 
 - (void) drawDrc:(CGContextRef)context
 {
-    HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] getActivePreset];
+    HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] preset];
     DrcCoef * drc = preset.drc.coef17;
     
     //draw drc graphic

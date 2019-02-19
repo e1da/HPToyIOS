@@ -14,7 +14,6 @@
 @interface MainViewController : UITableViewController {
     HiFiToyControl * hiFiToyControl;
     HiFiToyDevice * hiFiToyDevice;
-    HiFiToyPreset * hiFiToyPreset;
 }
 
 //outlets

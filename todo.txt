@@ -15,6 +15,10 @@
 
 +(02/13/19) create merge tool for HPToy
 +(02/13/19) create merge tool for HiFiToy
+-(02/17/19) check import preset from xml features 
++(02/17/19) solve bug with preset list synchronisation
+-(02/19/19) add new icon
 
 [iwoofer]
 -(02/15/19)[bug]app shoot down when export preset on iPad
+

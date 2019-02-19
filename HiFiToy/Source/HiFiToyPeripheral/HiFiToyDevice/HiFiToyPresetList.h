@@ -20,6 +20,7 @@
 -(void) removePresetWithKey:(NSString *)presetKey;
 -(void) updatePreset:(HiFiToyPreset *)preset withKey:(NSString *)presetKey;
 -(HiFiToyPreset *) getPresetWithKey:(NSString *)presetKey;
+-(BOOL) isPresetExist:(NSString *)presetKey;
 
 -(void) description;
 

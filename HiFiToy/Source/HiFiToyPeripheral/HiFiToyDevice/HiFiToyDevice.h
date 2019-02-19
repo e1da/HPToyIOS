@@ -12,22 +12,24 @@
 @interface HiFiToyDevice : NSObject <NSCoding>
 
 //main property
-@property NSString * uuid;
-@property NSString * name;
-@property uint32_t pairingCode;
+@property NSString *    uuid;
+@property NSString *    name;
+@property uint32_t      pairingCode;
 
 //audio source
-@property (nonatomic) PCM9211Source_t audioSource;
+@property (nonatomic) PCM9211Source_t   audioSource;
 //energy config
-@property (nonatomic) EnergyConfig_t energyConfig;
+@property (nonatomic) EnergyConfig_t    energyConfig;
 
 //preset property
-@property (nonatomic)   NSString * activeKeyPreset;
+@property (nonatomic)               NSString        * activeKeyPreset;
+@property (nonatomic, readonly)     HiFiToyPreset   * preset;
 
 //methods
 - (void) setDefault;
-- (HiFiToyPreset *) getActivePreset;
 - (NSString *) getShortUUIDString;
+
+- (void) changeKeyPreset:(NSString *)key;
 
 - (void) checkPresetChecksum:(uint16_t) checksum;
 

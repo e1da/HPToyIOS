@@ -39,7 +39,7 @@
 {
     [super viewWillAppear:animated];
     
-    HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] getActivePreset];
+    HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] preset];
     drc = preset.drc;
     
     [self setupOutlets];

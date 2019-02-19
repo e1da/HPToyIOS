@@ -313,7 +313,7 @@ typedef enum {
                                                          UITextField *name = alertController.textFields.firstObject;
                                                          mergePreset.presetName = (![name.text isEqualToString:@""]) ? name.text : @" ";
                                                          
-                                                         if (![[HiFiToyPresetList sharedInstance] getPresetWithKey:name.text]) {
+                                                         if ([[HiFiToyPresetList sharedInstance] isPresetExist:name.text] == NO) {
                                                              [[HiFiToyPresetList sharedInstance] updatePreset:mergePreset withKey:mergePreset.presetName];
                                                              [self.navigationController popViewControllerAnimated:YES];
                                                          } else {
