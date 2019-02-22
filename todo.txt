@@ -13,4 +13,7 @@
 
 -(02/20/19) after 1 minus turn on clip led in app menu
 
++(02/22/19) rename import xml preset "Add preset_name" -> " 'Preset_name' preset was successfully added."
++(02/22/19) update preset manager view after import preset from xml
+
 

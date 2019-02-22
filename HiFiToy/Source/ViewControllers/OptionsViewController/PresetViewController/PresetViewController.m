@@ -42,6 +42,24 @@
     [super viewDidLoad];
     
     hiFiToyPresetList = [HiFiToyPresetList sharedInstance];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(didImportPreset)
+                                                 name: @"PresetImportNotification"
+                                               object: nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(didImportPreset)
+                                                 name: @"PresetImportXmlNotification"
+                                               object: nil];
+}
+
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) didImportPreset {
+    [self.tableView reloadData];
 }
 
 - (void) viewWillAppear:(BOOL)animated {

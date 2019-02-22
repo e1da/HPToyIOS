@@ -67,11 +67,6 @@
                                                  name: @"KeyfobDidFoundNotification"
                                                object: nil];
     
-    /*[[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didGetPresetImportNotification:)
-                                                 name:@"PresetImportNotification"
-                                               object:nil];*/
-    
     
     hiFiToyControl = [HiFiToyControl sharedInstance];
     

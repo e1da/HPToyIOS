@@ -545,7 +545,8 @@
         [self updateChecksum];
         [[HiFiToyPresetList sharedInstance] updatePreset:self withKey:self.presetName];
         
-        NSString * msg = [NSString stringWithFormat:@"Add %@ preset", self.presetName];
+        NSString * msg = [NSString stringWithFormat:@"'%@' preset was successfully added.", self.presetName];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PresetImportXmlNotification" object:nil];
         [[DialogSystem sharedInstance] showAlert:msg];
         
     }
