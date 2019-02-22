@@ -188,6 +188,9 @@
 		D379127720D3C2CE0089962D /* DrcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127620D3C2CE0089962D /* DrcViewController.m */; };
 		D379127A20D3C55B0089962D /* DrcView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127920D3C55B0089962D /* DrcView.m */; };
 		D379127D20DE7B4F0089962D /* DrcTimeConstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127C20DE7B4F0089962D /* DrcTimeConstViewController.m */; };
+		D38A3C612220003E00319EDB /* AdvertiseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D38A3C602220003E00319EDB /* AdvertiseViewController.m */; };
+		D38A3C6222200C9E00319EDB /* AdvertiseViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = D38A3C5F2220003E00319EDB /* AdvertiseViewController.h */; };
+		D38A3C6322200C9E00319EDB /* AdvertiseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D38A3C602220003E00319EDB /* AdvertiseViewController.m */; };
 		D39C3C9C20BEB4FF00BDC1A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9A20BEB4FF00BDC1A0 /* Main.storyboard */; };
 		D39C3C9E20BEB50000BDC1A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */; };
 		D39C3CA120BEB50000BDC1A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */; };
@@ -333,6 +336,8 @@
 		D379127920D3C55B0089962D /* DrcView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcView.m; sourceTree = "<group>"; };
 		D379127B20DE7B4F0089962D /* DrcTimeConstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcTimeConstViewController.h; sourceTree = "<group>"; };
 		D379127C20DE7B4F0089962D /* DrcTimeConstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcTimeConstViewController.m; sourceTree = "<group>"; };
+		D38A3C5F2220003E00319EDB /* AdvertiseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvertiseViewController.h; sourceTree = "<group>"; };
+		D38A3C602220003E00319EDB /* AdvertiseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvertiseViewController.m; sourceTree = "<group>"; };
 		D39C3C8E20BEB4FF00BDC1A0 /* HiFiToy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HiFiToy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39C3C9B20BEB4FF00BDC1A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D39C3C9D20BEB50000BDC1A0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -511,6 +516,7 @@
 		D33A258420CA89E6008A94EF /* OptionsViewController */ = {
 			isa = PBXGroup;
 			children = (
+				D38A3C5E221FFFFB00319EDB /* AdvertiseViewController */,
 				D307EB0B22147D0900ACE7A3 /* MergeViewController */,
 				D3E97AAE2157F06500C98402 /* EnergyViewController */,
 				D33A258C20CA8FE0008A94EF /* DeviceNameViewController */,
@@ -615,6 +621,15 @@
 				D379127C20DE7B4F0089962D /* DrcTimeConstViewController.m */,
 			);
 			path = DrcViewController;
+			sourceTree = "<group>";
+		};
+		D38A3C5E221FFFFB00319EDB /* AdvertiseViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D38A3C5F2220003E00319EDB /* AdvertiseViewController.h */,
+				D38A3C602220003E00319EDB /* AdvertiseViewController.m */,
+			);
+			path = AdvertiseViewController;
 			sourceTree = "<group>";
 		};
 		D39C3C8520BEB4FF00BDC1A0 = {
@@ -976,6 +991,7 @@
 				D33A259820CA93B1008A94EF /* PresetViewController.m in Sources */,
 				D3BBD4FE218DC20300FFDB86 /* DontShowView.m in Sources */,
 				D379126320D111B80089962D /* XOverViewController.m in Sources */,
+				D38A3C612220003E00319EDB /* AdvertiseViewController.m in Sources */,
 				D33A259B20CA9538008A94EF /* PresetCell.m in Sources */,
 				D33A254320C064A9008A94EF /* TAS5558.h in Sources */,
 				D33A253E20BFF674008A94EF /* Number88.h in Sources */,
@@ -1052,6 +1068,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D38A3C6222200C9E00319EDB /* AdvertiseViewController.h in Sources */,
+				D38A3C6322200C9E00319EDB /* AdvertiseViewController.m in Sources */,
 				D32483C922146B3500028514 /* MergeToolCell.h in Sources */,
 				D32483CA22146B3500028514 /* MergeToolCell.m in Sources */,
 				D35492AB22086A8B00063768 /* main.m in Sources */,

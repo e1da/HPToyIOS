@@ -1,24 +1,16 @@
 [HPToyPeripheral]
 
--turn off ble advertising after some time
-
-
++turn off ble advertising after some time
++(02/20/19) loose preset after auto off/on
 
 [app]
 
 -[bug]disconnect/reconnect when sync energy_config
 -maybe create EnergyManager class
-+[bug]app crash when export preset on iPad
-+saving preset rename to sending preset
 
--(02/15/19)update app without environment files
-
-+(02/13/19) create merge tool for HPToy
-+(02/13/19) create merge tool for HiFiToy
 -(02/17/19) check import preset from xml features 
 +(02/17/19) solve bug with preset list synchronisation
--(02/19/19) add new icon
 
-[iwoofer]
--(02/15/19)[bug]app shoot down when export preset on iPad
+-(02/20/19) after 1 minus turn on clip led in app menu
+
 

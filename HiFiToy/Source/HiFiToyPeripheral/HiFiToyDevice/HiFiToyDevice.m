@@ -136,6 +136,24 @@
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
 }
 
+- (void) sendAdvertiseMode {
+    
+    CommonPacket_t packet;
+    packet.cmd = SET_ADVERTISE_MODE;
+    packet.data[0] = _advertiseMode;
+    
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
+}
+
+- (void) updateAdvertiseMode {
+    CommonPacket_t packet;
+    packet.cmd = GET_ADVERTISE_MODE;
+    
+    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
+}
+
 - (void) restoreFactory {
     //set default preset and save to file
     self.activeKeyPreset = @"DefaultPreset";

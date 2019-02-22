@@ -384,6 +384,13 @@
                 [self getChecksumParamData];
                 break;
             }
+            case GET_ADVERTISE_MODE:
+            {
+                _activeHiFiToyDevice.advertiseMode = data[1];
+                NSLog(@"GET_ADVERTISE_MODE %d", _activeHiFiToyDevice.advertiseMode);
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateAdvertiseModeNotification" object:nil];
+                break;
+            }
             case CLIP_DETECTION:
             {
                 NSNumber * clip = [NSNumber numberWithInt:status];

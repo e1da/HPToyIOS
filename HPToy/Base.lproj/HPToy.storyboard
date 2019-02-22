@@ -833,6 +833,26 @@
                                             <segue destination="6kr-dX-XmY" kind="push" id="sYZ-iY-wH2"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="WlS-ha-3pr">
+                                        <rect key="frame" x="0.0" y="395" width="375" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WlS-ha-3pr" id="rTh-EV-JNG">
+                                            <rect key="frame" x="0.0" y="0.0" width="341" height="59.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Advertise mode" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rez-uE-2HB">
+                                                    <rect key="frame" x="15" y="18" width="240" height="26"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <segue destination="scf-To-29p" kind="push" id="t0U-7a-vDP"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -1266,9 +1286,63 @@
             </objects>
             <point key="canvasLocation" x="-420" y="1029.5352323838081"/>
         </scene>
+        <!--Advertise mode-->
+        <scene sceneID="KJb-hX-EUl">
+            <objects>
+                <tableViewController id="scf-To-29p" customClass="AdvertiseViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="60" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="ctL-gg-ESI">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection id="3pk-gm-ZPa">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="DKT-wd-2kD">
+                                        <rect key="frame" x="0.0" y="35" width="375" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="DKT-wd-2kD" id="hla-gd-YFF">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Always/1min" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fBf-3V-r4M">
+                                                    <rect key="frame" x="20" y="19" width="159" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="5BX-bZ-xQ5">
+                                                    <rect key="frame" x="306" y="14.5" width="51" height="31"/>
+                                                    <connections>
+                                                        <action selector="setAdvertiseMode:" destination="scf-To-29p" eventType="valueChanged" id="Nvy-qc-oHl"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="5BX-bZ-xQ5" firstAttribute="trailing" secondItem="hla-gd-YFF" secondAttribute="trailing" constant="-20" id="Fpn-7T-rZj"/>
+                                                <constraint firstItem="5BX-bZ-xQ5" firstAttribute="centerY" secondItem="hla-gd-YFF" secondAttribute="centerY" id="X5C-d4-On0"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="scf-To-29p" id="a5q-V1-cEc"/>
+                            <outlet property="delegate" destination="scf-To-29p" id="POo-VN-6ZW"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Advertise mode" id="n1V-Ey-5fL"/>
+                    <connections>
+                        <outlet property="advertiseModeSwitch_outl" destination="5BX-bZ-xQ5" id="4xM-24-cgn"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YYp-G8-YGO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2057" y="-513"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="faG-pk-fhu"/>
+        <segue reference="Z6d-f1-hK3"/>
         <segue reference="N5W-tT-oFi"/>
     </inferredMetricsTieBreakers>
 </document>

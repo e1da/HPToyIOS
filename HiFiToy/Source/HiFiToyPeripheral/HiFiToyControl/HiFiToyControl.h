@@ -26,6 +26,8 @@ typedef enum : uint8_t {
     SET_AUDIO_SOURCE    = 0x07,
     GET_AUDIO_SOURCE    = 0x08,
     GET_ENERGY_CONFIG   = 0x09,
+    SET_ADVERTISE_MODE  = 0x0A,
+    GET_ADVERTISE_MODE  = 0x0B,
     
     //feedback msg
     CLIP_DETECTION              = 0xFD,

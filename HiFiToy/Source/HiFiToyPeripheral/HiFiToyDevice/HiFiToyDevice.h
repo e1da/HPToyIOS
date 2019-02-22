@@ -20,6 +20,8 @@
 @property (nonatomic) PCM9211Source_t   audioSource;
 //energy config
 @property (nonatomic) EnergyConfig_t    energyConfig;
+//advertise mode
+@property (nonatomic) AdvertiseMode_t   advertiseMode;
 
 //preset property
 @property (nonatomic)               NSString        * activeKeyPreset;
@@ -38,6 +40,9 @@
 
 - (void) sendEnergyConfig;
 - (void) updateEnergyConfig;
+
+- (void) sendAdvertiseMode;
+- (void) updateAdvertiseMode;
 
 - (void) restoreFactory;
 

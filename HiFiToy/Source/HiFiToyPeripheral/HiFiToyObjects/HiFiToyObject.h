@@ -21,6 +21,10 @@ typedef enum : uint8_t {
     PCM9211_SPDIF_SOURCE, PCM9211_USB_SOURCE, PCM9211_BT_SOURCE,
 } PCM9211Source_t;
 
+typedef enum : uint8_t {
+    ALWAYS_ENABLED, AFTER_1MIN_DISABLED
+} AdvertiseMode_t;
+
 #pragma pack(1)
 typedef struct {
     float       highThresholdDb;
