@@ -56,6 +56,7 @@
     _activeKeyPreset = @"DefaultPreset";
     _preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:_activeKeyPreset];
     self.audioSource = PCM9211_USB_SOURCE;
+    self.advertiseMode = ALWAYS_ENABLED;
     [self setDefaultEnergyConfig];
 }
 
@@ -170,6 +171,7 @@
     hiFiToyConfig.version           = HIFI_TOY_VERSION;
     hiFiToyConfig.pairingCode       = _pairingCode;
     hiFiToyConfig.audioSource       = _audioSource = PCM9211_USB_SOURCE;
+    hiFiToyConfig.advertiseMode     = _advertiseMode = ALWAYS_ENABLED;
     
     [self setDefaultEnergyConfig];
     hiFiToyConfig.energy = _energyConfig;

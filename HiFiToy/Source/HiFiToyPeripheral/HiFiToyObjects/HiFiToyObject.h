@@ -41,7 +41,8 @@ typedef struct {                            // offset
     uint16_t            version;            // 0x02
     uint32_t            pairingCode;        // 0x04
     PCM9211Source_t     audioSource;        // 0x08
-    uint8_t             reserved[3];        // 0x09
+    AdvertiseMode_t     advertiseMode;      // 0x09
+    uint8_t             reserved[2];        // 0x0A
     EnergyConfig_t      energy;             // 0x0C
     BiquadType_t        biquadTypes[7];     // 0x18
     uint8_t             reserved1;          //

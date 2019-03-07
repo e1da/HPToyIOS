@@ -154,6 +154,8 @@
                                                          
                                                          device.pairingCode = [newPairCode.text intValue];
                                                          [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+                                                         
+                                                         [[HiFiToyControl sharedInstance] sendNewPairingCode:device.pairingCode];
                                                      }];
     
     [_alertController addAction:cancelAction];
