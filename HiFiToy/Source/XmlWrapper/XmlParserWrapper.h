@@ -13,6 +13,7 @@
 @property (nonatomic) NSString * error;
 
 - (void)startParsingWithUrl:(NSURL *)url withDelegate:(id)delegate;
+- (void)startParsingWithData:(NSData *)data withDelegate:(id)delegate;
 - (void)stop;
 - (void)pushDelegate:(id)delegate;
 - (void)popDelegate;

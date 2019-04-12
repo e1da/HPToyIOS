@@ -134,10 +134,7 @@
                                                                TrebleFreq:TREBLE_FREQ_9000 TrebleDb:0
                                                                 maxBassDb:12 minBassDb:-12
                                                               maxTrebleDb:12 minTrebleDb:-12];
-    self.bassTreble = [BassTreble initWithBassTreble127:bassTreble12
-                                           BassTreble34:nil
-                                           BassTreble56:nil
-                                            BassTreble8:nil];
+    self.bassTreble = [BassTreble initWithBassTreble127:bassTreble12];
     
     [self.bassTreble setEnabledChannel:0 Enabled:1.0];
     [self.bassTreble setEnabledChannel:1 Enabled:1.0];

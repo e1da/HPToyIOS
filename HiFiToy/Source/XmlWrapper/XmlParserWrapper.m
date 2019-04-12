@@ -28,11 +28,10 @@
     return self;
 }
 
-- (void)startParsingWithUrl:(NSURL *)url withDelegate:(id)delegate {
+- (void)startParsingWithDelegate:(id)delegate {
     [delegateStack removeAllObjects];
     [self pushDelegate:delegate];
     
-    xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
     [xmlParser setDelegate:self];
     [xmlParser setShouldResolveExternalEntities:YES];
     
@@ -43,6 +42,16 @@
     if (e) {
         NSLog(@"%@", e.localizedDescription);
     }
+}
+
+- (void)startParsingWithUrl:(NSURL *)url withDelegate:(id)delegate {
+    xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
+    [self startParsingWithDelegate:delegate];
+}
+
+- (void)startParsingWithData:(NSData *)data withDelegate:(id)delegate {
+    xmlParser = [[NSXMLParser alloc] initWithData:data];
+    [self startParsingWithDelegate:delegate];
 }
 
 - (void)stop {

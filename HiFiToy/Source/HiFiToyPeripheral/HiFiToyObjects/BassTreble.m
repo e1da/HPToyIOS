@@ -22,14 +22,39 @@
 /*==========================================================================================
  Init
  ==========================================================================================*/
-- (id) init
-{
+- (id) init {
     self = [super init];
     if (self){
         memset(enabledCh, 0, 8); //all channels are disabled (DRY)
+        
+        self.bassTreble127 = nil;
+        self.bassTreble34 = nil;
+        self.bassTreble56 = nil;
+        self.bassTreble8 = nil;
     }
     
     return self;
+}
+
+/*---------------------- create methods -----------------------------*/
++ (BassTreble *)initWithBassTreble127:(BassTrebleChannel *)bassTreble127
+                         BassTreble34:(BassTrebleChannel *)bassTreble34
+                         BassTreble56:(BassTrebleChannel *)bassTreble56
+                          BassTreble8:(BassTrebleChannel *)bassTreble8 {
+    BassTreble *currentInstance = [[BassTreble alloc] init];
+    currentInstance.bassTreble127 = bassTreble127;
+    currentInstance.bassTreble34 = bassTreble34;
+    currentInstance.bassTreble56 = bassTreble56;
+    currentInstance.bassTreble8 = bassTreble8;
+    
+    return  currentInstance;
+}
+
++ (BassTreble *)initWithBassTreble127:(BassTrebleChannel *)bassTreble127 {
+    BassTreble *currentInstance = [[BassTreble alloc] init];
+    currentInstance.bassTreble127 = bassTreble127;
+    
+    return  currentInstance;
 }
 
 /*==========================================================================================
@@ -67,8 +92,7 @@
 /*==========================================================================================
  NSCopying protocol implementation
  ==========================================================================================*/
--(BassTreble *)copyWithZone:(NSZone *)zone
-{
+-(BassTreble *)copyWithZone:(NSZone *)zone {
     BassTreble * copyBassTreble = [[[self class] allocWithZone:zone] init];
     
     copyBassTreble.bassTreble127      = [self.bassTreble127 copy];
@@ -86,8 +110,7 @@
 /*==========================================================================================
  isEqual implementation
  ==========================================================================================*/
-- (BOOL) isEqual: (id) object
-{
+- (BOOL) isEqual: (id) object {
     if ([object class] == [self class]){
         BassTreble * temp = object;
         
@@ -131,30 +154,15 @@
         
     }
     
-    return NO;
-}
-
-/*---------------------- create methods -----------------------------*/
-+ (BassTreble *)initWithBassTreble127:(BassTrebleChannel *)bassTreble127
-                         BassTreble34:(BassTrebleChannel *)bassTreble34
-                         BassTreble56:(BassTrebleChannel *)bassTreble56
-                          BassTreble8:(BassTrebleChannel *)bassTreble8
-{
-    BassTreble *currentInstance = [[BassTreble alloc] init];
-    currentInstance.bassTreble127 = bassTreble127;
-    currentInstance.bassTreble34 = bassTreble34;
-    currentInstance.bassTreble56 = bassTreble56;
-    currentInstance.bassTreble8 = bassTreble8;
-    
-    return  currentInstance;
+    return YES;
 }
 
 - (uint8_t)address {
     return BASS_FILTER_SET_REG;
 }
 
--(void) setEnabledChannel:(uint8_t)channel Enabled:(float)enabled //enabled = 0.0 .. 1.0
-{
+//enabled = 0.0 .. 1.0
+-(void) setEnabledChannel:(uint8_t)channel Enabled:(float)enabled {
     if (channel > 7) channel = 7;
     
     if (enabled < 0.0) enabled = 0.0;
@@ -163,21 +171,19 @@
     enabledCh[channel] = enabled;
 }
 
--(float) getEnabledChannel:(uint8_t)channel //return enabled = 0.0 .. 1.0
-{
+//return enabled = 0.0 .. 1.0
+-(float) getEnabledChannel:(uint8_t)channel {
     if (channel > 7) channel = 7;
     return enabledCh[channel];
 }
 
 //info string
--(NSString *)getInfo
-{
+-(NSString *)getInfo {
     return @"BassTreble";
 }
 
 //send to dsp
-- (void) sendWithResponse:(BOOL)response
-{
+- (void) sendWithResponse:(BOOL)response {
     NSData *data = [self getFreqDbBinary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
@@ -187,8 +193,7 @@
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
-- (void) sendEnabledWithChannel:(uint8_t)channel withResponse:(BOOL)response
-{
+- (void) sendEnabledWithChannel:(uint8_t)channel withResponse:(BOOL)response {
     NSData *data = [self getEnabledBinaryWithChannel:channel];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
@@ -198,18 +203,16 @@
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
--(uint8_t) dbToTAS5558Format:(int) db
-{
+-(uint8_t) dbToTAS5558Format:(int) db {
     return 18 - db;
 }
 
--(int) TAS5558ToDbFormat:(uint8_t) tas5558_db
-{
+-(int) TAS5558ToDbFormat:(uint8_t) tas5558_db {
     return 18 - tas5558_db;
 }
 
-- (NSData *) getFreqDbBinary // return header + 16 byte
-{
+// return header + 16 byte
+- (NSData *) getFreqDbBinary {
     DataBufHeader_t dataBufHeader;
     NSMutableData *data = [[NSMutableData alloc] init];
     
@@ -218,32 +221,37 @@
     dataBufHeader.length = 16;
     [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
     
-    uint8_t valBassFreq[4] = {_bassTreble8.bassFreq, _bassTreble56.bassFreq, _bassTreble34.bassFreq, _bassTreble127.bassFreq};
+    uint8_t valBassFreq[4] = {  (_bassTreble8) ? _bassTreble8.bassFreq : 0,
+                                (_bassTreble56) ? _bassTreble56.bassFreq : 0,
+                                (_bassTreble34) ? _bassTreble34.bassFreq : 0,
+                                (_bassTreble127) ? _bassTreble127.bassFreq : 0};
     [data appendBytes:valBassFreq length:4];
     
     //fill bass db, BASS_FILTER_INDEX_REG
-    uint8_t valBassDb[4] = {[self dbToTAS5558Format:_bassTreble8.bassDb],
-                                [self dbToTAS5558Format:_bassTreble56.bassDb],
-                                [self dbToTAS5558Format:_bassTreble34.bassDb],
-                                [self dbToTAS5558Format:_bassTreble127.bassDb]};
+    uint8_t valBassDb[4] = {[self dbToTAS5558Format:(_bassTreble8) ? _bassTreble8.bassDb : 0],
+                            [self dbToTAS5558Format:(_bassTreble56) ? _bassTreble56.bassDb : 0],
+                            [self dbToTAS5558Format:(_bassTreble34) ? _bassTreble34.bassDb : 0],
+                            [self dbToTAS5558Format:(_bassTreble127) ? _bassTreble127.bassDb : 0]};
     [data appendBytes:&valBassDb length:4];
     
     //fill treble selection, TREBLE_FILTER_SET_REG
-    uint8_t valTrebleFreq[4] = {_bassTreble8.trebleFreq, _bassTreble56.trebleFreq, _bassTreble34.trebleFreq, _bassTreble127.trebleFreq};
+    uint8_t valTrebleFreq[4] = {    (_bassTreble8) ? _bassTreble8.trebleFreq : 0,
+                                    (_bassTreble56) ? _bassTreble56.trebleFreq : 0,
+                                    (_bassTreble34) ? _bassTreble34.trebleFreq : 0,
+                                    (_bassTreble127) ? _bassTreble127.trebleFreq : 0};
     [data appendBytes:&valTrebleFreq length:4];
     
     //fill treble db, TREBLE_FILTER_INDEX_REG
-    uint8_t valTrebleDb[4] = {[self dbToTAS5558Format:_bassTreble8.trebleDb],
-                                [self dbToTAS5558Format:_bassTreble56.trebleDb],
-                                [self dbToTAS5558Format:_bassTreble34.trebleDb],
-                                [self dbToTAS5558Format:_bassTreble127.trebleDb]};
+    uint8_t valTrebleDb[4] = {  [self dbToTAS5558Format:(_bassTreble8) ? _bassTreble8.trebleDb : 0],
+                                [self dbToTAS5558Format:(_bassTreble56) ? _bassTreble56.trebleDb : 0],
+                                [self dbToTAS5558Format:(_bassTreble34) ? _bassTreble34.trebleDb : 0],
+                                [self dbToTAS5558Format:(_bassTreble127) ? _bassTreble127.trebleDb : 0]};
     [data appendBytes:&valTrebleDb length:4];
     
     return data;
 }
 
-- (NSData *) getEnabledBinaryWithChannel:(uint8_t)channel
-{
+- (NSData *) getEnabledBinaryWithChannel:(uint8_t)channel {
     if (channel > 7) channel = 7;
     
     DataBufHeader_t dataBufHeader;
@@ -264,8 +272,7 @@
 }
 
 //get binary for save to dsp
-- (NSData *) getBinary
-{
+- (NSData *) getBinary {
     NSMutableData *data = [[NSMutableData alloc] init];
     
     //fill enabled registers
@@ -278,8 +285,7 @@
     return data;
 }
 
-- (BOOL) importData:(NSData *)data
-{
+- (BOOL) importData:(NSData *)data {
     BOOL importFlag = NO;
     HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
     DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
@@ -312,7 +318,7 @@
         }
         
         if ((dataBufHeader->addr >= BASS_TREBLE_REG) && (dataBufHeader->addr < LOUDNESS_LOG2_GAIN_REG) &&
-                                                        (dataBufHeader->length == 16)){
+                                                        (dataBufHeader->length == 8)){
         
             int32_t * e = (int32_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
             
@@ -326,7 +332,7 @@
 }
 
 /*---------------------------- XML export/import ----------------------------------*/
--(XmlData *) toXmlData{
+-(XmlData *) toXmlData {
     XmlData * xmlData = [[XmlData alloc] init];
     
     for (int i = 0; i < 8; i++){

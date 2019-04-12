@@ -25,6 +25,7 @@
                         BassTreble34:(BassTrebleChannel *)bassTreble34
                        BassTreble56:(BassTrebleChannel *)bassTreble56
                          BassTreble8:(BassTrebleChannel *)bassTreble8;
++ (BassTreble *)initWithBassTreble127:(BassTrebleChannel *)bassTreble127;
 
 
 -(void) setEnabledChannel:(uint8_t)channel Enabled:(float)enabled; //enabled = 0.0 .. 1.0

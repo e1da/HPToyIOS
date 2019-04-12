@@ -318,7 +318,7 @@
     
     NSArray<BiquadLL *> * allpassBiquads = [self getBiquadsWithType:BIQUAD_ALLPASS];
     if ((allpassBiquads) && (allpassBiquads.count > 0)) {
-        return [offBiquads objectAtIndex:0];
+        return [allpassBiquads objectAtIndex:0];
     }
     
     return nil;
@@ -380,6 +380,7 @@
         BiquadLL * b0 = [self getFreeBiquad];
         BiquadLL * b1 = [self getFreeBiquad];
         
+        //!!!WARNING NOT CORRECT b0 and b1 reference to equal biquad
         if ((b0) && (b1)) {
             b0.enabled = YES;
             b0.type = type;
