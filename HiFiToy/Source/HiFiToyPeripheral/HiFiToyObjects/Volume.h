@@ -16,19 +16,19 @@
 
 @interface Volume : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
 
-@property (nonatomic)   int         address;
-@property (nonatomic)   double      db;
+@property (nonatomic)   uint8_t     address;
+@property (nonatomic)   float       db;
 
-@property (nonatomic)   double      maxDb;
-@property (nonatomic)   double      minDb;
+@property (nonatomic)   float       maxDb;
+@property (nonatomic)   float       minDb;
 
-+ (Volume *)initWithAddress:(int)address
-                    dbValue:(double)db;
++ (Volume *)initWithAddress:(uint8_t)address
+                    dbValue:(float)db;
 
-+ (Volume *)initWithAddress:(int)address
-                    dbValue:(double)db
-                      maxDb:(double)maxDb
-                      minDb:(double)minDb;
++ (Volume *)initWithAddress:(uint8_t)address
+                    dbValue:(float)db
+                      maxDb:(float)maxDb
+                      minDb:(float)minDb;
 
 - (double) getDbPercent;
 - (void) setDbPercent:(double)percent;//[0..1]

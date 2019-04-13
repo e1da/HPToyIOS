@@ -8,6 +8,7 @@
 
 #import "Volume.h"
 #import "HiFiToyControl.h"
+#import "FloatUtility.h"
 
 @interface Volume(){
     int count;
@@ -15,6 +16,45 @@
 @end
 
 @implementation Volume
+
+/*==========================================================================================
+ Init
+ ==========================================================================================*/
+- (id) init {
+    self = [super init];
+    if (self) {
+        _address = 0;
+        _db = 0;
+        _maxDb = HW_MAX_DB;
+        _minDb = HW_MIN_DB;
+    }
+    return self;
+}
+
+/*---------------------- create methods -----------------------------*/
++ (Volume *)initWithAddress:(uint8_t)address
+                    dbValue:(float)db {
+    Volume * v = [[Volume alloc] init];
+    v.address = address;
+    v.db = db;
+    
+    return v;
+}
+
++ (Volume *)initWithAddress:(uint8_t)address
+                    dbValue:(float)db
+                      maxDb:(float)maxDb
+                      minDb:(float)minDb {
+    Volume * v = [[Volume alloc] init];
+    
+    v.address = address;
+    v.maxDb = maxDb;
+    v.minDb = minDb;
+    v.db = db;
+    
+    return v;
+}
+
 
 /*==========================================================================================
  NSCoding protocol implementation
@@ -40,8 +80,7 @@
 /*==========================================================================================
  NSCopying protocol implementation
  ==========================================================================================*/
--(Volume *)copyWithZone:(NSZone *)zone
-{
+-(Volume *)copyWithZone:(NSZone *)zone {
     Volume * copyVolume = [[[self class] allocWithZone:zone] init];
     
     copyVolume.address  = self.address;
@@ -55,12 +94,11 @@
 /*==========================================================================================
  isEqual implementation
  ==========================================================================================*/
-- (BOOL) isEqual: (id) object
-{
+- (BOOL) isEqual: (id) object {
     if ([object class] == [self class]){
         Volume * temp = object;
         if ((self.address == temp.address) &&
-            (fabs(self.db - temp.db) < 0.02f)){
+            (isFloatDiffLessThan(self.db, temp.db, 0.02f)) ){
             return YES;
         }
         
@@ -69,36 +107,10 @@
     return NO;
 }
 
-/*---------------------- create methods -----------------------------*/
-+ (Volume *)initWithAddress:(int)address
-                    dbValue:(double)db
-{
-    return [Volume initWithAddress:address dbValue:db maxDb:0.0 minDb:-40.0];
-}
-
-+ (Volume *)initWithAddress:(int)address
-                    dbValue:(double)db
-                      maxDb:(double)maxDb
-                      minDb:(double)minDb
-{
-    Volume *currentInstance = [[Volume alloc] init];
-    
-    currentInstance.address = address;
-    
-    if (maxDb > HW_MAX_DB) maxDb = HW_MAX_DB;
-    if (minDb < HW_MIN_DB) minDb = HW_MIN_DB;
-    currentInstance.maxDb = maxDb;
-    currentInstance.minDb = minDb;
-    
-    currentInstance.db = db;
-    
-    return currentInstance;
-    
-}
-
 - (double) getDbPercent {
     return (_db - _minDb) / (_maxDb - _minDb);
 }
+
 - (void) setDbPercent:(double)percent {
     if (percent > 1.0) percent = 1.0;
     if (percent < 0.0) percent = 0.0;
@@ -106,8 +118,7 @@
     [self setDb:percent * (_maxDb - _minDb) + _minDb];
 }
 
-- (void) setDb:(double)db
-{
+- (void) setDb:(float)db {
     //check border
     if (db < self.minDb) db = self.minDb;
     if (db > self.maxDb) db = self.maxDb;
@@ -115,19 +126,28 @@
     _db = db;
 }
 
-- (double)dbToAmpl:(double)db
-{
+- (void) setMaxDb:(float)maxDb {
+    if (maxDb > HW_MAX_DB) maxDb = HW_MAX_DB;
+    if (maxDb < HW_MIN_DB) maxDb = HW_MIN_DB;
+    _maxDb = maxDb;
+}
+
+- (void) setMinDb:(float)minDb {
+    if (minDb > HW_MAX_DB) minDb = HW_MAX_DB;
+    if (minDb < HW_MIN_DB) minDb = HW_MIN_DB;
+    _minDb = minDb;
+}
+
+- (double)dbToAmpl:(double)db {
     return pow(10, (db / 20));
 }
 
-- (double)amplToDb:(double)ampl
-{
+- (double)amplToDb:(double)ampl {
     return 20 * log10(ampl);
 }
 
 //info string
--(NSString *)getInfo
-{
+-(NSString *)getInfo {
     if (self.db > MUTE_VOLUME) {
         return [NSString stringWithFormat:@"%0.1fdb", self.db];
     }
@@ -135,8 +155,7 @@
 }
 
 //send to dsp
-- (void) sendWithResponse:(BOOL)response
-{
+- (void) sendWithResponse:(BOOL)response {
     NSData *data = [self getBinary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
@@ -147,8 +166,7 @@
 }
 
 //get binary for save to dsp
-- (NSData *) getBinary
-{
+- (NSData *) getBinary {
     DataBufHeader_t dataBufHeader;
     dataBufHeader.addr = self.address;
     dataBufHeader.length = 4;
@@ -172,8 +190,7 @@
     return data;
 }
 
-- (BOOL) importData:(NSData *)data
-{
+- (BOOL) importData:(NSData *)data {
     HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
     DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
     
@@ -199,7 +216,7 @@
 }
 
 /*---------------------------- XML export/import ----------------------------------*/
--(XmlData *) toXmlData{
+-(XmlData *) toXmlData {
     XmlData * xmlData = [[XmlData alloc] init];
     [xmlData addElementWithName:@"MaxDb" withDoubleValue:self.maxDb];
     [xmlData addElementWithName:@"MinDb" withDoubleValue:self.minDb];

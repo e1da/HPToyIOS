@@ -29,6 +29,9 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
 
 @implementation BiquadLL
 
+/*==========================================================================================
+ Init
+ ==========================================================================================*/
 - (id) init {
     self = [super init];
     if (self) {
@@ -40,6 +43,20 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
         self.type = BIQUAD_OFF;
     }
     return self;
+}
+
+/*---------------------- create method -----------------------------*/
++ (BiquadLL *)initWithAddress:(int)address {
+    return [BiquadLL initWithAddress0:address Address1:0];
+}
+
++ (BiquadLL *)initWithAddress0:(int)address0 Address1:(int)address1 {
+    BiquadLL *currentInstance = [[BiquadLL alloc] init];
+    
+    currentInstance.address0 = address0;
+    currentInstance.address1 = address1;
+    
+    return currentInstance;
 }
 
 /*==========================================================================================
@@ -112,6 +129,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     copyBiquad.type = self.type;
     copyBiquad.coef = self.coef; //copy biquad param too
     copyBiquad.biquadParam = [self.biquadParam copy];
+    copyBiquad.biquadParam.delegate = copyBiquad;
     
     return copyBiquad;
 }
@@ -146,20 +164,6 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     return NO;
 }
 
-
-/*---------------------- create method -----------------------------*/
-+ (BiquadLL *)initWithAddress:(int)address {
-    return [BiquadLL initWithAddress0:address Address1:0];
-}
-
-+ (BiquadLL *)initWithAddress0:(int)address0 Address1:(int)address1 {
-    BiquadLL *currentInstance = [[BiquadLL alloc] init];
-    
-    currentInstance.address0 = address0;
-    currentInstance.address1 = address1;
-    
-    return currentInstance;
-}
 
 - (uint8_t)address {
     return self.address0;
