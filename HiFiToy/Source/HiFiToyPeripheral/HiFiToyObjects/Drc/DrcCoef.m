@@ -74,6 +74,41 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
 @implementation DrcCoef
 
 /*==========================================================================================
+ Init
+ ==========================================================================================*/
+- (id) init {
+    self = [super init];
+    if (self) {
+        
+    }
+    return self;
+}
+
+/*---------------------- create methods -----------------------------*/
++ (DrcCoef *)initWithChannel:(DrcChannel_t)channel
+                      Point0:(DrcPoint_t)p0
+                      Point1:(DrcPoint_t)p1
+                      Point2:(DrcPoint_t)p2
+                      Point3:(DrcPoint_t)p3 {
+    DrcCoef * currentInstance = [[DrcCoef alloc] init];
+    
+    currentInstance.channel = channel;
+    currentInstance.point0 = p0;
+    currentInstance.point1 = p1;
+    currentInstance.point2 = p2;
+    currentInstance.point3 = p3;
+    
+    return currentInstance;
+}
+
++ (DrcCoef *)initWithChannel:(DrcChannel_t)channel
+                      Point0:(DrcPoint_t)p0
+                      Point1:(DrcPoint_t)p1
+                      Point2:(DrcPoint_t)p2 {
+    return [self initWithChannel:channel Point0:p0 Point1:p1 Point2:p1 Point3:p2];
+}
+
+/*==========================================================================================
  NSCoding protocol implementation
  ==========================================================================================*/
 - (void) encodeWithCoder:(NSCoder *)encoder {
@@ -107,8 +142,7 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
 /*==========================================================================================
  NSCopying protocol implementation
  ==========================================================================================*/
--(DrcCoef *)copyWithZone:(NSZone *)zone
-{
+-(DrcCoef *)copyWithZone:(NSZone *)zone {
     DrcCoef * copyDrcCoef = [[[self class] allocWithZone:zone] init];
     
     copyDrcCoef.channel      = self.channel;
@@ -123,8 +157,7 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
 /*==========================================================================================
  isEqual implementation
  ==========================================================================================*/
-- (BOOL) isEqual: (id) object
-{
+- (BOOL) isEqual: (id) object {
     if ([object class] == [self class]){
         DrcCoef * temp = object;
         if ((self.channel == temp.channel) &&
@@ -144,67 +177,37 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     return NO;
 }
 
-/*---------------------- create methods -----------------------------*/
-+ (DrcCoef *)initWithChannel:(DrcChannel_t)channel
-                      Point0:(DrcPoint_t)p0
-                      Point1:(DrcPoint_t)p1
-                      Point2:(DrcPoint_t)p2
-                      Point3:(DrcPoint_t)p3
-{
-    DrcCoef * currentInstance = [[DrcCoef alloc] init];
-    
-    currentInstance.channel = channel;
-    currentInstance.point0 = p0;
-    currentInstance.point1 = p1;
-    currentInstance.point2 = p2;
-    currentInstance.point3 = p3;
-    
-    return currentInstance;
-}
-
-+ (DrcCoef *)initWithChannel:(DrcChannel_t)channel
-                      Point0:(DrcPoint_t)p0
-                      Point1:(DrcPoint_t)p1
-                      Point2:(DrcPoint_t)p2
-{
-    return [self initWithChannel:channel Point0:p0 Point1:p1 Point2:p1 Point3:p2];
-}
 
 //setter/getter
-- (void) setPoint0:(DrcPoint_t)point0
-{
+- (void) setPoint0:(DrcPoint_t)point0 {
     if (point0.inputDb > 0) point0.inputDb = 0;
     if (point0.outputDb > 0) point0.outputDb = 0;
     
     _point0 = point0;
 }
 
-- (void) setPoint1:(DrcPoint_t)point1
-{
+- (void) setPoint1:(DrcPoint_t)point1 {
     if (point1.inputDb > 0) point1.inputDb = 0;
     if (point1.outputDb > 0) point1.outputDb = 0;
     
     _point1 = point1;
 }
 
-- (void) setPoint2:(DrcPoint_t)point2
-{
+- (void) setPoint2:(DrcPoint_t)point2 {
     if (point2.inputDb > 0) point2.inputDb = 0;
     if (point2.outputDb > 0) point2.outputDb = 0;
     
     _point2 = point2;
 }
 
-- (void) setPoint3:(DrcPoint_t)point3
-{
+- (void) setPoint3:(DrcPoint_t)point3 {
     if (point3.inputDb > 0) point3.inputDb = 0;
     if (point3.outputDb > 0) point3.outputDb = 0;
     
     _point3 = point3;
 }
 
-- (void) setPoint0WithCheck:(DrcPoint_t)point0
-{
+- (void) setPoint0WithCheck:(DrcPoint_t)point0 {
     if (point0.outputDb > _point1.outputDb) {
         point0.outputDb = _point1.outputDb;
     }
@@ -254,8 +257,7 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
 }
 
 //info string
--(NSString *)getInfo
-{
+-(NSString *)getInfo {
     return [NSString stringWithFormat:@"0:%0.1f %0.1f 1:%0.1f %0.1f 2:%0.1f %0.1f 3:%0.1f %0.1f",
             _point0.inputDb, _point0.outputDb,
             _point1.inputDb, _point1.outputDb,
@@ -264,8 +266,7 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
 }
 
 //send to dsp
-- (void) sendWithResponse:(BOOL)response
-{
+- (void) sendWithResponse:(BOOL)response {
     DrcPointPacket_t packet;
     packet.channel = self.channel;
     
@@ -311,8 +312,7 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     return data;
 }
 
-- (BOOL) importData:(NSData *)data
-{
+- (BOOL) importData:(NSData *)data {
     HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
     DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
     
@@ -352,7 +352,7 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
 }
 
 /*---------------------------- XML export/import ----------------------------------*/
--(XmlData *) toXmlData{
+-(XmlData *) toXmlData {
     XmlData * xmlData = [[XmlData alloc] init];
     [xmlData addElementWithName:@"InputDb0" withDoubleValue:self.point0.inputDb];
     [xmlData addElementWithName:@"OutputDb0" withDoubleValue:self.point0.outputDb];
