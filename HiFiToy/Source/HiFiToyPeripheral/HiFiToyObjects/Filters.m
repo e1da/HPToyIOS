@@ -7,14 +7,14 @@
 //
 
 #import "Filters.h"
-#import "BiquadLL.h"
+#import "Biquad.h"
 #import "PassFilter.h"
 #import "FloatUtility.h"
 
 
 @interface Filters () {
 @private
-    BiquadLL * biquads[7];
+    Biquad * biquads[7];
     int count;
     
 }
@@ -44,7 +44,7 @@
         
         for (int i = 0; i < 7; i++) {
             NSString * keyStr = [NSString stringWithFormat:@"keyBiquad[%d]", i ];
-            BiquadLL * b = [decoder decodeObjectForKey:keyStr];
+            Biquad * b = [decoder decodeObjectForKey:keyStr];
             
             [self setBiquad:b forIndex:i];
         }
@@ -84,7 +84,7 @@
         }
         
         for (int i = 0; i < 7; i++) {
-            BiquadLL * tempBiquad = [temp getBiquadAtIndex:i];
+            Biquad * tempBiquad = [temp getBiquadAtIndex:i];
             
             if ([tempBiquad isEqual:biquads[i]] == NO) {
                 return NO;
@@ -101,7 +101,7 @@
     self = [super init];
     if (self) {
         for (int i = 0; i < 7; i++) {
-            biquads[i] = [[BiquadLL alloc] init];
+            biquads[i] = [[Biquad alloc] init];
         }
         self.activeBiquadIndex = 0;
     }
@@ -116,7 +116,7 @@
     instance.address1 = addr1;
     
     for (int i = 0; i < 7; i++) {
-        BiquadLL * biquad = [BiquadLL initWithAddress0:addr0 + i
+        Biquad * biquad = [Biquad initWithAddress0:addr0 + i
                                               Address1:(addr1) ? (addr1 + i) : 0];
         
         [biquad.biquadParam setBorderMaxFreq:20000 minFreq:20];
@@ -151,14 +151,14 @@
     return 7;
 }
 
-- (BiquadLL *) getBiquadAtIndex:(uint8_t)index {
+- (Biquad *) getBiquadAtIndex:(uint8_t)index {
     if (index < 7) {
         return biquads[index];
     }
     return nil;
 }
 
-- (int) getBiquadIndex:(BiquadLL *)biquad {
+- (int) getBiquadIndex:(Biquad *)biquad {
     for (int i = 0; i < 7; i++) {
         if (biquads[i] == biquad) {
             return i;
@@ -167,11 +167,11 @@
     return -1;
 }
 
-- (BiquadLL *)  getActiveBiquad {
+- (Biquad *)  getActiveBiquad {
     return [self getBiquadAtIndex:_activeBiquadIndex];
 }
 
-- (void) setBiquad:(BiquadLL *)biquad forIndex:(uint8_t)index {
+- (void) setBiquad:(Biquad *)biquad forIndex:(uint8_t)index {
     if (index > 6) return;
     
     biquads[index] = biquad;
@@ -209,7 +209,7 @@
 - (void) nextActiveBiquadIndex {
     BiquadType_t type = [[self getBiquadAtIndex:_activeBiquadIndex] type];
     BiquadType_t nextType;
-    BiquadLL * b;
+    Biquad * b;
     int counter = 0;
     
     do {
@@ -233,7 +233,7 @@
 - (void) prevActiveBiquadIndex {
     BiquadType_t type = [[self getBiquadAtIndex:_activeBiquadIndex] type];
     BiquadType_t nextType;
-    BiquadLL * b;
+    Biquad * b;
     int counter = 0;
     
     do {
@@ -257,9 +257,9 @@
 - (BOOL) swapBiquads:(uint8_t)index0 withBiquad:(uint8_t)index1 {
     if ((index0 >= 7) || (index1 >= 7)) return NO;
     
-    BiquadLL * b0 = [self getBiquadAtIndex:index0];
-    BiquadLL * b1 = [self getBiquadAtIndex:index1];
-    BiquadLL * tempBiquad = [b0 copy];
+    Biquad * b0 = [self getBiquadAtIndex:index0];
+    Biquad * b1 = [self getBiquadAtIndex:index1];
+    Biquad * tempBiquad = [b0 copy];
     tempBiquad.address0 = b1.address0;
     tempBiquad.address1 = b1.address1;
     b1.address0 = b0.address0;
@@ -270,11 +270,11 @@
     return YES;
 }
 
-- (NSArray<BiquadLL *> *) getBiquadsWithType:(BiquadType_t)type {
+- (NSArray<Biquad *> *) getBiquadsWithType:(BiquadType_t)type {
     NSMutableArray * biquads = nil;
     
     for (int i = 0 ; i < 7; i++) {
-        BiquadLL * b = [self getBiquadAtIndex:i];
+        Biquad * b = [self getBiquadAtIndex:i];
         
         if (b.type == type) {
             
@@ -288,18 +288,18 @@
     return biquads;
 }
 
-- (BiquadLL *) getFreeBiquad {
-    NSArray<BiquadLL *> * offBiquads = [self getBiquadsWithType:BIQUAD_OFF];
+- (Biquad *) getFreeBiquad {
+    NSArray<Biquad *> * offBiquads = [self getBiquadsWithType:BIQUAD_OFF];
     if ((offBiquads) && (offBiquads.count > 0)) {
         return [offBiquads objectAtIndex:0];
     }
     
-    NSArray<BiquadLL *> * paramBiquads = [self getBiquadsWithType:BIQUAD_PARAMETRIC];
+    NSArray<Biquad *> * paramBiquads = [self getBiquadsWithType:BIQUAD_PARAMETRIC];
     if ((paramBiquads) && (paramBiquads.count > 0)) {
         
         //try find parametric with db == 0
         for (int i = 0; i < paramBiquads.count; i++) {
-            BiquadLL * p = [paramBiquads objectAtIndex:i];
+            Biquad * p = [paramBiquads objectAtIndex:i];
             
             if (isFloatNull(p.biquadParam.dbVolume)) {
                 return p;
@@ -307,7 +307,7 @@
         }
         
         //find parametric with min abs db
-        BiquadLL * p = [paramBiquads objectAtIndex:0];
+        Biquad * p = [paramBiquads objectAtIndex:0];
         for (int i = 1; i < paramBiquads.count; i++) {
             if ( (fabsf(p.biquadParam.dbVolume)) > (fabsf([[paramBiquads objectAtIndex:i] biquadParam].dbVolume)) ) {
                 p = [paramBiquads objectAtIndex:i];
@@ -316,7 +316,7 @@
         return p;
     }
     
-    NSArray<BiquadLL *> * allpassBiquads = [self getBiquadsWithType:BIQUAD_ALLPASS];
+    NSArray<Biquad *> * allpassBiquads = [self getBiquadsWithType:BIQUAD_ALLPASS];
     if ((allpassBiquads) && (allpassBiquads.count > 0)) {
         return [allpassBiquads objectAtIndex:0];
     }
@@ -325,27 +325,27 @@
 }
 
 - (PassFilter *) getLowpass {
-    NSArray<BiquadLL *> * lpBiquads = [self getBiquadsWithType:BIQUAD_LOWPASS];
+    NSArray<Biquad *> * lpBiquads = [self getBiquadsWithType:BIQUAD_LOWPASS];
     if (!lpBiquads) return nil;
     
     return [PassFilter initWithBiquads:lpBiquads withType:BIQUAD_LOWPASS];
 }
 
 - (PassFilter *) getHighpass {
-    NSArray<BiquadLL *> * hpBiquads = [self getBiquadsWithType:BIQUAD_HIGHPASS];
+    NSArray<Biquad *> * hpBiquads = [self getBiquadsWithType:BIQUAD_HIGHPASS];
     if (!hpBiquads) return nil;
     
     return [PassFilter initWithBiquads:hpBiquads withType:BIQUAD_HIGHPASS];
 }
 
 - (BOOL) isLowpassFull {
-    NSArray<BiquadLL *> * lpBiquads = [self getBiquadsWithType:BIQUAD_LOWPASS];
+    NSArray<Biquad *> * lpBiquads = [self getBiquadsWithType:BIQUAD_LOWPASS];
 
     return (lpBiquads) && (lpBiquads.count >= 2);
 }
 
 - (BOOL) isHighpassFull {
-    NSArray<BiquadLL *> * hpBiquads = [self getBiquadsWithType:BIQUAD_HIGHPASS];
+    NSArray<Biquad *> * hpBiquads = [self getBiquadsWithType:BIQUAD_HIGHPASS];
     
     return (hpBiquads) && (hpBiquads.count >= 2);
 }
@@ -366,10 +366,10 @@
         return;
     }
 
-    NSArray<BiquadLL *> * biquads = [self getBiquadsWithType:type];
+    NSArray<Biquad *> * biquads = [self getBiquadsWithType:type];
     
     if ((!biquads) || (biquads.count < 2)) {//need 1 biquad
-        BiquadLL * b = [self getFreeBiquad];
+        Biquad * b = [self getFreeBiquad];
         if (b) {
             b.enabled = YES;
             b.type = type;
@@ -377,8 +377,8 @@
         }
         
     } else if (biquads.count == 2) { //need 2 biquads
-        BiquadLL * b0 = [self getFreeBiquad];
-        BiquadLL * b1 = [self getFreeBiquad];
+        Biquad * b0 = [self getFreeBiquad];
+        Biquad * b1 = [self getFreeBiquad];
         
         //!!!WARNING NOT CORRECT b0 and b1 reference to equal biquad
         if ((b0) && (b1)) {
@@ -412,7 +412,7 @@
 - (void) downOrderFor:(PassFilterType_t)type {
     if ((type != BIQUAD_LOWPASS) && (type != BIQUAD_HIGHPASS)) return;
     
-    NSArray<BiquadLL *> * biquads = [self getBiquadsWithType:type];
+    NSArray<Biquad *> * biquads = [self getBiquadsWithType:type];
     if ((!biquads) || (!biquads.count)) return;
     
     int s = (int)biquads.count;
@@ -429,7 +429,7 @@
     
     //free excess biquads from LP and set to Parametric
     for (int i = s; i < biquads.count; i++) {
-        BiquadLL * b = [biquads objectAtIndex:i];
+        Biquad * b = [biquads objectAtIndex:i];
         
         b.enabled = [self isPEQEnabled];
         b.type = BIQUAD_PARAMETRIC;
@@ -458,14 +458,14 @@
 - (BOOL) isPEQEnabled {
     BOOL result = YES;
     
-    NSMutableArray<BiquadLL *> * biquads = [[NSMutableArray alloc] init];
+    NSMutableArray<Biquad *> * biquads = [[NSMutableArray alloc] init];
     [biquads addObjectsFromArray:[self getBiquadsWithType:BIQUAD_PARAMETRIC]];
     [biquads addObjectsFromArray:[self getBiquadsWithType:BIQUAD_ALLPASS]];
     
     if ((!biquads) || (!biquads.count) ) return NO;
     
     for (int i = 0; i < biquads.count; i++) {
-        BiquadLL * b = [biquads objectAtIndex:i];
+        Biquad * b = [biquads objectAtIndex:i];
         if (!b.enabled) {
             result = NO;
             break;
@@ -474,7 +474,7 @@
     
     if (!result) {
         for (int i = 0; i < biquads.count; i++) {
-            BiquadLL * b = [biquads objectAtIndex:i];
+            Biquad * b = [biquads objectAtIndex:i];
             if (b.enabled) {
                 b.enabled = NO;
                 [b sendWithResponse:YES];
@@ -487,19 +487,19 @@
 //set enablend and send to dsp
 - (void) setPEQEnabled:(BOOL)enabled {
     //NSArray<BiquadLL *> * biquads = [self getBiquadsWithType:BIQUAD_PARAMETRIC];
-    NSMutableArray<BiquadLL *> * biquads = [[NSMutableArray alloc] init];
+    NSMutableArray<Biquad *> * biquads = [[NSMutableArray alloc] init];
     [biquads addObjectsFromArray:[self getBiquadsWithType:BIQUAD_PARAMETRIC]];
     [biquads addObjectsFromArray:[self getBiquadsWithType:BIQUAD_ALLPASS]];
  
     for (int i = 0; i < biquads.count; i++) {
-        BiquadLL * b = [biquads objectAtIndex:i];
+        Biquad * b = [biquads objectAtIndex:i];
         if (b.enabled != enabled) {
             b.enabled = enabled;
             [b sendWithResponse:YES];
         }
     }
     
-    BiquadLL * b = [self getBiquadAtIndex:self.activeBiquadIndex];
+    Biquad * b = [self getBiquadAtIndex:self.activeBiquadIndex];
     if (!b.enabled) {
         [self nextActiveBiquadIndex];
     }

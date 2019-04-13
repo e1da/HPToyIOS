@@ -32,7 +32,7 @@ typedef struct {
 
 extern bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1);
 
-@interface BiquadLL : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate, BiquadParamDelegate>
+@interface Biquad : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate, BiquadParamDelegate>
 
 @property (nonatomic) BOOL    hiddenGui;
 @property (nonatomic) BOOL    enabled;
@@ -45,8 +45,8 @@ extern bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1);
 @property (nonatomic) BiquadCoef_t  coef;
 @property (nonatomic) BiquadParam * biquadParam;
 
-+ (BiquadLL *)initWithAddress:(int)address;
-+ (BiquadLL *)initWithAddress0:(int)address0 Address1:(int)address1;
++ (Biquad *)initWithAddress:(int)address;
++ (Biquad *)initWithAddress0:(int)address0 Address1:(int)address1;
 
 - (double) getAFR:(double)freqX;
 

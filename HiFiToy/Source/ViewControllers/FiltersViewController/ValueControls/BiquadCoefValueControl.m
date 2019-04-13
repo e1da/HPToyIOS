@@ -89,7 +89,7 @@
     filterTypeControl.titleLabel.text = [NSString stringWithFormat:@"BIQUAD #%d", _filters.activeBiquadIndex + 1];
     filterTypeControl.titleLabel.textColor = [UIColor orangeColor];
     
-    BiquadLL * b = [_filters getActiveBiquad];
+    Biquad * b = [_filters getActiveBiquad];
     
     if (b.type == BIQUAD_USER) {
         typeBiquadSegmentedControl.selectedSegmentIndex = 1;
@@ -117,7 +117,7 @@
 - (void) updateCoefValueControl:(NumValueControl *)control {
     if (!_filters) return;
     
-    BiquadLL * biquad = [_filters getActiveBiquad];
+    Biquad * biquad = [_filters getActiveBiquad];
     if (!biquad) return;
     
     BiquadCoef_t coef = biquad.coef;
@@ -167,7 +167,7 @@
  
 - (void) changeTypeFilter:(UISegmentedControl *) segmentControl {
     
-    BiquadLL * b = [_filters getActiveBiquad];
+    Biquad * b = [_filters getActiveBiquad];
     BiquadType_t prevType = b.type;
     
     switch (segmentControl.selectedSegmentIndex) {

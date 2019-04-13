@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BiquadLL.h"
+#import "Biquad.h"
 
 typedef BiquadType_t PassFilterType_t;
 
@@ -39,13 +39,13 @@ typedef struct {
 
 @interface PassFilter : NSObject <NSCopying>
 
-@property (nonatomic)   NSArray<BiquadLL *> * biquads;
+@property (nonatomic)   NSArray<Biquad *> * biquads;
 //border property
 @property (nonatomic)   PassFilterOrder_t maxOrder;
 @property (nonatomic)   PassFilterOrder_t minOrder;
 
 
-+ (PassFilter *)initWithBiquads:(NSArray<BiquadLL *> *)biquads withType:(PassFilterType_t)type;
++ (PassFilter *)initWithBiquads:(NSArray<Biquad *> *)biquads withType:(PassFilterType_t)type;
 
 // getter/setter
 //-(void) setOrder:(PassFilterOrder_t)order;

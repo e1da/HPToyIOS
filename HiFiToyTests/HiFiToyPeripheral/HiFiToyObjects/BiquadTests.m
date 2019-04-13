@@ -7,11 +7,11 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "BiquadLL.h"
+#import "Biquad.h"
 
 @interface BiquadTests : XCTestCase {
-    BiquadLL * b0;
-    BiquadLL * b1;
+    Biquad * b0;
+    Biquad * b1;
 }
 
 @end
@@ -19,7 +19,7 @@
 @implementation BiquadTests
 
 - (void)setUp {
-    b0 = [BiquadLL initWithAddress0:0x51 Address1:0x52];
+    b0 = [Biquad initWithAddress0:0x51 Address1:0x52];
     b0.type = BIQUAD_PARAMETRIC;
     b1 = [b0 copy];
     

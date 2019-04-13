@@ -31,7 +31,7 @@
         _gain = 0;
         _offset = 0;
         
-        _biquad = [BiquadLL initWithAddress:LOUDNESS_BIQUAD_REG];
+        _biquad = [Biquad initWithAddress:LOUDNESS_BIQUAD_REG];
         _biquad.type = BIQUAD_BANDPASS;
         
         [_biquad.biquadParam setBorderMaxFreq:200 minFreq:30];
@@ -107,7 +107,7 @@
     return NO;
 }
 
-+ (Loudness *)initWithOrder:(BiquadLL *)biquad LG:(float)LG LO:(float)LO
++ (Loudness *)initWithOrder:(Biquad *)biquad LG:(float)LG LO:(float)LO
                        Gain:(float)gain Offset:(float)offset
 {
     Loudness *currentInstance = [[Loudness alloc] init];

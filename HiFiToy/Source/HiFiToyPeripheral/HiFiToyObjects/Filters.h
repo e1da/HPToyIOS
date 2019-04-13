@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BiquadLL.h"
+#import "Biquad.h"
 #import "PassFilter.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -24,10 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (Filters *)   initDefaultWithAddr0:(int)addr0 withAddr1:(int)addr1;
 
 - (uint8_t)     getBiquadLength;
-- (BiquadLL *)  getBiquadAtIndex:(uint8_t)index;
-- (int)         getBiquadIndex:(BiquadLL *)biquad;
-- (BiquadLL *)  getActiveBiquad;
-- (void)        setBiquad:(BiquadLL *)biquad forIndex:(uint8_t)index;
+- (Biquad *)  getBiquadAtIndex:(uint8_t)index;
+- (int)         getBiquadIndex:(Biquad *)biquad;
+- (Biquad *)  getActiveBiquad;
+- (void)        setBiquad:(Biquad *)biquad forIndex:(uint8_t)index;
 
 - (BiquadType_t *) getBiquadTypes;
 
@@ -36,8 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) nextActiveBiquadIndex;
 - (void) prevActiveBiquadIndex;
 
-- (NSArray<BiquadLL *> *) getBiquadsWithType:(BiquadType_t)type;
-- (BiquadLL *) getFreeBiquad;
+- (NSArray<Biquad *> *) getBiquadsWithType:(BiquadType_t)type;
+- (Biquad *) getFreeBiquad;
 
 - (PassFilter *) getLowpass;
 - (PassFilter *) getHighpass;

@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "FloatUtility.h"
-#import "BiquadLL.h"
+#import "Biquad.h"
 #import "Volume.h"
 
 extern bool isFloatEqualWithAccuracy(float arg0, float arg1, int accuracy);
@@ -87,7 +87,7 @@ extern bool isFloatDiffLessThan(float f0, float f1, float maxDiff);
     
 }
 - (void) testBiquadLLCoefAndParams {
-    BiquadLL * biquad = [BiquadLL initWithAddress:0x51];
+    Biquad * biquad = [Biquad initWithAddress:0x51];
     
     biquad.type = BIQUAD_PARAMETRIC;
     biquad.biquadParam.freq = 100;
@@ -143,14 +143,14 @@ extern bool isFloatDiffLessThan(float f0, float f1, float maxDiff);
 }
 
 - (void) testBiquadLLEqualsCopyArchive {
-    BiquadLL * biquad = [BiquadLL initWithAddress:0x51];
+    Biquad * biquad = [Biquad initWithAddress:0x51];
     
     biquad.type = BIQUAD_PARAMETRIC;
     biquad.biquadParam.freq = 100;
     biquad.biquadParam.qFac = 1.41f;
     biquad.biquadParam.dbVolume = 3.0f;
     
-    BiquadLL * biquad1 = [BiquadLL initWithAddress:0x51];
+    Biquad * biquad1 = [Biquad initWithAddress:0x51];
     
     biquad1.type = BIQUAD_PARAMETRIC;
     biquad1.biquadParam.freq = 100;
@@ -174,15 +174,15 @@ extern bool isFloatDiffLessThan(float f0, float f1, float maxDiff);
     XCTAssertTrue([biquad1 isEqual:biquad]);
     
     //check copy
-    BiquadLL * biquad2 = [biquad1 copy];
+    Biquad * biquad2 = [biquad1 copy];
     XCTAssertTrue([biquad2 isEqual:biquad1]);
-    XCTAssertTrue([biquad2 isKindOfClass:[BiquadLL class]]);
+    XCTAssertTrue([biquad2 isKindOfClass:[Biquad class]]);
     
     //check archive: encoder, decoder
     NSData * d = [NSKeyedArchiver archivedDataWithRootObject:biquad2];
-    BiquadLL * biquad3 = [NSKeyedUnarchiver unarchiveObjectWithData:d];
+    Biquad * biquad3 = [NSKeyedUnarchiver unarchiveObjectWithData:d];
     
-    XCTAssertTrue([biquad3 isKindOfClass:[BiquadLL class]]);
+    XCTAssertTrue([biquad3 isKindOfClass:[Biquad class]]);
     XCTAssertTrue([biquad3 isEqual:biquad2]);
     
     biquad3.biquadParam.freq = 500;

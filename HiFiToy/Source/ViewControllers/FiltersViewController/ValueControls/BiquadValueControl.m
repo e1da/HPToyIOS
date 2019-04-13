@@ -69,7 +69,7 @@
 - (void) update {
     if (!_filters) return;
     
-    BiquadLL * b = [_filters getActiveBiquad];
+    Biquad * b = [_filters getActiveBiquad];
     
     if (b) {
         freqControl.numValue = b.biquadParam.freq;
@@ -83,7 +83,7 @@
 - (void) updateValueControl:(NumValueControl *)control {
     if (!_filters) return;
     
-    BiquadLL * biquad = [_filters getActiveBiquad];
+    Biquad * biquad = [_filters getActiveBiquad];
     if (!biquad) return;
     
     BiquadParam * bParam = biquad.biquadParam;
@@ -124,7 +124,7 @@
 - (void) didPressNext:(NumValueControl *) control {
     if (!_filters) return;
     
-    BiquadLL * biquad = [_filters getActiveBiquad];
+    Biquad * biquad = [_filters getActiveBiquad];
     if (!biquad) return;
     
     BiquadParam * bParam = biquad.biquadParam;
@@ -177,7 +177,7 @@
 - (void) didPressPrev:(NumValueControl *) control {
     if (!_filters) return;
     
-    BiquadLL * biquad = [_filters getActiveBiquad];
+    Biquad * biquad = [_filters getActiveBiquad];
     if (!biquad) return;
     
     BiquadParam * bParam = biquad.biquadParam;

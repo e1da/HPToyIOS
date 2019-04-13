@@ -281,7 +281,7 @@
     [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
 }
 
-- (void) showBiquadCoefSyncDialog:(BiquadLL *)biquad {
+- (void) showBiquadCoefSyncDialog:(Biquad *)biquad {
     UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
     
     if (_alertController) {

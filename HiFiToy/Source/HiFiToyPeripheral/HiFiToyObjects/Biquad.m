@@ -6,11 +6,11 @@
 //  Copyright © 2018 Kerosinn_OSX. All rights reserved.
 //
 
-#import "BiquadLL.h"
+#import "Biquad.h"
 #import "HiFiToyControl.h"
 #import "FloatUtility.h"
 
-@interface BiquadLL(){
+@interface Biquad(){
     int count;
 }
 @end
@@ -27,7 +27,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
 }
 
 
-@implementation BiquadLL
+@implementation Biquad
 
 /*==========================================================================================
  Init
@@ -46,12 +46,12 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
 }
 
 /*---------------------- create method -----------------------------*/
-+ (BiquadLL *)initWithAddress:(int)address {
-    return [BiquadLL initWithAddress0:address Address1:0];
++ (Biquad *)initWithAddress:(int)address {
+    return [Biquad initWithAddress0:address Address1:0];
 }
 
-+ (BiquadLL *)initWithAddress0:(int)address0 Address1:(int)address1 {
-    BiquadLL *currentInstance = [[BiquadLL alloc] init];
++ (Biquad *)initWithAddress0:(int)address0 Address1:(int)address1 {
+    Biquad *currentInstance = [[Biquad alloc] init];
     
     currentInstance.address0 = address0;
     currentInstance.address1 = address1;
@@ -82,7 +82,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     [encoder encodeFloat:b.minDbVol forKey:@"keyMinDbVol"];
 }
 
-- (BiquadLL *) initWithCoder:(NSCoder *)decoder {
+- (Biquad *) initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if (self) {
         _hiddenGui = [decoder decodeBoolForKey:@"keyHiddenGui"];
@@ -117,8 +117,8 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
 /*==========================================================================================
  NSCopying protocol implementation
  ==========================================================================================*/
--(BiquadLL *)copyWithZone:(NSZone *)zone {
-    BiquadLL * copyBiquad = [[[self class] allocWithZone:zone] init];
+-(Biquad *)copyWithZone:(NSZone *)zone {
+    Biquad * copyBiquad = [[[self class] allocWithZone:zone] init];
     
     copyBiquad.hiddenGui = self.hiddenGui;
     copyBiquad.enabled = self.enabled;
@@ -139,8 +139,8 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
  ==========================================================================================*/
 - (BOOL) isEqual: (id) object {
     
-    if ([object isKindOfClass:[BiquadLL class]]) {
-        BiquadLL * temp = object;
+    if ([object isKindOfClass:[Biquad class]]) {
+        Biquad * temp = object;
         BiquadParamBorder_t bTemp = temp.biquadParam.border;
         BiquadParamBorder_t b = self.biquadParam.border;
         

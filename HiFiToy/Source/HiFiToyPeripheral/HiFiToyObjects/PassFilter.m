@@ -25,8 +25,8 @@
 }
 
 /*---------------------- create method -----------------------------*/
-+ (PassFilter *)initWithBiquads:(NSArray<BiquadLL *> *)biquads withType:(PassFilterType_t)type {
-    BiquadLL * b;
++ (PassFilter *)initWithBiquads:(NSArray<Biquad *> *)biquads withType:(PassFilterType_t)type {
+    Biquad * b;
     uint16_t freq;
     
     type = (type == BIQUAD_LOWPASS) ? BIQUAD_LOWPASS : BIQUAD_HIGHPASS;

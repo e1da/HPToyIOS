@@ -194,7 +194,7 @@
         return;
     }
     
-    BiquadLL * b = [_filters getActiveBiquad];
+    Biquad * b = [_filters getActiveBiquad];
     
     if (b.type == BIQUAD_LOWPASS) {
         PassFilter * lp = [_filters getLowpass];
@@ -338,7 +338,7 @@
     if ((_filters.activeNullLP) || (_filters.activeNullLP)) return;
     
     CGPoint tap_point = [recognizer locationInView:recognizer.view];
-    BiquadLL * b = [_filters getActiveBiquad];
+    Biquad * b = [_filters getActiveBiquad];
     
     if ((!update) && ([self checkCrossParamFilters:b point_x:tap_point.x])) {
         if (b.type == BIQUAD_PARAMETRIC) {
@@ -414,7 +414,7 @@
     double currentScaleFactor = recognizer.scale / lastScaleFactor;
     lastScaleFactor = recognizer.scale;
     
-    BiquadLL * b = [_filters getActiveBiquad];
+    Biquad * b = [_filters getActiveBiquad];
     if (b.type != BIQUAD_PARAMETRIC) return;
     
     BiquadParam * p = b.biquadParam;
@@ -466,7 +466,7 @@
     for (int u = 0; u < [_filters getBiquadLength]; u++){
         [_filters nextActiveBiquadIndex];
         
-        BiquadLL * b = [_filters getActiveBiquad];
+        Biquad * b = [_filters getActiveBiquad];
         
         if ((b.type != BIQUAD_LOWPASS) && (b.type != BIQUAD_HIGHPASS) && (b.type != BIQUAD_PARAMETRIC) && (b.type != BIQUAD_ALLPASS)) {
             continue;
@@ -480,7 +480,7 @@
     _filters.activeBiquadIndex = tempIndex;
 }
 
-- (void) moved:(BiquadLL *)biquad translation:(CGPoint)translation {
+- (void) moved:(Biquad *)biquad translation:(CGPoint)translation {
     BiquadParam * bParam = biquad.biquadParam;
     if (( biquad.type == BIQUAD_OFF) || (( biquad.type == BIQUAD_USER))) return;
     
@@ -573,7 +573,7 @@
 }
 
 /* ----------------------- check cross Filters's freq ------------------------------*/
-- (BOOL) checkCrossParamFilters:(BiquadLL *)biquad
+- (BOOL) checkCrossParamFilters:(Biquad *)biquad
                         point_x: (float)point_x {
     if (abs((int)(point_x - [filtersView freqToPixel:biquad.biquadParam.freq])) < 15){
         return YES;
@@ -601,7 +601,7 @@
     return result;
 }
 
-- (BOOL) checkCross:(BiquadLL *)biquad tap_point:(CGPoint)tap_point {
+- (BOOL) checkCross:(Biquad *)biquad tap_point:(CGPoint)tap_point {
     
     if (biquad.type == BIQUAD_HIGHPASS) {
         int start_x = [filtersView freqToPixel:filtersView.minFreq];

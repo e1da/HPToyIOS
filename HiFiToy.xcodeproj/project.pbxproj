@@ -23,7 +23,6 @@
 		D30FF8712163AB4D007FA50D /* NumKeyboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF86E2163AB4D007FA50D /* NumKeyboardController.m */; };
 		D30FF87A21650820007FA50D /* FilterLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF87921650820007FA50D /* FilterLabel.m */; };
 		D30FF8802166A0D7007FA50D /* FilterTypeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF87F2166A0D7007FA50D /* FilterTypeControl.m */; };
-		D30FF883216A6B1A007FA50D /* BiquadLL.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF882216A6B1A007FA50D /* BiquadLL.m */; };
 		D30FF886216D49DE007FA50D /* FloatUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D30FF885216D49DE007FA50D /* FloatUtility.c */; };
 		D30FF889216E2F5C007FA50D /* Filters.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF888216E2F5C007FA50D /* Filters.m */; };
 		D30FF88C216FA8E8007FA50D /* PassFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF88B216FA8E8007FA50D /* PassFilter.m */; };
@@ -157,8 +156,6 @@
 		D3549293220869DB00063768 /* PassFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF88B216FA8E8007FA50D /* PassFilter.m */; };
 		D3549294220869DB00063768 /* BiquadParam.h in Sources */ = {isa = PBXBuildFile; fileRef = D301F07F217F479200E181C6 /* BiquadParam.h */; };
 		D3549295220869DB00063768 /* BiquadParam.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F080217F479200E181C6 /* BiquadParam.m */; };
-		D3549296220869DB00063768 /* BiquadLL.h in Sources */ = {isa = PBXBuildFile; fileRef = D30FF881216A6B1A007FA50D /* BiquadLL.h */; };
-		D3549297220869DB00063768 /* BiquadLL.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF882216A6B1A007FA50D /* BiquadLL.m */; };
 		D3549298220869DB00063768 /* Filters.h in Sources */ = {isa = PBXBuildFile; fileRef = D30FF887216E2F5C007FA50D /* Filters.h */; };
 		D3549299220869DB00063768 /* Filters.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF888216E2F5C007FA50D /* Filters.m */; };
 		D354929A220869DB00063768 /* Volume.h in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CC720BEB6FB00BDC1A0 /* Volume.h */; };
@@ -213,6 +210,8 @@
 		D3BBD4FE218DC20300FFDB86 /* DontShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = D3BBD4FD218DC20300FFDB86 /* DontShowView.m */; };
 		D3C11C3522084C2800FFA990 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3C11C3422084C2800FFA990 /* Assets.xcassets */; };
 		D3C11C4122084CDE00FFA990 /* HPToy.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D3C11C3F22084CDE00FFA990 /* HPToy.storyboard */; };
+		D3E297B022622AAA0096012B /* Biquad.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E297AF22622AA90096012B /* Biquad.m */; };
+		D3E297B122622AD00096012B /* Biquad.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E297AF22622AA90096012B /* Biquad.m */; };
 		D3E97AB12157F08200C98402 /* EnergyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E97AB02157F08200C98402 /* EnergyViewController.m */; };
 		D3F63295214C172A00340314 /* HiFiToyIcon87.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F63288214C172900340314 /* HiFiToyIcon87.png */; };
 		D3F63296214C172A00340314 /* HiFiToyIcon120.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F63289214C172900340314 /* HiFiToyIcon120.png */; };
@@ -264,8 +263,6 @@
 		D30FF87921650820007FA50D /* FilterLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterLabel.m; sourceTree = "<group>"; };
 		D30FF87E2166A0D7007FA50D /* FilterTypeControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilterTypeControl.h; sourceTree = "<group>"; };
 		D30FF87F2166A0D7007FA50D /* FilterTypeControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterTypeControl.m; sourceTree = "<group>"; };
-		D30FF881216A6B1A007FA50D /* BiquadLL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BiquadLL.h; sourceTree = "<group>"; };
-		D30FF882216A6B1A007FA50D /* BiquadLL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadLL.m; sourceTree = "<group>"; };
 		D30FF884216D49DE007FA50D /* FloatUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FloatUtility.h; path = HiFiToy/Source/HiFiToyPeripheral/NumberUtility/FloatUtility.h; sourceTree = SOURCE_ROOT; };
 		D30FF885216D49DE007FA50D /* FloatUtility.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = FloatUtility.c; sourceTree = "<group>"; };
 		D30FF887216E2F5C007FA50D /* Filters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Filters.h; sourceTree = "<group>"; };
@@ -382,6 +379,8 @@
 		D3C11C3422084C2800FFA990 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D3C11C3922084C2800FFA990 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D3C11C4022084CDE00FFA990 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/HPToy.storyboard; sourceTree = "<group>"; };
+		D3E297AE22622AA90096012B /* Biquad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Biquad.h; sourceTree = "<group>"; };
+		D3E297AF22622AA90096012B /* Biquad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Biquad.m; sourceTree = "<group>"; };
 		D3E97AAF2157F08200C98402 /* EnergyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EnergyViewController.h; sourceTree = "<group>"; };
 		D3E97AB02157F08200C98402 /* EnergyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EnergyViewController.m; sourceTree = "<group>"; };
 		D3F63288214C172900340314 /* HiFiToyIcon87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HiFiToyIcon87.png; sourceTree = "<group>"; };
@@ -762,12 +761,12 @@
 		D39C3CBD20BEB65A00BDC1A0 /* HiFiToyObjects */ = {
 			isa = PBXGroup;
 			children = (
+				D3E297AE22622AA90096012B /* Biquad.h */,
+				D3E297AF22622AA90096012B /* Biquad.m */,
 				D30FF88A216FA8E8007FA50D /* PassFilter.h */,
 				D30FF88B216FA8E8007FA50D /* PassFilter.m */,
 				D301F07F217F479200E181C6 /* BiquadParam.h */,
 				D301F080217F479200E181C6 /* BiquadParam.m */,
-				D30FF881216A6B1A007FA50D /* BiquadLL.h */,
-				D30FF882216A6B1A007FA50D /* BiquadLL.m */,
 				D30FF887216E2F5C007FA50D /* Filters.h */,
 				D30FF888216E2F5C007FA50D /* Filters.m */,
 				D39C3CC720BEB6FB00BDC1A0 /* Volume.h */,
@@ -1051,10 +1050,10 @@
 				D39C3CD920BEB8C500BDC1A0 /* XmlData.m in Sources */,
 				D39C3CDA20BEB8C500BDC1A0 /* XmlParserWrapper.m in Sources */,
 				D301F091218246EB00E181C6 /* BiquadValueControl.m in Sources */,
-				D30FF883216A6B1A007FA50D /* BiquadLL.m in Sources */,
 				D33A258B20CA8A30008A94EF /* NavigationController.m in Sources */,
 				D39C3CE220BEDD9D00BDC1A0 /* Number523.c in Sources */,
 				D33A254920C15AF7008A94EF /* DrcCoef.m in Sources */,
+				D3E297B022622AAA0096012B /* Biquad.m in Sources */,
 				D33A255220C5728E008A94EF /* DrcTimeConst.m in Sources */,
 				D39C3CC920BEB6FB00BDC1A0 /* Volume.m in Sources */,
 				D30FF87A21650820007FA50D /* FilterLabel.m in Sources */,
@@ -1096,6 +1095,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3E297B122622AD00096012B /* Biquad.m in Sources */,
 				D38A3C6222200C9E00319EDB /* AdvertiseViewController.h in Sources */,
 				D38A3C6322200C9E00319EDB /* AdvertiseViewController.m in Sources */,
 				D32483C922146B3500028514 /* MergeToolCell.h in Sources */,
@@ -1174,8 +1174,6 @@
 				D3549293220869DB00063768 /* PassFilter.m in Sources */,
 				D3549294220869DB00063768 /* BiquadParam.h in Sources */,
 				D3549295220869DB00063768 /* BiquadParam.m in Sources */,
-				D3549296220869DB00063768 /* BiquadLL.h in Sources */,
-				D3549297220869DB00063768 /* BiquadLL.m in Sources */,
 				D3549298220869DB00063768 /* Filters.h in Sources */,
 				D307EB172215902300ACE7A3 /* MergeNavigationViewCell.m in Sources */,
 				D3549299220869DB00063768 /* Filters.m in Sources */,
