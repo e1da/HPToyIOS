@@ -11,11 +11,18 @@
 -(02/17/19) check import preset from xml features 
 +(02/17/19) solve bug with preset list synchronisation
 
--(02/20/19) after 1 minus turn on clip led in app menu
+-(02/20/19) after 1 minute turn on clip led in app menu
+
 
 +(02/22/19) rename import xml preset "Add preset_name" -> " 'Preset_name' preset was successfully added."
+
 +(02/22/19) update preset manager view after import preset from xml
 
+
 -(040619)on xover ui bug. shadow is not correct in some case (see orientech!)
+
+-(041319)need move biquad coef to biquadParam
+
+-(041319)replace getBinary to getParamBuffs(see android app)
 
 

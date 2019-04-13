@@ -24,6 +24,44 @@
 @implementation Filters
 
 /*==========================================================================================
+ Init
+ ==========================================================================================*/
+-(id) init {
+    self = [super init];
+    if (self) {
+        for (int i = 0; i < 7; i++) {
+            biquads[i] = [[Biquad alloc] init];
+        }
+        self.activeBiquadIndex = 0;
+    }
+    return self;
+}
+
+
++ (Filters *) initDefaultWithAddr0:(int)addr0 withAddr1:(int)addr1 {
+    Filters * instance = [[Filters alloc] init];
+    
+    instance.address0 = addr0;
+    instance.address1 = addr1;
+    
+    for (int i = 0; i < 7; i++) {
+        Biquad * biquad = [Biquad initWithAddress0:addr0 + i
+                                          Address1:(addr1) ? (addr1 + i) : 0];
+        
+        [biquad.biquadParam setBorderMaxFreq:20000 minFreq:20];
+        
+        biquad.type     = BIQUAD_PARAMETRIC;
+        biquad.biquadParam.freq     = 100 * (i + 1);
+        biquad.biquadParam.qFac     = 1.41f;
+        biquad.biquadParam.dbVolume = 0.0f;
+        
+        [instance setBiquad:biquad forIndex:i];
+    }
+    
+    return instance;
+}
+
+/*==========================================================================================
  NSCoding protocol implementation
  ==========================================================================================*/
 - (void) encodeWithCoder:(NSCoder *)encoder {
@@ -55,8 +93,7 @@
 /*==========================================================================================
  NSCopying protocol implementation
  ==========================================================================================*/
--(Filters *)copyWithZone:(NSZone *)zone
-{
+-(Filters *)copyWithZone:(NSZone *)zone {
     Filters * copyFilters = [[[self class] allocWithZone:zone] init];
     
     copyFilters.address0 = self.address0;
@@ -73,8 +110,7 @@
 /*==========================================================================================
  isEqual implementation
  ==========================================================================================*/
-- (BOOL) isEqual: (id) object
-{
+- (BOOL) isEqual: (id) object {
     if ((object) && ([object class] == [self class])) {
         Filters * temp = object;
         
@@ -94,42 +130,6 @@
         return YES;
     }
     return NO;
-}
-
-/*============================= Init and create methods ===================================*/
--(id) init {
-    self = [super init];
-    if (self) {
-        for (int i = 0; i < 7; i++) {
-            biquads[i] = [[Biquad alloc] init];
-        }
-        self.activeBiquadIndex = 0;
-    }
-    return self;
-}
-
-
-+ (Filters *) initDefaultWithAddr0:(int)addr0 withAddr1:(int)addr1 {
-    Filters * instance = [[Filters alloc] init];
-    
-    instance.address0 = addr0;
-    instance.address1 = addr1;
-    
-    for (int i = 0; i < 7; i++) {
-        Biquad * biquad = [Biquad initWithAddress0:addr0 + i
-                                              Address1:(addr1) ? (addr1 + i) : 0];
-        
-        [biquad.biquadParam setBorderMaxFreq:20000 minFreq:20];
-        
-        biquad.type     = BIQUAD_PARAMETRIC;
-        biquad.biquadParam.freq     = 100 * (i + 1);
-        biquad.biquadParam.qFac     = 1.41f;
-        biquad.biquadParam.dbVolume = 0.0f;
-        
-        [instance setBiquad:biquad forIndex:i];
-    }
-    
-    return instance;
 }
 
 - (uint8_t)address {

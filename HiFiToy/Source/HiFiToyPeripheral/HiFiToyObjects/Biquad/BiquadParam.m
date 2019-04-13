@@ -10,10 +10,6 @@
 #import "HiFiToyObject.h"
 #import "FloatUtility.h"
 
-bool isCoefEqual(float c0, float c1) {
-    return isFloatEqualWithAccuracy(c0, c1, 16);
-}
-
 @implementation BiquadParam
 
 - (id) init {
@@ -89,7 +85,7 @@ bool isCoefEqual(float c0, float c1) {
                 
             case BIQUAD_BANDPASS:
                 w0 = acos(coef.a1 / 2 * (1 + coef.b0 / (1 - coef.b0)));
-                _freq = w0 * (float)FS / (2 * M_PI);
+                _freq = round(w0 * (float)FS / (2 * M_PI));
                 //TODO set import bandwidth
                 break;
                 

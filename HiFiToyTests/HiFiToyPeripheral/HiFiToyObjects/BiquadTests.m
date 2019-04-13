@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "Biquad.h"
+#import "FloatUtility.h"
 
 @interface BiquadTests : XCTestCase {
     Biquad * b0;
@@ -23,6 +24,27 @@
     b0.type = BIQUAD_PARAMETRIC;
     b1 = [b0 copy];
     
+}
+
+- (void) testParamToCoef {
+    b0.type = BIQUAD_PARAMETRIC;
+    b0.biquadParam.freq = 45;
+    b0.biquadParam.qFac = 1.41f;
+    b0.biquadParam.dbVolume = -3.0f;
+    
+    XCTAssertTrue(isCoefEqual(b0.coef.b0, 0.999637926f));
+    XCTAssertTrue(isCoefEqual(b0.coef.b1, -1.997511844f));
+    XCTAssertTrue(isCoefEqual(b0.coef.b2, 0.997882581f));
+    XCTAssertTrue(isCoefEqual(b0.coef.a1, 1.997511844f));
+    XCTAssertTrue(isCoefEqual(b0.coef.a2, -0.997520508f));
+    
+    BiquadCoef_t coefParam = {0.999637926f, -1.997511844f, 0.997882581f, 1.997511844f, -0.997520508f};
+    b0.coef = coefParam;
+    
+    XCTAssertEqual(b0.type, BIQUAD_PARAMETRIC);
+    XCTAssertEqual(b0.biquadParam.freq, 45);
+    XCTAssertTrue(isFloatDiffLessThan(b0.biquadParam.qFac, 1.41f, 0.01f));
+    XCTAssertTrue(isFloatDiffLessThan(b0.biquadParam.dbVolume, -3.0f, 0.01f));
 }
 
 - (void) testCopy {
@@ -65,5 +87,17 @@
     
 }
 
+- (void) testSerialization {
+    b0.type = BIQUAD_PARAMETRIC;
+    b0.biquadParam.freq = 60;
+    b0.biquadParam.qFac = 2.35f;
+    b0.biquadParam.dbVolume = 3.0f;
+    
+    //check archive: encoder, decoder
+    NSData * d = [NSKeyedArchiver archivedDataWithRootObject:b0];
+    b1 = [NSKeyedUnarchiver unarchiveObjectWithData:d];
+    
+    XCTAssertEqualObjects(b0, b1);
+}
 
 @end

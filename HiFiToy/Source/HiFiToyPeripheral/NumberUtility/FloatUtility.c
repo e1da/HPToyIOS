@@ -29,3 +29,6 @@ bool isFloatDiffLessThan(float f0, float f1, float maxDiff) {
     return fabsf(f0 - f1) < maxDiff;
 }
 
+bool isCoefEqual(float c0, float c1) {
+    return isFloatEqualWithAccuracy(c0, c1, 16);
+}

@@ -17,4 +17,6 @@ extern bool isFloatNull(float f);
 
 extern bool isFloatDiffLessThan(float f0, float f1, float maxDiff);
 
+extern bool isCoefEqual(float c0, float c1);
+
 #endif /* FloatUtility_h */

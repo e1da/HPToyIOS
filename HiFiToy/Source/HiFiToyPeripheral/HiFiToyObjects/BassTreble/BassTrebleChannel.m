@@ -56,8 +56,7 @@
 /*==========================================================================================
  NSCopying protocol implementation
  ==========================================================================================*/
--(BassTrebleChannel *)copyWithZone:(NSZone *)zone
-{
+-(BassTrebleChannel *)copyWithZone:(NSZone *)zone {
     BassTrebleChannel * copyBassTrebleChannel = [[[self class] allocWithZone:zone] init];
     
     copyBassTrebleChannel.channel      = self.channel;
@@ -78,8 +77,7 @@
 /*==========================================================================================
  isEqual implementation
  ==========================================================================================*/
-- (BOOL) isEqual: (id) object
-{
+- (BOOL) isEqual: (id) object {
     if ([object class] == [self class]){
         BassTrebleChannel * temp = object;
         if ((self.channel == temp.channel) &&
@@ -100,8 +98,7 @@
                               BassFreq:(BassFreq_t)bassFreq
                                 BassDb:(float)bassDb
                             TrebleFreq:(TrebleFreq_t)trebleFreq
-                              TrebleDb:(float)trebleDb
-{
+                              TrebleDb:(float)trebleDb {
     return [BassTrebleChannel initWithChannel:channel
                                      BassFreq:bassFreq BassDb:bassDb
                                    TrebleFreq:trebleFreq TrebleDb:trebleDb
@@ -117,8 +114,7 @@
                              maxBassDb:(int)maxBassDb
                              minBassDb:(int)minBassDb
                            maxTrebleDb:(int)maxTrebleDb
-                           minTrebleDb:(int)minTrebleDb
-{
+                           minTrebleDb:(int)minTrebleDb {
     BassTrebleChannel *currentInstance = [[BassTrebleChannel alloc] init];
     
     currentInstance.channel = channel;
@@ -147,8 +143,7 @@
 
 
 //setters/getters
-- (void) setBassDb:(int)db
-{
+- (void) setBassDb:(int)db {
     //check border
     if (db < self.minBassDb) db = self.minBassDb;
     if (db > self.maxBassDb) db = self.maxBassDb;
@@ -156,8 +151,7 @@
     _bassDb = db;
 }
 
-- (void) setTrebleDb:(int)db
-{
+- (void) setTrebleDb:(int)db {
     //check border
     if (db < self.minTrebleDb) db = self.minTrebleDb;
     if (db > self.maxTrebleDb) db = self.maxTrebleDb;
@@ -165,26 +159,22 @@
     _trebleDb = db;
 }
 
-- (float) getBassDbPercent
-{
+- (float) getBassDbPercent {
     return (float)(_bassDb - _minBassDb) / (_maxBassDb - _minBassDb);
 }
 
-- (void) setBassDbPercent:(float)percent
-{
+- (void) setBassDbPercent:(float)percent {
     if (percent > 1.0) percent = 1.0;
     if (percent < 0.0) percent = 0.0;
     
     [self setBassDb:percent * (_maxBassDb - _minBassDb) + _minBassDb];
 }
 
-- (float) getTrebleDbPercent
-{
+- (float) getTrebleDbPercent {
     return (float)(_trebleDb - _minTrebleDb) / (_maxTrebleDb - _minTrebleDb);
 }
 
-- (void) setTrebleDbPercent:(float)percent
-{
+- (void) setTrebleDbPercent:(float)percent {
     if (percent > 1.0) percent = 1.0;
     if (percent < 0.0) percent = 0.0;
     
@@ -192,7 +182,7 @@
 }
 
 /*---------------------------- XML export/import ----------------------------------*/
--(XmlData *) toXmlData{
+-(XmlData *) toXmlData {
     XmlData * xmlData = [[XmlData alloc] init];
     [xmlData addElementWithName:@"BassFreq" withIntValue:self.bassFreq];
     [xmlData addElementWithName:@"BassDb" withIntValue:self.bassDb];

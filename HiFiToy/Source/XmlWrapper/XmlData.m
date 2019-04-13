@@ -126,7 +126,7 @@
                  withAttrib:(NSDictionary *)attrib
                   withLevel:(int)level {
     [self addElementWithName:name
-             withStringValue:[NSString stringWithFormat:@"%f", value]
+             withStringValue:[NSString stringWithFormat:@"%0.9f", value]
                   withAttrib:attrib
                    withLevel:level];
 }

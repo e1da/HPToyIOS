@@ -15,18 +15,6 @@
 }
 @end
 
-bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
-    if ((isFloatEqualWithAccuracy(arg0.a1, arg1.a1, 16)) &&
-         (isFloatEqualWithAccuracy(arg0.a2, arg1.a2, 16)) &&
-          (isFloatEqualWithAccuracy(arg0.b0, arg1.b0, 16)) &&
-           (isFloatEqualWithAccuracy(arg0.b1, arg1.b1, 16)) &&
-            (isFloatEqualWithAccuracy(arg0.b2, arg1.b2, 16)) ) {
-                return true;
-            }
-    return false;
-}
-
-
 @implementation Biquad
 
 /*==========================================================================================
@@ -137,9 +125,20 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
 /*==========================================================================================
  isEqual implementation
  ==========================================================================================*/
+- (BOOL) isBiquadCoef:(BiquadCoef_t)arg0 equalCoef:(BiquadCoef_t)arg1 {
+    if ((isFloatDiffLessThan(arg0.a1, arg1.a1, 0.01f)) &&
+        (isFloatDiffLessThan(arg0.a2, arg1.a2, 0.01f)) &&
+        (isFloatDiffLessThan(arg0.b0, arg1.b0, 0.01f)) &&
+        (isFloatDiffLessThan(arg0.b1, arg1.b1, 0.01f)) &&
+        (isFloatDiffLessThan(arg0.b2, arg1.b2, 0.01f)) ) {
+        return YES;
+    }
+    return NO;
+}
+
 - (BOOL) isEqual: (id) object {
     
-    if ([object isKindOfClass:[Biquad class]]) {
+    if ( (object) && ([object isKindOfClass:[Biquad class]]) ) {
         Biquad * temp = object;
         BiquadParamBorder_t bTemp = temp.biquadParam.border;
         BiquadParamBorder_t b = self.biquadParam.border;
@@ -148,14 +147,18 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
             (self.address1 == temp.address1) &&
             (self.order == temp.order) &&
             (self.type == temp.type) &&
-            (isBiquadCoefEqual(self.coef, temp.coef)) &&
+            ([self isBiquadCoef:self.coef equalCoef:temp.coef]) &&
+            
+            (self.biquadParam.freq == temp.biquadParam.freq) &&
+            (isFloatDiffLessThan(self.biquadParam.qFac, temp.biquadParam.qFac, 0.02f)) &&
+            (isFloatDiffLessThan(self.biquadParam.dbVolume, temp.biquadParam.dbVolume, 0.02f)) &&
             
             (b.maxFreq == b.maxFreq) &&
             (b.minFreq == b.minFreq) &&
-            (isFloatDiffLessThan(b.maxQ, bTemp.maxQ, 0.01f)) &&
-            (isFloatDiffLessThan(b.minQ, bTemp.minQ, 0.01f)) &&
-            (isFloatDiffLessThan(b.maxDbVol, bTemp.maxDbVol, 0.01f)) &&
-            (isFloatDiffLessThan(b.minDbVol, bTemp.minDbVol, 0.01f)) ) {
+            (isFloatDiffLessThan(b.maxQ, bTemp.maxQ, 0.02f)) &&
+            (isFloatDiffLessThan(b.minQ, bTemp.minQ, 0.02f)) &&
+            (isFloatDiffLessThan(b.maxDbVol, bTemp.maxDbVol, 0.02f)) &&
+            (isFloatDiffLessThan(b.minDbVol, bTemp.minDbVol, 0.02f)) ) {
             return YES;
         }
     }
@@ -392,8 +395,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
-- (void) sendWithResponse:(BOOL)response
-{
+- (void) sendWithResponse:(BOOL)response {
     if (self.type == BIQUAD_USER) {
         [self sendCoefWithResponse:response];
     } else {
@@ -405,8 +407,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
  Get Binary Operations
  ==========================================================================*/
 //get binary for save to dsp
-- (NSData *) getBinary
-{
+- (NSData *) getBinary {
     
     DataBufHeader_t dataBufHeader;
     dataBufHeader.addr = self.address0;
@@ -428,7 +429,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
     return data;
 }
 
-- (BOOL) importData:(NSData *)data{
+- (BOOL) importData:(NSData *)data {
     HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
     DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
     
@@ -453,7 +454,7 @@ bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1) {
 }
 
 /*---------------------------- XML export/import ----------------------------------*/
--(XmlData *) toXmlData{
+-(XmlData *) toXmlData {
     XmlData * xmlData = [[XmlData alloc] init];
     BiquadParamBorder_t b = _biquadParam.border;
     

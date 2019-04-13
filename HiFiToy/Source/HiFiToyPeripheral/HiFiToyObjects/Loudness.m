@@ -11,6 +11,7 @@
 #import "Number923.h"
 #import "Number523.h"
 #import "HiFiToyControl.h"
+#import "FloatUtility.h"
 
 @interface Loudness(){
     int count;
@@ -22,8 +23,7 @@
 /*==========================================================================================
  Init
  ==========================================================================================*/
-- (id) init
-{
+- (id) init {
     self = [super init];
     if (self){
         _LG = -0.5;
@@ -43,10 +43,22 @@
     return self;
 }
 
++ (Loudness *)initWithOrder:(Biquad *)biquad LG:(float)LG LO:(float)LO
+                       Gain:(float)gain Offset:(float)offset {
+    Loudness *currentInstance = [[Loudness alloc] init];
+    
+    currentInstance.biquad = biquad;
+    currentInstance.LG = LG;
+    currentInstance.LO = LO;
+    currentInstance.gain = gain;
+    currentInstance.offset = offset;
+    
+    return currentInstance;
+}
+
 /*==========================================================================================
  NSCoding protocol implementation
  ==========================================================================================*/
-
 - (void) encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:self.biquad forKey:@"keyBiquad"];
     [encoder encodeFloat:self.LG forKey:@"keyLG"];
@@ -70,8 +82,7 @@
 /*==========================================================================================
  NSCopying protocol implementation
  ==========================================================================================*/
--(Loudness *)copyWithZone:(NSZone *)zone
-{
+-(Loudness *)copyWithZone:(NSZone *)zone {
     Loudness * copyLoudness= [[[self class] allocWithZone:zone] init];
     
     //copyFilter.numberBiquads = self.numberBiquads;
@@ -87,38 +98,22 @@
 /*==========================================================================================
  isEqual implementation
  ==========================================================================================*/
-- (BOOL) isEqual: (id) object
-{
+- (BOOL) isEqual: (id) object {
     if ([object class] == [self class]){
         Loudness * temp = object;
         
-        if (([self.biquad isEqual:temp.biquad] == NO) ||
-            (fabs(self.LG - temp.LG) > 0.02f) ||
-            (fabs(self.LO - temp.LO) > 0.02f) ||
-            (fabs(self.gain - temp.gain) > 0.02f) ||
-            (fabs(self.offset - temp.offset) > 0.02f)) {
+        if ((![self.biquad isEqual:temp.biquad]) ||
+            (!isFloatDiffLessThan(self.LG, temp.LG, 0.02f)) ||
+            (!isFloatDiffLessThan(self.LO, temp.LO, 0.02f)) ||
+            (!isFloatDiffLessThan(self.gain, temp.gain, 0.02f)) ||
+            (!isFloatDiffLessThan(self.offset, temp.offset, 0.02f)) ) {
             
             return NO;
         }
         
-        
         return YES;
     }
     return NO;
-}
-
-+ (Loudness *)initWithOrder:(Biquad *)biquad LG:(float)LG LO:(float)LO
-                       Gain:(float)gain Offset:(float)offset
-{
-    Loudness *currentInstance = [[Loudness alloc] init];
-    
-    currentInstance.biquad = biquad;
-    currentInstance.LG = LG;
-    currentInstance.LO = LO;
-    currentInstance.gain = gain;
-    currentInstance.offset = offset;
-    
-    return currentInstance;
 }
 
 - (uint8_t) address {
@@ -126,19 +121,16 @@
 }
 
 //info string
--(NSString *)getFreqInfo
-{
+-(NSString *)getFreqInfo {
     return [NSString stringWithFormat:@"%dHz", _biquad.biquadParam.freq];
 }
 
--(NSString *)getInfo
-{
+-(NSString *)getInfo {
     return [NSString stringWithFormat:@"%d%%", (int)(self.gain * 100)];
 }
 
 //send to dsp
-- (void) sendWithResponse:(BOOL)response
-{
+- (void) sendWithResponse:(BOOL)response {
     NSData *data = [self getMainBinary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
@@ -164,16 +156,14 @@
 }
 
 //get binary for save to dsp
-- (NSData *) getBinary
-{
+- (NSData *) getBinary {
     NSMutableData *data = [self getMainBinary];
     [data appendData:[self.biquad getBinary]];
     
     return data;
 }
 
-- (BOOL) importData:(NSData *)data
-{
+- (BOOL) importData:(NSData *)data {
     if ([self.biquad importData:data] == NO){
         return NO;
     }
@@ -200,7 +190,7 @@
 }
 
 /*---------------------------- XML export/import ----------------------------------*/
--(XmlData *) toXmlData{
+-(XmlData *) toXmlData {
     XmlData * xmlData = [[XmlData alloc] init];
     [xmlData addElementWithName:@"LG" withDoubleValue:self.LG];
     [xmlData addElementWithName:@"LO" withDoubleValue:self.LO];

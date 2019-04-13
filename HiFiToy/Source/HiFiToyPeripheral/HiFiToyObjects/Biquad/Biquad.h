@@ -30,7 +30,6 @@ typedef struct {
 } BiquadCoefPacket_t;           //size = 22
 #pragma options align=reset
 
-extern bool isBiquadCoefEqual(BiquadCoef_t arg0, BiquadCoef_t arg1);
 
 @interface Biquad : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate, BiquadParamDelegate>
 

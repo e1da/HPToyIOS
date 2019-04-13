@@ -53,7 +53,6 @@ typedef struct {
 } BiquadParam_t;
 #pragma options align=reset
 
-extern bool isCoefEqual(float c0, float c1);
 
 @class BiquadParam;
 
