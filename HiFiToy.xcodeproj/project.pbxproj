@@ -219,6 +219,7 @@
 		D3E297C222637F890096012B /* DrcTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E297C122637F890096012B /* DrcTests.m */; };
 		D3E297C5226381620096012B /* IntegerUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D3E297C4226381620096012B /* IntegerUtility.c */; };
 		D3E297C62263820A0096012B /* IntegerUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D3E297C4226381620096012B /* IntegerUtility.c */; };
+		D3E297C922638A260096012B /* HiFiToyPresetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E297C822638A260096012B /* HiFiToyPresetTests.m */; };
 		D3E97AB12157F08200C98402 /* EnergyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E97AB02157F08200C98402 /* EnergyViewController.m */; };
 		D3F63295214C172A00340314 /* HiFiToyIcon87.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F63288214C172900340314 /* HiFiToyIcon87.png */; };
 		D3F63296214C172A00340314 /* HiFiToyIcon120.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F63289214C172900340314 /* HiFiToyIcon120.png */; };
@@ -395,6 +396,7 @@
 		D3E297C122637F890096012B /* DrcTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcTests.m; sourceTree = "<group>"; };
 		D3E297C3226381620096012B /* IntegerUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IntegerUtility.h; sourceTree = "<group>"; };
 		D3E297C4226381620096012B /* IntegerUtility.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = IntegerUtility.c; sourceTree = "<group>"; };
+		D3E297C822638A260096012B /* HiFiToyPresetTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HiFiToyPresetTests.m; sourceTree = "<group>"; };
 		D3E97AAF2157F08200C98402 /* EnergyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EnergyViewController.h; sourceTree = "<group>"; };
 		D3E97AB02157F08200C98402 /* EnergyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EnergyViewController.m; sourceTree = "<group>"; };
 		D3F63288214C172900340314 /* HiFiToyIcon87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HiFiToyIcon87.png; sourceTree = "<group>"; };
@@ -916,6 +918,7 @@
 		D3E297C7226389150096012B /* HiFiToyDevice */ = {
 			isa = PBXGroup;
 			children = (
+				D3E297C822638A260096012B /* HiFiToyPresetTests.m */,
 			);
 			path = HiFiToyDevice;
 			sourceTree = "<group>";
@@ -1161,6 +1164,7 @@
 				D35492B02208D39C00063768 /* FloatUtility.c in Sources */,
 				D3E297BB226248DE0096012B /* FiltersTests.m in Sources */,
 				D35AC34B226211470034C666 /* VolumeTests.m in Sources */,
+				D3E297C922638A260096012B /* HiFiToyPresetTests.m in Sources */,
 				D3E297C022624E6A0096012B /* DrcTimeConstTests.m in Sources */,
 				D35AC349226100470034C666 /* BassTrebleTests.m in Sources */,
 			);
