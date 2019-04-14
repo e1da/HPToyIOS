@@ -49,6 +49,14 @@
     return (pixel - d_coef) / c_coef;
 }
 
+- (float)dbToAmpl:(float)db {
+    return pow(10, (db / 20));
+}
+
+- (float)amplToDb:(float)ampl {
+    return 20 * log10(ampl);
+}
+
 - (int) getWidth
 {
     return width;
@@ -251,118 +259,95 @@
 
 }
 
-- (void) drawAfr:(CGContextRef)context withPoints:(NSMutableData *)points withComplement:(FillViewComplement_t) complement {
-    if ((!points) || (points.length < 2 * sizeof(CGPoint)) ) return;
+- (void) drawAfrShadow:(CGContextRef)context {
+    NSMutableData * points = [[NSMutableData alloc] init];
+    
+    for (int i = border_left; i <= width - border_right; i++) {
+        double ampl = [self.filters getAFR:[self pixelToFreq:i] ];
+        double db = [self amplToDb:ampl];
+        if (db < MIN_VIEW_DB) db = MIN_VIEW_DB;
+        if (db > MAX_VIEW_DB) db = MAX_VIEW_DB;
+        
+        CGPoint p = CGPointMake(i, [self dbToPixel:db]);
+        [points appendBytes:&p length:sizeof(CGPoint)];
+    }
+    
+    //add 2 points [0,0] [fmax, 0]
+    CGPoint lastP = CGPointMake(width - border_right, [self dbToPixel:0]);
+    CGPoint firstP = CGPointMake(border_left, [self dbToPixel:0]);
+    [points appendBytes:&lastP length:sizeof(CGPoint)];
+    [points appendBytes:&firstP length:sizeof(CGPoint)];
     
     unsigned long size = points.length / sizeof(CGPoint);
     CGPoint * p = (CGPoint *)points.bytes;
     
-    CGPoint firstPoint = p[0];
-    firstPoint.y = [self dbToPixel:0];
-    CGPoint lastPoint = p[size - 1];
-    lastPoint.y = [self dbToPixel:0];
-    
-    [points appendBytes:&lastPoint length:sizeof(CGPoint)];
-    [points appendBytes:&firstPoint length:sizeof(CGPoint)];
-    //update p pointer after append new points
-    p = (CGPoint *)points.bytes;
-    
-    UIColor * c = [UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:0.1];
-    CGContextSetFillColorWithColor(context, [c CGColor]);
-    
-    CGContextAddLines(context, p, size + 2);
-    CGContextDrawPath(context, kCGPathFill);
-    
-    if ((complement == LEFT_COMPLEMENT) || (complement == BOTH_COMPLEMENT)) {
-        CGRect rect = CGRectMake([self freqToPixel:self.minFreq], [self dbToPixel:0],
-                                 p[0].x - [self freqToPixel:self.minFreq], [self dbToPixel:-30] - [self dbToPixel:0]);
-        
-        CGContextAddRect(context, rect);
-        CGContextDrawPath(context, kCGPathFill);
-    }
-    if ((complement == RIGHT_COMPLEMENT) || (complement == BOTH_COMPLEMENT)) {
-        CGPoint lP = p[size - 1];
-        CGRect rect = CGRectMake([self freqToPixel:self.maxFreq], [self dbToPixel:0],
-                                 lP.x - [self freqToPixel:self.maxFreq], [self dbToPixel:-30] - [self dbToPixel:0]);
-        
-        CGContextAddRect(context, rect);
-        CGContextDrawPath(context, kCGPathFill);
-    }
-    
-    
-    //draw stroke
+    UIColor * shadowColor = [UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:0.1];
+    CGContextSetFillColorWithColor(context, [shadowColor CGColor]);
     CGContextAddLines(context, p, size);
-    CGContextDrawPath(context, kCGPathStroke);
-    
-    
+    CGContextDrawPath(context, kCGPathFill);
     
 }
 
-- (void) drawFilters:(CGContextRef)context
-{
+- (void) drawFilters:(CGContextRef)context {
+    [self drawAfrShadow:context];
+    
     int highpass_freq_pix = 0;
     int lowpass_freq_pix = 0;
     
-    CGContextSetLineWidth(context, 2.0);
-    
     BiquadType_t type = [[_filters getActiveBiquad] type];
+    if (type == BIQUAD_HIGHPASS) highpass_freq_pix = [self getHighPassBorderPix];
+    if (type == BIQUAD_LOWPASS) lowpass_freq_pix = [self getLowPassBorderPix];
     
-    if (type == BIQUAD_HIGHPASS) {
-        CGContextSetStrokeColorWithColor(context, [[UIColor orangeColor] CGColor]);
-        
-        highpass_freq_pix = [self getHighPassBorderPix];
-
-    } else {
-        CGContextSetStrokeColorWithColor(context, [[UIColor lightGrayColor] CGColor]);
-        
-        if (type == BIQUAD_LOWPASS){
-            lowpass_freq_pix = [self getLowPassBorderPix];
-        }
-    }
-
     //get points
     NSMutableData * points = [[NSMutableData alloc] init];
+    NSMutableData * activePoints = [[NSMutableData alloc] init];
     
     for (int i = border_left; i <= width - border_right; i++) {
-        double y = [self.filters getAFR:[self pixelToFreq:i] ];
+        double ampl = [self.filters getAFR:[self pixelToFreq:i] ];
+        double db = [self amplToDb:ampl];
+        if ( (db < MIN_VIEW_DB) || (db > MAX_VIEW_DB) ) continue;
         
-        if ((i == highpass_freq_pix) && (type == BIQUAD_HIGHPASS)){
-            CGPoint p = CGPointMake(i, [ self dbToPixel:(20.0f * log10(y)) ]);
-            [points appendBytes:&p length:sizeof(CGPoint)];
-            [self drawAfr:context withPoints:points withComplement:LEFT_COMPLEMENT];
-            points = [[NSMutableData alloc] init];
-            
-            CGContextSetStrokeColorWithColor(context, [[UIColor lightGrayColor] CGColor]);
-        }
-        if ((i == lowpass_freq_pix) && (type == BIQUAD_LOWPASS)){
-            CGPoint p = CGPointMake(i, [ self dbToPixel:(20.0f * log10(y)) ]);
-            [points appendBytes:&p length:sizeof(CGPoint)];
-            [self drawAfr:context withPoints:points withComplement:LEFT_COMPLEMENT];
-            points = [[NSMutableData alloc] init];
-            
-            CGContextSetStrokeColorWithColor(context, [[UIColor orangeColor] CGColor]);
-        }
         
-        if (y > CLIP_DB){
-            CGPoint p = CGPointMake(i, [ self dbToPixel:(20.0f * log10(y)) ]);
+        CGPoint p = CGPointMake(i, [ self dbToPixel:db ]);
+        if ((type == BIQUAD_HIGHPASS) && (i <= highpass_freq_pix)) {
+            [activePoints appendBytes:&p length:sizeof(CGPoint)];
+            if (i == highpass_freq_pix) [points appendBytes:&p length:sizeof(CGPoint)];
+            
+        } else if ((type == BIQUAD_LOWPASS) && (i >= lowpass_freq_pix)) {
+            [activePoints appendBytes:&p length:sizeof(CGPoint)];
+            if (i == lowpass_freq_pix) [points appendBytes:&p length:sizeof(CGPoint)];
+            
+        } else {
             [points appendBytes:&p length:sizeof(CGPoint)];
         }
         
     }
     
-    FillViewComplement_t com;
-    if ( (type == BIQUAD_HIGHPASS) || (type == BIQUAD_LOWPASS) ){
-        com = RIGHT_COMPLEMENT;
-    } else {
-        com = BOTH_COMPLEMENT;
+    CGContextSetLineWidth(context, 2.0);
+    
+    //draw active stroke
+    unsigned long size = activePoints.length / sizeof(CGPoint);
+    if (size > 1) {
+        CGPoint * p = (CGPoint *)activePoints.bytes;
+        CGContextSetStrokeColorWithColor(context, [[UIColor orangeColor] CGColor]);
+        CGContextAddLines(context, p, size);
+        CGContextDrawPath(context, kCGPathStroke);
     }
-    [self drawAfr:context withPoints:points withComplement:com];
+    
+    //draw normal stroke
+    size = points.length / sizeof(CGPoint);
+    if (size > 1) {
+        CGPoint * p = (CGPoint *)points.bytes;
+        CGContextSetStrokeColorWithColor(context, [[UIColor lightGrayColor] CGColor]);
+        CGContextAddLines(context, p, size);
+        CGContextDrawPath(context, kCGPathStroke);
+    }
     
     [self drawFreqLineForParamFilters:(CGContextRef)context];
     [self drawFreqLineForAllpassFilters:(CGContextRef)context];
     [self drawPassFilterTap:context];
-    
 }
+
 
 - (void) drawFreqLineForParamFilters:(CGContextRef)context {
     NSArray<Biquad *> * params = [_filters getBiquadsWithType:BIQUAD_PARAMETRIC];
@@ -428,7 +413,7 @@
         point.x = width - border_right;
         point.y = [self.filters getAFR:[self pixelToFreq:width - border_right] ];
         
-        if (point.y > CLIP_DB) {
+        if ([self amplToDb:point.y] > MIN_VIEW_DB) {
             CGContextFillEllipseInRect(context, CGRectMake(point.x - 5, [ self dbToPixel:(20.0f * log10(point.y)) ]  - 5, 10, 10));
             CGContextDrawPath(context, kCGPathStroke);
         }
@@ -444,7 +429,7 @@
         point.x = border_left;
         point.y = [self.filters getAFR:[self pixelToFreq:border_left] ];
         
-        if (point.y > CLIP_DB) {
+        if ([self amplToDb:point.y] > MIN_VIEW_DB) {
             CGContextFillEllipseInRect(context, CGRectMake(point.x - 5, [ self dbToPixel:(20.0f * log10(point.y)) ]  - 5, 10, 10));
             CGContextDrawPath(context, kCGPathStroke);
         }

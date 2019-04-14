@@ -10,7 +10,6 @@
 #import "DialogSystem.h"
 #import "PresetViewController.h"
 #import "OptionsViewController.h"
-#import "XOverViewController.h"
 #import "FiltersViewController.h"
 
 @implementation MainViewController

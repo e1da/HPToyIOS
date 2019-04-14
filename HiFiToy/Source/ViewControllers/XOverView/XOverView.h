@@ -12,7 +12,8 @@
 /*==========================================================================================
  DEFINES
  ==========================================================================================*/
-#define CLIP_DB     0.031622776
+#define MIN_VIEW_DB     -30.0f
+#define MAX_VIEW_DB     15.0f
 
 typedef enum {
     NO_COMPLEMENT, LEFT_COMPLEMENT, RIGHT_COMPLEMENT, BOTH_COMPLEMENT

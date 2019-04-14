@@ -105,8 +105,6 @@
 		D3549260220869DB00063768 /* CoefButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F096218353D700E181C6 /* CoefButton.m */; };
 		D3549261220869DB00063768 /* XOverView.h in Sources */ = {isa = PBXBuildFile; fileRef = D379126420D1153F0089962D /* XOverView.h */; };
 		D3549262220869DB00063768 /* XOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126520D1153F0089962D /* XOverView.m */; };
-		D3549263220869DB00063768 /* XOverViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = D379126120D111B80089962D /* XOverViewController.h */; };
-		D3549264220869DB00063768 /* XOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126220D111B80089962D /* XOverViewController.m */; };
 		D3549265220869DB00063768 /* DrcViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = D379127520D3C2CE0089962D /* DrcViewController.h */; };
 		D3549266220869DB00063768 /* DrcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127620D3C2CE0089962D /* DrcViewController.m */; };
 		D3549267220869DB00063768 /* DrcView.h in Sources */ = {isa = PBXBuildFile; fileRef = D379127820D3C55B0089962D /* DrcView.h */; };
@@ -183,7 +181,6 @@
 		D35AC349226100470034C666 /* BassTrebleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D35AC348226100470034C666 /* BassTrebleTests.m */; };
 		D35AC34B226211470034C666 /* VolumeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D35AC34A226211470034C666 /* VolumeTests.m */; };
 		D35AC34D226217C80034C666 /* BiquadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D35AC34C226217C80034C666 /* BiquadTests.m */; };
-		D379126320D111B80089962D /* XOverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126220D111B80089962D /* XOverViewController.m */; };
 		D379126620D1153F0089962D /* XOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126520D1153F0089962D /* XOverView.m */; };
 		D379127720D3C2CE0089962D /* DrcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127620D3C2CE0089962D /* DrcViewController.m */; };
 		D379127A20D3C55B0089962D /* DrcView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127920D3C55B0089962D /* DrcView.m */; };
@@ -337,8 +334,6 @@
 		D35AC348226100470034C666 /* BassTrebleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BassTrebleTests.m; sourceTree = "<group>"; };
 		D35AC34A226211470034C666 /* VolumeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VolumeTests.m; sourceTree = "<group>"; };
 		D35AC34C226217C80034C666 /* BiquadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadTests.m; sourceTree = "<group>"; };
-		D379126120D111B80089962D /* XOverViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XOverViewController.h; sourceTree = "<group>"; };
-		D379126220D111B80089962D /* XOverViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XOverViewController.m; sourceTree = "<group>"; };
 		D379126420D1153F0089962D /* XOverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XOverView.h; sourceTree = "<group>"; };
 		D379126520D1153F0089962D /* XOverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XOverView.m; sourceTree = "<group>"; };
 		D379127520D3C2CE0089962D /* DrcViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcViewController.h; sourceTree = "<group>"; };
@@ -504,7 +499,7 @@
 				D30FF86B2163AB4D007FA50D /* NumberKeyboard */,
 				D33A258420CA89E6008A94EF /* OptionsViewController */,
 				D39F5517215E33D00017DF48 /* FiltersViewController */,
-				D33A258520CA89E7008A94EF /* XOverViewController */,
+				D33A258520CA89E7008A94EF /* XOverView */,
 				D379127420D3C2A60089962D /* DrcViewController */,
 				D33A257620C94852008A94EF /* DiscoveryViewController */,
 				D33A257720C94852008A94EF /* MainViewController */,
@@ -549,15 +544,13 @@
 			path = OptionsViewController;
 			sourceTree = "<group>";
 		};
-		D33A258520CA89E7008A94EF /* XOverViewController */ = {
+		D33A258520CA89E7008A94EF /* XOverView */ = {
 			isa = PBXGroup;
 			children = (
 				D379126420D1153F0089962D /* XOverView.h */,
 				D379126520D1153F0089962D /* XOverView.m */,
-				D379126120D111B80089962D /* XOverViewController.h */,
-				D379126220D111B80089962D /* XOverViewController.m */,
 			);
-			path = XOverViewController;
+			path = XOverView;
 			sourceTree = "<group>";
 		};
 		D33A258C20CA8FE0008A94EF /* DeviceNameViewController */ = {
@@ -1086,7 +1079,6 @@
 				D33A258220C952CD008A94EF /* FoundCell.m in Sources */,
 				D33A259820CA93B1008A94EF /* PresetViewController.m in Sources */,
 				D3BBD4FE218DC20300FFDB86 /* DontShowView.m in Sources */,
-				D379126320D111B80089962D /* XOverViewController.m in Sources */,
 				D38A3C612220003E00319EDB /* AdvertiseViewController.m in Sources */,
 				D33A259B20CA9538008A94EF /* PresetCell.m in Sources */,
 				D33A254320C064A9008A94EF /* TAS5558.h in Sources */,
@@ -1202,8 +1194,6 @@
 				D3549260220869DB00063768 /* CoefButton.m in Sources */,
 				D3549261220869DB00063768 /* XOverView.h in Sources */,
 				D3549262220869DB00063768 /* XOverView.m in Sources */,
-				D3549263220869DB00063768 /* XOverViewController.h in Sources */,
-				D3549264220869DB00063768 /* XOverViewController.m in Sources */,
 				D3549265220869DB00063768 /* DrcViewController.h in Sources */,
 				D3549266220869DB00063768 /* DrcViewController.m in Sources */,
 				D3549267220869DB00063768 /* DrcView.h in Sources */,

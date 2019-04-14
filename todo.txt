@@ -19,7 +19,7 @@
 +(02/22/19) update preset manager view after import preset from xml
 
 
--(040619)on xover ui bug. shadow is not correct in some case (see orientech!)
++(040619)on xover ui bug. shadow is not correct in some case (see orientech!)
 
 -(041319)need move biquad coef to biquadParam
 
