@@ -56,6 +56,7 @@ DrcPoint88_t initDrcPoint88(float inputDb, float outputDb);
 @property (nonatomic)   DrcPoint_t    point2;
 @property (nonatomic)   DrcPoint_t    point3;
 
++ (DrcCoef *)initWithChannel:(DrcChannel_t)channel;
 + (DrcCoef *)initWithChannel:(DrcChannel_t)channel
                       Point0:(DrcPoint_t)p0
                       Point1:(DrcPoint_t)p1

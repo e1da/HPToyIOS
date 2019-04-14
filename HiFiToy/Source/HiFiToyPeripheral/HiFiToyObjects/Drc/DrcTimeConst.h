@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "DrcCoef.h"
 
-uint32_t reverseUint32(uint32_t num) ;
-
 @interface DrcTimeConst : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
 
 @property (nonatomic)   DrcChannel_t    channel;
@@ -18,6 +16,7 @@ uint32_t reverseUint32(uint32_t num) ;
 @property (nonatomic)   float           attackMS;
 @property (nonatomic)   float           decayMS;
 
++ (DrcTimeConst *)initWithChannel:(DrcChannel_t)channel;
 + (DrcTimeConst *)initWithChannel:(DrcChannel_t)channel
                            Energy:(float)energyMS
                            Attack:(float)attackMS

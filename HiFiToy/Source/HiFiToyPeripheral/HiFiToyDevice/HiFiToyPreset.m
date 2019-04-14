@@ -142,22 +142,8 @@
     //Loudness: LG = -0.5, LO = Gain = Offset = 0, Biquad=(BANDPASS, 140Hz = (30..200Hz))
     self.loudness = [[Loudness alloc] init];
     
-    
     //Drc
-    DrcCoef * drcCoef17 = [DrcCoef initWithChannel:DRC_CH_1_7
-                                            Point0:initDrcPoint(POINT0_INPUT_DB, -120)
-                                            Point1:initDrcPoint(-72, -72)
-                                            Point2:initDrcPoint(-24, -24)
-                                            Point3:initDrcPoint(POINT3_INPUT_DB, -24)];
-    DrcCoef * drcCoef8 = [drcCoef17 copy];
-    drcCoef8.channel = DRC_CH_8;
-    
-    DrcTimeConst * drcTimeConst17 = [DrcTimeConst initWithChannel:DRC_CH_1_7 Energy:0.1f Attack:10.0f Decay:100.0f];
-    DrcTimeConst * drcTimeConst8 = [drcTimeConst17 copy];
-    drcTimeConst8.channel = DRC_CH_8;
-    
-    self.drc = [Drc initWithCoef17:drcCoef17 Coef8:drcCoef8 TimeConst17:drcTimeConst17 TimeConst8:drcTimeConst8];
-    
+    self.drc = [[Drc alloc] init];
     [self.drc setEvaluation:POST_VOLUME_EVAL forChannel:0];
     [self.drc setEvaluation:POST_VOLUME_EVAL forChannel:1];
     [self.drc setEnabled:0.0 forChannel:0];

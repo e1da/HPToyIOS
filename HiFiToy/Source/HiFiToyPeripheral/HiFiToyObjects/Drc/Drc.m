@@ -9,6 +9,7 @@
 #import "Drc.h"
 #import "TAS5558.h"
 #import "Number523.h"
+#import "IntegerUtility.h"
 #import "HiFiToyControl.h"
 
 @interface Drc(){
@@ -17,6 +18,37 @@
 @end
 
 @implementation Drc
+
+/*==========================================================================================
+ Init
+ ==========================================================================================*/
+- (id) init {
+    self = [super init];
+    if (self) {
+        self.coef17 = [DrcCoef initWithChannel:DRC_CH_1_7];
+        self.coef8 = [DrcCoef initWithChannel:DRC_CH_8];
+        self.timeConst17 = [DrcTimeConst initWithChannel:DRC_CH_1_7];
+        self.timeConst8 = [DrcTimeConst initWithChannel:DRC_CH_8];
+        
+    }
+    return self;
+}
+
+/*---------------------- create methods -----------------------------*/
++ (Drc *) initWithCoef17:(DrcCoef *)coef17
+                  Coef8:(DrcCoef *)coef8
+            TimeConst17:(DrcTimeConst *)timeConst17
+             TimeConst8:(DrcTimeConst *)timeConst8; {
+    Drc * currentInstance = [[Drc alloc] init];
+    
+    currentInstance.coef17 = coef17;
+    currentInstance.coef8 = coef8;
+    currentInstance.timeConst17 = timeConst17;
+    currentInstance.timeConst8 = timeConst8;
+    
+    return currentInstance;
+}
+
 
 /*==========================================================================================
  NSCoding protocol implementation
@@ -38,7 +70,7 @@
     }
 }
 
-- (id)initWithCoder:(NSCoder *)decoder {
+- (id) initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if (self) {
         self.coef17         = [decoder decodeObjectForKey:@"keyCoef17"];
@@ -62,8 +94,7 @@
 /*==========================================================================================
  NSCopying protocol implementation
  ==========================================================================================*/
--(Drc *)copyWithZone:(NSZone *)zone
-{
+-(Drc *)copyWithZone:(NSZone *)zone {
     Drc * copyDrc = [[[self class] allocWithZone:zone] init];
     
     copyDrc.coef17          = [self.coef17 copy];
@@ -85,8 +116,7 @@
 /*==========================================================================================
  isEqual implementation
  ==========================================================================================*/
-- (BOOL) isEqual: (id) object
-{
+- (BOOL) isEqual: (id) object {
     if ([object class] == [self class]){
         Drc * temp = object;
         if ((![self.coef17 isEqual:temp.coef17]) ||
@@ -114,42 +144,25 @@
     return NO;
 }
 
-/*---------------------- create methods -----------------------------*/
-+ (Drc *)initWithCoef17:(DrcCoef *)coef17
-                  Coef8:(DrcCoef *)coef8
-            TimeConst17:(DrcTimeConst *)timeConst17
-             TimeConst8:(DrcTimeConst *)timeConst8;
-{
-    Drc * currentInstance = [[Drc alloc] init];
-    
-    currentInstance.coef17 = coef17;
-    currentInstance.coef8 = coef8;
-    currentInstance.timeConst17 = timeConst17;
-    currentInstance.timeConst8 = timeConst8;
-    
-    return currentInstance;
-}
-
--(void) setEnabled:(float)enabled forChannel:(uint8_t)channel //enabled = 0.0 .. 1.0
-{
+//getters / setters
+//enabled = 0.0 .. 1.0
+-(void) setEnabled:(float)enabled forChannel:(uint8_t)channel {
     if (channel > 7) channel = 7;
     enabledCh[channel] = enabled;
 }
 
--(float) getEnabledChannel:(uint8_t)channel //return enabled = 0.0 .. 1.0
-{
+//return enabled = 0.0 .. 1.0
+-(float) getEnabledChannel:(uint8_t)channel {
     if (channel > 7) channel = 7;
     return enabledCh[channel];
 }
 
--(void) setEvaluation:(DrcEvaluation_t)evaluation forChannel:(uint8_t)channel
-{
+-(void) setEvaluation:(DrcEvaluation_t)evaluation forChannel:(uint8_t)channel {
     if (channel > 7) channel = 7;
     evaluationCh[channel] = evaluation;
 }
 
--(float) getEvaluationChannel:(uint8_t)channel
-{
+-(float) getEvaluationChannel:(uint8_t)channel {
     if (channel > 7) channel = 7;
     return evaluationCh[channel];
 }
@@ -159,14 +172,12 @@
 }
 
 //info string
--(NSString *)getInfo
-{
+-(NSString *)getInfo {
     return [NSString stringWithFormat:@"Drc info"];
 }
 
 //send to dsp
-- (void) sendEvaluationWithResponse:(BOOL)response
-{
+- (void) sendEvaluationWithResponse:(BOOL)response {
     NSData *data = [self getEvaluationBinary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
@@ -176,8 +187,7 @@
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
-- (void) sendEnabledForChannel:(uint8_t)channel withResponse:(BOOL)response
-{
+- (void) sendEnabledForChannel:(uint8_t)channel withResponse:(BOOL)response {
     NSData *data = [self getEnabledBinaryForChannel:channel];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
@@ -187,8 +197,7 @@
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
-- (void) sendWithResponse:(BOOL)response
-{
+- (void) sendWithResponse:(BOOL)response {
     [self.coef17 sendWithResponse:response];
     [self.coef8 sendWithResponse:response];
     [self.timeConst17 sendWithResponse:response];
@@ -201,8 +210,7 @@
     }
 }
 
-- (NSData *) getEvaluationBinary
-{
+- (NSData *) getEvaluationBinary {
     DataBufHeader_t dataBufHeader;
     dataBufHeader.addr = [self address];
     dataBufHeader.length = 8;
@@ -227,8 +235,7 @@
     return data;
 }
 
-- (NSData *) getEnabledBinaryForChannel:(uint8_t)channel
-{
+- (NSData *) getEnabledBinaryForChannel:(uint8_t)channel {
     if (channel > 7) channel = 7;
     
     DataBufHeader_t dataBufHeader;
@@ -249,8 +256,7 @@
 }
 
 //get binary for save to dsp
-- (NSData *) getBinary
-{
+- (NSData *) getBinary {
     NSMutableData *data = [[NSMutableData alloc] init];
     
     [data appendData:[self.coef17 getBinary]];
@@ -267,8 +273,7 @@
     return data;
 }
 
-- (BOOL) importData:(NSData *)data
-{
+- (BOOL) importData:(NSData *)data {
     if ([self.coef17 importData:data] == NO) return NO;
     if ([self.coef8 importData:data] == NO) return NO;
     if ([self.timeConst17 importData:data] == NO) return NO;
@@ -316,7 +321,7 @@
 }
 
 /*---------------------------- XML export/import ----------------------------------*/
--(XmlData *) toXmlData{
+-(XmlData *) toXmlData {
     XmlData * xmlData = [[XmlData alloc] init];
     
     for (int i = 0; i < 8; i++){

@@ -9,29 +9,7 @@
 #import "DrcTimeConst.h"
 #import "TAS5558.h"
 #import "HiFiToyControl.h"
-
-uint32_t reverseUint32(uint32_t num) {
-    uint32_t result;
-    uint8_t * pSrc = (uint8_t *)&num;
-    uint8_t * pDest = (uint8_t *)&result;
-    
-    pDest[0] = pSrc[3];
-    pDest[1] = pSrc[2];
-    pDest[2] = pSrc[1];
-    pDest[3] = pSrc[0];
-    
-    return result;
-}
-
-static uint32_t timeToUint32(float time_ms) {
-    return (uint32_t)(pow(M_E, -2000.0f / time_ms / TAS5558_FS) * 0x800000) & 0x007FFFFF;
-}
-
-static float uint32ToTimeMS(uint32_t time) {
-    float t = (float)(reverseUint32(time) & 0x007FFFFF) / 0x800000;
-    
-    return (float)(-2000.0f / TAS5558_FS / log(t)); //log == ln
-}
+#import "IntegerUtility.h"
 
 @interface DrcTimeConst(){
     int count;
@@ -39,6 +17,42 @@ static float uint32ToTimeMS(uint32_t time) {
 @end
 
 @implementation DrcTimeConst
+
+/*==========================================================================================
+ Init
+ ==========================================================================================*/
+- (id) init {
+    self = [super init];
+    if (self) {
+        self.channel = DRC_CH_1_7;
+        self.energyMS = 0.1f;
+        self.attackMS = 10.0f;
+        self.decayMS = 100.f;
+    }
+    return self;
+}
+
+/*---------------------- create methods -----------------------------*/
++ (DrcTimeConst *)initWithChannel:(DrcChannel_t)channel {
+    DrcTimeConst * currentInstance = [[DrcTimeConst alloc] init];
+    
+    currentInstance.channel = channel;
+    return currentInstance;
+}
+
++ (DrcTimeConst *)initWithChannel:(DrcChannel_t)channel
+                           Energy:(float)energyMS
+                           Attack:(float)attackMS
+                            Decay:(float)decayMS {
+    DrcTimeConst * currentInstance = [[DrcTimeConst alloc] init];
+    
+    currentInstance.channel = channel;
+    currentInstance.energyMS = energyMS;
+    currentInstance.attackMS = attackMS;
+    currentInstance.decayMS = decayMS;
+    
+    return currentInstance;
+}
 
 /*==========================================================================================
  NSCoding protocol implementation
@@ -64,8 +78,7 @@ static float uint32ToTimeMS(uint32_t time) {
 /*==========================================================================================
  NSCopying protocol implementation
  ==========================================================================================*/
--(DrcTimeConst *)copyWithZone:(NSZone *)zone
-{
+-(DrcTimeConst *)copyWithZone:(NSZone *)zone {
     DrcTimeConst * copyDrcTimeConst = [[[self class] allocWithZone:zone] init];
     
     copyDrcTimeConst.channel    = self.channel;
@@ -79,9 +92,8 @@ static float uint32ToTimeMS(uint32_t time) {
 /*==========================================================================================
  isEqual implementation
  ==========================================================================================*/
-- (BOOL) isEqual: (id) object
-{
-    if ([object class] == [self class]){
+- (BOOL) isEqual: (id) object {
+    if ( (object) && ([object class] == [self class]) ) {
         DrcTimeConst * temp = object;
         if ((self.channel == temp.channel) &&
             (fabs(self.energyMS - temp.energyMS) < 0.02f) &&
@@ -96,29 +108,7 @@ static float uint32ToTimeMS(uint32_t time) {
     return NO;
 }
 
-/*---------------------- create methods -----------------------------*/
-+ (DrcTimeConst *)initWithChannel:(DrcChannel_t)channel
-                           Energy:(float)energyMS
-                           Attack:(float)attackMS
-                            Decay:(float)decayMS
-{
-    DrcTimeConst * currentInstance = [[DrcTimeConst alloc] init];
-    
-    currentInstance.channel = channel;
-    currentInstance.energyMS = energyMS;
-    currentInstance.attackMS = attackMS;
-    currentInstance.decayMS = decayMS;
-    
-    return currentInstance;
-}
-
-- (uint8_t) address {
-    if (self.channel == DRC_CH_8) {
-        return DRC2_ENERGY_REG;
-    }
-    return DRC1_ENERGY_REG;
-}
-
+//setters getters
 - (void) setEnergyMS:(float)energyMS {
     if (energyMS < 0.05) {
         _energyMS = 0.05;
@@ -133,16 +123,33 @@ static float uint32ToTimeMS(uint32_t time) {
     }
 }
 
+//time utilityies
+- (uint32_t) timeToUint32:(float)time_ms {
+    return (uint32_t)(pow(M_E, -2000.0f / time_ms / TAS5558_FS) * 0x800000) & 0x007FFFFF;
+}
+
+- (float) uint32ToTimeMS:(uint32_t)time {
+    float t = (float)(reverseUint32(time) & 0x007FFFFF) / 0x800000;
+    
+    return (float)(-2000.0f / TAS5558_FS / log(t)); //log == ln
+}
+
+//HiFiToyObject protocol implements
+- (uint8_t) address {
+    if (self.channel == DRC_CH_8) {
+        return DRC2_ENERGY_REG;
+    }
+    return DRC1_ENERGY_REG;
+}
+
 //info string
--(NSString *)getInfo
-{
+-(NSString *)getInfo {
     return [NSString stringWithFormat:@"Energy=%0.1f Attack=%0.1f Decay=%0.1f",
                                     self.energyMS, self.attackMS, self.decayMS];
 }
 
 //send to dsp
-- (void) sendEnergyWithResponse:(BOOL)response
-{
+- (void) sendEnergyWithResponse:(BOOL)response {
     NSData *data = [self getEnergyBinary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
@@ -152,8 +159,7 @@ static float uint32ToTimeMS(uint32_t time) {
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
-- (void) sendAttackDecayWithResponse:(BOOL)response
-{
+- (void) sendAttackDecayWithResponse:(BOOL)response {
     NSData *data = [self getAttackDecayBinary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
@@ -163,14 +169,12 @@ static float uint32ToTimeMS(uint32_t time) {
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
-- (void) sendWithResponse:(BOOL)response
-{
+- (void) sendWithResponse:(BOOL)response {
     [self sendEnergyWithResponse:response];
     [self sendAttackDecayWithResponse:response];
 }
 
-- (NSData *) getEnergyBinary
-{
+- (NSData *) getEnergyBinary {
     DataBufHeader_t dataBufHeader;
     dataBufHeader.addr = [self address];
     dataBufHeader.length = 8;
@@ -178,7 +182,7 @@ static float uint32ToTimeMS(uint32_t time) {
     NSMutableData *data = [[NSMutableData alloc] init];
     [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
     
-    uint32_t t = timeToUint32(self.energyMS);
+    uint32_t t = [self timeToUint32:self.energyMS];
     NSLog(@"%f %d", _energyMS, t);
     
     uint32_t d[2] = {reverseUint32(0x800000 - t), reverseUint32(t)};
@@ -187,8 +191,7 @@ static float uint32ToTimeMS(uint32_t time) {
     return data;
 }
 
-- (NSData *) getAttackDecayBinary
-{
+- (NSData *) getAttackDecayBinary {
     DataBufHeader_t dataBufHeader;
     dataBufHeader.addr = [self address] + 4; //DRCx_ATTACK_DECAY_REG
     dataBufHeader.length = 16;
@@ -196,8 +199,8 @@ static float uint32ToTimeMS(uint32_t time) {
     NSMutableData *data = [[NSMutableData alloc] init];
     [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
     
-    uint32_t attack = timeToUint32(self.attackMS);
-    uint32_t decay = timeToUint32(self.decayMS);
+    uint32_t attack = [self timeToUint32:self.attackMS];
+    uint32_t decay = [self timeToUint32:self.decayMS];
     uint32_t d[4] = {reverseUint32(0x800000 - attack), reverseUint32(attack),
                         reverseUint32(0x800000 - decay), reverseUint32(decay)};
     [data appendBytes:d length:16];
@@ -215,8 +218,7 @@ static float uint32ToTimeMS(uint32_t time) {
 }
 
 //get binary for save to dsp
-- (NSData *) getBinary
-{
+- (NSData *) getBinary {
     NSMutableData *data = [[NSMutableData alloc] init];
     [data appendData:[self getEnergyBinary]];
     [data appendData:[self getAttackDecayBinary]];
@@ -224,8 +226,7 @@ static float uint32ToTimeMS(uint32_t time) {
     return data;
 }
 
-- (BOOL) importData:(NSData *)data
-{
+- (BOOL) importData:(NSData *)data {
     int importCount = 0;
     
     HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
@@ -235,7 +236,7 @@ static float uint32ToTimeMS(uint32_t time) {
         if ((dataBufHeader->addr == [self address]) && (dataBufHeader->length == 8)){
             
             uint32_t * number = (uint32_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
-            self.energyMS = uint32ToTimeMS(number[1]);
+            self.energyMS = [self uint32ToTimeMS:number[1]];
             
             importCount++;
             if (importCount >= 2) break;
@@ -243,8 +244,8 @@ static float uint32ToTimeMS(uint32_t time) {
         if ((dataBufHeader->addr == ([self address] + 4)) && (dataBufHeader->length == 16)){
             
             uint32_t * number = (uint32_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
-            self.attackMS = uint32ToTimeMS(number[1]);
-            self.decayMS = uint32ToTimeMS(number[3]);
+            self.attackMS = [self uint32ToTimeMS:number[1]];
+            self.decayMS = [self uint32ToTimeMS:number[3]];
             
             importCount++;
             if (importCount >= 2) break;
@@ -260,7 +261,7 @@ static float uint32ToTimeMS(uint32_t time) {
 }
 
 /*---------------------------- XML export/import ----------------------------------*/
--(XmlData *) toXmlData{
+-(XmlData *) toXmlData {
     XmlData * xmlData = [[XmlData alloc] init];
     [xmlData addElementWithName:@"Energy" withDoubleValue:self.energyMS];
     [xmlData addElementWithName:@"Attack" withDoubleValue:self.attackMS];

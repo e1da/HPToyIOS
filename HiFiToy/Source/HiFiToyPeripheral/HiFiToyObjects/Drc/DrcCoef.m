@@ -79,12 +79,23 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
 - (id) init {
     self = [super init];
     if (self) {
-        
+        self.channel = DRC_CH_1_7;
+        self.point0 = initDrcPoint(POINT0_INPUT_DB, -120);
+        self.point1 = initDrcPoint(-72, -72);
+        self.point2 = initDrcPoint(-24, -24);
+        self.point3 = initDrcPoint(POINT3_INPUT_DB, -24);
     }
     return self;
 }
 
 /*---------------------- create methods -----------------------------*/
++ (DrcCoef *)initWithChannel:(DrcChannel_t)channel {
+    DrcCoef * currentInstance = [[DrcCoef alloc] init];
+    
+    currentInstance.channel = channel;
+    return currentInstance;
+}
+
 + (DrcCoef *)initWithChannel:(DrcChannel_t)channel
                       Point0:(DrcPoint_t)p0
                       Point1:(DrcPoint_t)p1

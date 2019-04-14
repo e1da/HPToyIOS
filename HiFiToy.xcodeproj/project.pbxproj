@@ -215,6 +215,10 @@
 		D3E297B9226237140096012B /* FloatUtilityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E297B8226237140096012B /* FloatUtilityTests.m */; };
 		D3E297BB226248DE0096012B /* FiltersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E297BA226248DE0096012B /* FiltersTests.m */; };
 		D3E297BE22624AE70096012B /* DrcCoefTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E297BD22624AE70096012B /* DrcCoefTests.m */; };
+		D3E297C022624E6A0096012B /* DrcTimeConstTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E297BF22624E6A0096012B /* DrcTimeConstTests.m */; };
+		D3E297C222637F890096012B /* DrcTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E297C122637F890096012B /* DrcTests.m */; };
+		D3E297C5226381620096012B /* IntegerUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D3E297C4226381620096012B /* IntegerUtility.c */; };
+		D3E297C62263820A0096012B /* IntegerUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D3E297C4226381620096012B /* IntegerUtility.c */; };
 		D3E97AB12157F08200C98402 /* EnergyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E97AB02157F08200C98402 /* EnergyViewController.m */; };
 		D3F63295214C172A00340314 /* HiFiToyIcon87.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F63288214C172900340314 /* HiFiToyIcon87.png */; };
 		D3F63296214C172A00340314 /* HiFiToyIcon120.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F63289214C172900340314 /* HiFiToyIcon120.png */; };
@@ -387,6 +391,10 @@
 		D3E297B8226237140096012B /* FloatUtilityTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FloatUtilityTests.m; sourceTree = "<group>"; };
 		D3E297BA226248DE0096012B /* FiltersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FiltersTests.m; sourceTree = "<group>"; };
 		D3E297BD22624AE70096012B /* DrcCoefTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcCoefTests.m; sourceTree = "<group>"; };
+		D3E297BF22624E6A0096012B /* DrcTimeConstTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcTimeConstTests.m; sourceTree = "<group>"; };
+		D3E297C122637F890096012B /* DrcTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrcTests.m; sourceTree = "<group>"; };
+		D3E297C3226381620096012B /* IntegerUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IntegerUtility.h; sourceTree = "<group>"; };
+		D3E297C4226381620096012B /* IntegerUtility.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = IntegerUtility.c; sourceTree = "<group>"; };
 		D3E97AAF2157F08200C98402 /* EnergyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EnergyViewController.h; sourceTree = "<group>"; };
 		D3E97AB02157F08200C98402 /* EnergyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EnergyViewController.m; sourceTree = "<group>"; };
 		D3F63288214C172900340314 /* HiFiToyIcon87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HiFiToyIcon87.png; sourceTree = "<group>"; };
@@ -604,6 +612,7 @@
 		D35AC3462261000E0034C666 /* HiFiToyPeripheral */ = {
 			isa = PBXGroup;
 			children = (
+				D3E297C7226389150096012B /* HiFiToyDevice */,
 				D3E297B7226236FA0096012B /* NumberUtility */,
 				D35AC347226100250034C666 /* HiFiToyObjects */,
 			);
@@ -808,6 +817,8 @@
 				D39C3CE120BEDD9D00BDC1A0 /* Number923.c */,
 				D30FF884216D49DE007FA50D /* FloatUtility.h */,
 				D30FF885216D49DE007FA50D /* FloatUtility.c */,
+				D3E297C3226381620096012B /* IntegerUtility.h */,
+				D3E297C4226381620096012B /* IntegerUtility.c */,
 			);
 			path = NumberUtility;
 			sourceTree = "<group>";
@@ -896,8 +907,17 @@
 			isa = PBXGroup;
 			children = (
 				D3E297BD22624AE70096012B /* DrcCoefTests.m */,
+				D3E297BF22624E6A0096012B /* DrcTimeConstTests.m */,
+				D3E297C122637F890096012B /* DrcTests.m */,
 			);
 			path = Drc;
+			sourceTree = "<group>";
+		};
+		D3E297C7226389150096012B /* HiFiToyDevice */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = HiFiToyDevice;
 			sourceTree = "<group>";
 		};
 		D3E97AAE2157F06500C98402 /* EnergyViewController */ = {
@@ -1076,6 +1096,7 @@
 				D33A257420C94459008A94EF /* AppDelegate.m in Sources */,
 				D33A254020BFF674008A94EF /* Number923.h in Sources */,
 				D30FF8802166A0D7007FA50D /* FilterTypeControl.m in Sources */,
+				D3E297C5226381620096012B /* IntegerUtility.c in Sources */,
 				D307EB1222147D6200ACE7A3 /* BaseCell.m in Sources */,
 				D30FF889216E2F5C007FA50D /* Filters.m in Sources */,
 				D33A257A20C94865008A94EF /* DiscoveryViewController.m in Sources */,
@@ -1131,6 +1152,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3E297C222637F890096012B /* DrcTests.m in Sources */,
 				D35492AF2208D39C00063768 /* FloatUtility.h in Sources */,
 				D35AC34D226217C80034C666 /* BiquadTests.m in Sources */,
 				D3E297BE22624AE70096012B /* DrcCoefTests.m in Sources */,
@@ -1139,6 +1161,7 @@
 				D35492B02208D39C00063768 /* FloatUtility.c in Sources */,
 				D3E297BB226248DE0096012B /* FiltersTests.m in Sources */,
 				D35AC34B226211470034C666 /* VolumeTests.m in Sources */,
+				D3E297C022624E6A0096012B /* DrcTimeConstTests.m in Sources */,
 				D35AC349226100470034C666 /* BassTrebleTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1147,6 +1170,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3E297C62263820A0096012B /* IntegerUtility.c in Sources */,
 				D3E297B122622AD00096012B /* Biquad.m in Sources */,
 				D38A3C6222200C9E00319EDB /* AdvertiseViewController.h in Sources */,
 				D38A3C6322200C9E00319EDB /* AdvertiseViewController.m in Sources */,
