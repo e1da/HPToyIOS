@@ -8,15 +8,84 @@
 
 #import "BassTrebleChannel.h"
 
-#define HW_BASSTREBLE_MAX_DB   18
-#define HW_BASSTREBLE_MIN_DB   -18
-
 @interface BassTrebleChannel(){
     int count;
 }
 @end
 
 @implementation BassTrebleChannel
+
+/*==========================================================================================
+ Init
+ ==========================================================================================*/
+- (id) init {
+    self = [super init];
+    if (self){
+        self.channel = BASS_TREBLE_CH_127;
+        
+        self.maxBassDb = HW_BASSTREBLE_MAX_DB;
+        self.minBassDb = HW_BASSTREBLE_MIN_DB;
+        self.maxTrebleDb = HW_BASSTREBLE_MAX_DB;
+        self.minTrebleDb = HW_BASSTREBLE_MIN_DB;
+        
+        self.bassFreq = BASS_FREQ_NONE;
+        self.bassDb = 0;
+        self.trebleFreq = TREBLE_FREQ_NONE;
+        self.trebleDb = 0;
+    }
+    
+    return self;
+}
+
+/*---------------------- create methods -----------------------------*/
++ (BassTrebleChannel *)initWithChannel:(BassTrebleCh_t)channel
+                              BassFreq:(BassFreq_t)bassFreq
+                                BassDb:(int8_t)bassDb
+                            TrebleFreq:(TrebleFreq_t)trebleFreq
+                              TrebleDb:(int8_t)trebleDb
+                             maxBassDb:(int8_t)maxBassDb
+                             minBassDb:(int8_t)minBassDb
+                           maxTrebleDb:(int8_t)maxTrebleDb
+                           minTrebleDb:(int8_t)minTrebleDb {
+    BassTrebleChannel *currentInstance = [[BassTrebleChannel alloc] init];
+    
+    currentInstance.channel = channel;
+
+    currentInstance.maxBassDb   = maxBassDb;
+    currentInstance.minBassDb   = minBassDb;
+    currentInstance.maxTrebleDb = maxTrebleDb;
+    currentInstance.minTrebleDb = minTrebleDb;
+    
+    currentInstance.bassFreq    = bassFreq;
+    currentInstance.bassDb      = bassDb;
+    currentInstance.trebleFreq  = trebleFreq;
+    currentInstance.trebleDb    = trebleDb;
+    
+    return currentInstance;
+}
+
++ (BassTrebleChannel *)initWithChannel:(BassTrebleCh_t)channel
+                              BassFreq:(BassFreq_t)bassFreq
+                                BassDb:(int8_t)bassDb
+                            TrebleFreq:(TrebleFreq_t)trebleFreq
+                              TrebleDb:(int8_t)trebleDb {
+    BassTrebleChannel *currentInstance = [[BassTrebleChannel alloc] init];
+    
+    currentInstance.channel     = channel;
+    currentInstance.bassFreq    = bassFreq;
+    currentInstance.bassDb      = bassDb;
+    currentInstance.trebleFreq  = trebleFreq;
+    currentInstance.trebleDb    = trebleDb;
+    
+    return currentInstance;
+}
+
++ (BassTrebleChannel *)initWithChannel:(BassTrebleCh_t)channel {
+    BassTrebleChannel *currentInstance = [[BassTrebleChannel alloc] init];
+    
+    currentInstance.channel     = channel;
+    return currentInstance;
+}
 
 /*==========================================================================================
  NSCoding protocol implementation
@@ -93,57 +162,16 @@
     return NO;
 }
 
-/*---------------------- create methods -----------------------------*/
-+ (BassTrebleChannel *)initWithChannel:(BassTrebleCh_t)channel
-                              BassFreq:(BassFreq_t)bassFreq
-                                BassDb:(float)bassDb
-                            TrebleFreq:(TrebleFreq_t)trebleFreq
-                              TrebleDb:(float)trebleDb {
-    return [BassTrebleChannel initWithChannel:channel
-                                     BassFreq:bassFreq BassDb:bassDb
-                                   TrebleFreq:trebleFreq TrebleDb:trebleDb
-                                    maxBassDb:HW_BASSTREBLE_MAX_DB minBassDb:HW_BASSTREBLE_MIN_DB
-                                  maxTrebleDb:HW_BASSTREBLE_MAX_DB minTrebleDb:HW_BASSTREBLE_MIN_DB];
-}
-
-+ (BassTrebleChannel *)initWithChannel:(BassTrebleCh_t)channel
-                              BassFreq:(BassFreq_t)bassFreq
-                                BassDb:(float)bassDb
-                            TrebleFreq:(TrebleFreq_t)trebleFreq
-                              TrebleDb:(float)trebleDb
-                             maxBassDb:(int)maxBassDb
-                             minBassDb:(int)minBassDb
-                           maxTrebleDb:(int)maxTrebleDb
-                           minTrebleDb:(int)minTrebleDb {
-    BassTrebleChannel *currentInstance = [[BassTrebleChannel alloc] init];
-    
-    currentInstance.channel = channel;
-    
-    if (bassFreq > BASS_FREQ_500)           bassFreq = BASS_FREQ_500;
-    if (trebleFreq > TREBLE_FREQ_13000)     trebleFreq = TREBLE_FREQ_13000;
-    
-    currentInstance.bassFreq    = bassFreq;
-    currentInstance.trebleFreq  = trebleFreq;
-    
-    if (maxBassDb > HW_BASSTREBLE_MAX_DB)      maxBassDb = HW_BASSTREBLE_MAX_DB;
-    if (maxTrebleDb > HW_BASSTREBLE_MAX_DB)    maxTrebleDb = HW_BASSTREBLE_MAX_DB;
-    if (minBassDb < HW_BASSTREBLE_MIN_DB)      minBassDb = HW_BASSTREBLE_MIN_DB;
-    if (minTrebleDb < HW_BASSTREBLE_MIN_DB)    minTrebleDb = HW_BASSTREBLE_MIN_DB;
-    
-    currentInstance.maxBassDb       = maxBassDb;
-    currentInstance.minBassDb       = minBassDb;
-    currentInstance.maxTrebleDb     = maxTrebleDb;
-    currentInstance.minTrebleDb     = minTrebleDb;
-    
-    currentInstance.bassDb          = bassDb;
-    currentInstance.trebleDb        = trebleDb;
-    
-    return currentInstance;
-}
-
 
 //setters/getters
-- (void) setBassDb:(int)db {
+- (void) setBassFreq:(BassFreq_t)bassFreq {
+    if (bassFreq > BASS_FREQ_500) bassFreq = BASS_FREQ_500;
+    if (bassFreq < BASS_FREQ_NONE) bassFreq = BASS_FREQ_NONE;
+    
+    _bassFreq = bassFreq;
+}
+
+- (void) setBassDb:(int8_t)db {
     //check border
     if (db < self.minBassDb) db = self.minBassDb;
     if (db > self.maxBassDb) db = self.maxBassDb;
@@ -151,7 +179,14 @@
     _bassDb = db;
 }
 
-- (void) setTrebleDb:(int)db {
+- (void) setTrebleFreq:(TrebleFreq_t)trebleFreq {
+    if (trebleFreq > TREBLE_FREQ_13000) trebleFreq = TREBLE_FREQ_13000;
+    if (trebleFreq < TREBLE_FREQ_NONE) trebleFreq = TREBLE_FREQ_NONE;
+    
+    _trebleFreq = trebleFreq;
+}
+
+- (void) setTrebleDb:(int8_t)db {
     //check border
     if (db < self.minTrebleDb) db = self.minTrebleDb;
     if (db > self.maxTrebleDb) db = self.maxTrebleDb;
@@ -161,6 +196,25 @@
 
 - (float) getBassDbPercent {
     return (float)(_bassDb - _minBassDb) / (_maxBassDb - _minBassDb);
+}
+
+- (int8_t) cutDb:(int8_t)db {
+    if (db > HW_BASSTREBLE_MAX_DB) db = HW_BASSTREBLE_MAX_DB;
+    if (db < HW_BASSTREBLE_MIN_DB) db = HW_BASSTREBLE_MIN_DB;
+    return db;
+}
+
+- (void) setMaxBassDb:(int8_t)maxBassDb {
+    _maxBassDb = [self cutDb:maxBassDb];
+}
+- (void) setMinBassDb:(int8_t)minBassDb {
+    _minBassDb = [self cutDb:minBassDb];
+}
+- (void) setMaxTrebleDb:(int8_t)maxTrebleDb {
+    _maxTrebleDb = [self cutDb:maxTrebleDb];
+}
+- (void) setMinTrebleDb:(int8_t)minTrebleDb {
+    _minTrebleDb = [self cutDb:minTrebleDb];
 }
 
 - (void) setBassDbPercent:(float)percent {

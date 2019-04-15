@@ -26,11 +26,14 @@
     self = [super init];
     if (self){
         memset(enabledCh, 0, 8); //all channels are disabled (DRY)
-        
-        self.bassTreble127 = nil;
-        self.bassTreble34 = nil;
-        self.bassTreble56 = nil;
-        self.bassTreble8 = nil;
+
+        self.bassTreble127 = [BassTrebleChannel initWithChannel:BASS_TREBLE_CH_127
+                                                       BassFreq:BASS_FREQ_125 BassDb:0
+                                                     TrebleFreq:TREBLE_FREQ_9000 TrebleDb:0
+                                                      maxBassDb:12 minBassDb:-12 maxTrebleDb:12 minTrebleDb:-12];
+        self.bassTreble34 = [BassTrebleChannel initWithChannel:BASS_TREBLE_CH_34];
+        self.bassTreble56 = [BassTrebleChannel initWithChannel:BASS_TREBLE_CH_56];
+        self.bassTreble8 = [BassTrebleChannel initWithChannel:BASS_TREBLE_CH_8];
     }
     
     return self;
@@ -42,18 +45,19 @@
                          BassTreble56:(BassTrebleChannel *)bassTreble56
                           BassTreble8:(BassTrebleChannel *)bassTreble8 {
     BassTreble *currentInstance = [[BassTreble alloc] init];
-    currentInstance.bassTreble127 = bassTreble127;
-    currentInstance.bassTreble34 = bassTreble34;
-    currentInstance.bassTreble56 = bassTreble56;
-    currentInstance.bassTreble8 = bassTreble8;
+    
+    if (bassTreble127) currentInstance.bassTreble127 = bassTreble127;
+    if (bassTreble34) currentInstance.bassTreble34 = bassTreble34;
+    if (bassTreble56) currentInstance.bassTreble56 = bassTreble56;
+    if (bassTreble8) currentInstance.bassTreble8 = bassTreble8;
     
     return  currentInstance;
 }
 
 + (BassTreble *)initWithBassTreble127:(BassTrebleChannel *)bassTreble127 {
     BassTreble *currentInstance = [[BassTreble alloc] init];
-    currentInstance.bassTreble127 = bassTreble127;
     
+    if (bassTreble127) currentInstance.bassTreble127 = bassTreble127;
     return  currentInstance;
 }
 
@@ -95,9 +99,9 @@
 -(BassTreble *)copyWithZone:(NSZone *)zone {
     BassTreble * copyBassTreble = [[[self class] allocWithZone:zone] init];
     
-    copyBassTreble.bassTreble127      = [self.bassTreble127 copy];
-    copyBassTreble.bassTreble34      = [self.bassTreble34 copy];
-    copyBassTreble.bassTreble56      = [self.bassTreble56 copy];
+    copyBassTreble.bassTreble127    = [self.bassTreble127 copy];
+    copyBassTreble.bassTreble34     = [self.bassTreble34 copy];
+    copyBassTreble.bassTreble56     = [self.bassTreble56 copy];
     copyBassTreble.bassTreble8      = [self.bassTreble8 copy];
     
     for (int i = 0; i < 8; i++){
@@ -221,31 +225,27 @@
     dataBufHeader.length = 16;
     [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
     
-    uint8_t valBassFreq[4] = {  (_bassTreble8) ? _bassTreble8.bassFreq : 0,
-                                (_bassTreble56) ? _bassTreble56.bassFreq : 0,
-                                (_bassTreble34) ? _bassTreble34.bassFreq : 0,
-                                (_bassTreble127) ? _bassTreble127.bassFreq : 0};
+    uint8_t valBassFreq[4] = {  _bassTreble8.bassFreq, _bassTreble56.bassFreq,
+                                _bassTreble34.bassFreq, _bassTreble127.bassFreq};
     [data appendBytes:valBassFreq length:4];
     
     //fill bass db, BASS_FILTER_INDEX_REG
-    uint8_t valBassDb[4] = {[self dbToTAS5558Format:(_bassTreble8) ? _bassTreble8.bassDb : 0],
-                            [self dbToTAS5558Format:(_bassTreble56) ? _bassTreble56.bassDb : 0],
-                            [self dbToTAS5558Format:(_bassTreble34) ? _bassTreble34.bassDb : 0],
-                            [self dbToTAS5558Format:(_bassTreble127) ? _bassTreble127.bassDb : 0]};
+    uint8_t valBassDb[4] = {[self dbToTAS5558Format:_bassTreble8.bassDb],
+                            [self dbToTAS5558Format:_bassTreble56.bassDb],
+                            [self dbToTAS5558Format:_bassTreble34.bassDb],
+                            [self dbToTAS5558Format:_bassTreble127.bassDb]};
     [data appendBytes:&valBassDb length:4];
     
     //fill treble selection, TREBLE_FILTER_SET_REG
-    uint8_t valTrebleFreq[4] = {    (_bassTreble8) ? _bassTreble8.trebleFreq : 0,
-                                    (_bassTreble56) ? _bassTreble56.trebleFreq : 0,
-                                    (_bassTreble34) ? _bassTreble34.trebleFreq : 0,
-                                    (_bassTreble127) ? _bassTreble127.trebleFreq : 0};
+    uint8_t valTrebleFreq[4] = {    _bassTreble8.trebleFreq, _bassTreble56.trebleFreq,
+                                    _bassTreble34.trebleFreq, _bassTreble127.trebleFreq};
     [data appendBytes:&valTrebleFreq length:4];
     
     //fill treble db, TREBLE_FILTER_INDEX_REG
-    uint8_t valTrebleDb[4] = {  [self dbToTAS5558Format:(_bassTreble8) ? _bassTreble8.trebleDb : 0],
-                                [self dbToTAS5558Format:(_bassTreble56) ? _bassTreble56.trebleDb : 0],
-                                [self dbToTAS5558Format:(_bassTreble34) ? _bassTreble34.trebleDb : 0],
-                                [self dbToTAS5558Format:(_bassTreble127) ? _bassTreble127.trebleDb : 0]};
+    uint8_t valTrebleDb[4] = {  [self dbToTAS5558Format:_bassTreble8.trebleDb],
+                                [self dbToTAS5558Format:_bassTreble56.trebleDb],
+                                [self dbToTAS5558Format:_bassTreble34.trebleDb],
+                                [self dbToTAS5558Format:_bassTreble127.trebleDb]};
     [data appendBytes:&valTrebleDb length:4];
     
     return data;
@@ -340,10 +340,10 @@
         [xmlData addElementWithName:keyStr withDoubleValue:enabledCh[i]];
         
     }
-    if (_bassTreble127) [xmlData addXmlData:[_bassTreble127 toXmlData]];
-    if (_bassTreble34) [xmlData addXmlData:[_bassTreble34 toXmlData]];
-    if (_bassTreble56) [xmlData addXmlData:[_bassTreble56 toXmlData]];
-    if (_bassTreble8) [xmlData addXmlData:[_bassTreble8 toXmlData]];
+    [xmlData addXmlData:[_bassTreble127 toXmlData]];
+    [xmlData addXmlData:[_bassTreble34 toXmlData]];
+    [xmlData addXmlData:[_bassTreble56 toXmlData]];
+    [xmlData addXmlData:[_bassTreble8 toXmlData]];
     
     XmlData * bassTrebleXmlData = [[XmlData alloc] init];
     NSDictionary * dict = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -369,19 +369,19 @@
     if (!channelStr) return;
     BassTrebleCh_t channel = [channelStr intValue];
     
-    if ((self.bassTreble127) && (self.bassTreble127.channel == channel)){
+    if (self.bassTreble127.channel == channel) {
         [self.bassTreble127 importFromXml:xmlParser withAttrib:attributeDict];
         count++;
     }
-    if ((self.bassTreble34) && (self.bassTreble34.channel == channel)){
+    if (self.bassTreble34.channel == channel) {
         [self.bassTreble34 importFromXml:xmlParser withAttrib:attributeDict];
         count++;
     }
-    if ((self.bassTreble56) && (self.bassTreble56.channel == channel)){
+    if (self.bassTreble56.channel == channel) {
         [self.bassTreble56 importFromXml:xmlParser withAttrib:attributeDict];
         count++;
     }
-    if ((self.bassTreble8) && (self.bassTreble8.channel == channel)){
+    if (self.bassTreble8.channel == channel) {
         [self.bassTreble8 importFromXml:xmlParser withAttrib:attributeDict];
         count++;
     }
@@ -406,14 +406,7 @@
                    parser:(XmlParserWrapper *)xmlParser {
     
     if ([elementName isEqualToString:@"BassTreble"]){
-        
-        int cmp_count = 8;
-        if (self.bassTreble127) cmp_count++;
-        if (self.bassTreble34) cmp_count++;
-        if (self.bassTreble56) cmp_count++;
-        if (self.bassTreble8) cmp_count++;
-
-        if (count != cmp_count){
+        if (count != 12){
             xmlParser.error = [NSString stringWithFormat:
                                @"BassTreble. Import from xml is not success. " ];
             

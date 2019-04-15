@@ -430,8 +430,7 @@
     XmlData * presetXmlData = [[XmlData alloc] init];
     NSDictionary * dict = [[NSDictionary alloc] initWithObjectsAndKeys:
                            @"HiFiToy", @"Type",
-                           @"1.0", @"Version",
-                           [NSString stringWithFormat:@"%d", self.checkSum], @"Checksum", nil];
+                           @"1.0", @"Version", nil];
     
     [presetXmlData addElementWithName:@"Preset" withXmlValue:xmlData withAttrib:dict];
     
@@ -468,19 +467,15 @@
     if ([elementName isEqualToString:@"Preset"]){
         NSString * type = [attributeDict objectForKey:@"Type"];
         NSString * version = [attributeDict objectForKey:@"Version"];
-        NSString * checkSumStr = [attributeDict objectForKey:@"Checksum"];
         
         if ((!type) || (![type isEqualToString:@"HiFiToy"]) ||
-            (!version) || (![version isEqualToString:@"1.0"]) || (!checkSumStr)){
+            (!version) || (![version isEqualToString:@"1.0"])){
             //[parser abortParsing];
             [xmlParser stop];
-            NSLog(@"DspPreset xml file is not correct. See \"Type\", \"Version\" or \"Checksum\" fields.");
+            NSLog(@"DspPreset xml file is not correct. See \"Type\", \"Version\" fields.");
             return;
         }
         
-        //get checksum from NSString
-        self.checkSum =  atoi([checkSumStr UTF8String]);
-        NSLog(@"import checksum = %@", [NSString stringWithFormat:@"%d", self.checkSum ]);
     }
     
     //get DspAddress of DspElement
