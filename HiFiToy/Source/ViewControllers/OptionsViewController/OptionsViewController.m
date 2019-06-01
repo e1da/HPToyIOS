@@ -43,7 +43,6 @@
     if (!self.hiFiToyDevice) return;
     
     _nameLabel_outl.text = self.hiFiToyDevice.name;
-    _UUIDLabel_outl.text = [self.hiFiToyDevice getShortUUIDString];
 }
 
 /*-----------------------------------------------------------------------------------------
@@ -81,7 +80,7 @@
             [self presentViewController:alertController animated:YES completion:nil];
         }
         
-        if (indexPath.row == 2){//restore factory settings
+        if (indexPath.row == 1){//restore factory settings
             
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"", @"")
                                                                                      message:NSLocalizedString(@"Are you sure you want to reset to factory defaults?", @"")
@@ -102,7 +101,7 @@
             
             [self presentViewController:alertController animated:YES completion:nil];
         }
-        if (indexPath.row == 3){//change pairing code
+        if (indexPath.row == 2){//change pairing code
             
             [[DialogSystem sharedInstance] showNewPairCodeInput];
         }
@@ -134,11 +133,6 @@
         
     }
     
-    /*if ([[segue identifier] isEqualToString:@"showBiquadManager"]) {
-        BiquadManagerViewController *destination = (BiquadManagerViewController * )segue.destinationViewController;
-        destination.xover = [[self.hiFiToyDevice getActivePreset] xover];
-        
-    }*/
     
 }
 

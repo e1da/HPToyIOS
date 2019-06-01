@@ -19,5 +19,5 @@
 
 //outlets
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel_outl;
-@property (weak, nonatomic) IBOutlet UILabel *UUIDLabel_outl;
+
 @end
