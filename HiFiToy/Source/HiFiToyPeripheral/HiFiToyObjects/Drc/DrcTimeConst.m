@@ -183,7 +183,7 @@
     [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
     
     uint32_t t = [self timeToUint32:self.energyMS];
-    NSLog(@"%f %d", _energyMS, t);
+    //NSLog(@"%f %d", _energyMS, t);
     
     uint32_t d[2] = {reverseUint32(0x800000 - t), reverseUint32(t)};
     [data appendBytes:d length:8];

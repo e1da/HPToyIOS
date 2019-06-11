@@ -75,15 +75,26 @@
  UITableViewDataSource protocol
  -----------------------------------------------------------------------------------------*/
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
     
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) { // for preset list
         return [hiFiToyPresetList count];
+    } else if (section == 1) {
+        return 2;
     }
-    return 1; // for merge tool
+    return 1; // for merge tool and preset repository menu
+}
+
+- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return @"LOCAL PRESET LIST";
+    } else if (section == 1) {
+        return @"IMPORT PRESET";
+    }
+    return @"";
 }
 
 
@@ -115,13 +126,29 @@
         
         return presetCell;
         
-    } else { // merge tool
+    } else if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            UITableViewCell * urlImportPresetCell = [tableView dequeueReusableCellWithIdentifier:@"UrlPresetImportCell"];
+            if (urlImportPresetCell == nil) {
+                urlImportPresetCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UrlPresetImportCell"];
+            }
+            return urlImportPresetCell;
+        } else if (indexPath.row == 1) {
+            UITableViewCell * textImportPresetCell = [tableView dequeueReusableCellWithIdentifier:@"TextImportPresetCell"];
+            if (textImportPresetCell == nil) {
+                textImportPresetCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextImportPresetCell"];
+            }
+            return textImportPresetCell;
+            
+        }
+    } else if (indexPath.section == 2) { // merge tool
         MergeToolCell * mergeCell = [tableView dequeueReusableCellWithIdentifier:@"MergeToolCell"];
         if (mergeCell == nil) {
             mergeCell = [[MergeToolCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MergeToolCell"];
         }
         
         return mergeCell;
+        
     }
     
     return nil;

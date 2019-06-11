@@ -13,6 +13,14 @@
 		D301F091218246EB00E181C6 /* BiquadValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F090218246EB00E181C6 /* BiquadValueControl.m */; };
 		D301F09421834FDF00E181C6 /* BiquadCoefValueControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F09321834FDF00E181C6 /* BiquadCoefValueControl.m */; };
 		D301F097218353D700E181C6 /* CoefButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D301F096218353D700E181C6 /* CoefButton.m */; };
+		D302578822AAB0AC008CF0C9 /* PresetRepoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D302578722AAB0AC008CF0C9 /* PresetRepoViewController.m */; };
+		D302578922AAB2C6008CF0C9 /* PresetRepoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D302578722AAB0AC008CF0C9 /* PresetRepoViewController.m */; };
+		D302578C22AAB8C8008CF0C9 /* DownloadPresetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D302578B22AAB8C8008CF0C9 /* DownloadPresetCell.m */; };
+		D302578D22AABAB3008CF0C9 /* DownloadPresetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D302578B22AAB8C8008CF0C9 /* DownloadPresetCell.m */; };
+		D30257B322AE6BCF008CF0C9 /* PresetTextImportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D30257B222AE6BCF008CF0C9 /* PresetTextImportViewController.m */; };
+		D30257B422AE6C72008CF0C9 /* PresetTextImportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D30257B222AE6BCF008CF0C9 /* PresetTextImportViewController.m */; };
+		D30257B822AE6FC2008CF0C9 /* PresetUrlImportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D30257B722AE6FC2008CF0C9 /* PresetUrlImportViewController.m */; };
+		D30257B922AE7140008CF0C9 /* PresetUrlImportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D30257B722AE6FC2008CF0C9 /* PresetUrlImportViewController.m */; };
 		D307EB1022147D6200ACE7A3 /* MergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D307EB0E22147D6200ACE7A3 /* MergeViewController.m */; };
 		D307EB1122147D6200ACE7A3 /* MergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D307EB0E22147D6200ACE7A3 /* MergeViewController.m */; };
 		D307EB1222147D6200ACE7A3 /* BaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D307EB0F22147D6200ACE7A3 /* BaseCell.m */; };
@@ -254,6 +262,14 @@
 		D301F09321834FDF00E181C6 /* BiquadCoefValueControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadCoefValueControl.m; sourceTree = "<group>"; };
 		D301F095218353D700E181C6 /* CoefButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoefButton.h; sourceTree = "<group>"; };
 		D301F096218353D700E181C6 /* CoefButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoefButton.m; sourceTree = "<group>"; };
+		D302578622AAB0AC008CF0C9 /* PresetRepoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetRepoViewController.h; sourceTree = "<group>"; };
+		D302578722AAB0AC008CF0C9 /* PresetRepoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetRepoViewController.m; sourceTree = "<group>"; };
+		D302578A22AAB8C8008CF0C9 /* DownloadPresetCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadPresetCell.h; sourceTree = "<group>"; };
+		D302578B22AAB8C8008CF0C9 /* DownloadPresetCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadPresetCell.m; sourceTree = "<group>"; };
+		D30257B122AE6BCF008CF0C9 /* PresetTextImportViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetTextImportViewController.h; sourceTree = "<group>"; };
+		D30257B222AE6BCF008CF0C9 /* PresetTextImportViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetTextImportViewController.m; sourceTree = "<group>"; };
+		D30257B622AE6FC2008CF0C9 /* PresetUrlImportViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetUrlImportViewController.h; sourceTree = "<group>"; };
+		D30257B722AE6FC2008CF0C9 /* PresetUrlImportViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetUrlImportViewController.m; sourceTree = "<group>"; };
 		D307EB0C22147D6200ACE7A3 /* BaseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseCell.h; sourceTree = "<group>"; };
 		D307EB0D22147D6200ACE7A3 /* MergeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeViewController.h; sourceTree = "<group>"; };
 		D307EB0E22147D6200ACE7A3 /* MergeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergeViewController.m; sourceTree = "<group>"; };
@@ -450,6 +466,35 @@
 			path = ValueControls;
 			sourceTree = "<group>";
 		};
+		D302578522AAB08A008CF0C9 /* PresetRepoViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D302578622AAB0AC008CF0C9 /* PresetRepoViewController.h */,
+				D302578722AAB0AC008CF0C9 /* PresetRepoViewController.m */,
+				D302578A22AAB8C8008CF0C9 /* DownloadPresetCell.h */,
+				D302578B22AAB8C8008CF0C9 /* DownloadPresetCell.m */,
+			);
+			path = PresetRepoViewController;
+			sourceTree = "<group>";
+		};
+		D30257B022AE6B99008CF0C9 /* PresetTextImportViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D30257B122AE6BCF008CF0C9 /* PresetTextImportViewController.h */,
+				D30257B222AE6BCF008CF0C9 /* PresetTextImportViewController.m */,
+			);
+			path = PresetTextImportViewController;
+			sourceTree = "<group>";
+		};
+		D30257B522AE6F8A008CF0C9 /* PresetUrlImportViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D30257B622AE6FC2008CF0C9 /* PresetUrlImportViewController.h */,
+				D30257B722AE6FC2008CF0C9 /* PresetUrlImportViewController.m */,
+			);
+			path = PresetUrlImportViewController;
+			sourceTree = "<group>";
+		};
 		D307EB0B22147D0900ACE7A3 /* MergeViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -532,6 +577,9 @@
 		D33A258420CA89E6008A94EF /* OptionsViewController */ = {
 			isa = PBXGroup;
 			children = (
+				D30257B522AE6F8A008CF0C9 /* PresetUrlImportViewController */,
+				D30257B022AE6B99008CF0C9 /* PresetTextImportViewController */,
+				D302578522AAB08A008CF0C9 /* PresetRepoViewController */,
 				D38A3C5E221FFFFB00319EDB /* AdvertiseViewController */,
 				D307EB0B22147D0900ACE7A3 /* MergeViewController */,
 				D3E97AAE2157F06500C98402 /* EnergyViewController */,
@@ -1085,11 +1133,13 @@
 				D33A253E20BFF674008A94EF /* Number88.h in Sources */,
 				D379127A20D3C55B0089962D /* DrcView.m in Sources */,
 				D3BBD4FB218DC1DD00FFDB86 /* CoefWarningController.m in Sources */,
+				D30257B322AE6BCF008CF0C9 /* PresetTextImportViewController.m in Sources */,
 				D32483C82214683800028514 /* MergeToolCell.m in Sources */,
 				D33A255E20C6AEBB008A94EF /* HiFiToyDeviceList.m in Sources */,
 				D33A253F20BFF674008A94EF /* Number523.h in Sources */,
 				D33A257420C94459008A94EF /* AppDelegate.m in Sources */,
 				D33A254020BFF674008A94EF /* Number923.h in Sources */,
+				D302578C22AAB8C8008CF0C9 /* DownloadPresetCell.m in Sources */,
 				D30FF8802166A0D7007FA50D /* FilterTypeControl.m in Sources */,
 				D3E297C5226381620096012B /* IntegerUtility.c in Sources */,
 				D307EB1222147D6200ACE7A3 /* BaseCell.m in Sources */,
@@ -1101,6 +1151,7 @@
 				D379127720D3C2CE0089962D /* DrcViewController.m in Sources */,
 				D33A258320C952CD008A94EF /* DemoCell.m in Sources */,
 				D39C3CD220BEB71C00BDC1A0 /* Drc.m in Sources */,
+				D30257B822AE6FC2008CF0C9 /* PresetUrlImportViewController.m in Sources */,
 				D39C3CCF20BEB71200BDC1A0 /* Loudness.m in Sources */,
 				D30FF886216D49DE007FA50D /* FloatUtility.c in Sources */,
 				D33A256120C6E163008A94EF /* BleDriver.m in Sources */,
@@ -1119,6 +1170,7 @@
 				D39C3CE220BEDD9D00BDC1A0 /* Number523.c in Sources */,
 				D33A254920C15AF7008A94EF /* DrcCoef.m in Sources */,
 				D3E297B022622AAA0096012B /* Biquad.m in Sources */,
+				D302578822AAB0AC008CF0C9 /* PresetRepoViewController.m in Sources */,
 				D33A255220C5728E008A94EF /* DrcTimeConst.m in Sources */,
 				D39C3CC920BEB6FB00BDC1A0 /* Volume.m in Sources */,
 				D30FF87A21650820007FA50D /* FilterLabel.m in Sources */,
@@ -1166,6 +1218,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D30257B922AE7140008CF0C9 /* PresetUrlImportViewController.m in Sources */,
+				D30257B422AE6C72008CF0C9 /* PresetTextImportViewController.m in Sources */,
+				D302578D22AABAB3008CF0C9 /* DownloadPresetCell.m in Sources */,
+				D302578922AAB2C6008CF0C9 /* PresetRepoViewController.m in Sources */,
 				D3E297C62263820A0096012B /* IntegerUtility.c in Sources */,
 				D3E297B122622AD00096012B /* Biquad.m in Sources */,
 				D38A3C6222200C9E00319EDB /* AdvertiseViewController.h in Sources */,

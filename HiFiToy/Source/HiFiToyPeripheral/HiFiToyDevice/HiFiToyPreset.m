@@ -442,18 +442,55 @@
     [xmlParser pushDelegate:self];*/
 }
 
+- (NSString *) checkPresetName:(NSString *)name {
+    if ([[[[HiFiToyControl sharedInstance] activeHiFiToyDevice] activeKeyPreset] isEqualToString:name]) {
+        NSString * msg = [NSString stringWithFormat:@"Preset %@ is exist and active. Import is not success.", name];
+        [[DialogSystem sharedInstance] showAlert:msg];
+        return nil;
+    }
+    
+    if ([[HiFiToyPresetList sharedInstance] getPresetWithKey:name]) {
+        int index = 1;
+        NSString * modifyName;
+        do {
+            modifyName = [name stringByAppendingString:[NSString stringWithFormat:@"_%d", index++]];
+        } while ([[HiFiToyPresetList sharedInstance] getPresetWithKey:modifyName]);
+        
+        
+        /*NSString * msg = [NSString stringWithFormat:@"Preset %@ is exist and active. And we saved it with %@ name", name, modifyName];
+        [[DialogSystem sharedInstance] showAlert:msg];*/
+        return modifyName;
+    }
+    return name;
+}
 
 -(BOOL) importFromXml:(NSURL *)url {
     
     ///get name for preset
     NSArray * fileNameArray = [url.lastPathComponent componentsSeparatedByString:@"."];
     NSString * fileName = [fileNameArray objectAtIndex:0];
+    
+    fileName = [self checkPresetName:fileName];
+    if (!fileName) return NO;
     self.presetName = fileName;
     
     //start xml parser
     count = 0;
     xmlParser = [[XmlParserWrapper alloc] init];
     [xmlParser startParsingWithUrl:url withDelegate:self];
+    
+    return NO;
+}
+
+-(BOOL) importFromXmlWithData:(NSData *)data withName:(NSString *)name {
+    name = [self checkPresetName:name];
+    if (!name) return NO;
+    self.presetName = name;
+    
+    //start xml parser
+    count = 0;
+    xmlParser = [[XmlParserWrapper alloc] init];
+    [xmlParser startParsingWithData:data withDelegate:self];
     
     return NO;
 }

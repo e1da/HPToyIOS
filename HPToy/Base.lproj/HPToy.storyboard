@@ -527,6 +527,66 @@
                                     <segue destination="3Ua-Vn-Rel" kind="push" identifier="showMergeTool" id="8J1-EW-qma"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="PresetRepoCell" editingAccessoryType="checkmark" id="E4y-yl-W3C">
+                                <rect key="frame" x="0.0" y="175.5" width="375" height="60"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E4y-yl-W3C" id="Rzj-35-rwK">
+                                    <rect key="frame" x="0.0" y="0.0" width="341" height="59.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Official Repository" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pdz-KK-QFA">
+                                            <rect key="frame" x="14" y="17" width="256" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="RVY-Vt-V1l" kind="push" id="QV5-w3-PHu"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="UrlPresetImportCell" editingAccessoryType="checkmark" id="F3C-er-nNC">
+                                <rect key="frame" x="0.0" y="235.5" width="375" height="60"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="F3C-er-nNC" id="Nms-5f-Ibw">
+                                    <rect key="frame" x="0.0" y="0.0" width="341" height="59.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Direct link" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BeE-dd-lhE">
+                                            <rect key="frame" x="14" y="17" width="256" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="teN-hg-2Mp" kind="push" id="UXv-gB-JX7"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="TextImportPresetCell" editingAccessoryType="checkmark" id="9Hl-Qs-UNc">
+                                <rect key="frame" x="0.0" y="295.5" width="375" height="60"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9Hl-Qs-UNc" id="Whn-qT-Z8t">
+                                    <rect key="frame" x="0.0" y="0.0" width="341" height="59.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Text" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VK6-Tl-xlB">
+                                            <rect key="frame" x="14" y="17" width="256" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="6UD-DF-S1y" kind="push" id="Mzf-T9-4Yy"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <sections/>
                         <connections>
@@ -552,6 +612,153 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S3O-tD-cp7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1182" y="1030"/>
+        </scene>
+        <!--Url Import-->
+        <scene sceneID="CW0-A4-NB9">
+            <objects>
+                <viewController id="teN-hg-2Mp" customClass="PresetUrlImportViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pUR-5o-AWH"/>
+                        <viewControllerLayoutGuide type="bottom" id="BTu-Tc-hrM"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xq7-Yd-oNb">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tFo-KH-dyt">
+                                <rect key="frame" x="20" y="84" width="335" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" textContentType="url"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="tFo-KH-dyt" firstAttribute="leading" secondItem="xq7-Yd-oNb" secondAttribute="leading" constant="20" id="YfR-N9-JS8"/>
+                            <constraint firstItem="tFo-KH-dyt" firstAttribute="top" secondItem="pUR-5o-AWH" secondAttribute="bottom" constant="20" id="fVG-IM-suZ"/>
+                            <constraint firstItem="tFo-KH-dyt" firstAttribute="trailing" secondItem="xq7-Yd-oNb" secondAttribute="trailing" constant="-20" id="xyf-Ua-qYT"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Url Import" id="Io7-xT-8HM">
+                        <barButtonItem key="rightBarButtonItem" title="Import" style="plain" id="Oeh-3D-Rgl">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="l7I-xQ-0Iv">
+                                <rect key="frame" x="276" y="7" width="83" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Import"/>
+                                <connections>
+                                    <action selector="importPreset:" destination="teN-hg-2Mp" eventType="touchUpInside" id="4n7-rH-urB"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="urlTextFiled_outl" destination="tFo-KH-dyt" id="xGY-gN-33a"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ffk-MB-CpC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="366" y="1766"/>
+        </scene>
+        <!--Official Repository-->
+        <scene sceneID="FLA-LI-4jf">
+            <objects>
+                <tableViewController id="RVY-Vt-V1l" customClass="PresetRepoViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="60" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="IWS-gN-bHH">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="DownloadPresetCell" id="SaB-Zn-8aj" customClass="DownloadPresetCell">
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="60"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SaB-Zn-8aj" id="FoS-Th-Ini">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dt3-c5-KE8">
+                                            <rect key="frame" x="268" y="13" width="81" height="34"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <state key="normal" title="Download"/>
+                                            <connections>
+                                                <action selector="downloadPreset:" destination="SaB-Zn-8aj" eventType="touchUpInside" id="07z-WN-Gpa"/>
+                                            </connections>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sAZ-ia-mZL">
+                                            <rect key="frame" x="36" y="17" width="150" height="26"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Dt3-c5-KE8" firstAttribute="centerY" secondItem="FoS-Th-Ini" secondAttribute="centerYWithinMargins" id="AtM-Km-L19"/>
+                                        <constraint firstItem="sAZ-ia-mZL" firstAttribute="leading" secondItem="FoS-Th-Ini" secondAttribute="leadingMargin" constant="10" id="RxC-R6-P3I"/>
+                                        <constraint firstItem="sAZ-ia-mZL" firstAttribute="centerY" secondItem="FoS-Th-Ini" secondAttribute="centerYWithinMargins" id="Tzp-2e-VBR"/>
+                                        <constraint firstItem="Dt3-c5-KE8" firstAttribute="trailing" secondItem="FoS-Th-Ini" secondAttribute="trailingMargin" constant="-10" id="lhA-GG-KCP"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="downloadPresetName_outl" destination="sAZ-ia-mZL" id="DMq-9K-nkF"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="RVY-Vt-V1l" id="g8N-Fj-PS5"/>
+                            <outlet property="delegate" destination="RVY-Vt-V1l" id="3TT-fb-apf"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Official Repository" id="Mnr-WQ-nBP"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="54D-GZ-j8B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1181.5999999999999" y="1767.1664167916044"/>
+        </scene>
+        <!--Text Import-->
+        <scene sceneID="WJG-2l-HIK">
+            <objects>
+                <viewController id="6UD-DF-S1y" customClass="PresetTextImportViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="b4a-Kl-9J1"/>
+                        <viewControllerLayoutGuide type="bottom" id="WQR-Q3-YVX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="miS-LX-zZ9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Rwr-DW-JLB">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Rwr-DW-JLB" firstAttribute="leading" secondItem="miS-LX-zZ9" secondAttribute="leading" id="4Zi-sV-1gg"/>
+                            <constraint firstItem="Rwr-DW-JLB" firstAttribute="top" secondItem="b4a-Kl-9J1" secondAttribute="bottom" id="97z-6R-JCX"/>
+                            <constraint firstItem="Rwr-DW-JLB" firstAttribute="bottom" secondItem="WQR-Q3-YVX" secondAttribute="top" id="h3u-PQ-WMW"/>
+                            <constraint firstItem="Rwr-DW-JLB" firstAttribute="trailing" secondItem="miS-LX-zZ9" secondAttribute="trailing" id="pCu-0F-pd5"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Text Import" id="UPO-8V-y1a">
+                        <barButtonItem key="rightBarButtonItem" title="Import" style="plain" id="yD2-qS-7Kz">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dEC-zK-DAQ">
+                                <rect key="frame" x="276" y="7" width="83" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Import"/>
+                                <connections>
+                                    <action selector="importPreset:" destination="6UD-DF-S1y" eventType="touchUpInside" id="xHZ-h2-R0p"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="presetTextView_outl" destination="Rwr-DW-JLB" id="0Bu-Gn-Bxz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nfp-Qf-0fH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2056.8000000000002" y="1766.2668665667168"/>
         </scene>
         <!--Preset Name-->
         <scene sceneID="TyX-Mn-mNQ">

@@ -43,5 +43,6 @@
 - (void) updateChecksumWithParamData:(NSData *)data;
 
 -(BOOL) importFromXml:(NSURL *)url;
+-(BOOL) importFromXmlWithData:(NSData *)data withName:(NSString *)name;
 
 @end
