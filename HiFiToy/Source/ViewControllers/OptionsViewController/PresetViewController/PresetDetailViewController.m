@@ -50,8 +50,8 @@
 {
     _name_outl.text = self.hiFiToyPreset.presetName;
     
-    if ([self.hiFiToyPreset.presetName isEqualToString:@"DefaultPreset"]){
-        _name_outl.text = NSLocalizedString(@"DefaultPreset", @"");
+    if ([self.hiFiToyPreset.presetName isEqualToString:@"No processing"]){
+        _name_outl.text = self.hiFiToyPreset.presetName;
         _name_outl.enabled = NO;
     } else {
         [_name_outl becomeFirstResponder];

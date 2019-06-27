@@ -119,7 +119,7 @@
 
 //creation method
 - (void) setDefault {
-    self.presetName = @"DefaultPreset";
+    self.presetName = @"No processing";
     
     //Filters
     self.filters = [Filters initDefaultWithAddr0:BIQUAD_FILTER_REG withAddr1:(BIQUAD_FILTER_REG + 7)];

@@ -479,15 +479,18 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FGc-vE-hC5">
-                                            <rect key="frame" x="14" y="17" width="256" height="26"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FGc-vE-hC5">
+                                            <rect key="frame" x="15" y="18" width="283" height="24"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="detailDisclosure" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jJu-ac-gg2">
-                                            <rect key="frame" x="317" y="19" width="22" height="22"/>
+                                            <rect key="frame" x="318" y="19" width="22" height="22"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="22" id="LLQ-T7-R8j"/>
+                                                <constraint firstAttribute="height" constant="22" id="thc-gg-sM1"/>
+                                            </constraints>
                                             <state key="normal">
                                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </state>
@@ -497,8 +500,11 @@
                                         </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="centerYWithinMargins" secondItem="jJu-ac-gg2" secondAttribute="centerY" id="egW-tg-nly"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="jJu-ac-gg2" secondAttribute="trailing" constant="20" id="q80-li-bS6"/>
+                                        <constraint firstItem="FGc-vE-hC5" firstAttribute="centerY" secondItem="Wrn-aV-6Qp" secondAttribute="centerY" id="bdD-Pe-wIv"/>
+                                        <constraint firstItem="jJu-ac-gg2" firstAttribute="centerY" secondItem="Wrn-aV-6Qp" secondAttribute="centerYWithinMargins" id="egW-tg-nly"/>
+                                        <constraint firstItem="FGc-vE-hC5" firstAttribute="leading" secondItem="Wrn-aV-6Qp" secondAttribute="leading" constant="15" id="nZ6-Wn-kCa"/>
+                                        <constraint firstItem="jJu-ac-gg2" firstAttribute="trailing" secondItem="Wrn-aV-6Qp" secondAttribute="trailing" constant="-35" id="q80-li-bS6"/>
+                                        <constraint firstItem="FGc-vE-hC5" firstAttribute="trailing" secondItem="jJu-ac-gg2" secondAttribute="leading" constant="-20" id="ubH-vn-Afr"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -514,7 +520,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k7g-5l-us4">
-                                            <rect key="frame" x="14" y="17" width="256" height="26"/>
+                                            <rect key="frame" x="15" y="17" width="256" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -535,7 +541,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Official Repository" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pdz-KK-QFA">
-                                            <rect key="frame" x="14" y="17" width="256" height="26"/>
+                                            <rect key="frame" x="15" y="17" width="256" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -555,7 +561,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Direct link" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BeE-dd-lhE">
-                                            <rect key="frame" x="14" y="17" width="256" height="26"/>
+                                            <rect key="frame" x="15" y="17" width="256" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -575,7 +581,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Text" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VK6-Tl-xlB">
-                                            <rect key="frame" x="14" y="17" width="256" height="26"/>
+                                            <rect key="frame" x="15" y="17" width="256" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

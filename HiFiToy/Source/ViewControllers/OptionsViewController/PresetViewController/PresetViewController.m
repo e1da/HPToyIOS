@@ -127,13 +127,13 @@
         return presetCell;
         
     } else if (indexPath.section == 1) {
-        if (indexPath.row == 0) {
+        if (indexPath.row == 0) { // url import
             UITableViewCell * urlImportPresetCell = [tableView dequeueReusableCellWithIdentifier:@"UrlPresetImportCell"];
             if (urlImportPresetCell == nil) {
                 urlImportPresetCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UrlPresetImportCell"];
             }
             return urlImportPresetCell;
-        } else if (indexPath.row == 1) {
+        } else if (indexPath.row == 1) { // text import
             UITableViewCell * textImportPresetCell = [tableView dequeueReusableCellWithIdentifier:@"TextImportPresetCell"];
             if (textImportPresetCell == nil) {
                 textImportPresetCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextImportPresetCell"];
