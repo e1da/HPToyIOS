@@ -9,7 +9,7 @@
 #import "HiFiToyPresetList.h"
 
 @interface HiFiToyPresetList() {
-    NSMutableDictionary *list;
+    NSMutableArray * list;
 }
 @end
 
@@ -18,12 +18,11 @@
 - (id) init {
     self = [super init];
     if (self) {
-        list = [[NSMutableDictionary alloc] init];
+        list = [[NSMutableArray alloc] init];
         
         //if default preset not exists then create
-        if ( (![self openPresetListFromFile]) || ([self isPresetExist:@"DefaultPreset"] == NO) ) {
-            HiFiToyPreset * p = [HiFiToyPreset getDefault];
-            [self updatePreset:p withKey:@"DefaultPreset"];
+        if ( (![self openPresetListFromFile]) || ([self isPresetExist:@"No processing"] == NO) ) {
+            [self setPreset:[HiFiToyPreset getDefault]];
         }
     }
     return self;
@@ -46,14 +45,18 @@
     
     plistPath = [rootPath stringByAppendingPathComponent:@"PresetList.plist"];
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
+    if(![[NSFileManager defaultManager] fileExistsAtPath:plistPath]){
+        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"PresetList" ofType:@"plist" ]toPath:plistPath error:nil];
+    }
+    
+    //if ([[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
         
         NSData * data = [NSData dataWithContentsOfFile:plistPath];
         list = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         return YES;
-    }
+    //}
     
-    return NO;
+    //return NO;
 }
 
 -(BOOL) savePresetListToFile {
@@ -80,39 +83,56 @@
     return list.count;
 }
 
--(NSArray *) getValues {
-    return list.allValues;
+-(BOOL) isPresetExist:(NSString *)presetName {
+    for (HiFiToyPreset * preset in list) {
+        if ([preset.presetName isEqualToString:presetName]) return YES;
+    }
+    return NO;
 }
 
--(NSArray *) getKeys {
-    return list.allKeys;
+-(void) removePresetWithName:(NSString *)presetName {
+    for (int i = 0 ; i < list.count; i++) {
+        HiFiToyPreset * p = [list objectAtIndex:i];
+        if ([p.presetName isEqualToString:presetName]) {
+            [list removeObjectAtIndex:i];
+            [self savePresetListToFile];
+            break;
+        }
+    }
 }
 
--(void) removePresetWithKey:(NSString *)presetKey {
-    [list removeObjectForKey:presetKey];
+-(void) setPreset:(HiFiToyPreset *)preset {
+    for (int i = 0; i < list.count; i++) {
+        HiFiToyPreset * p = [list objectAtIndex:i];
+        if ([p.presetName isEqualToString:preset.presetName]) {
+            [list replaceObjectAtIndex:i withObject:[preset copy]];
+            [self savePresetListToFile];
+            return;
+        }
+    }
+    
+    [list addObject:[preset copy]];
     [self savePresetListToFile];
 }
 
--(void) updatePreset:(HiFiToyPreset *)preset withKey:(NSString *)presetKey {
-    [list setObject:[preset copy] forKey:presetKey];
-    [self savePresetListToFile];
+-(HiFiToyPreset *) presetWithIndex:(NSInteger)index {
+    return [[list objectAtIndex:index] copy];
 }
 
--(HiFiToyPreset *) getPresetWithKey:(NSString *)presetKey{
-    return [[list objectForKey:presetKey] copy];
-}
-
--(BOOL) isPresetExist:(NSString *)presetKey {
-    return ([list objectForKey:presetKey]) ? YES : NO;
+-(HiFiToyPreset *) presetWithName:(NSString *)presetName {
+    for (HiFiToyPreset * preset in list) {
+        if ([preset.presetName isEqualToString:presetName]) {
+            return [preset copy];
+        }
+    }
+    return nil;
 }
 
 -(void) description{
     NSLog(@"================ PresetList =======================");
-    NSArray *keys = list.allKeys;
-    for (int i = 0; i < list.count; i++){
-        HiFiToyPreset *preset = [list objectForKey:[keys objectAtIndex:i]];
-        
-        NSLog(@"%@ %@", (NSString *)[keys objectAtIndex:i], preset.presetName);
+    for (int i = 0; i < list.count; i++) {
+        HiFiToyPreset * p = [list objectAtIndex:i];
+        NSLog(@"%d %@", i, p.presetName);
     }
 }
 

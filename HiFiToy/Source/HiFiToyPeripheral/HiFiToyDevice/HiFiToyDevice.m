@@ -33,7 +33,7 @@
         self.pairingCode = [decoder decodeIntForKey:@"pairingCode"];
         
         _activeKeyPreset = [decoder decodeObjectForKey:@"activeKeyPreset"];
-        _preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:_activeKeyPreset];
+        _preset = [[HiFiToyPresetList sharedInstance] presetWithName:_activeKeyPreset];
         
         self.audioSource = PCM9211_USB_SOURCE;
         [self setDefaultEnergyConfig];
@@ -53,8 +53,8 @@
     self.uuid = @"demo";
     self.name = @"Default";
     self.pairingCode = 0;
-    _activeKeyPreset = @"DefaultPreset";
-    _preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:_activeKeyPreset];
+    _activeKeyPreset = @"No processing";
+    _preset = [[HiFiToyPresetList sharedInstance] presetWithName:_activeKeyPreset];
     self.audioSource = PCM9211_USB_SOURCE;
     self.advertiseMode = ALWAYS_ENABLED;
     [self setDefaultEnergyConfig];
@@ -70,11 +70,11 @@
 - (void) setActiveKeyPreset:(NSString *)activeKeyPreset {
     _activeKeyPreset = activeKeyPreset;
     
-    _preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:_activeKeyPreset];
+    _preset = [[HiFiToyPresetList sharedInstance] presetWithName:_activeKeyPreset];
     
     if (!_preset){
-        _activeKeyPreset = @"DefaultPreset";
-        _preset = [[HiFiToyPresetList sharedInstance] getPresetWithKey:@"DefaultPreset"];
+        _activeKeyPreset = @"No processing";
+        _preset = [[HiFiToyPresetList sharedInstance] presetWithName:_activeKeyPreset];
     }
     [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
 }
@@ -157,7 +157,7 @@
 
 - (void) restoreFactory {
     //set default preset and save to file
-    self.activeKeyPreset = @"DefaultPreset";
+    self.activeKeyPreset = @"No processing";
     
     if (![[HiFiToyControl sharedInstance] isConnected]) return;
     

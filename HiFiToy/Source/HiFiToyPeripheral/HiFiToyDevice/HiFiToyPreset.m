@@ -38,8 +38,7 @@
     return [[HiFiToyPreset alloc] init];
 }
 
-- (void) initCharacteristicsPointer
-{
+- (void) initCharacteristicsPointer {
     _characteristics = [NSArray arrayWithObjects:_filters, _masterVolume, _bassTreble, _loudness, _drc, nil];
 }
 
@@ -77,8 +76,7 @@
 
 
 //NSCopying protocol implementation
--(HiFiToyPreset *)copyWithZone:(NSZone *)zone
-{
+-(HiFiToyPreset *)copyWithZone:(NSZone *)zone {
     HiFiToyPreset * copyPreset = [[[self class] allocWithZone:zone] init];
     
     NSLog(@"%lu", (unsigned long)copyPreset.characteristics.count);
@@ -98,8 +96,7 @@
 }
 
 //isEqual implementation
-- (BOOL) isEqual: (id) object
-{
+- (BOOL) isEqual: (id) object {
     if ([object class] == [self class]){
         HiFiToyPreset * temp = object;
         
@@ -157,8 +154,7 @@
     return 0;
 }
 
-- (BOOL)rename:(NSString *)newName
-{
+- (BOOL)rename:(NSString *)newName {
     if ([self.presetName isEqualToString:newName]){
         return NO;
     }
@@ -172,16 +168,15 @@
     NSString * tempName = self.presetName;
     self.presetName = [newName copy];
     
-    [[HiFiToyPresetList sharedInstance] updatePreset:self withKey:self.presetName];
-    [[HiFiToyPresetList sharedInstance] removePresetWithKey:tempName];
+    [[HiFiToyPresetList sharedInstance] setPreset:self];
+    [[HiFiToyPresetList sharedInstance] removePresetWithName:tempName];
     
     
     return YES;
 }
 
 //send preset to HiFiToyPeripheral, response always YES
-- (void) sendWithResponse:(BOOL)response
-{
+- (void) sendWithResponse:(BOOL)response {
     if (![[HiFiToyControl sharedInstance] isConnected]) return;
     
     //init progress dialog
@@ -385,7 +380,7 @@
         [self updateChecksumWithParamData:paramData];
         
         //add new import preset to list and save
-        [[HiFiToyPresetList sharedInstance] updatePreset:self withKey:self.presetName];
+        [[HiFiToyPresetList sharedInstance] setPreset:self];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"PresetImportNotification" object:self];
         
@@ -449,12 +444,12 @@
         return nil;
     }
     
-    if ([[HiFiToyPresetList sharedInstance] getPresetWithKey:name]) {
+    if ([[HiFiToyPresetList sharedInstance] presetWithName:name]) {
         int index = 1;
         NSString * modifyName;
         do {
             modifyName = [name stringByAppendingString:[NSString stringWithFormat:@"_%d", index++]];
-        } while ([[HiFiToyPresetList sharedInstance] getPresetWithKey:modifyName]);
+        } while ([[HiFiToyPresetList sharedInstance] presetWithName:modifyName]);
         
         
         /*NSString * msg = [NSString stringWithFormat:@"Preset %@ is exist and active. And we saved it with %@ name", name, modifyName];
@@ -558,7 +553,7 @@
         
     } else {
         [self updateChecksum];
-        [[HiFiToyPresetList sharedInstance] updatePreset:self withKey:self.presetName];
+        [[HiFiToyPresetList sharedInstance] setPreset:self];
         
         NSString * msg = [NSString stringWithFormat:@"'%@' preset was successfully added.", self.presetName];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"PresetImportXmlNotification" object:nil];

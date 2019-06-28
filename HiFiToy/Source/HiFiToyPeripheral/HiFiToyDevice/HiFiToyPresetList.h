@@ -15,12 +15,13 @@
 + (HiFiToyPresetList *)sharedInstance;
 
 -(NSUInteger) count;
--(NSArray *) getValues;
--(NSArray *) getKeys;
--(void) removePresetWithKey:(NSString *)presetKey;
--(void) updatePreset:(HiFiToyPreset *)preset withKey:(NSString *)presetKey;
--(HiFiToyPreset *) getPresetWithKey:(NSString *)presetKey;
--(BOOL) isPresetExist:(NSString *)presetKey;
+
+-(BOOL) isPresetExist:(NSString *)presetName;
+-(void) removePresetWithName:(NSString *)presetName;
+
+-(void) setPreset:(HiFiToyPreset *)preset;
+-(HiFiToyPreset *) presetWithIndex:(NSInteger)index;
+-(HiFiToyPreset *) presetWithName:(NSString *)presetName;
 
 -(void) description;
 

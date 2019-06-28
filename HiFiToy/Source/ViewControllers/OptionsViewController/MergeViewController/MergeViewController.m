@@ -139,7 +139,7 @@ typedef enum {
         }
         
         if (indexPath.row < [presetList count]){
-            HiFiToyPreset * preset = [[presetList getValues] objectAtIndex:indexPath.row];
+            HiFiToyPreset * preset = [presetList presetWithIndex:indexPath.row];
             baseCell.label_outl.text = NSLocalizedString(preset.presetName, @"");
             
             HiFiToyPreset * cmpPreset = [self getPresetForState];
@@ -162,7 +162,7 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 1) {
-        HiFiToyPreset * preset = [[presetList getValues] objectAtIndex:indexPath.row];
+        HiFiToyPreset * preset = [presetList presetWithIndex:indexPath.row];
         
         switch (state) {
             case VOLUME_STATE:
@@ -314,7 +314,8 @@ typedef enum {
                                                          mergePreset.presetName = (![name.text isEqualToString:@""]) ? name.text : @" ";
                                                          
                                                          if ([[HiFiToyPresetList sharedInstance] isPresetExist:name.text] == NO) {
-                                                             [[HiFiToyPresetList sharedInstance] updatePreset:mergePreset withKey:mergePreset.presetName];
+                                                             [[HiFiToyPresetList sharedInstance] setPreset:mergePreset];
+                                                             
                                                              [self.navigationController popViewControllerAnimated:YES];
                                                          } else {
                                                              [self showInputNameDialog:mergePreset renameFlag:YES];
