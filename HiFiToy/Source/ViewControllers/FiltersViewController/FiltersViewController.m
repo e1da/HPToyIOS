@@ -31,16 +31,14 @@
 @implementation FiltersViewController
 
 - (BOOL)shouldAutorotate {
-    return NO;
+    return YES;
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskLandscape;
 }
 
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
-{
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
     return UIInterfaceOrientationLandscapeLeft;
 }
 
@@ -59,20 +57,9 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    //[super viewWillAppear:animated];
-    UIApplication* application = [UIApplication sharedApplication];
-    if (application.statusBarOrientation != UIInterfaceOrientationLandscapeLeft)
-    {
-        UIViewController *c = [[UIViewController alloc]init];
-        [c.view setBackgroundColor:[UIColor blackColor]];
-        [self.navigationController presentViewController:c animated:NO completion:^{
-            [self.navigationController dismissViewControllerAnimated:YES completion:^{
-            }];
-        }];
-    }
+    [super viewWillAppear:animated];
     
     [self updateSubviews];
-    
 }
 
 - (void) initGestures {

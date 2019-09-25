@@ -144,7 +144,7 @@ typedef enum {
             
             HiFiToyPreset * cmpPreset = [self getPresetForState];
             
-            if ( (cmpPreset) && (preset == cmpPreset) ) {
+            if ( (cmpPreset) && (preset.presetName == cmpPreset.presetName) ) {
                 baseCell.accessoryType = UITableViewCellAccessoryCheckmark;
             } else {
                 baseCell.accessoryType = UITableViewCellAccessoryNone;

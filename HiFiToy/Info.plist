@@ -39,6 +39,8 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Displays and edits photos to demonstrate the Photos framework.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>HiFiToy used bluetooth. </string>
 	<key>TargetName</key>

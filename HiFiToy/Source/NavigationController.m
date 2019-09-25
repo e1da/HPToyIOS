@@ -10,24 +10,20 @@
 
 @implementation NavigationController
 
--(BOOL)shouldAutorotate
-{
+-(BOOL)shouldAutorotate {
     return [[self.viewControllers lastObject] shouldAutorotate];
 }
 
--(UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
+-(UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return [[self.viewControllers lastObject] supportedInterfaceOrientations];
 }
 
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
-{
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
     return [[self.viewControllers lastObject] preferredInterfaceOrientationForPresentation];
 }
 
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -35,9 +31,11 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.delegate = self;
+    
     // Do any additional setup after loading the view.
     self.interactivePopGestureRecognizer.enabled = NO;
     
@@ -52,9 +50,35 @@
     [self.navigationBar addSubview:self.clipView];
 }
 
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    
+    NSUInteger vcCount = self.viewControllers.count;
+    if (vcCount > 1) {
+        UIInterfaceOrientation prevOrientation = [[self.viewControllers objectAtIndex:self.viewControllers.count - 2] preferredInterfaceOrientationForPresentation];
+        UIInterfaceOrientation currentOrientation = self.preferredInterfaceOrientationForPresentation;
+        
+        if (prevOrientation != currentOrientation) {
+            NSNumber *value = [NSNumber numberWithLong:currentOrientation];
+            [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+            
+            UIViewController *c = [[UIViewController alloc]init];
+            [c.view setBackgroundColor:[UIColor blackColor]];
+            [self presentViewController:c animated:NO completion:^{
+                [self dismissViewControllerAnimated:YES completion:^{
+                }];
+            }];
+            
+            [UINavigationController attemptRotationToDeviceOrientation];
+        }
+    }
+    
+    
+    
+    
+}
 
-- (void) viewWillLayoutSubviews
-{
+
+- (void) viewWillLayoutSubviews {
     NSString * s = [NSString stringWithFormat:@"w=%f h=%f",  self.navigationBar.frame.size.width,  self.navigationBar.frame.size.height];
     NSLog(@"viewWillLayoutSubviews %@", s);
     
@@ -68,8 +92,7 @@
 /*-----------------------------------------------------------------------------------------
  ClipDetectionNotification
  -----------------------------------------------------------------------------------------*/
-- (void) didClipDetection:(NSNotification *)notification
-{
+- (void) didClipDetection:(NSNotification *)notification {
     BOOL clip = [[notification object] boolValue];
     //NSLog(@"Clip=%d", clip);
 
@@ -93,8 +116,7 @@
 }
 
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
