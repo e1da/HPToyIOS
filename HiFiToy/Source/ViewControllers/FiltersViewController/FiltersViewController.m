@@ -10,6 +10,7 @@
 #import "XOverView.h"
 #import "DialogSystem.h"
 #import "CoefWarningController.h"
+#import "BackFR.h"
 
 
 @interface FiltersViewController () {
@@ -45,8 +46,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    //self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    //self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    //[self.navigationController.navigationBar.backItem setTitle:@" "];
     
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
     showBiquadText = NO;
@@ -107,6 +109,7 @@
     [filtersView addGestureRecognizer:pinchGesture];
     filtersView.maxFreq = 30000;
     filtersView.minFreq = 20;
+    filtersView.visibleRelativeCenter = NO;
     
     if (filtersView.maxFreq > 500){
         filtersView.drawFreqUnitArray = [NSArray arrayWithObjects:[NSNumber numberWithInt:20],
@@ -347,11 +350,46 @@
             update = YES;
             [self updateSubviews];
         }
+    } else if (!update) {
+        [self showBackgroundFRDialog];
     }
     
     if (recognizer.state == UIGestureRecognizerStateEnded){
         update = NO;
     }
+}
+
+- (void) showBackgroundFRDialog {
+        UIAlertController * alertController = [UIAlertController alertControllerWithTitle:nil
+                                                              message:nil
+                                                       preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *setBackgroundAction = [UIAlertAction actionWithTitle:@"Set background"
+                                                                      style:UIAlertActionStyleDefault
+                                                                    handler:^(UIAlertAction * _Nonnull action){
+                                                                        [self showPhotosViewController];
+                                                                    }];
+        UIAlertAction *clearAction = [UIAlertAction actionWithTitle:@"Clear"
+                                                              style:UIAlertActionStyleDefault
+                                                            handler:^(UIAlertAction * _Nonnull action){
+                                                                [[BackFR sharedInstance] clear];
+                                                                [self->filtersView setNeedsDisplay];
+                                                            }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                              style:UIAlertActionStyleCancel
+                                                            handler:nil];
+        [alertController addAction:setBackgroundAction];
+        [alertController addAction:clearAction];
+        [alertController addAction:cancelAction];
+        
+
+        [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void) showPhotosViewController {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"HPToy" bundle: nil];
+    UIViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"PhotosVC"];
+    
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void) panHandler:(UIPanGestureRecognizer *)recognizer {

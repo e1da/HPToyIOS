@@ -77,6 +77,16 @@
     }
 }
 
+- (void) dismissProgressDialog:(void (^ __nullable)(void))completion
+{
+    if ([self isProgressDialogVisible]) {
+        [_progressController dismissViewControllerAnimated:YES completion:completion];
+    } else {
+        completion();
+    }
+}
+
+
 - (void) showProgressDialog:(NSString *)title
 {
     UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;

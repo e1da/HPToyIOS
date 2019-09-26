@@ -24,6 +24,7 @@
 
 - (BOOL) isProgressDialogVisible;
 - (void) dismissProgressDialog;
+- (void) dismissProgressDialog:(void (^ __nullable)(void))completion;
 - (void) showProgressDialog:(NSString *)title;
 
 - (void) showNewPairCodeInput;

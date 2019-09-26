@@ -210,6 +210,18 @@
 		D39C3CE320BEDD9D00BDC1A0 /* Number88.c in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CE020BEDD9D00BDC1A0 /* Number88.c */; };
 		D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CE120BEDD9D00BDC1A0 /* Number923.c */; };
 		D39F551A215E34070017DF48 /* FiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39F5519215E34070017DF48 /* FiltersViewController.m */; };
+		D3B969A92339682B002D90BC /* BackFR.m in Sources */ = {isa = PBXBuildFile; fileRef = D3B969A42339682A002D90BC /* BackFR.m */; };
+		D3B969AA2339682B002D90BC /* AdjustBackFRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3B969A72339682B002D90BC /* AdjustBackFRViewController.m */; };
+		D3B969B123396F46002D90BC /* PhotoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D3B969AE23396F46002D90BC /* PhotoViewCell.m */; };
+		D3B969B223396F46002D90BC /* PhotosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3B969B023396F46002D90BC /* PhotosViewController.m */; };
+		D3B969B3233970DA002D90BC /* PhotosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3B969B023396F46002D90BC /* PhotosViewController.m */; };
+		D3B969B4233970E5002D90BC /* PhotosViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = D3B969AF23396F46002D90BC /* PhotosViewController.h */; };
+		D3B969B5233970E5002D90BC /* PhotoViewCell.h in Sources */ = {isa = PBXBuildFile; fileRef = D3B969AD23396F46002D90BC /* PhotoViewCell.h */; };
+		D3B969B6233970E5002D90BC /* PhotoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D3B969AE23396F46002D90BC /* PhotoViewCell.m */; };
+		D3B969B7233970E5002D90BC /* AdjustBackFRViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = D3B969A52339682A002D90BC /* AdjustBackFRViewController.h */; };
+		D3B969B8233970E5002D90BC /* AdjustBackFRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3B969A72339682B002D90BC /* AdjustBackFRViewController.m */; };
+		D3B969B9233970E5002D90BC /* BackFR.h in Sources */ = {isa = PBXBuildFile; fileRef = D3B969A62339682B002D90BC /* BackFR.h */; };
+		D3B969BA233970E5002D90BC /* BackFR.m in Sources */ = {isa = PBXBuildFile; fileRef = D3B969A42339682A002D90BC /* BackFR.m */; };
 		D3BBD4FB218DC1DD00FFDB86 /* CoefWarningController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3BBD4FA218DC1DD00FFDB86 /* CoefWarningController.m */; };
 		D3BBD4FE218DC20300FFDB86 /* DontShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = D3BBD4FD218DC20300FFDB86 /* DontShowView.m */; };
 		D3C11C3522084C2800FFA990 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3C11C3422084C2800FFA990 /* Assets.xcassets */; };
@@ -389,6 +401,14 @@
 		D39C3CE120BEDD9D00BDC1A0 /* Number923.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Number923.c; sourceTree = "<group>"; };
 		D39F5518215E34070017DF48 /* FiltersViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FiltersViewController.h; sourceTree = "<group>"; };
 		D39F5519215E34070017DF48 /* FiltersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FiltersViewController.m; sourceTree = "<group>"; };
+		D3B969A42339682A002D90BC /* BackFR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackFR.m; sourceTree = "<group>"; };
+		D3B969A52339682A002D90BC /* AdjustBackFRViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdjustBackFRViewController.h; sourceTree = "<group>"; };
+		D3B969A62339682B002D90BC /* BackFR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackFR.h; sourceTree = "<group>"; };
+		D3B969A72339682B002D90BC /* AdjustBackFRViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdjustBackFRViewController.m; sourceTree = "<group>"; };
+		D3B969AD23396F46002D90BC /* PhotoViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewCell.h; sourceTree = "<group>"; };
+		D3B969AE23396F46002D90BC /* PhotoViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewCell.m; sourceTree = "<group>"; };
+		D3B969AF23396F46002D90BC /* PhotosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosViewController.h; sourceTree = "<group>"; };
+		D3B969B023396F46002D90BC /* PhotosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotosViewController.m; sourceTree = "<group>"; };
 		D3BBD4F9218DC1DD00FFDB86 /* CoefWarningController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoefWarningController.h; sourceTree = "<group>"; };
 		D3BBD4FA218DC1DD00FFDB86 /* CoefWarningController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoefWarningController.m; sourceTree = "<group>"; };
 		D3BBD4FC218DC20300FFDB86 /* DontShowView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DontShowView.h; sourceTree = "<group>"; };
@@ -541,6 +561,7 @@
 		D33A257520C945D6008A94EF /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				D3B969A323396740002D90BC /* BackgroundFR */,
 				D30FF86B2163AB4D007FA50D /* NumberKeyboard */,
 				D33A258420CA89E6008A94EF /* OptionsViewController */,
 				D39F5517215E33D00017DF48 /* FiltersViewController */,
@@ -882,6 +903,29 @@
 			path = FiltersViewController;
 			sourceTree = "<group>";
 		};
+		D3B969A323396740002D90BC /* BackgroundFR */ = {
+			isa = PBXGroup;
+			children = (
+				D3B969AC23396839002D90BC /* MediaViewer */,
+				D3B969A52339682A002D90BC /* AdjustBackFRViewController.h */,
+				D3B969A72339682B002D90BC /* AdjustBackFRViewController.m */,
+				D3B969A62339682B002D90BC /* BackFR.h */,
+				D3B969A42339682A002D90BC /* BackFR.m */,
+			);
+			path = BackgroundFR;
+			sourceTree = "<group>";
+		};
+		D3B969AC23396839002D90BC /* MediaViewer */ = {
+			isa = PBXGroup;
+			children = (
+				D3B969AF23396F46002D90BC /* PhotosViewController.h */,
+				D3B969B023396F46002D90BC /* PhotosViewController.m */,
+				D3B969AD23396F46002D90BC /* PhotoViewCell.h */,
+				D3B969AE23396F46002D90BC /* PhotoViewCell.m */,
+			);
+			path = MediaViewer;
+			sourceTree = "<group>";
+		};
 		D3BBD4F8218DC1DD00FFDB86 /* CoefWarning */ = {
 			isa = PBXGroup;
 			children = (
@@ -1132,6 +1176,7 @@
 				D33A254320C064A9008A94EF /* TAS5558.h in Sources */,
 				D33A253E20BFF674008A94EF /* Number88.h in Sources */,
 				D379127A20D3C55B0089962D /* DrcView.m in Sources */,
+				D3B969B123396F46002D90BC /* PhotoViewCell.m in Sources */,
 				D3BBD4FB218DC1DD00FFDB86 /* CoefWarningController.m in Sources */,
 				D30257B322AE6BCF008CF0C9 /* PresetTextImportViewController.m in Sources */,
 				D32483C82214683800028514 /* MergeToolCell.m in Sources */,
@@ -1175,8 +1220,10 @@
 				D39C3CC920BEB6FB00BDC1A0 /* Volume.m in Sources */,
 				D30FF87A21650820007FA50D /* FilterLabel.m in Sources */,
 				D33A255520C5D4B3008A94EF /* HiFiToyPreset.m in Sources */,
+				D3B969AA2339682B002D90BC /* AdjustBackFRViewController.m in Sources */,
 				D33A259220CA8FF4008A94EF /* DeviceNameViewController.m in Sources */,
 				D39C3CA420BEB50000BDC1A0 /* main.m in Sources */,
+				D3B969B223396F46002D90BC /* PhotosViewController.m in Sources */,
 				D33A258820CA8A00008A94EF /* OptionsViewController.m in Sources */,
 				D39C3CE320BEDD9D00BDC1A0 /* Number88.c in Sources */,
 				D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */,
@@ -1189,6 +1236,7 @@
 				D3E97AB12157F08200C98402 /* EnergyViewController.m in Sources */,
 				D33A255820C68B92008A94EF /* HiFiToyPresetList.m in Sources */,
 				D30FF8712163AB4D007FA50D /* NumKeyboardController.m in Sources */,
+				D3B969A92339682B002D90BC /* BackFR.m in Sources */,
 				D3571E34218F335500A99CB8 /* KeyboardView.m in Sources */,
 				D33A257120C943F5008A94EF /* DialogSystem.m in Sources */,
 				D30FF88C216FA8E8007FA50D /* PassFilter.m in Sources */,
@@ -1218,6 +1266,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3B969B4233970E5002D90BC /* PhotosViewController.h in Sources */,
+				D3B969B5233970E5002D90BC /* PhotoViewCell.h in Sources */,
+				D3B969B6233970E5002D90BC /* PhotoViewCell.m in Sources */,
+				D3B969B7233970E5002D90BC /* AdjustBackFRViewController.h in Sources */,
+				D3B969B8233970E5002D90BC /* AdjustBackFRViewController.m in Sources */,
+				D3B969B9233970E5002D90BC /* BackFR.h in Sources */,
+				D3B969BA233970E5002D90BC /* BackFR.m in Sources */,
+				D3B969B3233970DA002D90BC /* PhotosViewController.m in Sources */,
 				D30257B922AE7140008CF0C9 /* PresetUrlImportViewController.m in Sources */,
 				D30257B422AE6C72008CF0C9 /* PresetTextImportViewController.m in Sources */,
 				D302578D22AABAB3008CF0C9 /* DownloadPresetCell.m in Sources */,
@@ -1434,7 +1490,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1486,7 +1542,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

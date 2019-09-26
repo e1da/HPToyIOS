@@ -44,6 +44,8 @@ typedef enum {
 @property int maxFreq;
 @property int minFreq;
 
+@property BOOL visibleRelativeCenter;
+
 @property NSArray * drawFreqUnitArray;
 
 - (double) freqToPixel:(int)freq;

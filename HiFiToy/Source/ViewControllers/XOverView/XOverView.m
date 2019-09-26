@@ -7,21 +7,25 @@
 //
 
 #import "XOverView.h"
+#import "BackFR.h"
 
 /*==========================================================================================
  SubFilterView Implementation
  ==========================================================================================*/
 @implementation XOverView
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
         self.maxFreq = 20000;
         self.minFreq = 10;
+        self.visibleRelativeCenter = NO;
+        
+        self.filters = nil;
         
         self.backgroundColor = [UIColor darkGrayColor];
+        
     }
     return self;
 }
@@ -289,6 +293,8 @@
 }
 
 - (void) drawFilters:(CGContextRef)context {
+    if (!_filters) return;
+    
     [self drawAfrShadow:context];
     
     int highpass_freq_pix = 0;
@@ -350,6 +356,8 @@
 
 
 - (void) drawFreqLineForParamFilters:(CGContextRef)context {
+    if (!_filters) return;
+    
     NSArray<Biquad *> * params = [_filters getBiquadsWithType:BIQUAD_PARAMETRIC];
     [self drawFreqLineForBiquads:params
                        withColor:[UIColor brownColor] withSelectColor:[UIColor orangeColor]
@@ -357,6 +365,8 @@
 }
 
 - (void) drawFreqLineForAllpassFilters:(CGContextRef)context {
+    if (!_filters) return;
+    
     NSArray<Biquad *> * allpass = [_filters getBiquadsWithType:BIQUAD_ALLPASS];
     UIColor * c = [UIColor colorWithRed:0.2 green:0.5 blue:1.0 alpha:0.5];
     UIColor * sc = [UIColor colorWithRed:0.2 green:0.5 blue:1.0 alpha:1.0];
@@ -401,6 +411,8 @@
 
 
 - (void) drawPassFilterTap:(CGContextRef)context {
+    if (!_filters) return;
+    
     CGPoint point;
     
     if (![_filters getLowpass]) {
@@ -437,6 +449,65 @@
     }
 }
 
+- (UIImage *) clipImage:(UIImage *)img inRect:(CGRect)clipRect {
+    CGImageRef imgCGRef = [img CGImage];
+    size_t w = CGImageGetWidth(imgCGRef) ;
+    size_t h = CGImageGetHeight(imgCGRef);
+    
+    if (w > clipRect.size.width * img.scale)    w = clipRect.size.width * img.scale;
+    if (h > clipRect.size.height * img.scale)   h = clipRect.size.height * img.scale;
+    
+    CGImageRef r = CGImageCreateWithImageInRect(imgCGRef, CGRectMake(0, 0, w, h));
+    UIImage * i = [UIImage imageWithCGImage:r scale:img.scale orientation:img.imageOrientation];
+    
+    CGImageRelease(r);
+    return i;
+}
+
+- (void) drawBack:(CGRect)dstRect {
+    UIImage * img = [[BackFR sharedInstance] image];
+    if (!img) return;
+    
+    CGPoint trans = [[BackFR sharedInstance] translate];
+    CGPoint scale = [[BackFR sharedInstance] scale];
+    CGSize scaleSize = CGSizeMake(dstRect.size.width * scale.x, dstRect.size.height * scale.y);
+    
+    CGPoint baseCenter = CGPointMake([self freqToPixel:1000] - [self freqToPixel:20], [self dbToPixel:0] - [self dbToPixel:15]);
+    CGPoint center = CGPointMake(baseCenter.x - trans.x, baseCenter.y - trans.y);
+    CGPoint scaleCenter = CGPointMake(center.x * scale.x, center.y * scale.y);
+    CGPoint deltaCenter = CGPointMake(center.x - scaleCenter.x, center.y - scaleCenter.y);
+    
+    CGSize s = CGSizeMake(scaleSize.width + deltaCenter.x + trans.x, scaleSize.height + deltaCenter.y + trans.y);
+    
+    UIGraphicsBeginImageContextWithOptions(s, NO, 0.0);
+    [img drawInRect:CGRectMake(trans.x + deltaCenter.x, trans.y + deltaCenter.y, scaleSize.width, scaleSize.height)];
+    img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    //clip and draw
+    img = [self clipImage:img inRect:dstRect];
+    [img drawAtPoint:dstRect.origin];
+    
+}
+
+- (void) drawRelativeCenter:(CGContextRef)context {
+    if (!_visibleRelativeCenter) return;
+    
+    //prepare color settings
+    CGContextSetStrokeColorWithColor(context, [[UIColor orangeColor] CGColor]);
+    CGContextSetLineWidth(context, 4.0);
+    
+    CGPoint center = CGPointMake([self freqToPixel:1000], [self dbToPixel:0]);
+    CGFloat radius = 10.0f;
+    
+    CGContextMoveToPoint(context, center.x - radius, center.y);
+    CGContextAddLineToPoint(context, center.x + radius, center.y);
+    CGContextMoveToPoint(context, center.x, center.y - radius);
+    CGContextAddLineToPoint(context, center.x, center.y + radius);
+    
+    CGContextDrawPath(context, kCGPathStroke);
+}
+
 /*-----------------------------------------------------------------------------------------
  Main Draw
  -----------------------------------------------------------------------------------------*/
@@ -446,10 +517,16 @@
     
     [self view_refresh];
     
+    CGRect dstRect = CGRectMake([self freqToPixel:20], [self dbToPixel:15],
+                                [self freqToPixel:30000] - [self freqToPixel:20], [self dbToPixel:-30] - [self dbToPixel:15]);
+    [self drawBack:dstRect];
+    
     [self drawGrid:context];
     [self drawGridUnits:context];
     
     [self drawFilters:context];
+    
+    [self drawRelativeCenter:context];
     
 }
 
