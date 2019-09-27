@@ -40,8 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self.view setBackgroundColor:[UIColor darkGrayColor]];
     self.title = @"Relative center: 0dB, 1kHz";
     
     //init bar buttons
@@ -93,6 +92,7 @@
     int top = self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
     int width = self.view.frame.size.width;
     int height = self.view.frame.size.height - top;
+    
     
     [filtersView setFrame:CGRectMake(0, top, width, height)];
     [filtersView setNeedsDisplay];

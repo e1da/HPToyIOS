@@ -8,7 +8,6 @@
 
 #import "DiscoveryViewController.h"
 #import "FoundCell.h"
-#import "DemoCell.h"
 #import "HiFiToyPresetList.h"
 #import "DialogSystem.h"
 
@@ -54,9 +53,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleEnteredForeground)

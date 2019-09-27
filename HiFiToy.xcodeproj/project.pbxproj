@@ -57,7 +57,6 @@
 		D33A257A20C94865008A94EF /* DiscoveryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A257920C94865008A94EF /* DiscoveryViewController.m */; };
 		D33A257D20C94875008A94EF /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A257C20C94875008A94EF /* MainViewController.m */; };
 		D33A258220C952CD008A94EF /* FoundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258020C952CD008A94EF /* FoundCell.m */; };
-		D33A258320C952CD008A94EF /* DemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258120C952CD008A94EF /* DemoCell.m */; };
 		D33A258820CA8A00008A94EF /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258720CA8A00008A94EF /* OptionsViewController.m */; };
 		D33A258B20CA8A30008A94EF /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258A20CA8A30008A94EF /* NavigationController.m */; };
 		D33A259220CA8FF4008A94EF /* DeviceNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A259120CA8FF4008A94EF /* DeviceNameViewController.m */; };
@@ -119,8 +118,6 @@
 		D3549268220869DB00063768 /* DrcView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127920D3C55B0089962D /* DrcView.m */; };
 		D3549269220869DB00063768 /* DrcTimeConstViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = D379127B20DE7B4F0089962D /* DrcTimeConstViewController.h */; };
 		D354926A220869DB00063768 /* DrcTimeConstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127C20DE7B4F0089962D /* DrcTimeConstViewController.m */; };
-		D354926B220869DB00063768 /* DemoCell.h in Sources */ = {isa = PBXBuildFile; fileRef = D33A257F20C952CD008A94EF /* DemoCell.h */; };
-		D354926C220869DB00063768 /* DemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258120C952CD008A94EF /* DemoCell.m */; };
 		D354926D220869DB00063768 /* FoundCell.h in Sources */ = {isa = PBXBuildFile; fileRef = D33A257E20C952CD008A94EF /* FoundCell.h */; };
 		D354926E220869DB00063768 /* FoundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A258020C952CD008A94EF /* FoundCell.m */; };
 		D354926F220869DB00063768 /* DiscoveryViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = D33A257820C94865008A94EF /* DiscoveryViewController.h */; };
@@ -336,9 +333,7 @@
 		D33A257B20C94875008A94EF /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		D33A257C20C94875008A94EF /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		D33A257E20C952CD008A94EF /* FoundCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoundCell.h; sourceTree = "<group>"; };
-		D33A257F20C952CD008A94EF /* DemoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoCell.h; sourceTree = "<group>"; };
 		D33A258020C952CD008A94EF /* FoundCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoundCell.m; sourceTree = "<group>"; };
-		D33A258120C952CD008A94EF /* DemoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoCell.m; sourceTree = "<group>"; };
 		D33A258620CA8A00008A94EF /* OptionsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
 		D33A258720CA8A00008A94EF /* OptionsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
 		D33A258920CA8A30008A94EF /* NavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
@@ -576,8 +571,6 @@
 		D33A257620C94852008A94EF /* DiscoveryViewController */ = {
 			isa = PBXGroup;
 			children = (
-				D33A257F20C952CD008A94EF /* DemoCell.h */,
-				D33A258120C952CD008A94EF /* DemoCell.m */,
 				D33A257E20C952CD008A94EF /* FoundCell.h */,
 				D33A258020C952CD008A94EF /* FoundCell.m */,
 				D33A257820C94865008A94EF /* DiscoveryViewController.h */,
@@ -1194,7 +1187,6 @@
 				D379127D20DE7B4F0089962D /* DrcTimeConstViewController.m in Sources */,
 				D33A255B20C6AEAA008A94EF /* HiFiToyDevice.m in Sources */,
 				D379127720D3C2CE0089962D /* DrcViewController.m in Sources */,
-				D33A258320C952CD008A94EF /* DemoCell.m in Sources */,
 				D39C3CD220BEB71C00BDC1A0 /* Drc.m in Sources */,
 				D30257B822AE6FC2008CF0C9 /* PresetUrlImportViewController.m in Sources */,
 				D39C3CCF20BEB71200BDC1A0 /* Loudness.m in Sources */,
@@ -1313,8 +1305,6 @@
 				D3549269220869DB00063768 /* DrcTimeConstViewController.h in Sources */,
 				D354926A220869DB00063768 /* DrcTimeConstViewController.m in Sources */,
 				D307EB1322147D6200ACE7A3 /* BaseCell.m in Sources */,
-				D354926B220869DB00063768 /* DemoCell.h in Sources */,
-				D354926C220869DB00063768 /* DemoCell.m in Sources */,
 				D354926D220869DB00063768 /* FoundCell.h in Sources */,
 				D354926E220869DB00063768 /* FoundCell.m in Sources */,
 				D354926F220869DB00063768 /* DiscoveryViewController.h in Sources */,

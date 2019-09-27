@@ -85,8 +85,6 @@
     HiFiToyPreset * p = hiFiToyDevice.preset;
     
     _audioSourceSegment_outl.selectedSegmentIndex = hiFiToyDevice.audioSource;
-    self.volumeTitle_outl.textColor = [UIColor blackColor];
-    self.gainLabel_outl.textColor = [UIColor blackColor];
     self.gainLabel_outl.text = [p.masterVolume getInfo];
     self.gainSlider_outl.value = [p.masterVolume getDbPercent];
     

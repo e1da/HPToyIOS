@@ -875,26 +875,6 @@
                                     <segue destination="pGg-6v-bdr" kind="push" identifier="ConnectSegue" id="N5W-tT-oFi"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="DemoCell" id="IJe-PQ-NFQ" customClass="DemoCell">
-                                <rect key="frame" x="0.0" y="315.5" width="375" height="60"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IJe-PQ-NFQ" id="NoZ-bZ-g6K">
-                                    <rect key="frame" x="0.0" y="0.0" width="347.5" height="60"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Demo Mode" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kas-mR-5CB">
-                                            <rect key="frame" x="20" y="17" width="173" height="27"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="pGg-6v-bdr" kind="push" identifier="ConnectSegue" id="dBA-2p-FmV"/>
-                                </connections>
-                            </tableViewCell>
                         </prototypes>
                         <sections/>
                         <connections>
@@ -921,7 +901,7 @@
         <scene sceneID="T7k-s0-VzY">
             <objects>
                 <navigationController id="0fz-4A-aZ1" customClass="NavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fXD-ve-pYB">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="fXD-ve-pYB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1453,6 +1433,5 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Z6d-f1-hK3"/>
-        <segue reference="dBA-2p-FmV"/>
     </inferredMetricsTieBreakers>
 </document>

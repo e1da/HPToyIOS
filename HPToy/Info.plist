@@ -42,8 +42,10 @@
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Displays and edits photos to demonstrate the Photos framework.</string>
+	<string>Need access to Photo Library.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>HPToy used bluetooth. </string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>HPToy used bluetooth. </string>
 	<key>TargetName</key>
 	<string>$(TARGET_NAME)</string>

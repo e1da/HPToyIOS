@@ -46,10 +46,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    //self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    //[self.navigationController.navigationBar.backItem setTitle:@" "];
-    
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
     showBiquadText = NO;
     

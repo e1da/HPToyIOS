@@ -116,7 +116,12 @@
             
             //set color
             if ([p.presetName isEqualToString:self.hiFiToyDevice.activeKeyPreset]){
-                presetCell.presetLabel_outl.textColor = [UIColor blackColor];
+                if (@available(iOS 13.0, *)) {
+                    presetCell.presetLabel_outl.textColor = [UIColor labelColor];
+                } else {
+                    presetCell.presetLabel_outl.textColor = [UIColor blackColor];
+                }
+                
             } else {
                 presetCell.presetLabel_outl.textColor = [UIColor grayColor];
             }

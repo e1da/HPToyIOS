@@ -41,10 +41,7 @@
     
     // Register cell classes
     //[self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"GridViewCell"];
-    [self.navigationController.navigationBar.backItem setTitle:@" "];
-    //self.navigationItem.title = @"List View";
-    //[self.navigationController setNeedsFocusUpdate];
-    //self.navigationController.navigationItem.backBarButtonItem.
+    self.title = @"Photos";
     
     [self getPhotos];
 }
@@ -88,13 +85,14 @@
 
 - (void)photoLibraryDidChange:(PHChange *)changeInstance {
     PHFetchResultChangeDetails * changes = [changeInstance changeDetailsForFetchResult:fetchResult];
-    if (!changes) return;
     
-    // Change notifications may originate from a background queue.
-    // As such, re-dispatch execution to the main queue before acting
-    // on the change, so you can update the UI.
     dispatch_sync(dispatch_get_main_queue(), ^{
-        self->fetchResult = changes.fetchResultAfterChanges;
+        if (changes) {
+            self->fetchResult = changes.fetchResultAfterChanges;
+        } else {
+            [self getPhotos];
+        }
+        
         [self.collectionView reloadData];
     });
 }
@@ -160,7 +158,7 @@
             DialogSystem * dialog = [DialogSystem sharedInstance];
    
             if ([dialog isProgressDialogVisible]) {
-                dialog.progressController.message = [NSString stringWithFormat:@"Download %d%%.", (int)(progress * 100)];
+                dialog.progressController.message = [NSString stringWithFormat:@"Getting image %d%%.", (int)(progress * 100)];
             }
         });
         
