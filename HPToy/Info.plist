@@ -34,19 +34,19 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.3</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>19</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetooth is needed to control PowerDac V2 hardware.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Bluetooth is needed to control PowerDac V2 hardware.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Need access to Photo Library.</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>HPToy used bluetooth. </string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>HPToy used bluetooth. </string>
 	<key>TargetName</key>
 	<string>$(TARGET_NAME)</string>
 	<key>UILaunchStoryboardName</key>
@@ -89,7 +89,7 @@
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.text</string>
+				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>HPToy file extension</string>

@@ -9,6 +9,7 @@
 #import "PresetUrlImportViewController.h"
 #import "DialogSystem.h"
 #import "HiFiToyPreset.h"
+#import "HiFiToyPresetList.h"
 
 @interface PresetUrlImportViewController ()
 
@@ -58,13 +59,16 @@
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
                                                            style:UIAlertActionStyleDestructive
                                                          handler:nil];
+    
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * _Nonnull action) {
+        
                                                          UITextField *name = alertController.textFields.firstObject;
                                                          if (![name.text isEqualToString:@""]) {
-                                                             HiFiToyPreset * importPreset = [HiFiToyPreset getDefault];
-                                                             [importPreset importFromXmlWithData:d withName:name.text];
-                                                             
+ 
+                                                             [[HiFiToyPresetList sharedInstance] importPresetFromData:d
+                                                                                                           withName:name.text
+                                                                                                          checkName:YES];
                                                          }
                                                      }];
     

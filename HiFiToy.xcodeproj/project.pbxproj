@@ -66,7 +66,6 @@
 		D33A25A120CA9A2C008A94EF /* PresetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */; };
 		D33A25A420CABC9C008A94EF /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */; };
 		D33A25A820CABF19008A94EF /* DeviceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A620CABF19008A94EF /* DeviceList.plist */; };
-		D33A25A920CABF19008A94EF /* PresetList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A720CABF19008A94EF /* PresetList.plist */; };
 		D35492272208681300063768 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */; };
 		D35492352208699C00063768 /* AppDelegate.h in Sources */ = {isa = PBXBuildFile; fileRef = D33A257220C94459008A94EF /* AppDelegate.h */; };
 		D35492362208699C00063768 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A257320C94459008A94EF /* AppDelegate.m */; };
@@ -177,7 +176,6 @@
 		D35492A7220869DB00063768 /* DrcTimeConst.h in Sources */ = {isa = PBXBuildFile; fileRef = D33A255020C5728E008A94EF /* DrcTimeConst.h */; };
 		D35492A8220869DB00063768 /* DrcTimeConst.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A255120C5728E008A94EF /* DrcTimeConst.m */; };
 		D35492A922086A4700063768 /* DeviceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A620CABF19008A94EF /* DeviceList.plist */; };
-		D35492AA22086A4700063768 /* PresetList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A720CABF19008A94EF /* PresetList.plist */; };
 		D35492AB22086A8B00063768 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D39C3CA320BEB50000BDC1A0 /* main.m */; };
 		D35492AE2208D21700063768 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39C3C9F20BEB50000BDC1A0 /* LaunchScreen.storyboard */; };
 		D35492AF2208D39C00063768 /* FloatUtility.h in Sources */ = {isa = PBXBuildFile; fileRef = D30FF884216D49DE007FA50D /* FloatUtility.h */; };
@@ -234,6 +232,8 @@
 		D3E297C5226381620096012B /* IntegerUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D3E297C4226381620096012B /* IntegerUtility.c */; };
 		D3E297C62263820A0096012B /* IntegerUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D3E297C4226381620096012B /* IntegerUtility.c */; };
 		D3E297C922638A260096012B /* HiFiToyPresetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E297C822638A260096012B /* HiFiToyPresetTests.m */; };
+		D3E91E60233EB3600039F259 /* official_presets in Resources */ = {isa = PBXBuildFile; fileRef = D3E91E5F233EB3600039F259 /* official_presets */; };
+		D3E91E61233EB3950039F259 /* official_presets in Resources */ = {isa = PBXBuildFile; fileRef = D3E91E5F233EB3600039F259 /* official_presets */; };
 		D3E97AB12157F08200C98402 /* EnergyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E97AB02157F08200C98402 /* EnergyViewController.m */; };
 		D3F63295214C172A00340314 /* HiFiToyIcon87.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F63288214C172900340314 /* HiFiToyIcon87.png */; };
 		D3F63296214C172A00340314 /* HiFiToyIcon120.png in Resources */ = {isa = PBXBuildFile; fileRef = D3F63289214C172900340314 /* HiFiToyIcon120.png */; };
@@ -350,7 +350,6 @@
 		D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetDetailViewController.m; sourceTree = "<group>"; };
 		D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		D33A25A620CABF19008A94EF /* DeviceList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceList.plist; sourceTree = "<group>"; };
-		D33A25A720CABF19008A94EF /* PresetList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PresetList.plist; sourceTree = "<group>"; };
 		D35492312208693E00063768 /* Source */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Source; path = HiFiToy/Source; sourceTree = "<group>"; };
 		D3571E32218F335500A99CB8 /* KeyboardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardView.h; sourceTree = "<group>"; };
 		D3571E33218F335500A99CB8 /* KeyboardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyboardView.m; sourceTree = "<group>"; };
@@ -423,6 +422,7 @@
 		D3E297C3226381620096012B /* IntegerUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IntegerUtility.h; sourceTree = "<group>"; };
 		D3E297C4226381620096012B /* IntegerUtility.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = IntegerUtility.c; sourceTree = "<group>"; };
 		D3E297C822638A260096012B /* HiFiToyPresetTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HiFiToyPresetTests.m; sourceTree = "<group>"; };
+		D3E91E5F233EB3600039F259 /* official_presets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = official_presets; sourceTree = "<group>"; };
 		D3E97AAF2157F08200C98402 /* EnergyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EnergyViewController.h; sourceTree = "<group>"; };
 		D3E97AB02157F08200C98402 /* EnergyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EnergyViewController.m; sourceTree = "<group>"; };
 		D3F63288214C172900340314 /* HiFiToyIcon87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HiFiToyIcon87.png; sourceTree = "<group>"; };
@@ -659,9 +659,9 @@
 		D33A25A520CABF19008A94EF /* Res */ = {
 			isa = PBXGroup;
 			children = (
+				D3E91E5F233EB3600039F259 /* official_presets */,
 				D379126720D1CC240089962D /* icon */,
 				D33A25A620CABF19008A94EF /* DeviceList.plist */,
-				D33A25A720CABF19008A94EF /* PresetList.plist */,
 			);
 			path = Res;
 			sourceTree = "<group>";
@@ -1120,7 +1120,7 @@
 				D3F632A1214C172A00340314 /* HiFiToyIcon167.png in Resources */,
 				D3F6329B214C172A00340314 /* HiFiToyIcon180.png in Resources */,
 				D3F63297214C172A00340314 /* HiFiToyIcon1024.png in Resources */,
-				D33A25A920CABF19008A94EF /* PresetList.plist in Resources */,
+				D3E91E60233EB3600039F259 /* official_presets in Resources */,
 				D39C3CA120BEB50000BDC1A0 /* LaunchScreen.storyboard in Resources */,
 				D3F6329A214C172A00340314 /* HiFiToyIcon80.png in Resources */,
 				D3F63299214C172A00340314 /* HiFiToyIcon76.png in Resources */,
@@ -1143,9 +1143,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3E91E61233EB3950039F259 /* official_presets in Resources */,
 				D35492AE2208D21700063768 /* LaunchScreen.storyboard in Resources */,
 				D35492A922086A4700063768 /* DeviceList.plist in Resources */,
-				D35492AA22086A4700063768 /* PresetList.plist in Resources */,
 				D3C11C3522084C2800FFA990 /* Assets.xcassets in Resources */,
 				D3C11C4122084CDE00FFA990 /* HPToy.storyboard in Resources */,
 			);
@@ -1619,6 +1619,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_TEAM = HC834Q5NUC;
 				INFOPLIST_FILE = HPToy/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1626,6 +1627,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HPToy;
@@ -1641,6 +1643,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_TEAM = HC834Q5NUC;
 				INFOPLIST_FILE = HPToy/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1648,6 +1651,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1.0;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HPToy;
 				PRODUCT_NAME = "$(TARGET_NAME)";

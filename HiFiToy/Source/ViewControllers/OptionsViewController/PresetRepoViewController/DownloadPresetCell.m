@@ -7,7 +7,7 @@
 //
 
 #import "DownloadPresetCell.h"
-#import "HiFiToyPreset.h"
+#import "HiFiToyPresetList.h"
 #import "DialogSystem.h"
 
 @implementation DownloadPresetCell
@@ -32,24 +32,17 @@
     NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession]
                                           dataTaskWithURL:fileURL
                                           completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                              if (error != nil) {
-                                                  [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                                                      [[DialogSystem sharedInstance] showAlert:[error localizedDescription]];
-                                                  }];
-                                                  
-                                              } else {
-                                                  //NSString * s = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                                                  //NSLog(@"%@", s);
-                                                  
-                                                  [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                                                      HiFiToyPreset * importPreset = [HiFiToyPreset getDefault];
-                                                      [importPreset importFromXmlWithData:data      withName:self.downloadPresetName_outl.text];
-                                                  }];
-                                                  
-                                                  
-                                                  
-                                              }
-                                          }];
+                                        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+            if (error) {
+                [[DialogSystem sharedInstance] showAlert:[error localizedDescription]];
+            } else {
+                [[HiFiToyPresetList sharedInstance] importPresetFromData:data withName:self.downloadPresetName_outl.text
+                                                             checkName:YES];
+            }
+        }];
+    }];
+    
     [downloadTask resume];
 }
 @end

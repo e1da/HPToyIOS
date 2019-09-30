@@ -347,7 +347,7 @@
             [self updateSubviews];
         }
     } else if (!update) {
-        [self showBackgroundFRDialog];
+        [self showBackgroundFRDialog:tap_point];
     }
     
     if (recognizer.state == UIGestureRecognizerStateEnded){
@@ -355,30 +355,33 @@
     }
 }
 
-- (void) showBackgroundFRDialog {
-        UIAlertController * alertController = [UIAlertController alertControllerWithTitle:nil
+- (void) showBackgroundFRDialog:(CGPoint)tapPoint {
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:nil
                                                               message:nil
                                                        preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *setBackgroundAction = [UIAlertAction actionWithTitle:@"Set background"
-                                                                      style:UIAlertActionStyleDefault
-                                                                    handler:^(UIAlertAction * _Nonnull action){
-                                                                        [self showPhotosViewController];
-                                                                    }];
-        UIAlertAction *clearAction = [UIAlertAction actionWithTitle:@"Clear"
-                                                              style:UIAlertActionStyleDefault
-                                                            handler:^(UIAlertAction * _Nonnull action){
-                                                                [[BackFR sharedInstance] clear];
-                                                                [self->filtersView setNeedsDisplay];
-                                                            }];
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                              style:UIAlertActionStyleCancel
-                                                            handler:nil];
-        [alertController addAction:setBackgroundAction];
-        [alertController addAction:clearAction];
-        [alertController addAction:cancelAction];
+    UIAlertAction *setBackgroundAction = [UIAlertAction actionWithTitle:@"Set background"
+                                                                  style:UIAlertActionStyleDefault
+                                                                handler:^(UIAlertAction * _Nonnull action){
+                                                                    [self showPhotosViewController];
+                                                                }];
+    UIAlertAction *clearAction = [UIAlertAction actionWithTitle:@"Clear"
+                                                          style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction * _Nonnull action){
+                                                            [[BackFR sharedInstance] clear];
+                                                            [self->filtersView setNeedsDisplay];
+                                                        }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil];
+    [alertController addAction:setBackgroundAction];
+    [alertController addAction:clearAction];
+    [alertController addAction:cancelAction];
         
 
-        [self presentViewController:alertController animated:YES completion:nil];
+    alertController.popoverPresentationController.sourceView = filtersView;
+    alertController.popoverPresentationController.sourceRect = CGRectMake(tapPoint.x, tapPoint.y, 0, 0);
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void) showPhotosViewController {

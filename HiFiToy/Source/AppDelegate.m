@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "HiFiToyPreset.h"
+#import "HiFiToyPresetList.h"
 
 @interface AppDelegate ()
 
@@ -17,7 +17,6 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
     return YES;
 }
 
@@ -44,11 +43,9 @@
 }
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
-    if (url) {
-        //HiFiToyPreset * importPreset = [[[[HiFiToyDeviceList sharedInstance] getActiveDevice] getActivePreset] copy];
-        HiFiToyPreset * importPreset = [HiFiToyPreset getDefault];
-        [importPreset importFromXml:url];
-        
+    if (url) {        
+        [[HiFiToyPresetList sharedInstance] importPresetFromUrl:url checkName:YES];
+
         return YES;
     }
     return NO;

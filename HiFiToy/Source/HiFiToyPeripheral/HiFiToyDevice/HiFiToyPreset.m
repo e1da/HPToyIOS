@@ -18,6 +18,9 @@
     int count;
     
     int paramAddress;
+    
+    void (^xmlImportResultHandler)(HiFiToyPreset * preset, NSString * error);
+    
 }
 
 - (void) getParamData:(NSNotification*)notification;
@@ -79,7 +82,7 @@
 -(HiFiToyPreset *)copyWithZone:(NSZone *)zone {
     HiFiToyPreset * copyPreset = [[[self class] allocWithZone:zone] init];
     
-    NSLog(@"%lu", (unsigned long)copyPreset.characteristics.count);
+    //NSLog(@"%lu", (unsigned long)copyPreset.characteristics.count);
     
     copyPreset.presetName = [self.presetName copy];
     copyPreset.checkSum = self.checkSum;
@@ -459,35 +462,46 @@
     return name;
 }
 
--(BOOL) importFromXml:(NSURL *)url {
+-(BOOL) importFromXml:(NSURL *)url checkName:(BOOL)checkName
+        resultHandler:(void (^)(HiFiToyPreset *, NSString *))resultHandler {
     
     ///get name for preset
     NSArray * fileNameArray = [url.lastPathComponent componentsSeparatedByString:@"."];
     NSString * fileName = [fileNameArray objectAtIndex:0];
     
-    fileName = [self checkPresetName:fileName];
+    if (checkName) {
+        fileName = [self checkPresetName:fileName];
+    }
     if (!fileName) return NO;
     self.presetName = fileName;
+    xmlImportResultHandler = resultHandler;
     
     //start xml parser
     count = 0;
     xmlParser = [[XmlParserWrapper alloc] init];
     [xmlParser startParsingWithUrl:url withDelegate:self];
     
-    return NO;
+    return YES;
 }
 
--(BOOL) importFromXmlWithData:(NSData *)data withName:(NSString *)name {
-    name = [self checkPresetName:name];
-    if (!name) return NO;
+-(BOOL) importFromXmlWithData:(NSData *)data
+                     withName:(NSString *)name
+                    checkName:(BOOL)checkName
+                resultHandler:(void (^)(HiFiToyPreset *, NSString *))resultHandler {
+    if ((!name) || (!data)) return NO;
+    if (checkName) {
+        name = [self checkPresetName:name];
+        if (!name) return NO;
+    }
     self.presetName = name;
+    xmlImportResultHandler = resultHandler;
     
     //start xml parser
     count = 0;
     xmlParser = [[XmlParserWrapper alloc] init];
     [xmlParser startParsingWithData:data withDelegate:self];
     
-    return NO;
+    return YES;
 }
 
 /* -------------------------------------- XmlParserDelegate ---------------------------------------*/
@@ -547,18 +561,12 @@
 }
 
 - (void) finishedParsing:(NSString *)error {
-    if (error){
-        NSString * errorString = [NSString stringWithFormat:@"Import preset is not success. %@ error", error ];
-        [[DialogSystem sharedInstance] showAlert:errorString];
-        
-    } else {
+    if (!error) {
         [self updateChecksum];
-        [[HiFiToyPresetList sharedInstance] setPreset:self];
-        
-        NSString * msg = [NSString stringWithFormat:@"'%@' preset was successfully added.", self.presetName];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"PresetImportXmlNotification" object:nil];
-        [[DialogSystem sharedInstance] showAlert:msg];
-        
+    }
+    
+    if (xmlImportResultHandler) {
+        xmlImportResultHandler(self, error);
     }
 }
 

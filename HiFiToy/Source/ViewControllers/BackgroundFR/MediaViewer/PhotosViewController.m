@@ -136,7 +136,7 @@
     
     DialogSystem * dialog = [DialogSystem sharedInstance];
     [dialog showProgressDialog:@""];
-    dialog.progressController.message = @"Download 0%";
+    dialog.progressController.message = @"Getting image 0%";
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self requestImage:asset];
@@ -178,7 +178,7 @@
 
 - (void)responseImage:(UIImage *)img {
     DialogSystem * dialog = [DialogSystem sharedInstance];
-    dialog.progressController.message = @"Download 100%";
+    dialog.progressController.message = @"Getting image 100%";
     
     [dialog dismissProgressDialog:^{
         
