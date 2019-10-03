@@ -51,11 +51,6 @@
                                                  name:@"PresetImportNotification"
                                                object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didClipDetection:)
-                                                 name:@"ClipDetectionNotification"
-                                               object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(didUpdateAudioSource)
                                                  name: @"UpdateAudioSourceNotification"
@@ -292,18 +287,6 @@
     hiFiToyDevice.activeKeyPreset = preset.presetName;
 
     [self setupOutlets];
-}
-
-/*-----------------------------------------------------------------------------------------
-    ClipDetectionNotification
- -----------------------------------------------------------------------------------------*/
-- (void) didClipDetection:(NSNotification *)notification
-{
-    BOOL clip = [[notification object] boolValue];
-    NSLog(@"Clip=%d", clip);
-    
-    self.gainLabel_outl.textColor = /*clip ? [UIColor redColor] :*/ [UIColor blackColor];
-    self.volumeTitle_outl.textColor = /*clip ? [UIColor redColor] :*/ [UIColor blackColor];
 }
 
 @end
