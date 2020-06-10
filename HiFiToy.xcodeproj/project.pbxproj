@@ -301,6 +301,7 @@
 		D30FF88B216FA8E8007FA50D /* PassFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassFilter.m; sourceTree = "<group>"; };
 		D32483C62214683800028514 /* MergeToolCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MergeToolCell.h; sourceTree = "<group>"; };
 		D32483C72214683800028514 /* MergeToolCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MergeToolCell.m; sourceTree = "<group>"; };
+		D33969EA23E8E3FE00AC8583 /* HPToy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HPToy.entitlements; sourceTree = "<group>"; };
 		D33A254220C06481008A94EF /* TAS5558.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAS5558.h; sourceTree = "<group>"; };
 		D33A254420C140F8008A94EF /* BassTrebleChannel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BassTrebleChannel.h; sourceTree = "<group>"; };
 		D33A254520C140F8008A94EF /* BassTrebleChannel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BassTrebleChannel.m; sourceTree = "<group>"; };
@@ -933,6 +934,7 @@
 		D3C11C2A22084C2600FFA990 /* HPToy */ = {
 			isa = PBXGroup;
 			children = (
+				D33969EA23E8E3FE00AC8583 /* HPToy.entitlements */,
 				D3C11C3F22084CDE00FFA990 /* HPToy.storyboard */,
 				D3C11C3422084C2800FFA990 /* Assets.xcassets */,
 				D3C11C3922084C2800FFA990 /* Info.plist */,
@@ -1617,9 +1619,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = HPToy/HPToy.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 21;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = HC834Q5NUC;
 				INFOPLIST_FILE = HPToy/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1633,6 +1637,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.HPToy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1641,9 +1646,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = HPToy/HPToy.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 21;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = HC834Q5NUC;
 				INFOPLIST_FILE = HPToy/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1656,6 +1663,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.HPToy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
