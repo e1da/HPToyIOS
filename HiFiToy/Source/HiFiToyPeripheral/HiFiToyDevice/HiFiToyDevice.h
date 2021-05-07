@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HiFiToyPreset.h"
+#import "HiFiToyOutputMode.h"
 
 @interface HiFiToyDevice : NSObject <NSCoding>
 
@@ -17,11 +18,11 @@
 @property uint32_t      pairingCode;
 
 //audio source
-@property (nonatomic) PCM9211Source_t   audioSource;
-//energy config
-@property (nonatomic) EnergyConfig_t    energyConfig;
-//advertise mode
-@property (nonatomic) AdvertiseMode_t   advertiseMode;
+@property (nonatomic) PCM9211Source_t               audioSource;
+@property (nonatomic) EnergyConfig_t                energyConfig;
+@property (nonatomic) AdvertiseMode_t               advertiseMode;
+@property (nonatomic, readonly) HiFiToyOutputMode * outputMode;
+
 
 //preset property
 @property (nonatomic)               NSString        * activeKeyPreset;

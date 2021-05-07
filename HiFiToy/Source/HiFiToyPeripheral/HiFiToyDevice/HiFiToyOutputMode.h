@@ -21,6 +21,8 @@ typedef enum : uint8_t {
 
 - (void) setBoost:(int16_t)boostValue;
 
+- (void) sendToDsp;
+- (void) readFromDsp;
 
 @end
 

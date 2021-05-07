@@ -37,6 +37,7 @@
         
         self.audioSource = PCM9211_USB_SOURCE;
         [self setDefaultEnergyConfig];
+        [self setDefaultOutputMode];
     }
     return self;
 }
@@ -58,6 +59,7 @@
     self.audioSource = PCM9211_USB_SOURCE;
     self.advertiseMode = ALWAYS_ENABLED;
     [self setDefaultEnergyConfig];
+    [self setDefaultOutputMode];
 }
 
 - (void) setDefaultEnergyConfig {
@@ -65,6 +67,10 @@
     _energyConfig.lowThresholdDb = -55;
     _energyConfig.auxTimeout120ms = 2500; // 2500 * 120ms = 300s = 5min
     _energyConfig.usbTimeout120ms = 0;
+}
+
+- (void) setDefaultOutputMode {
+    _outputMode = [[HiFiToyOutputMode alloc] init];
 }
 
 - (void) setActiveKeyPreset:(NSString *)activeKeyPreset {
@@ -175,6 +181,14 @@
     
     [self setDefaultEnergyConfig];
     hiFiToyConfig.energy = _energyConfig;
+    
+    //TODO: fix this stupid code
+    [self setDefaultOutputMode];
+    hiFiToyConfig.outputType = (self.outputMode.value == BALANCE_OUT_MODE) ?
+                                                        BALANCE_OUT_MODE : UNBALANCE_OUT_MODE;
+    hiFiToyConfig.gainChannel3 = (self.outputMode.value == UNBALANCE_BOOST_OUT_MODE) ? 0x40 : 0;
+    
+    
     
     //store to peripheral first pat of HiFiToyPeripheral_t
     [[HiFiToyControl sharedInstance] sendBufToDsp:(uint8_t *)&hiFiToyConfig

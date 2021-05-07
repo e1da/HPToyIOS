@@ -399,18 +399,18 @@
             }
             case GET_OUTPUT_MODE:
                 NSLog(@"GET_OUTPUT_MODE %d", status);
-                //activeDevice.getOutputMode().setValue(status);
+                _activeHiFiToyDevice.outputMode.value = status;
             
-                //ApplicationContext.getInstance().setupOutlets();
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateOutputModeNotification" object:nil];
                 break;
             
             case GET_TAS5558_CH3_MIXER:
             {
                 uint16_t val = data[1] + (uint16_t)(data[2] << 8);
                 NSLog(@"GET_TAS5558_CH3_MIXER %d", val);
-                //activeDevice.getOutputMode().setBoost(val);
+                [_activeHiFiToyDevice.outputMode setBoost:val];
             
-                //ApplicationContext.getInstance().setupOutlets();
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateOutputModeNotification" object:nil];
                 break;
             }
             case CLIP_DETECTION:
