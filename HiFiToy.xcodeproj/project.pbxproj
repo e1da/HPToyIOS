@@ -66,6 +66,9 @@
 		D33A25A120CA9A2C008A94EF /* PresetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */; };
 		D33A25A420CABC9C008A94EF /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */; };
 		D33A25A820CABF19008A94EF /* DeviceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A620CABF19008A94EF /* DeviceList.plist */; };
+		D33DF344263D52EB001A87BB /* HiFiToyOutputMode.m in Sources */ = {isa = PBXBuildFile; fileRef = D33DF343263D52EB001A87BB /* HiFiToyOutputMode.m */; };
+		D33DF348264569FB001A87BB /* HiFiToyOutputMode.m in Sources */ = {isa = PBXBuildFile; fileRef = D33DF343263D52EB001A87BB /* HiFiToyOutputMode.m */; };
+		D33DF34C264569FF001A87BB /* HiFiToyOutputMode.h in Sources */ = {isa = PBXBuildFile; fileRef = D33DF342263D52EB001A87BB /* HiFiToyOutputMode.h */; };
 		D35492272208681300063768 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */; };
 		D35492352208699C00063768 /* AppDelegate.h in Sources */ = {isa = PBXBuildFile; fileRef = D33A257220C94459008A94EF /* AppDelegate.h */; };
 		D35492362208699C00063768 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A257320C94459008A94EF /* AppDelegate.m */; };
@@ -351,6 +354,8 @@
 		D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetDetailViewController.m; sourceTree = "<group>"; };
 		D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		D33A25A620CABF19008A94EF /* DeviceList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceList.plist; sourceTree = "<group>"; };
+		D33DF342263D52EB001A87BB /* HiFiToyOutputMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HiFiToyOutputMode.h; sourceTree = "<group>"; };
+		D33DF343263D52EB001A87BB /* HiFiToyOutputMode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HiFiToyOutputMode.m; sourceTree = "<group>"; };
 		D35492312208693E00063768 /* Source */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Source; path = HiFiToy/Source; sourceTree = "<group>"; };
 		D3571E32218F335500A99CB8 /* KeyboardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardView.h; sourceTree = "<group>"; };
 		D3571E33218F335500A99CB8 /* KeyboardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyboardView.m; sourceTree = "<group>"; };
@@ -830,6 +835,8 @@
 				D33A255A20C6AEAA008A94EF /* HiFiToyDevice.m */,
 				D33A255C20C6AEBB008A94EF /* HiFiToyDeviceList.h */,
 				D33A255D20C6AEBB008A94EF /* HiFiToyDeviceList.m */,
+				D33DF342263D52EB001A87BB /* HiFiToyOutputMode.h */,
+				D33DF343263D52EB001A87BB /* HiFiToyOutputMode.m */,
 			);
 			path = HiFiToyDevice;
 			sourceTree = "<group>";
@@ -1220,6 +1227,7 @@
 				D3B969B223396F46002D90BC /* PhotosViewController.m in Sources */,
 				D33A258820CA8A00008A94EF /* OptionsViewController.m in Sources */,
 				D39C3CE320BEDD9D00BDC1A0 /* Number88.c in Sources */,
+				D33DF344263D52EB001A87BB /* HiFiToyOutputMode.m in Sources */,
 				D39C3CCC20BEB70800BDC1A0 /* BassTreble.m in Sources */,
 				D301F097218353D700E181C6 /* CoefButton.m in Sources */,
 				D33A256A20C6E209008A94EF /* BlePacketQueue.m in Sources */,
@@ -1386,6 +1394,8 @@
 				D3549240220869B200063768 /* KeyboardView.m in Sources */,
 				D3549239220869A200063768 /* EnergyViewController.h in Sources */,
 				D354923A220869A200063768 /* EnergyViewController.m in Sources */,
+				D33DF34C264569FF001A87BB /* HiFiToyOutputMode.h in Sources */,
+				D33DF348264569FB001A87BB /* HiFiToyOutputMode.m in Sources */,
 				D35492352208699C00063768 /* AppDelegate.h in Sources */,
 				D35492362208699C00063768 /* AppDelegate.m in Sources */,
 				D35492372208699C00063768 /* NavigationController.h in Sources */,

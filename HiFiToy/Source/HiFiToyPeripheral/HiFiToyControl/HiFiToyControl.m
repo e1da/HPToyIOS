@@ -89,6 +89,12 @@
     [bleDriver writeValue:0xFFF0 characteristicUUID:0xFFF1 data:data response:response];
 }
 
+- (void) sendCommonPacketToDsp:(CommonPacket_t *)packet
+{
+    NSData *data = [[NSData alloc] initWithBytes:packet length:sizeof(CommonPacket_t)];
+    [self sendDataToDsp:data withResponse:YES];
+}
+
 //this method used attach page
 - (void) sendBufToDsp:(uint8_t*)data withLength:(uint16_t)length withOffset:(uint16_t)offsetInDspData; {
     
@@ -389,6 +395,22 @@
                 _activeHiFiToyDevice.advertiseMode = data[1];
                 NSLog(@"GET_ADVERTISE_MODE %d", _activeHiFiToyDevice.advertiseMode);
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateAdvertiseModeNotification" object:nil];
+                break;
+            }
+            case GET_OUTPUT_MODE:
+                NSLog(@"GET_OUTPUT_MODE %d", status);
+                //activeDevice.getOutputMode().setValue(status);
+            
+                //ApplicationContext.getInstance().setupOutlets();
+                break;
+            
+            case GET_TAS5558_CH3_MIXER:
+            {
+                uint16_t val = data[1] + (uint16_t)(data[2] << 8);
+                NSLog(@"GET_TAS5558_CH3_MIXER %d", val);
+                //activeDevice.getOutputMode().setBoost(val);
+            
+                //ApplicationContext.getInstance().setupOutlets();
                 break;
             }
             case CLIP_DETECTION:
