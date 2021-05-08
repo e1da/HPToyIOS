@@ -69,6 +69,7 @@
 		D33DF344263D52EB001A87BB /* HiFiToyOutputMode.m in Sources */ = {isa = PBXBuildFile; fileRef = D33DF343263D52EB001A87BB /* HiFiToyOutputMode.m */; };
 		D33DF348264569FB001A87BB /* HiFiToyOutputMode.m in Sources */ = {isa = PBXBuildFile; fileRef = D33DF343263D52EB001A87BB /* HiFiToyOutputMode.m */; };
 		D33DF34C264569FF001A87BB /* HiFiToyOutputMode.h in Sources */ = {isa = PBXBuildFile; fileRef = D33DF342263D52EB001A87BB /* HiFiToyOutputMode.h */; };
+		D33DF3562645A0EC001A87BB /* OutputModeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33DF3552645A0EC001A87BB /* OutputModeViewController.m */; };
 		D35492272208681300063768 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */; };
 		D35492352208699C00063768 /* AppDelegate.h in Sources */ = {isa = PBXBuildFile; fileRef = D33A257220C94459008A94EF /* AppDelegate.h */; };
 		D35492362208699C00063768 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A257320C94459008A94EF /* AppDelegate.m */; };
@@ -356,6 +357,8 @@
 		D33A25A620CABF19008A94EF /* DeviceList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceList.plist; sourceTree = "<group>"; };
 		D33DF342263D52EB001A87BB /* HiFiToyOutputMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HiFiToyOutputMode.h; sourceTree = "<group>"; };
 		D33DF343263D52EB001A87BB /* HiFiToyOutputMode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HiFiToyOutputMode.m; sourceTree = "<group>"; };
+		D33DF3542645A0EC001A87BB /* OutputModeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OutputModeViewController.h; sourceTree = "<group>"; };
+		D33DF3552645A0EC001A87BB /* OutputModeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OutputModeViewController.m; sourceTree = "<group>"; };
 		D35492312208693E00063768 /* Source */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Source; path = HiFiToy/Source; sourceTree = "<group>"; };
 		D3571E32218F335500A99CB8 /* KeyboardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardView.h; sourceTree = "<group>"; };
 		D3571E33218F335500A99CB8 /* KeyboardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyboardView.m; sourceTree = "<group>"; };
@@ -597,6 +600,7 @@
 		D33A258420CA89E6008A94EF /* OptionsViewController */ = {
 			isa = PBXGroup;
 			children = (
+				D33DF3502645A0AC001A87BB /* OutputModeViewController */,
 				D30257B522AE6F8A008CF0C9 /* PresetUrlImportViewController */,
 				D30257B022AE6B99008CF0C9 /* PresetTextImportViewController */,
 				D302578522AAB08A008CF0C9 /* PresetRepoViewController */,
@@ -670,6 +674,15 @@
 				D33A25A620CABF19008A94EF /* DeviceList.plist */,
 			);
 			path = Res;
+			sourceTree = "<group>";
+		};
+		D33DF3502645A0AC001A87BB /* OutputModeViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D33DF3542645A0EC001A87BB /* OutputModeViewController.h */,
+				D33DF3552645A0EC001A87BB /* OutputModeViewController.m */,
+			);
+			path = OutputModeViewController;
 			sourceTree = "<group>";
 		};
 		D35AC3462261000E0034C666 /* HiFiToyPeripheral */ = {
@@ -1173,6 +1186,7 @@
 				D33A258220C952CD008A94EF /* FoundCell.m in Sources */,
 				D33A259820CA93B1008A94EF /* PresetViewController.m in Sources */,
 				D3BBD4FE218DC20300FFDB86 /* DontShowView.m in Sources */,
+				D33DF3562645A0EC001A87BB /* OutputModeViewController.m in Sources */,
 				D38A3C612220003E00319EDB /* AdvertiseViewController.m in Sources */,
 				D33A259B20CA9538008A94EF /* PresetCell.m in Sources */,
 				D33A254320C064A9008A94EF /* TAS5558.h in Sources */,
