@@ -361,7 +361,6 @@
 		D33DF343263D52EB001A87BB /* HiFiToyOutputMode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HiFiToyOutputMode.m; sourceTree = "<group>"; };
 		D33DF3542645A0EC001A87BB /* OutputModeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OutputModeViewController.h; sourceTree = "<group>"; };
 		D33DF3552645A0EC001A87BB /* OutputModeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OutputModeViewController.m; sourceTree = "<group>"; };
-		D35492312208693E00063768 /* Source */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Source; path = HiFiToy/Source; sourceTree = "<group>"; };
 		D3571E32218F335500A99CB8 /* KeyboardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardView.h; sourceTree = "<group>"; };
 		D3571E33218F335500A99CB8 /* KeyboardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyboardView.m; sourceTree = "<group>"; };
 		D35AC348226100470034C666 /* BassTrebleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BassTrebleTests.m; sourceTree = "<group>"; };
@@ -755,7 +754,6 @@
 		D39C3C8520BEB4FF00BDC1A0 = {
 			isa = PBXGroup;
 			children = (
-				D35492312208693E00063768 /* Source */,
 				D39C3C9020BEB4FF00BDC1A0 /* HiFiToy */,
 				D39C3CAC20BEB50000BDC1A0 /* HiFiToyTests */,
 				D3C11C2A22084C2600FFA990 /* HPToy */,
