@@ -1617,13 +1617,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4Yz-jY-pHC">
-                                <rect key="frame" x="20" y="84" width="335" height="32"/>
+                                <rect key="frame" x="20" y="84" width="335" height="61"/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.29999999999999999"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="SLY-4L-Jdy"/>
+                                </constraints>
                                 <segments>
                                     <segment title="Balance"/>
                                     <segment title="Unbalance"/>
                                     <segment title="Unbalance \nboost"/>
                                 </segments>
+                                <connections>
+                                    <action selector="setOutputMode:" destination="7Pf-u5-Rol" eventType="valueChanged" id="xKQ-rG-3ZB"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -1634,6 +1640,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Output mode" id="E66-fp-7op"/>
+                    <connections>
+                        <outlet property="outputSegmentedOutlet" destination="4Yz-jY-pHC" id="MkP-M1-eUp"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qmP-uY-BEt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1641,7 +1650,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Z6d-f1-hK3"/>
+        <segue reference="faG-pk-fhu"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="groupTableViewBackgroundColor">
