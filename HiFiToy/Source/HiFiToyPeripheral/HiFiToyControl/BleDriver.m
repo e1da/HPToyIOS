@@ -7,7 +7,6 @@
 //
 
 #import "BleDriver.h"
-#import "BlePacketQueue.h"
 
 @interface BleDriver() {
     CBCentralManager * CM;
@@ -373,14 +372,17 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (error) {
-        NSLog(@"%@", error.description);
-        if (_communicationDelegate) [_communicationDelegate keyfobMacAddrError];
-        return;
+        NSLog(@"did write with error: %@", error.description);
+    } else {
+        NSLog(@"did write");
     }
-    NSLog(@"did write");
     
-    UInt16 characteristicUUID = [self CBUUIDToInt:characteristic.UUID];
-    if (characteristicUUID != 0xFFF1) return;
+    if (_communicationDelegate) {
+        [_communicationDelegate keyfobDidWrite:[blePacketQueue getFirstPacket]
+                                         error:error];
+    }
+    
+    if ([self CBUUIDToInt:characteristic.UUID] != 0xFFF1) return;
     
     
     [blePacketQueue removeFirstPacket];
@@ -394,7 +396,7 @@
     }
         
     if (self.communicationDelegate){
-        [self.communicationDelegate keyfobDidWriteValue:[blePacketQueue size]];
+        [self.communicationDelegate keyfobUpdatePacketLength:[blePacketQueue size]];
     }
         
     NSLog(@"didWriteValueForCharacteristic. packet queue = %d", [blePacketQueue size]);

@@ -12,7 +12,9 @@
 #import "DialogSystem.h"
 
 
-@implementation HiFiToyControl
+@implementation HiFiToyControl {
+    BleDriver * bleDriver;
+}
 
 - (id) init
 {
@@ -96,8 +98,8 @@
 }
 
 //this method used attach page
-- (void) sendBufToDsp:(uint8_t*)data withLength:(uint16_t)length withOffset:(uint16_t)offsetInDspData; {
-    
+- (void) sendBufToDsp:(uint8_t*)data withLength:(uint16_t)length withOffset:(uint16_t)offsetInDspData
+{    
     //init vars
     uint16_t l = CC2540_PAGE_SIZE - offsetInDspData % CC2540_PAGE_SIZE;
     if (length < l) l = length;
@@ -245,11 +247,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"KeyfobDidFoundNotification" object:nil];
 }
 
-- (void) keyfobMacAddrError {
-    NSLog(@"keyfobMacAddrError ");
-    [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Mac address is not correct and device is not certified! Please contact your distributor.", @"")];
-}
-
 -(void) keyfobDidConnected
 {
     NSLog(@"keyfobDidConnected");
@@ -281,22 +278,28 @@
     [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Disconnected!", @"")];
 }
 
--(void) keyfobDidWriteValue:(uint)remainPacketLength
-{
-    DialogSystem * dialog = [DialogSystem sharedInstance];
+- (void) keyfobDidWrite:(BlePacket *)p error:(NSError *)error {
+    /*NSLog(@"keyfobMacAddrError ");
+    [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Mac address is not correct and device is not certified! Please contact your distributor.", @"")];
+     */
     
-    if (remainPacketLength != 0){// if queue isn`t empty
-        if (([dialog isProgressDialogVisible]) &&
-            (![dialog.progressController.title isEqualToString:NSLocalizedString(@"Import Preset...", @"")])) {
-            dialog.progressController.message = [NSString stringWithFormat:@"Left %d packets.", remainPacketLength];
-        }
-    } else {
-        if ([dialog isProgressDialogVisible]) {
-            [dialog dismissProgressDialog];
-         
-            //[[NSNotificationCenter defaultCenter] postNotificationName:@"CompleteDataSendNotification" object:nil];
+    if (p.data.length == sizeof(CommonCmd_t)) {
+        uint8_t * data = (uint8_t *)p.data.bytes;
+        uint8_t cmd = data[0];
+        
+        if ((cmd >= SET_TAS5558_CH3_MIXER) && (cmd <= GET_OUTPUT_MODE)) {
+            if (error) {
+                NSLog(@"Output Mode is unsupported.");
+                [_activeHiFiToyDevice.outputMode setHwSupported:NO];
+                
+            } else {
+                [_activeHiFiToyDevice.outputMode setHwSupported:YES];
+            }
+            
+            //ApplicationContext.getInstance().setupOutlets();
         }
     }
+    
 }
 
 -(void) keyfobDidUpdateValue:(NSData *) value
@@ -432,6 +435,24 @@
     
     if (value.length == 20) { // Get data from storage
         [[NSNotificationCenter defaultCenter] postNotificationName:@"GetDataNotification" object:value];
+    }
+}
+
+-(void) keyfobUpdatePacketLength:(uint)remainPacketLength
+{
+    DialogSystem * dialog = [DialogSystem sharedInstance];
+    
+    if (remainPacketLength != 0){// if queue isn`t empty
+        if (([dialog isProgressDialogVisible]) &&
+            (![dialog.progressController.title isEqualToString:NSLocalizedString(@"Import Preset...", @"")])) {
+            dialog.progressController.message = [NSString stringWithFormat:@"Left %d packets.", remainPacketLength];
+        }
+    } else {
+        if ([dialog isProgressDialogVisible]) {
+            [dialog dismissProgressDialog];
+         
+            //[[NSNotificationCenter defaultCenter] postNotificationName:@"CompleteDataSendNotification" object:nil];
+        }
     }
 }
 

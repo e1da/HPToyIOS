@@ -55,9 +55,7 @@ typedef enum : uint8_t {
     PAIR_NO, PAIR_YES
 } PairStatus_t;
 
-@interface HiFiToyControl : NSObject <BleCommunicationDelegate> {
-    BleDriver * bleDriver;    
-}
+@interface HiFiToyControl : NSObject <BleCommunicationDelegate>
 
 @property (nonatomic, readonly) NSMutableArray * foundHiFiToyDevices;
 @property (nonatomic, readonly) HiFiToyDevice * activeHiFiToyDevice;

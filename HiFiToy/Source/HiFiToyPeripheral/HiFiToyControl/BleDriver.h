@@ -8,20 +8,21 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
+#import "BlePacketQueue.h"
 
 /*--------------------------- TIBleCommunicationDelegate Protocol ----------------------------------------*/
 @protocol BleCommunicationDelegate
 
 -(void) keyfobDidFound:(NSString *)peripheralUUID;
 
--(void) keyfobMacAddrError;
-
 -(void) keyfobDidConnected;
 -(void) keyfobDidFailConnect;
 -(void) keyfobDidDisconnected;
 
--(void) keyfobDidWriteValue:(uint)remainPacketLength;
--(void) keyfobDidUpdateValue:(NSData *) value;
+-(void) keyfobDidWrite:(BlePacket *)p error:(NSError *)error;
+-(void) keyfobDidUpdateValue:(NSData *)value;
+
+-(void) keyfobUpdatePacketLength:(uint)remainPacketLength;
 
 @end
 
