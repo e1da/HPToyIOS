@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "HiFiToyPreset.h"
 
-#define PRESET_LIST_VERSION ((uint32_t)1)
+#define PRESET_LIST_VERSION ((uint32_t)2)
 
 @interface HiFiToyPresetList : NSObject
 

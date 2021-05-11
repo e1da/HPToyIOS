@@ -64,10 +64,6 @@
                                                               NSUserDomainMask, YES) objectAtIndex:0];
     NSString *plistPath = [rootPath stringByAppendingPathComponent:@"PresetList.plist"];
     
-    /*if(![[NSFileManager defaultManager] fileExistsAtPath:plistPath]){
-        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"PresetList" ofType:@"plist" ]toPath:plistPath error:nil];
-    }*/
-    
     // write back to file
     return [NSKeyedArchiver archiveRootObject:list toFile:plistPath];
 }
@@ -107,18 +103,19 @@
     
     if ((presetNameArray) && (presetNameArray.count > 0)) {
         for (NSString * presetName in presetNameArray) {
-            if (![self isPresetExist:presetName]) {
-                NSString * path = [NSString stringWithFormat:@"%@/%@.tpr", [self getOfficialPresetPath], presetName];
+            
+            //NOTE: app rewrites exist presets
+            NSString * path = [NSString stringWithFormat:@"%@/%@.tpr", [self getOfficialPresetPath], presetName];
                 
-                if ([[NSFileManager defaultManager] fileExistsAtPath:path]){
-                    NSData * data = [NSData dataWithContentsOfFile:path];
-                    [self importPresetFromData:data withName:presetName checkName:NO resultHandler:nil];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path]){
+                NSData * data = [NSData dataWithContentsOfFile:path];
+                [self importPresetFromData:data withName:presetName checkName:NO resultHandler:nil];
                     
-                } else {
-                    NSLog(@"%@ file not found", path);
-                }
-                
+            } else {
+                NSLog(@"%@ file not found", path);
             }
+                
+            
         }
     }
 }
