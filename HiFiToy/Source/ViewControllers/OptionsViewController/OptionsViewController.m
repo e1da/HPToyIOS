@@ -33,9 +33,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleNotification:)
+                                                 name: @"SetupOutletsNotification"
+                                               object: nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [self setupOutlets];
+}
+
+- (void) handleNotification:(NSNotification*)notification {
     [self setupOutlets];
 }
 

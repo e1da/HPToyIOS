@@ -9,7 +9,9 @@
 #import "HiFiToyOutputMode.h"
 #import "HiFiToyControl.h"
 
-@implementation HiFiToyOutputMode
+@implementation HiFiToyOutputMode {
+    uint16_t offset;
+}
 
 - (id) init {
     self = [super init];
@@ -31,27 +33,13 @@
     _value = value;
 }
 
-- (void) setBoost:(int16_t)boostValue {
-    if (self.value == BALANCE_OUT_MODE) return;
-
-    if (boostValue == 0) {
-        self.value = UNBALANCE_OUT_MODE;
-    } else {
-        self.value = UNBALANCE_BOOST_OUT_MODE;
-    }
-}
-
 - (void) sendToDsp {
     CommonPacket_t packet;
     
     //send output mode
     packet.cmd = SET_OUTPUT_MODE;
+    packet.data[0] = (self.value == BALANCE_OUT_MODE) ? 0 : 1;
     
-    if (self.value == BALANCE_OUT_MODE) {
-        packet.data[0] = BALANCE_OUT_MODE;
-    } else {
-        packet.data[0] = UNBALANCE_OUT_MODE;
-    }
     [[HiFiToyControl sharedInstance] sendCommonPacketToDsp:&packet];
     
     //send mixer value
@@ -65,15 +53,65 @@
 }
 
 - (void) readFromDsp {
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleGetDataNotification:)
+                                                 name: @"GetDataNotification"
+                                               object: nil];
+    
+    offset = GAIN_CH3_OFFSET;
+    [[HiFiToyControl sharedInstance] getDspDataWithOffset:offset];
+}
+
+- (void) handleGetDataNotification:(NSNotification*)notification {
+    static uint16_t boost;
+    
+    //we get 20 bytes
+    const uint8_t * data = ((NSData *)[notification object]).bytes;
+    
+    if (offset == GAIN_CH3_OFFSET) {
+        boost = (uint16_t)(data[0] + (data[1] << 8));
+
+        offset += 20;
+        [[HiFiToyControl sharedInstance] getDspDataWithOffset:offset];
+
+    } else {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+        uint8_t bal = data[OUTPUT_TYPE_OFFSET - GAIN_CH3_OFFSET - 20];
+        NSLog(@"Boost=%d Unbalance=%d", boost, bal);
+        
+        //update value
+        self.value = bal;
+        if ((boost != 0) && (self.value > BALANCE_OUT_MODE)) {
+            self.value = UNBALANCE_BOOST_OUT_MODE;
+        }
+        NSLog(@"%@", [self description]);
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
+    }
+}
+
+//WARNING: GET_OUTPUT_MODE cmd uses only for check PDV2.1 or PDV2 classic
+//this cmd return incorrect value. bug on hw side.
+- (void) isSettingsAvailable {
     CommonPacket_t packet;
     
     //read output value
     packet.cmd = GET_OUTPUT_MODE;
     [[HiFiToyControl sharedInstance] sendCommonPacketToDsp:&packet];
-    
-    //read mixer value
-    packet.cmd = GET_TAS5558_CH3_MIXER;
-    [[HiFiToyControl sharedInstance] sendCommonPacketToDsp:&packet];
+}
+
+- (NSString *) description {
+    switch (self.value) {
+        case BALANCE_OUT_MODE:
+            return @"Output mode = Balance";
+        case UNBALANCE_OUT_MODE:
+            return @"Output mode = Unbalance";
+        case UNBALANCE_BOOST_OUT_MODE:
+            return @"Output mode = Boost unbalance";
+        default:
+            return @"Output mode = Error";
+    }
 }
 
 @end

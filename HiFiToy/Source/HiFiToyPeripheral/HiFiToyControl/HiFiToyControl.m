@@ -296,7 +296,7 @@
                 [_activeHiFiToyDevice.outputMode setHwSupported:YES];
             }
             
-            //ApplicationContext.getInstance().setupOutlets();
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
         }
     }
     
@@ -400,20 +400,14 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateAdvertiseModeNotification" object:nil];
                 break;
             }
-            case GET_OUTPUT_MODE:
+            case GET_OUTPUT_MODE: //WARNING: not uses. bug on HW side
                 NSLog(@"GET_OUTPUT_MODE %d", status);
-                _activeHiFiToyDevice.outputMode.value = status;
-            
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateOutputModeNotification" object:nil];
                 break;
             
-            case GET_TAS5558_CH3_MIXER:
+            case GET_TAS5558_CH3_MIXER: //WARNING: not uses. bug on HW side in GET_OUTPUT_MODE cmd
             {
                 uint16_t val = data[1] + (uint16_t)(data[2] << 8);
                 NSLog(@"GET_TAS5558_CH3_MIXER %d", val);
-                [_activeHiFiToyDevice.outputMode setBoost:val];
-            
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateOutputModeNotification" object:nil];
                 break;
             }
             case CLIP_DETECTION:
