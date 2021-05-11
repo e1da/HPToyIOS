@@ -15,6 +15,18 @@
 
 @implementation OutputModeViewController
 
+- (BOOL)shouldAutorotate {
+    return YES;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -58,7 +70,7 @@
     
     if (_outputSegmentedOutlet.selectedSegmentIndex == BALANCE_OUT_MODE) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@""
-                                                               message:@"Please be careful. Using unbalance headphone with PDV2 in balance mode is dangerous. Are you sure want to set balance output mode?"
+                                                               message:@"Please be careful. Using unbalance headphone with PDV2.1 in balance mode is dangerous. Are you sure want to set balance output mode?"
                                                         preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
