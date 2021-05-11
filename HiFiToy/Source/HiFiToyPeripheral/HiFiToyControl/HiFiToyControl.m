@@ -283,7 +283,7 @@
     [[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Mac address is not correct and device is not certified! Please contact your distributor.", @"")];
      */
     
-    if (p.data.length == sizeof(CommonCmd_t)) {
+    if (p.data.length == sizeof(CommonPacket_t)) {
         uint8_t * data = (uint8_t *)p.data.bytes;
         uint8_t cmd = data[0];
         

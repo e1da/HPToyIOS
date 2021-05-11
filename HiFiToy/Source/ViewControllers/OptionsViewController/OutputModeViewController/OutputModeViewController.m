@@ -67,7 +67,7 @@
             [self setupOutlets];
         }];
         
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok"
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Set"
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction * _Nonnull action) {
             dev.outputMode.value = self.outputSegmentedOutlet.selectedSegmentIndex;

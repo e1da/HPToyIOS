@@ -38,6 +38,8 @@
                                              selector: @selector(handleNotification:)
                                                  name: @"SetupOutletsNotification"
                                                object: nil];
+    
+    [self.hiFiToyDevice.outputMode isSettingsAvailable];
 }
 
 - (void)dealloc {
@@ -56,6 +58,13 @@
     if (!self.hiFiToyDevice) return;
     
     _nameLabel_outl.text = self.hiFiToyDevice.name;
+    
+    if (self.hiFiToyDevice.outputMode.hwSupported) {
+        _outputModeCell_outl.hidden = NO;
+    } else {
+        _outputModeCell_outl.hidden = YES;
+    }
+    
 }
 
 /*-----------------------------------------------------------------------------------------

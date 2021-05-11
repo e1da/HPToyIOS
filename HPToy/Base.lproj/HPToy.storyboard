@@ -1093,6 +1093,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="nameLabel_outl" destination="1yK-jZ-GpR" id="S5D-Sh-xOi"/>
+                        <outlet property="outputModeCell_outl" destination="jFp-cm-33W" id="ymg-dn-PWu"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Imc-FG-daK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1650,7 +1651,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="faG-pk-fhu"/>
+        <segue reference="Z6d-f1-hK3"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="groupTableViewBackgroundColor">
