@@ -34,6 +34,8 @@
 		D30FF886216D49DE007FA50D /* FloatUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = D30FF885216D49DE007FA50D /* FloatUtility.c */; };
 		D30FF889216E2F5C007FA50D /* Filters.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF888216E2F5C007FA50D /* Filters.m */; };
 		D30FF88C216FA8E8007FA50D /* PassFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = D30FF88B216FA8E8007FA50D /* PassFilter.m */; };
+		D31A7B3E2656C61D0025C4AB /* HiFiToyDataBuf.m in Sources */ = {isa = PBXBuildFile; fileRef = D31A7B3D2656C61D0025C4AB /* HiFiToyDataBuf.m */; };
+		D31A7B3F2656C61D0025C4AB /* HiFiToyDataBuf.m in Sources */ = {isa = PBXBuildFile; fileRef = D31A7B3D2656C61D0025C4AB /* HiFiToyDataBuf.m */; };
 		D32483C82214683800028514 /* MergeToolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D32483C72214683800028514 /* MergeToolCell.m */; };
 		D32483C922146B3500028514 /* MergeToolCell.h in Sources */ = {isa = PBXBuildFile; fileRef = D32483C62214683800028514 /* MergeToolCell.h */; };
 		D32483CA22146B3500028514 /* MergeToolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D32483C72214683800028514 /* MergeToolCell.m */; };
@@ -305,6 +307,8 @@
 		D30FF888216E2F5C007FA50D /* Filters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Filters.m; sourceTree = "<group>"; };
 		D30FF88A216FA8E8007FA50D /* PassFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassFilter.h; sourceTree = "<group>"; };
 		D30FF88B216FA8E8007FA50D /* PassFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassFilter.m; sourceTree = "<group>"; };
+		D31A7B3C2656C61D0025C4AB /* HiFiToyDataBuf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HiFiToyDataBuf.h; sourceTree = "<group>"; };
+		D31A7B3D2656C61D0025C4AB /* HiFiToyDataBuf.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HiFiToyDataBuf.m; sourceTree = "<group>"; };
 		D32483C62214683800028514 /* MergeToolCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MergeToolCell.h; sourceTree = "<group>"; };
 		D32483C72214683800028514 /* MergeToolCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MergeToolCell.m; sourceTree = "<group>"; };
 		D33969EA23E8E3FE00AC8583 /* HPToy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HPToy.entitlements; sourceTree = "<group>"; };
@@ -869,6 +873,8 @@
 				D39C3CCD20BEB71200BDC1A0 /* Loudness.h */,
 				D39C3CCE20BEB71200BDC1A0 /* Loudness.m */,
 				D39C3CD320BEB73C00BDC1A0 /* HiFiToyObject.h */,
+				D31A7B3C2656C61D0025C4AB /* HiFiToyDataBuf.h */,
+				D31A7B3D2656C61D0025C4AB /* HiFiToyDataBuf.m */,
 			);
 			path = HiFiToyObjects;
 			sourceTree = "<group>";
@@ -1226,6 +1232,7 @@
 				D39C3CD920BEB8C500BDC1A0 /* XmlData.m in Sources */,
 				D39C3CDA20BEB8C500BDC1A0 /* XmlParserWrapper.m in Sources */,
 				D301F091218246EB00E181C6 /* BiquadValueControl.m in Sources */,
+				D31A7B3E2656C61D0025C4AB /* HiFiToyDataBuf.m in Sources */,
 				D33A258B20CA8A30008A94EF /* NavigationController.m in Sources */,
 				D39C3CE220BEDD9D00BDC1A0 /* Number523.c in Sources */,
 				D33A254920C15AF7008A94EF /* DrcCoef.m in Sources */,
@@ -1296,6 +1303,7 @@
 				D30257B422AE6C72008CF0C9 /* PresetTextImportViewController.m in Sources */,
 				D302578D22AABAB3008CF0C9 /* DownloadPresetCell.m in Sources */,
 				D302578922AAB2C6008CF0C9 /* PresetRepoViewController.m in Sources */,
+				D31A7B3F2656C61D0025C4AB /* HiFiToyDataBuf.m in Sources */,
 				D3E297C62263820A0096012B /* IntegerUtility.c in Sources */,
 				D3E297B122622AD00096012B /* Biquad.m in Sources */,
 				D38A3C6222200C9E00319EDB /* AdvertiseViewController.h in Sources */,
@@ -1664,6 +1672,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1690,6 +1699,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
