@@ -199,33 +199,27 @@
     return self.presetName;
 }
 
-//get binary for save to dsp
-- (NSData *) getBinary
-{
-    NSMutableData *data = [[NSMutableData alloc] init];
+- (NSArray<HiFiToyDataBuf *> *) getDataBufs {
+    NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];
     
     if (!self.characteristics) [self initCharacteristicsPointer];
     
     //get binary of all dspCharacteristics
     for (int i = 0; i < self.characteristics.count; i++){
-        [data appendData:[[self.characteristics objectAtIndex:i] getBinary]];
+        [dataBufs addObjectsFromArray:[self.characteristics[i] getDataBufs]];
+    }
+    return dataBufs;
+}
+
+- (NSData *) getBinary {
+    NSArray<HiFiToyDataBuf *> * dataBufs = [self getDataBufs];
+    NSMutableData * data = [[NSMutableData alloc] init];
+    
+    for (HiFiToyDataBuf * db in dataBufs) {
+        [data appendData:[db binary]];
     }
     
     return data;
-}
-
--(uint16_t) getDataBufLength:(NSData *)data
-{
-    DataBufHeader_t * dataBufHeader = (DataBufHeader_t *)data.bytes;
-    
-    uint16_t counter = 0;
-    
-    while (((uint8_t *)dataBufHeader -  (uint8_t *)data.bytes) < data.length) {
-        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + dataBufHeader->length + sizeof(DataBufHeader_t));
-        counter++;
-    }
-    
-    return counter;
 }
 
 //store and import to/from peripheral
@@ -247,7 +241,7 @@
     memcpy(&hiFiToyConfig.biquadTypes, types, 7 * sizeof(BiquadType_t));
     
     //fill buf and bytes length
-    hiFiToyConfig.dataBufLength     = [self getDataBufLength:data];
+    hiFiToyConfig.dataBufLength     = [[self getDataBufs] count];
     hiFiToyConfig.dataBytesLength   = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + data.length;
     
     uint8_t typesLength = sizeof(BiquadType_t) + 1; // 7 biquads + 1 reserved byte
