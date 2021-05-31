@@ -44,7 +44,7 @@
                 if ((arg < 1.0f) && (arg > -1.0f)) break;
                 
                 w0 = acos(1.0f / arg);
-                _freq = round(w0 * FS / (2 * M_PI));
+                _freq = round(w0 * TAS5558_FS / (2 * M_PI));
                 _qFac = sin(w0) * coef.a1 / (2 * (2 * cos(w0) - coef.a1));
                 break;
                 
@@ -53,7 +53,7 @@
                 if ((arg < 1.0f) && (arg > -1.0f)) break;
                 
                 w0 = acos(-1.0f / arg);
-                _freq = round(w0 * FS / (2 * M_PI));
+                _freq = round(w0 * TAS5558_FS / (2 * M_PI));
                 _qFac = sin(w0) * coef.a1 / (2 * (2 * cos(w0) - coef.a1));
                 break;
                 
@@ -62,7 +62,7 @@
                 if ((arg > 1.0f) || (arg < -1.0f)) break;
                 
                 w0 = acos(arg);
-                _freq = round(w0 * FS / (2 * M_PI));
+                _freq = round(w0 * TAS5558_FS / (2 * M_PI));
                 
                 arg = (coef.b0 * 2 * cos(w0) - coef.a1) / (2 * cos(w0) - coef.a1);
                 if (arg < 0.0) break;
@@ -79,13 +79,13 @@
                 if ((arg > 1.0f) || (arg < -1.0f)) break;
                 
                 w0 = acos(arg);
-                _freq = round(w0 * FS / (2 * M_PI));
+                _freq = round(w0 * TAS5558_FS / (2 * M_PI));
                 _qFac = sin(w0) * coef.a1 / (2 * (2 * cos(w0) - coef.a1));
                 break;
                 
             case BIQUAD_BANDPASS:
                 w0 = acos(coef.a1 / 2 * (1 + coef.b0 / (1 - coef.b0)));
-                _freq = round(w0 * (float)FS / (2 * M_PI));
+                _freq = round(w0 * (float)TAS5558_FS / (2 * M_PI));
                 //TODO set import bandwidth
                 break;
                 
@@ -98,7 +98,7 @@
         
         if (coef.a1 > 0) {
             w0 = -log10(coef.a1) / log10(2.7);
-            _freq = round(w0 * FS / (2 * M_PI));
+            _freq = round(w0 * TAS5558_FS / (2 * M_PI));
         }
     }
 }

@@ -6,7 +6,6 @@
 //  Copyright © 2021 Kerosinn_OSX. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "BiquadParam.h"
 #import "HiFiToyDataBuf.h"
 #import "HiFiToyDevice.h"

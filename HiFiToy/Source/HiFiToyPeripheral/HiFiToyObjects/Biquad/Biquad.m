@@ -207,7 +207,7 @@
 
 
 - (void) didUpdateBiquadParam:(BiquadParam *) param {
-    float w0 = 2 * M_PI * (float)param.freq / FS;
+    float w0 = 2 * M_PI * (float)param.freq / TAS5558_FS;
     float ampl;
     float bandwidth = 1.41f;
     float alpha, a0;

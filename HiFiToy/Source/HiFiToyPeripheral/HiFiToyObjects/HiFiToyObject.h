@@ -5,14 +5,9 @@
 //  Created by Artem Khlyupin on 30/05/2018.
 //
 
-#import <Foundation/Foundation.h>
 #import "PeripheralDefines.h"
 #import "XmlData.h"
 #import "XmlParserWrapper.h"
-#import "BiquadParam.h"
-
-#define FS 96000
-
 
 @protocol HiFiToyObject
 
