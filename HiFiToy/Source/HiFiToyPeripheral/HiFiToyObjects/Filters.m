@@ -182,12 +182,10 @@
     _activeBiquadIndex = activeBiquadIndex;
 }
 
-- (BiquadType_t *) getBiquadTypes {
-    BiquadType_t * types = malloc(7 * sizeof(BiquadType_t));
+- (void) getBiquadTypes:(BiquadType_t *)types {
     for (int i = 0; i < 7; i++) {
         types[i] = biquads[i].type;
     }
-    return types;
 }
 
 - (void) incActiveBiquadIndex {

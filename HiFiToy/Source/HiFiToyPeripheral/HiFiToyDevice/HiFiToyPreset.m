@@ -242,9 +242,9 @@
     NSData * data = [self getBinary];
     
     //fill biquqad types
-    BiquadType_t * types = [self.filters getBiquadTypes]; // get 7 BiquadTypes
+    BiquadType_t types[7];
+    [self.filters getBiquadTypes:types]; // get 7 BiquadTypes
     memcpy(&hiFiToyConfig.biquadTypes, types, 7 * sizeof(BiquadType_t));
-    free(types);
     
     //fill buf and bytes length
     hiFiToyConfig.dataBufLength     = [self getDataBufLength:data];

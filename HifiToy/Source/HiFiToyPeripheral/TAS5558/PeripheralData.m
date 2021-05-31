@@ -32,13 +32,12 @@
         gainChannel3    = [dev.outputMode getGainCh3];
         energy          = dev.energyConfig;
         
-        BiquadType_t * types = [dev.preset.filters getBiquadTypes]; // get 7 BiquadTypes
+        BiquadType_t types[7];
+        [dev.preset.filters getBiquadTypes:types]; // get 7 BiquadTypes
         memcpy(biquadTypes, types, 7 * sizeof(BiquadType_t));
-        free(types);
         
         outputMode      = [dev.outputMode isUnbalance] ? 1 : 0;
         
-
         //List<HiFiToyDataBuf> dataBufs = device.getActivePreset().getDataBufs();
         //appendAmModeDataBuf(dataBufs, device.getAmMode(), device.isNewPDV21Hw());
 
@@ -52,9 +51,9 @@
     if (self) {
         [self clear];
         
-        BiquadType_t * types = [preset.filters getBiquadTypes]; // get 7 BiquadTypes
+        BiquadType_t types[7];
+        [preset.filters getBiquadTypes:types]; // get 7 BiquadTypes
         memcpy(biquadTypes, types, 7 * sizeof(BiquadType_t));
-        free(types);
         
         HiFiToyDevice * dev = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
         outputMode          = [dev.outputMode isUnbalance] ? 1 : 0;

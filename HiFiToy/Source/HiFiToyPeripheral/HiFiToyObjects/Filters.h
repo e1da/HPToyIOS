@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (Biquad *)  getActiveBiquad;
 - (void)        setBiquad:(Biquad *)biquad forIndex:(uint8_t)index;
 
-- (BiquadType_t *) getBiquadTypes;
+- (void) getBiquadTypes:(BiquadType_t *)types;
 
 - (void) incActiveBiquadIndex;
 - (void) decActiveBiquadIndex;
