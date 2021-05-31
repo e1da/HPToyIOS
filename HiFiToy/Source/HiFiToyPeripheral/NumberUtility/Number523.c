@@ -7,13 +7,13 @@
 
 #include "Number523.h"
 
-float getMaxFloatFor523() {
+static float getMaxFloatFor523() {
     float max = 16.0f;
     uint32_t temp = *((uint32_t *)&max) - 1;
     return *((float *)&temp);
 }
 
-float getMinFloatFor523() {
+static float getMinFloatFor523() {
     return -16.0f;
 }
 

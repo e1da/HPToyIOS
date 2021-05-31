@@ -153,8 +153,8 @@
             (isFloatDiffLessThan(self.biquadParam.qFac, temp.biquadParam.qFac, 0.02f)) &&
             (isFloatDiffLessThan(self.biquadParam.dbVolume, temp.biquadParam.dbVolume, 0.02f)) &&
             
-            (b.maxFreq == b.maxFreq) &&
-            (b.minFreq == b.minFreq) &&
+            (b.maxFreq == bTemp.maxFreq) &&
+            (b.minFreq == bTemp.minFreq) &&
             (isFloatDiffLessThan(b.maxQ, bTemp.maxQ, 0.02f)) &&
             (isFloatDiffLessThan(b.minQ, bTemp.minQ, 0.02f)) &&
             (isFloatDiffLessThan(b.maxDbVol, bTemp.maxDbVol, 0.02f)) &&

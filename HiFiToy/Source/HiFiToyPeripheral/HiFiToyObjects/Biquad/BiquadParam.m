@@ -133,8 +133,8 @@
             (isFloatNull(self.qFac - temp.qFac)) &&
             (isFloatNull(self.dbVolume - temp.dbVolume)) &&
             
-            (b.maxFreq == b.maxFreq) &&
-            (b.minFreq == b.minFreq) &&
+            (b.maxFreq == bTemp.maxFreq) &&
+            (b.minFreq == bTemp.minFreq) &&
             (isFloatDiffLessThan(b.maxQ, bTemp.maxQ, 0.01f)) &&
             (isFloatDiffLessThan(b.minQ, bTemp.minQ, 0.01f)) &&
             (isFloatDiffLessThan(b.maxDbVol, bTemp.maxDbVol, 0.01f)) &&
