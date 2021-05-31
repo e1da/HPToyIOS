@@ -429,6 +429,23 @@
     return data;
 }
 
+- (NSArray<HiFiToyDataBuf *> *) getDataBufs {
+    Number523_t coefs[5] = {to523Reverse(_coef.b0), to523Reverse(_coef.b1), to523Reverse(_coef.b2),
+                            to523Reverse(_coef.a1), to523Reverse(_coef.a2)};
+    
+    uint8_t data[20];
+    memcpy(data, coefs, 20);
+    
+    HiFiToyDataBuf * dataBuf0 = [HiFiToyDataBuf dataBufWithAddr:self.address0 withLength:20 withData:data];
+    HiFiToyDataBuf * dataBuf1 = [HiFiToyDataBuf dataBufWithAddr:self.address0 withLength:20 withData:data];
+    
+    if (self.address1 != 0) {
+        return @[dataBuf0, dataBuf1];
+    }
+
+    return @[dataBuf0];
+}
+
 - (BOOL) importData:(NSData *)data {
     HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
     DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
