@@ -131,7 +131,7 @@
 
 //send to dsp
 - (void) sendWithResponse:(BOOL)response {
-    NSData *data = [self getMainBinary];
+    NSData *data = [[self getMainDataBuf] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
     data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
@@ -140,27 +140,31 @@
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
 }
 
-- (NSMutableData *) getMainBinary {
-    DataBufHeader_t dataBufHeader;
-    dataBufHeader.addr = [self address];
-    dataBufHeader.length = 4 * 4; // LG LO Gain Offset
-    
-    NSMutableData *data = [[NSMutableData alloc] init];
-    [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
-
+- (HiFiToyDataBuf *) getMainDataBuf {
     Number923_t number[4] = {to523Reverse(_LG), to923Reverse(_LO),
                                 to523Reverse(_gain), to923Reverse(_offset)};
-    [data appendBytes:number length:(4 * sizeof(Number923_t))];
+    
+    return [HiFiToyDataBuf dataBufWithAddr:self.address
+                                withLength:16
+                                  withData:(uint8_t *)number];
+}
+
+
+//get binary for save to dsp
+- (NSData *) getBinary {
+    NSMutableData *data = [[NSMutableData alloc] init];
+    [data appendData:[[self getMainDataBuf] binary]];
+    [data appendData:[self.biquad getBinary]];
     
     return data;
 }
 
-//get binary for save to dsp
-- (NSData *) getBinary {
-    NSMutableData *data = [self getMainBinary];
-    [data appendData:[self.biquad getBinary]];
+- (NSArray<HiFiToyDataBuf *> *) getDataBufs {
+    NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];
+    [dataBufs addObject:[self getMainDataBuf]];
+    [dataBufs addObjectsFromArray:[self.biquad getDataBufs]];
     
-    return data;
+    return dataBufs;
 }
 
 - (BOOL) importData:(NSData *)data {
