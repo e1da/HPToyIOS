@@ -560,16 +560,6 @@
     return @"Filters is 7 biquads";
 }
 
-- (NSData *)getBinary {
-    NSMutableData *data = [[NSMutableData alloc] init];
-    
-    for (int i = 0; i < 7; i++) {
-        [data appendData:[biquads[i] getBinary]];
-    }
-    
-    return data;
-}
-
 - (NSArray<HiFiToyDataBuf *> *) getDataBufs {
     NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];
     

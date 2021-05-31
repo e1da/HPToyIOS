@@ -287,40 +287,11 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     packet.point[3] = initDrcPoint88(_point3.inputDb, _point3.outputDb);
     
     //NSLog(@"0:%0.1f %0.1f 1:%0.1f %0.1f", _point2.inputDb, _point2.outputDb, _point3.inputDb, _point3.outputDb);
-    /*packet.point[0] = initDrcPoint88(-90, -90);
-    packet.point[1] = initDrcPoint88(-60, -60);
-    packet.point[2] = initDrcPoint88(0, 0);
-    packet.point[3] = initDrcPoint88(24, 0);*/
+
     NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(DrcPointPacket_t)];
     
     //send data
     [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
-}
-
-//get binary for save to dsp
-- (NSData *) getBinary
-{
- 
-    DataBufHeader_t dataBufHeader;
-    dataBufHeader.addr = [self address];
-    dataBufHeader.length = 7 * sizeof(Number923_t); // thresholds, ks, offsets
-    
-    NSMutableData *data = [[NSMutableData alloc] init];
-    [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
-    
-    DrcCoef_t drcCoef = getDrcCoef(self.point0, self.point1, self.point2, self.point3);
-    
-    Number923_t number[7] = {to923Reverse(drcCoef.threshold1_db / -6.0206),
-                                to923Reverse(drcCoef.threshold2_db / -6.0206),
-                                to523Reverse(drcCoef.k0),
-                                to523Reverse(drcCoef.k1),
-                                to523Reverse(drcCoef.k2),
-                                to923Reverse((drcCoef.offset1_db + 24.0824) / 6.0206),
-                                to923Reverse((drcCoef.offset2_db + 24.0824) / 6.0206)
-    };
-    [data appendBytes:number length:(7 * sizeof(Number923_t))];
-    
-    return data;
 }
 
 - (NSArray<HiFiToyDataBuf *> *) getDataBufs {

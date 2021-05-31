@@ -49,8 +49,6 @@ typedef struct {
 
 - (double) getAFR:(double)freqX;
 
-- (NSArray<HiFiToyDataBuf *> *) getDataBufs;
-
 @end
 
 NS_ASSUME_NONNULL_END

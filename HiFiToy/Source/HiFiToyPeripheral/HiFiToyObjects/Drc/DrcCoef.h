@@ -72,6 +72,4 @@ DrcPoint88_t initDrcPoint88(float inputDb, float outputDb);
 - (void) setPoint2WithCheck:(DrcPoint_t)point2;
 - (void) setPoint3WithCheck:(DrcPoint_t)point3;
 
-- (NSArray<HiFiToyDataBuf *> *) getDataBufs;
-
 @end

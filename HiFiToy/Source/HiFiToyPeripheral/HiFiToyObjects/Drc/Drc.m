@@ -239,23 +239,6 @@
                                   withData:(uint8_t *)data];
 }
 
-//get binary for save to dsp
-- (NSData *) getBinary {
-    NSMutableData *data = [[NSMutableData alloc] init];
-    
-    [data appendData:[self.coef17 getBinary]];
-    [data appendData:[self.coef8 getBinary]];
-    [data appendData:[self.timeConst17 getBinary]];
-    [data appendData:[self.timeConst8 getBinary]];
-    
-    [data appendData:[[self getEvaluationDataBuf] binary]];
-    
-    for (int i = 0; i < 8; i++){
-        [data appendData:[[self getEnabledDataBufForChannel:i] binary]];
-    }
-    
-    return data;
-}
 
 - (NSArray<HiFiToyDataBuf *> *) getDataBufs {
     NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];

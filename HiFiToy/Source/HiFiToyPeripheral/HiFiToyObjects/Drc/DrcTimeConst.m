@@ -203,15 +203,6 @@
                                   withData:(uint8_t *)data];
 }
 
-//get binary for save to dsp
-- (NSData *) getBinary {
-    NSMutableData *data = [[NSMutableData alloc] init];
-    [data appendData:[[self getEnergyDataBuf] binary]];
-    [data appendData:[[self getAttackDecayDataBuf] binary]];
-    
-    return data;
-}
-
 - (NSArray<HiFiToyDataBuf *> *) getDataBufs {
     return @[[self getEnergyDataBuf], [self getAttackDecayDataBuf]];
 }

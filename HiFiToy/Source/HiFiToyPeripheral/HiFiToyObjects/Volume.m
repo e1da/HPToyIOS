@@ -156,7 +156,7 @@
 
 //send to dsp
 - (void) sendWithResponse:(BOOL)response {
-    NSData *data = [self getBinary];
+    NSData *data = [[self getDataBufs][0] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
     data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
@@ -166,30 +166,6 @@
 }
 
 //get binary for save to dsp
-- (NSData *) getBinary {
-    DataBufHeader_t dataBufHeader;
-    dataBufHeader.addr = self.address;
-    dataBufHeader.length = 4;
-    
-    uint16_t v;
-    if (self.db > MUTE_VOLUME) {
-        
-        v = (18.0 - self.db) / 0.25;
-        if (v < 1) v = 1;
-        if (v > 0x245) v = 0x245;
-        
-    } else {
-        v = 0x245;
-    }
-    
-    uint8_t vBuf[4] = {0, 0, (v >> 8) & 0xFF, v & 0xFF};
-    
-    NSMutableData *data = [[NSMutableData alloc] init];
-    [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
-    [data appendBytes:vBuf length:4];
-    return data;
-}
-
 - (NSArray<HiFiToyDataBuf *> *) getDataBufs {
     uint16_t v;
     if (self.db > MUTE_VOLUME) {

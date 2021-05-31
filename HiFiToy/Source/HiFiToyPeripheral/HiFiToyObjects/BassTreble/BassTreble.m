@@ -258,21 +258,6 @@
                                 withLength:8 withData:data];
 }
 
-
-//get binary for save to dsp
-- (NSData *) getBinary {
-    NSMutableData *data = [[NSMutableData alloc] init];
-    
-    //fill enabled registers
-    for (int i = 0; i < 8; i++){
-        [data appendData:[[self getEnabledDataBufWithChannel:i] binary]];
-    }
-    
-    [data appendData:[[self getFreqDbDataBuf] binary]];
-    
-    return data;
-}
-
 - (NSArray<HiFiToyDataBuf *> *) getDataBufs {
     NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];
     

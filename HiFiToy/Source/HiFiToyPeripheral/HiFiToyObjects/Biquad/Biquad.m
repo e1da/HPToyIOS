@@ -403,32 +403,7 @@
     }
 }
 
-/*===========================================================================
- Get Binary Operations
- ==========================================================================*/
 //get binary for save to dsp
-- (NSData *) getBinary {
-    
-    DataBufHeader_t dataBufHeader;
-    dataBufHeader.addr = self.address0;
-    dataBufHeader.length = 20;
-    
-    NSMutableData *data = [[NSMutableData alloc] init];
-    [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
-    
-    Number523_t coefs[5] = {to523Reverse(_coef.b0), to523Reverse(_coef.b1), to523Reverse(_coef.b2),
-                            to523Reverse(_coef.a1), to523Reverse(_coef.a2)};
-    [data appendBytes:coefs length:20];
-    
-    if (self.address1) {
-        dataBufHeader.addr = self.address1;
-        [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
-        [data appendBytes:coefs length:20];
-    }
-    
-    return data;
-}
-
 - (NSArray<HiFiToyDataBuf *> *) getDataBufs {
     Number523_t coefs[5] = {to523Reverse(_coef.b0), to523Reverse(_coef.b1), to523Reverse(_coef.b2),
                             to523Reverse(_coef.a1), to523Reverse(_coef.a2)};

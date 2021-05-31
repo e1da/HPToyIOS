@@ -19,8 +19,8 @@
 //send to dsp
 - (void) sendWithResponse:(BOOL)response;
 
-//get binary for save to dsp
-- (NSData *) getBinary;
+//get binary for store to dsp
+- (NSArray<HiFiToyDataBuf *> *) getDataBufs;
 
 - (BOOL) importData:(NSData *)data;
 
