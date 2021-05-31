@@ -148,9 +148,18 @@
                                     self.energyMS, self.attackMS, self.decayMS];
 }
 
+- (NSString *) getEnergyDescription {
+    if (_energyMS < 0.1) {
+        return [NSString stringWithFormat:@"%dus", (int)(_energyMS * 1000)];
+    } else if (_energyMS < 1) {
+        return [NSString stringWithFormat:@"%0.1fms", _energyMS];
+    }
+    return [NSString stringWithFormat:@"%dms", (int)_energyMS];
+}
+
 //send to dsp
 - (void) sendEnergyWithResponse:(BOOL)response {
-    NSData *data = [self getEnergyBinary];
+    NSData *data = [[self getEnergyDataBuf] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
     data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
@@ -160,7 +169,7 @@
 }
 
 - (void) sendAttackDecayWithResponse:(BOOL)response {
-    NSData *data = [self getAttackDecayBinary];
+    NSData *data = [[self getAttackDecayDataBuf] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
     data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
@@ -174,56 +183,37 @@
     [self sendAttackDecayWithResponse:response];
 }
 
-- (NSData *) getEnergyBinary {
-    DataBufHeader_t dataBufHeader;
-    dataBufHeader.addr = [self address];
-    dataBufHeader.length = 8;
-    
-    NSMutableData *data = [[NSMutableData alloc] init];
-    [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
-    
+- (HiFiToyDataBuf *) getEnergyDataBuf {
     uint32_t t = [self timeToUint32:self.energyMS];
-    //NSLog(@"%f %d", _energyMS, t);
+    uint32_t data[2] = {reverseUint32(0x800000 - t), reverseUint32(t)};
     
-    uint32_t d[2] = {reverseUint32(0x800000 - t), reverseUint32(t)};
-    [data appendBytes:d length:8];
-    
-    return data;
+    return [HiFiToyDataBuf dataBufWithAddr:self.address
+                                withLength:8
+                                  withData:(uint8_t *)data];
 }
 
-- (NSData *) getAttackDecayBinary {
-    DataBufHeader_t dataBufHeader;
-    dataBufHeader.addr = [self address] + 4; //DRCx_ATTACK_DECAY_REG
-    dataBufHeader.length = 16;
+- (HiFiToyDataBuf *) getAttackDecayDataBuf {
+    uint32_t attack     = [self timeToUint32:self.attackMS];
+    uint32_t decay      = [self timeToUint32:self.decayMS];
+    uint32_t data[4]    = {reverseUint32(0x800000 - attack), reverseUint32(attack),
+                            reverseUint32(0x800000 - decay), reverseUint32(decay)};
     
-    NSMutableData *data = [[NSMutableData alloc] init];
-    [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
-    
-    uint32_t attack = [self timeToUint32:self.attackMS];
-    uint32_t decay = [self timeToUint32:self.decayMS];
-    uint32_t d[4] = {reverseUint32(0x800000 - attack), reverseUint32(attack),
-                        reverseUint32(0x800000 - decay), reverseUint32(decay)};
-    [data appendBytes:d length:16];
-    
-    return data;
-}
-
-- (NSString *) getEnergyDescription {
-    if (_energyMS < 0.1) {
-        return [NSString stringWithFormat:@"%dus", (int)(_energyMS * 1000)];
-    } else if (_energyMS < 1) {
-        return [NSString stringWithFormat:@"%0.1fms", _energyMS];
-    }
-    return [NSString stringWithFormat:@"%dms", (int)_energyMS];
+    return [HiFiToyDataBuf dataBufWithAddr:(self.address + 4)
+                                withLength:16
+                                  withData:(uint8_t *)data];
 }
 
 //get binary for save to dsp
 - (NSData *) getBinary {
     NSMutableData *data = [[NSMutableData alloc] init];
-    [data appendData:[self getEnergyBinary]];
-    [data appendData:[self getAttackDecayBinary]];
+    [data appendData:[[self getEnergyDataBuf] binary]];
+    [data appendData:[[self getAttackDecayDataBuf] binary]];
     
     return data;
+}
+
+- (NSArray<HiFiToyDataBuf *> *) getDataBufs {
+    return @[[self getEnergyDataBuf], [self getAttackDecayDataBuf]];
 }
 
 - (BOOL) importData:(NSData *)data {

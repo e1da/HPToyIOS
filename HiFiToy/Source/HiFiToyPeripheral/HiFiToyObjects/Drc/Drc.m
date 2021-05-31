@@ -178,7 +178,7 @@
 
 //send to dsp
 - (void) sendEvaluationWithResponse:(BOOL)response {
-    NSData *data = [self getEvaluationBinary];
+    NSData *data = [[self getEvaluationDataBuf] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
     data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
@@ -188,7 +188,7 @@
 }
 
 - (void) sendEnabledForChannel:(uint8_t)channel withResponse:(BOOL)response {
-    NSData *data = [self getEnabledBinaryForChannel:channel];
+    NSData *data = [[self getEnabledDataBufForChannel:channel] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
     data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
@@ -210,49 +210,33 @@
     }
 }
 
-- (NSData *) getEvaluationBinary {
-    DataBufHeader_t dataBufHeader;
-    dataBufHeader.addr = [self address];
-    dataBufHeader.length = 8;
-    
-    NSMutableData *data = [[NSMutableData alloc] init];
-    [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
-    
-    uint32_t d[2] = {0, 0};
+- (HiFiToyDataBuf *) getEvaluationDataBuf {
+    uint32_t data[2] = {0, 0};
     
     for (int i = 7; i >= 0; i--){
-        d[0] <<= 2;
-        d[0] |= evaluationCh[i] & 0x03;
+        data[0] <<= 2;
+        data[0] |= evaluationCh[i] & 0x03;
     }
-    d[0] = reverseUint32(d[0]);
+    data[0] = reverseUint32(data[0]);
     
-    d[1] = evaluationCh[7] & 0x03;
-    d[1] = reverseUint32(d[1]);
-
-
-    [data appendBytes:d length:8];
+    data[1] = evaluationCh[7] & 0x03;
+    data[1] = reverseUint32(data[1]);
     
-    return data;
+    return [HiFiToyDataBuf dataBufWithAddr:self.address
+                                withLength:8
+                                  withData:(uint8_t *)data];
 }
 
-- (NSData *) getEnabledBinaryForChannel:(uint8_t)channel {
+- (HiFiToyDataBuf *) getEnabledDataBufForChannel:(uint8_t)channel {
     if (channel > 7) channel = 7;
-    
-    DataBufHeader_t dataBufHeader;
-    NSMutableData *data = [[NSMutableData alloc] init];
-    
-    dataBufHeader.addr = DRC_BYPASS1_REG + channel;
-    dataBufHeader.length = 8;
-    
-    [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
     
     uint32_t val = reverseNumber523(0x800000 * enabledCh[channel]);
     uint32_t ival = reverseNumber523(0x800000 - 0x800000 * enabledCh[channel]);
+    uint32_t data[2] = {val, ival};
     
-    [data appendBytes:&ival length:4];
-    [data appendBytes:&val length:4];
-    
-    return data;
+    return [HiFiToyDataBuf dataBufWithAddr:(DRC_BYPASS1_REG + channel)
+                                withLength:8
+                                  withData:(uint8_t *)data];
 }
 
 //get binary for save to dsp
@@ -264,13 +248,30 @@
     [data appendData:[self.timeConst17 getBinary]];
     [data appendData:[self.timeConst8 getBinary]];
     
-    [data appendData:[self getEvaluationBinary]];
+    [data appendData:[[self getEvaluationDataBuf] binary]];
     
     for (int i = 0; i < 8; i++){
-        [data appendData:[self getEnabledBinaryForChannel:i]];
+        [data appendData:[[self getEnabledDataBufForChannel:i] binary]];
     }
     
     return data;
+}
+
+- (NSArray<HiFiToyDataBuf *> *) getDataBufs {
+    NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];
+    
+    [dataBufs addObjectsFromArray:[self.coef17 getDataBufs]];
+    [dataBufs addObjectsFromArray:[self.coef8 getDataBufs]];
+    [dataBufs addObjectsFromArray:[self.timeConst17 getDataBufs]];
+    [dataBufs addObjectsFromArray:[self.timeConst8 getDataBufs]];
+    
+    [dataBufs addObject:[self getEvaluationDataBuf]];
+    
+    for (int i = 0; i < 8; i++) {
+        [dataBufs addObject:[self getEnabledDataBufForChannel:i]];
+    }
+    
+    return dataBufs;
 }
 
 - (BOOL) importData:(NSData *)data {

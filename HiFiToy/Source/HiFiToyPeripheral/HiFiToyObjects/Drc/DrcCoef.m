@@ -323,6 +323,31 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     return data;
 }
 
+- (NSArray<HiFiToyDataBuf *> *) getDataBufs {
+    DrcCoef_t drcCoef = getDrcCoef(self.point0, self.point1, self.point2, self.point3);
+    
+    Number923_t number[7] = {to923Reverse(drcCoef.threshold1_db / -6.0206),
+                                to923Reverse(drcCoef.threshold2_db / -6.0206),
+                                to523Reverse(drcCoef.k0),
+                                to523Reverse(drcCoef.k1),
+                                to523Reverse(drcCoef.k2),
+                                to923Reverse((drcCoef.offset1_db + 24.0824) / 6.0206),
+                                to923Reverse((drcCoef.offset2_db + 24.0824) / 6.0206)
+    };
+    
+    HiFiToyDataBuf * dataBuf = [HiFiToyDataBuf dataBufWithAddr:self.address
+                                                    withLength:(7 * sizeof(Number923_t))
+                                                      withData:(uint8_t *)number];
+    
+    return @[dataBuf];
+}
+
+/*@Override
+    public List<HiFiToyDataBuf> getDataBufs() {
+        ByteBuffer b = new DrcParam(point0, point1, point2, point3).getBinary();
+        return new ArrayList<>(Collections.singletonList(new HiFiToyDataBuf(getAddress(), b)));
+    }*/
+
 - (BOOL) importData:(NSData *)data {
     HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
     DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;

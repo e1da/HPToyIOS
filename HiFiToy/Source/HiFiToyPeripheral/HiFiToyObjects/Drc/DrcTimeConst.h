@@ -26,4 +26,6 @@
 - (void) sendAttackDecayWithResponse:(BOOL)response;
 
 - (NSString *) getEnergyDescription;
+
+- (NSArray<HiFiToyDataBuf *> *) getDataBufs;
 @end
