@@ -56,7 +56,7 @@
 
 - (void) setupOutlets{
     if (device) {
-        self.advertiseModeSwitch_outl.on = (device.advertiseMode == ALWAYS_ENABLED) ? NO : YES;
+        self.advertiseModeSwitch_outl.on = (device.advertiseMode == ADVERTISE_ALWAYS_ENABLED) ? NO : YES;
     } else {
         self.advertiseModeSwitch_outl.on = NO;
     }
@@ -65,7 +65,8 @@
 
 - (IBAction)setAdvertiseMode:(id)sender {
     if (device) {
-        device.advertiseMode = (self.advertiseModeSwitch_outl.on) ? AFTER_1MIN_DISABLED : ALWAYS_ENABLED;
+        device.advertiseMode = (self.advertiseModeSwitch_outl.on) ?
+                                ADVERTISE_AFTER_1MIN_DISABLED : ADVERTISE_ALWAYS_ENABLED;
         [device sendAdvertiseMode];
     }
 }

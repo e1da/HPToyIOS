@@ -11,7 +11,7 @@
 #import "HiFiToyPreset.h"
 #import "HiFiToyDevice.h"
 
-#define HIFI_TOY_VERSION            11
+
 #define CC2540_PAGE_SIZE            2048
 #define ATTACH_PAGE_OFFSET          (3 * CC2540_PAGE_SIZE)//3 page
 
@@ -71,6 +71,7 @@ typedef enum : uint8_t {
 
 //base send command
 - (void) sendDataToDsp:(NSData *)data withResponse:(BOOL)response;
+- (void) sendPacketToDsp:(Packet_t *)packet withResponse:(BOOL)response;
 - (void) sendCommonPacketToDsp:(CommonPacket_t *)packet;
 - (void) sendBufToDsp:(uint8_t*)data withLength:(uint16_t)length withOffset:(uint16_t)offsetInDspData;
 - (void) getDspDataWithOffset:(uint16_t)offset;

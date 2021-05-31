@@ -192,6 +192,9 @@
 		D35AC349226100470034C666 /* BassTrebleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D35AC348226100470034C666 /* BassTrebleTests.m */; };
 		D35AC34B226211470034C666 /* VolumeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D35AC34A226211470034C666 /* VolumeTests.m */; };
 		D35AC34D226217C80034C666 /* BiquadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D35AC34C226217C80034C666 /* BiquadTests.m */; };
+		D36CF92826614DF900631A57 /* PeripheralData.m in Sources */ = {isa = PBXBuildFile; fileRef = D36CF92726614DF900631A57 /* PeripheralData.m */; };
+		D36CF92926614F7900631A57 /* PeripheralData.h in Sources */ = {isa = PBXBuildFile; fileRef = D36CF92626614DF900631A57 /* PeripheralData.h */; };
+		D36CF92A26614F7900631A57 /* PeripheralData.m in Sources */ = {isa = PBXBuildFile; fileRef = D36CF92726614DF900631A57 /* PeripheralData.m */; };
 		D379126620D1153F0089962D /* XOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126520D1153F0089962D /* XOverView.m */; };
 		D379127720D3C2CE0089962D /* DrcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127620D3C2CE0089962D /* DrcViewController.m */; };
 		D379127A20D3C55B0089962D /* DrcView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127920D3C55B0089962D /* DrcView.m */; };
@@ -370,6 +373,9 @@
 		D35AC348226100470034C666 /* BassTrebleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BassTrebleTests.m; sourceTree = "<group>"; };
 		D35AC34A226211470034C666 /* VolumeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VolumeTests.m; sourceTree = "<group>"; };
 		D35AC34C226217C80034C666 /* BiquadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiquadTests.m; sourceTree = "<group>"; };
+		D36CF92626614DF900631A57 /* PeripheralData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeripheralData.h; sourceTree = "<group>"; };
+		D36CF92726614DF900631A57 /* PeripheralData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeripheralData.m; sourceTree = "<group>"; };
+		D36CF92B26615A1B00631A57 /* PeripheralDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeripheralDefines.h; sourceTree = "<group>"; };
 		D379126420D1153F0089962D /* XOverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XOverView.h; sourceTree = "<group>"; };
 		D379126520D1153F0089962D /* XOverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XOverView.m; sourceTree = "<group>"; };
 		D379127520D3C2CE0089962D /* DrcViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcViewController.h; sourceTree = "<group>"; };
@@ -554,6 +560,9 @@
 			isa = PBXGroup;
 			children = (
 				D33A254220C06481008A94EF /* TAS5558.h */,
+				D36CF92626614DF900631A57 /* PeripheralData.h */,
+				D36CF92726614DF900631A57 /* PeripheralData.m */,
+				D36CF92B26615A1B00631A57 /* PeripheralDefines.h */,
 			);
 			path = TAS5558;
 			sourceTree = "<group>";
@@ -1223,6 +1232,7 @@
 				D33A256120C6E163008A94EF /* BleDriver.m in Sources */,
 				D33A259520CA9141008A94EF /* PairingCodeViewController.m in Sources */,
 				D39C3CE420BEDD9D00BDC1A0 /* Number923.c in Sources */,
+				D36CF92826614DF900631A57 /* PeripheralData.m in Sources */,
 				D33A256420C6E173008A94EF /* BlePacket.m in Sources */,
 				D307EB1022147D6200ACE7A3 /* MergeViewController.m in Sources */,
 				D30FF8702163AB4D007FA50D /* KeyboardButton.m in Sources */,
@@ -1289,6 +1299,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D36CF92926614F7900631A57 /* PeripheralData.h in Sources */,
+				D36CF92A26614F7900631A57 /* PeripheralData.m in Sources */,
 				D3B969B4233970E5002D90BC /* PhotosViewController.h in Sources */,
 				D3B969B5233970E5002D90BC /* PhotoViewCell.h in Sources */,
 				D3B969B6233970E5002D90BC /* PhotoViewCell.m in Sources */,

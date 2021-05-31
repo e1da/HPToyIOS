@@ -57,7 +57,7 @@
     _activeKeyPreset = @"No processing";
     _preset = [[HiFiToyPresetList sharedInstance] presetWithName:_activeKeyPreset];
     self.audioSource = PCM9211_USB_SOURCE;
-    self.advertiseMode = ALWAYS_ENABLED;
+    self.advertiseMode = ADVERTISE_ALWAYS_ENABLED;
     [self setDefaultEnergyConfig];
     [self setDefaultOutputMode];
 }
@@ -174,10 +174,10 @@
     HiFiToyPeripheral_t hiFiToyConfig;
     hiFiToyConfig.i2cAddr           = I2C_ADDR;
     hiFiToyConfig.successWriteFlag  = 0x00; //must be assign '0' before sendFactorySettings
-    hiFiToyConfig.version           = HIFI_TOY_VERSION;
+    hiFiToyConfig.version           = PERIPHERAL_VERSION;
     hiFiToyConfig.pairingCode       = _pairingCode;
     hiFiToyConfig.audioSource       = _audioSource = PCM9211_USB_SOURCE;
-    hiFiToyConfig.advertiseMode     = _advertiseMode = ALWAYS_ENABLED;
+    hiFiToyConfig.advertiseMode     = _advertiseMode = ADVERTISE_ALWAYS_ENABLED;
     
     [self setDefaultEnergyConfig];
     hiFiToyConfig.energy = _energyConfig;

@@ -91,6 +91,12 @@
     [bleDriver writeValue:0xFFF0 characteristicUUID:0xFFF1 data:data response:response];
 }
 
+- (void) sendPacketToDsp:(Packet_t *)packet withResponse:(BOOL)response
+{
+    NSData *data = [[NSData alloc] initWithBytes:packet length:sizeof(Packet_t)];
+    [self sendDataToDsp:data withResponse:response];
+}
+
 - (void) sendCommonPacketToDsp:(CommonPacket_t *)packet
 {
     NSData *data = [[NSData alloc] initWithBytes:packet length:sizeof(CommonPacket_t)];
@@ -368,7 +374,7 @@
                 uint16_t version;
                 memcpy(&version, data + 1, sizeof(uint16_t));
                 
-                if (version == HIFI_TOY_VERSION) {
+                if (version == PERIPHERAL_VERSION) {
                     NSLog(@"GET_VERSION_OK");
                     [_activeHiFiToyDevice updateAudioSource];
                 } else {

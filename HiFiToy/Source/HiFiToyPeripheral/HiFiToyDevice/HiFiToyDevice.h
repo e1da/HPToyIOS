@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "HiFiToyPreset.h"
 #import "HiFiToyOutputMode.h"
+#import "PeripheralDefines.h"
 
 @interface HiFiToyDevice : NSObject <NSCoding>
 

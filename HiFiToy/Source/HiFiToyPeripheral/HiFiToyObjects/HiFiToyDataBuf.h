@@ -10,6 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef struct{
+    uint8_t addr;     // in TAS5558 registers
+    uint8_t length;    // [byte] unit
+} DataBufHeader_t;
+
+
 @interface HiFiToyDataBuf : NSObject
 
 @property uint8_t               addr;
