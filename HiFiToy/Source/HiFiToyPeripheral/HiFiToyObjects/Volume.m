@@ -190,6 +190,24 @@
     return data;
 }
 
+- (NSArray<HiFiToyDataBuf *> *) getDataBufs {
+    uint16_t v;
+    if (self.db > MUTE_VOLUME) {
+        
+        v = (18.0 - self.db) / 0.25;
+        if (v < 1) v = 1;
+        if (v > 0x245) v = 0x245;
+        
+    } else {
+        v = 0x245;
+    }
+    
+    uint8_t data[4] = {0, 0, (v >> 8) & 0xFF, v & 0xFF};
+    
+    HiFiToyDataBuf * dataBuf = [HiFiToyDataBuf dataBufWithAddr:self.address withLength:4 withData:data];
+    return [NSArray arrayWithObject:dataBuf];
+}
+
 - (BOOL) importData:(NSData *)data {
     HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
     DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
