@@ -25,6 +25,8 @@ typedef struct{
 - (id) initWithAddr:(uint8_t)addr withLength:(uint8_t)length withData:(uint8_t *)d;
 - (id) initWithData:(NSData *)d;
 
++ (id) dataBufWithAddr:(uint8_t)addr withLength:(uint8_t)length withData:(uint8_t *)d;
+
 - (NSData *) binary;
 - (BOOL) parseBinary:(NSData *)bin;
 

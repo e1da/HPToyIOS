@@ -27,6 +27,10 @@
     return self;
 }
 
++ (id) dataBufWithAddr:(uint8_t)addr withLength:(uint8_t)length withData:(uint8_t *)d {
+    return [[HiFiToyDataBuf alloc] initWithAddr:addr withLength:length withData:d];
+}
+
 - (uint8_t) length {
     return (self.data == nil) ? 0 : self.data.length;
 }
