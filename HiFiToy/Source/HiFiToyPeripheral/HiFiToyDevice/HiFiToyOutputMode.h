@@ -22,6 +22,9 @@ typedef enum : uint8_t {
 @property (getter=isHwSupported) BOOL   hwSupported;
 @property (nonatomic) OutputModeValue_t value;
 
+- (BOOL)        isUnbalance;
+- (uint16_t)    getGainCh3;
+    
 - (void) sendToDsp;
 - (void) readFromDsp;
 - (void) isSettingsAvailable;

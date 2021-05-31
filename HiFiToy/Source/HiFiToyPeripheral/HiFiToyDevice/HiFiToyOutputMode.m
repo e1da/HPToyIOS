@@ -33,6 +33,15 @@
     _value = value;
 }
 
+- (BOOL) isUnbalance {
+        return (_value > 0);
+}
+
+- (uint16_t) getGainCh3 {
+    return (_value == UNBALANCE_BOOST_OUT_MODE) ? 0x4000 : 0;
+}
+
+
 - (void) sendToDsp {
     CommonPacket_t packet;
     

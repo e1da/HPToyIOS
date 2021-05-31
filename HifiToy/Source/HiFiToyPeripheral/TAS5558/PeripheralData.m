@@ -29,15 +29,14 @@
         pairingCode     = dev.pairingCode;
         advertiseMode   = dev.advertiseMode;
         
-        gainChannel3    = 16384; //[dev.outputMode getGainCh3];
+        gainChannel3    = [dev.outputMode getGainCh3];
         energy          = dev.energyConfig;
         
         BiquadType_t * types = [dev.preset.filters getBiquadTypes]; // get 7 BiquadTypes
         memcpy(biquadTypes, types, 7 * sizeof(BiquadType_t));
         free(types);
         
-        
-        outputMode      = 1; //[dev.outputMode isUnbalance] ? 1 : 0;
+        outputMode      = [dev.outputMode isUnbalance] ? 1 : 0;
         
 
         //List<HiFiToyDataBuf> dataBufs = device.getActivePreset().getDataBufs();
@@ -58,7 +57,7 @@
         free(types);
         
         HiFiToyDevice * dev = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
-        outputMode          = 1; // [dev.outputMode isUnbalance] ? 1 : 0;
+        outputMode          = [dev.outputMode isUnbalance] ? 1 : 0;
         
         
         //appendAmModeDataBuf(dataBufs, dev.getAmMode(), dev.isNewPDV21Hw());
@@ -77,7 +76,7 @@
     advertiseMode       = ADVERTISE_ALWAYS_ENABLED;
 
     HiFiToyOutputMode * om = [[HiFiToyOutputMode alloc] init];
-    gainChannel3        = 16384; // [om getGainCh3]; // 0x4000
+    gainChannel3        = [om getGainCh3]; // 0x4000
     
     energy.highThresholdDb = ENERGY_CORRECT_HIGH_THRES_COEF;    // 0
     energy.lowThresholdDb  = -55;  // -55
@@ -85,7 +84,7 @@
     energy.usbTimeout120ms = 0;    // not used
     
     memset(biquadTypes, BIQUAD_PARAMETRIC, sizeof(biquadTypes)); // all biquads = PARAMETRIC
-    outputMode = 1; // [om isUnbalance] ? 1 : 0;
+    outputMode = [om isUnbalance] ? 1 : 0;
 
     dataBufLength   = 0;
     dataBytesLength = 0;
