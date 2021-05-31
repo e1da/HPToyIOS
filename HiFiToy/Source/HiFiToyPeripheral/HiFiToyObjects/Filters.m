@@ -570,6 +570,16 @@
     return data;
 }
 
+- (NSArray<HiFiToyDataBuf *> *) getDataBufs {
+    NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < 7; i++) {
+        [dataBufs addObjectsFromArray:[biquads[i] getDataBufs]];
+    }
+    
+    return dataBufs;
+}
+
 - (BOOL)importData:(NSData *)data {
     HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
     for (int i = 0; i < 7; i++) {
