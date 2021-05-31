@@ -188,7 +188,7 @@
 
 //send to dsp
 - (void) sendWithResponse:(BOOL)response {
-    NSData *data = [self getFreqDbBinary];
+    NSData *data = [[self getFreqDbDataBuf] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
     data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
@@ -198,7 +198,7 @@
 }
 
 - (void) sendEnabledWithChannel:(uint8_t)channel withResponse:(BOOL)response {
-    NSData *data = [self getEnabledBinaryWithChannel:channel];
+    NSData *data = [[self getEnabledDataBufWithChannel:channel] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
     data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
@@ -215,61 +215,49 @@
     return 18 - tas5558_db;
 }
 
-// return header + 16 byte
-- (NSData *) getFreqDbBinary {
-    DataBufHeader_t dataBufHeader;
-    NSMutableData *data = [[NSMutableData alloc] init];
-    
+- (HiFiToyDataBuf *) getFreqDbDataBuf {
     //fill bass selection
-    dataBufHeader.addr = BASS_FILTER_SET_REG; // next BASS_FILTER_INDEX_REG, TREBLE_FILTER_SET_REG, TREBLE_FILTER_INDEX_REG
-    dataBufHeader.length = 16;
-    [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
-    
     uint8_t valBassFreq[4] = {  _bassTreble8.bassFreq, _bassTreble56.bassFreq,
                                 _bassTreble34.bassFreq, _bassTreble127.bassFreq};
-    [data appendBytes:valBassFreq length:4];
     
     //fill bass db, BASS_FILTER_INDEX_REG
     uint8_t valBassDb[4] = {[self dbToTAS5558Format:_bassTreble8.bassDb],
                             [self dbToTAS5558Format:_bassTreble56.bassDb],
                             [self dbToTAS5558Format:_bassTreble34.bassDb],
                             [self dbToTAS5558Format:_bassTreble127.bassDb]};
-    [data appendBytes:&valBassDb length:4];
     
     //fill treble selection, TREBLE_FILTER_SET_REG
     uint8_t valTrebleFreq[4] = {    _bassTreble8.trebleFreq, _bassTreble56.trebleFreq,
                                     _bassTreble34.trebleFreq, _bassTreble127.trebleFreq};
-    [data appendBytes:&valTrebleFreq length:4];
     
     //fill treble db, TREBLE_FILTER_INDEX_REG
     uint8_t valTrebleDb[4] = {  [self dbToTAS5558Format:_bassTreble8.trebleDb],
                                 [self dbToTAS5558Format:_bassTreble56.trebleDb],
                                 [self dbToTAS5558Format:_bassTreble34.trebleDb],
                                 [self dbToTAS5558Format:_bassTreble127.trebleDb]};
-    [data appendBytes:&valTrebleDb length:4];
     
-    return data;
+    uint8_t data[16];
+    memcpy(data + 0, valBassFreq, 4);
+    memcpy(data + 4, valBassDb, 4);
+    memcpy(data + 8, valTrebleFreq, 4);
+    memcpy(data + 12, valTrebleDb, 4);
+    
+    return [HiFiToyDataBuf dataBufWithAddr:self.address
+                                withLength:16 withData:data];
 }
 
-- (NSData *) getEnabledBinaryWithChannel:(uint8_t)channel {
-    if (channel > 7) channel = 7;
-    
-    DataBufHeader_t dataBufHeader;
-    NSMutableData *data = [[NSMutableData alloc] init];
-    
-    dataBufHeader.addr = BASS_TREBLE_REG + channel;
-    dataBufHeader.length = 8;
-    
-    [data appendBytes:&dataBufHeader length:sizeof(DataBufHeader_t)];
-    
+- (HiFiToyDataBuf *) getEnabledDataBufWithChannel:(uint8_t)channel {
     uint32_t val = reverseNumber523(0x800000 * enabledCh[channel]);
     uint32_t ival = reverseNumber523(0x800000 - 0x800000 * enabledCh[channel]);
     
-    [data appendBytes:&ival length:4];
-    [data appendBytes:&val length:4];
+    uint8_t data[8];
+    memcpy(data + 0, &val, 4);
+    memcpy(data + 4, &ival, 4);
     
-    return data;
+    return [HiFiToyDataBuf dataBufWithAddr:(BASS_TREBLE_REG + channel)
+                                withLength:8 withData:data];
 }
+
 
 //get binary for save to dsp
 - (NSData *) getBinary {
@@ -277,12 +265,24 @@
     
     //fill enabled registers
     for (int i = 0; i < 8; i++){
-        [data appendData:[self getEnabledBinaryWithChannel:i]];
+        [data appendData:[[self getEnabledDataBufWithChannel:i] binary]];
     }
     
-    [data appendData:[self getFreqDbBinary]];
+    [data appendData:[[self getFreqDbDataBuf] binary]];
     
     return data;
+}
+
+- (NSArray<HiFiToyDataBuf *> *) getDataBufs {
+    NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < 8; i++) {
+        [dataBufs addObject:[self getEnabledDataBufWithChannel:i]];
+    }
+    
+    [dataBufs addObject:[self getFreqDbDataBuf]];
+    
+    return dataBufs;
 }
 
 - (BOOL) importData:(NSData *)data {
