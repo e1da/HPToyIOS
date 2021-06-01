@@ -24,24 +24,31 @@
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
-- (void) testCharacteristicPointer:(HiFiToyPreset *)p {
-    XCTAssertTrue(p.characteristics.count == 5);
-    
-    XCTAssertTrue([p.characteristics objectAtIndex:0] == p.filters);
-    XCTAssertTrue([p.characteristics objectAtIndex:1] == p.masterVolume);
-    XCTAssertTrue([p.characteristics objectAtIndex:2] == p.bassTreble);
-    XCTAssertTrue([p.characteristics objectAtIndex:3] == p.loudness);
-    XCTAssertTrue([p.characteristics objectAtIndex:4] == p.drc);
-}
-
 - (void) testCopy {
     XCTAssertTrue(p0 != p1);
-    [self testCharacteristicPointer:p0];
-    [self testCharacteristicPointer:p1];
     
-    for (int i = 0; i < p0.characteristics.count; i++) {
-        XCTAssertTrue([p0.characteristics objectAtIndex:i] != [p1.characteristics objectAtIndex:i]);
+    XCTAssertTrue(p0.filters != p1.filters);
+    for (int i = 0 ; i < 7 ; i++) {
+        XCTAssertTrue([p0.filters getBiquadAtIndex:i] != [p1.filters getBiquadAtIndex:i]);
+        XCTAssertTrue([[p0.filters getBiquadAtIndex:i] biquadParam] != [[p1.filters getBiquadAtIndex:i] biquadParam]);
     }
+    
+    XCTAssertTrue(p0.masterVolume != p1.masterVolume);
+    
+    XCTAssertTrue(p0.bassTreble                 != p1.bassTreble);
+    XCTAssertTrue(p0.bassTreble.bassTreble127   != p1.bassTreble.bassTreble127);
+    XCTAssertTrue(p0.bassTreble.bassTreble34    != p1.bassTreble.bassTreble34);
+    XCTAssertTrue(p0.bassTreble.bassTreble56    != p1.bassTreble.bassTreble56);
+    XCTAssertTrue(p0.bassTreble.bassTreble8     != p1.bassTreble.bassTreble8);
+    
+    XCTAssertTrue(p0.loudness           != p1.loudness);
+    XCTAssertTrue(p0.loudness.biquad    != p1.loudness.biquad);
+    
+    XCTAssertTrue(p0.drc                != p1.drc);
+    XCTAssertTrue(p0.drc.coef17         != p1.drc.coef17);
+    XCTAssertTrue(p0.drc.coef8          != p1.drc.coef8);
+    XCTAssertTrue(p0.drc.timeConst17    != p1.drc.timeConst17);
+    XCTAssertTrue(p0.drc.timeConst8     != p1.drc.timeConst8);
 }
 
 - (void) testEqual {
