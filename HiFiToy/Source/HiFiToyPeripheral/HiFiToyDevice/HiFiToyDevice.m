@@ -12,6 +12,7 @@
 #import "DialogSystem.h"
 #import "HiFiToyControl.h"
 #import "TAS5558.h"
+#import "PeripheralData.h"
 
 @implementation HiFiToyDevice
 
@@ -141,41 +142,18 @@
 
 - (void) restoreFactory {
     //set default preset and save to file
-    self.activeKeyPreset = @"No processing";
+    self.pairingCode        = 0;
+    self.activeKeyPreset    = @"No processing";
+    self.audioSource        = PCM9211_USB_SOURCE;
+    self.advertiseMode      = ADVERTISE_ALWAYS_ENABLED;
+    [self setDefaultEnergyConfig];
+    _outputMode             = [[HiFiToyOutputMode alloc] init];
+    
     [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
     
-    if (![[HiFiToyControl sharedInstance] isConnected]) return;
-    
-    //show progress dialog
-    [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Restore factory", @"")];
-
-    //fill HiFiToyConfig_t structure
-    HiFiToyPeripheral_t hiFiToyConfig;
-    hiFiToyConfig.i2cAddr           = I2C_ADDR;
-    hiFiToyConfig.successWriteFlag  = 0x00; //must be assign '0' before sendFactorySettings
-    hiFiToyConfig.version           = PERIPHERAL_VERSION;
-    hiFiToyConfig.pairingCode       = _pairingCode;
-    hiFiToyConfig.audioSource       = _audioSource = PCM9211_USB_SOURCE;
-    hiFiToyConfig.advertiseMode     = _advertiseMode = ADVERTISE_ALWAYS_ENABLED;
-    
-    [self setDefaultEnergyConfig];
-    hiFiToyConfig.energy = _energyConfig;
-    
-    //TODO: fix this stupid code
-    _outputMode = [[HiFiToyOutputMode alloc] init];
-    hiFiToyConfig.outputType = (self.outputMode.value == BALANCE_OUT_MODE) ?
-                                                        BALANCE_OUT_MODE : UNBALANCE_OUT_MODE;
-    hiFiToyConfig.gainChannel3 = (self.outputMode.value == UNBALANCE_BOOST_OUT_MODE) ? 0x40 : 0;
-    
-    
-    
-    //store to peripheral first pat of HiFiToyPeripheral_t
-    [[HiFiToyControl sharedInstance] sendBufToDsp:(uint8_t *)&hiFiToyConfig
-                                       withLength:offsetof(HiFiToyPeripheral_t, biquadTypes)
-                                       withOffset:0];
-    
-    //store second part of HiFiToyPeripheral_t and preset and setInitDsp
-    [self.preset storeToPeripheral];
+    //store to peripheral
+    PeripheralData * pd = [[PeripheralData alloc] initWithDevice:self];
+    [pd exportWithDialog:NSLocalizedString(@"Restore factory", @"")];
 }
 
 @end

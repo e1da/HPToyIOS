@@ -42,6 +42,7 @@ typedef struct {                            // offset
 - (void) clear;
 
 - (void) exportAll;
+- (void) exportWithDialog:(NSString *)title;
 - (void) exportPreset;
 - (void) exportPresetWithDialog:(NSString *)title;
 

@@ -147,6 +147,13 @@
     
 }
 
+- (void) exportWithDialog:(NSString *)title {
+    if (![[HiFiToyControl sharedInstance] isConnected]) return;
+    
+    [[DialogSystem sharedInstance] showProgressDialog:title];
+    [self exportAll];
+}
+
 - (void) exportPreset {
     HiFiToyControl * ctrl = [HiFiToyControl sharedInstance];
     
