@@ -46,6 +46,9 @@ typedef struct {                            // offset
 - (void) exportPreset;
 - (void) exportPresetWithDialog:(NSString *)title;
 
+- (void) importHeader:(void (^ __nullable)(void))finishHandler;
+- (void) import:(void (^ __nullable)(void))finishHandler;
+
 @end
 
 NS_ASSUME_NONNULL_END

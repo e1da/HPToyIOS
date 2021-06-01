@@ -16,6 +16,9 @@
 
 @implementation PeripheralData {
     NSArray<HiFiToyDataBuf *> * dataBufs;
+    NSMutableData * importData;
+    
+    void (^finishHandler)(void);
 }
 
 - (id) init {
@@ -172,6 +175,99 @@
     
     [[DialogSystem sharedInstance] showProgressDialog:title];
     [self exportPreset];
+}
+
+- (void) importHeader:(void (^ __nullable)(void))finishHandler {
+    HiFiToyControl * ctrl = [HiFiToyControl sharedInstance];
+    
+    if (![ctrl isConnected]) return;
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(didGetHeaderData:)
+                                                 name: @"GetDataNotification"
+                                               object: finishHandler];
+    importData = [[NSMutableData alloc] init];
+    [ctrl getDspDataWithOffset:0];
+}
+
+
+- (void) didGetHeaderData:(NSNotification*)notification {
+    //get 20 byte portion and append
+    NSData * data = (NSData *)[notification object];
+    [importData appendData:data];
+    
+    if (importData.length == 40) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        
+        if (![self parseHeader:importData]) {
+            header.dataBytesLength = 0;
+        }
+        
+        finishHandler = notification.object;
+        if (finishHandler) finishHandler();
+        
+    } else {
+        [[HiFiToyControl sharedInstance] getDspDataWithOffset:20];
+    }
+}
+
+- (BOOL) parseHeader:(NSData *)data {
+    if (data.length < PERIPHERAL_CONFIG_LENGTH) {
+        return NO;
+    }
+    memcpy(&header, data.bytes, PERIPHERAL_CONFIG_LENGTH);
+    
+    return YES;
+}
+
+- (void) import:(void (^ __nullable)(void))finishHandler {
+    [self importHeader:^() {
+        if (self->header.dataBytesLength == 0) {
+            [[DialogSystem sharedInstance] showAlert:@"Import preset is not success."];
+            return;
+        }
+        
+        [[NSNotificationCenter defaultCenter] addObserver: self
+                                                 selector: @selector(didGetData:)
+                                                     name: @"GetDataNotification"
+                                                   object: finishHandler];
+        
+        self->importData = [[NSMutableData alloc] init];
+        [[HiFiToyControl sharedInstance] getDspDataWithOffset:PERIPHERAL_CONFIG_LENGTH];
+    }];
+}
+
+- (void) didGetData:(NSNotification*)notification {
+    //get 20 byte portion and append
+    NSData * data = (NSData *)[notification object];
+    [importData appendData:data];
+    
+    if (importData.length >= header.dataBufLength) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        
+        [self parseDataBufs:importData];
+        
+        finishHandler = notification.object;
+        if (finishHandler) finishHandler();
+        
+    } else {
+        [[HiFiToyControl sharedInstance] getDspDataWithOffset:PERIPHERAL_CONFIG_LENGTH + importData.length];
+    }
+}
+
+- (void) parseDataBufs:(NSData *)data {
+    DataBufHeader_t * buf = (DataBufHeader_t *)data.bytes;
+    
+    NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < header.dataBufLength; i++) {
+        NSData * d = [[NSData alloc] initWithBytes:buf length:(buf->length + 2)];
+        buf = (DataBufHeader_t *)((uint8_t *)buf + sizeof(DataBufHeader_t) + buf->length);
+        
+        [dataBufs addObject:[[HiFiToyDataBuf alloc] initWithData:d]];
+    }
+    
+    [self setDataBufs:dataBufs];
 }
 
 @end
