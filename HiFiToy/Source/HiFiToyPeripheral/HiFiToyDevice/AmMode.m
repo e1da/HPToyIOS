@@ -10,6 +10,7 @@
 #import "TAS5558.h"
 #import "HiFiToyControl.h"
 #import "HiFiToyDataBuf.h"
+#import "PeripheralData.h"
 
 @implementation AmMode {
     uint8_t data[4];
@@ -98,19 +99,9 @@
 
 
 - (void) storeToPeripheral {
-    HiFiToyPreset * p = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] preset];
-
-    
-    /*PeripheralData peripheralData = new PeripheralData(p.getFilters().getBiquadTypes(),
-                p.getFilters().getDataBufs());
-    peripheralData.exportPresetWithDialog("Beat-tones update...");*/
-    [p storeToPeripheral];
-    
-    /*HiFiToyPreset p = HiFiToyControl.getInstance().getActiveDevice().getActivePreset();
-
-    PeripheralData peripheralData = new PeripheralData(p.getFilters().getBiquadTypes(),
-                    p.getDataBufs());
-    peripheralData.exportPresetWithDialog("Beat-tones update...");*/
+    HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] preset];
+    PeripheralData * pd = [[PeripheralData alloc] initWithPreset:preset];
+    [pd exportPresetWithDialog:@"Beat-tones update..."];
 }
 
 - (void) importFromPeripheral {
