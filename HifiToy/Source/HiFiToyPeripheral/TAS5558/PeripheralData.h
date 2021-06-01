@@ -48,6 +48,7 @@ typedef struct {                            // offset
 
 - (void) importHeader:(void (^ __nullable)(void))finishHandler;
 - (void) import:(void (^ __nullable)(void))finishHandler;
+- (void) importWithDialog:(NSString *)title handler:(void (^ __nullable)(void))finishHandler;
 
 @end
 

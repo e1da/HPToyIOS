@@ -237,15 +237,34 @@
     }];
 }
 
+- (void) importWithDialog:(NSString *)title handler:(void (^ __nullable)(void))finishHandler {
+    if (![[HiFiToyControl sharedInstance] isConnected]) return;
+    
+    [[DialogSystem sharedInstance] showProgressDialog:title];
+    [self import:finishHandler];
+}
+
 - (void) didGetData:(NSNotification*)notification {
     //get 20 byte portion and append
     NSData * data = (NSData *)[notification object];
     [importData appendData:data];
     
+    //update dialog view
+    DialogSystem * dialog = [DialogSystem sharedInstance];
+    if ([dialog isProgressDialogVisible]) {
+        float progress = (float)importData.length / (header.dataBufLength - PERIPHERAL_CONFIG_LENGTH) * 100;
+        dialog.progressController.message = [NSString stringWithFormat:@"Progress %d%%", (int)progress];
+    }
+    
     if (importData.length >= header.dataBufLength) {
         [[NSNotificationCenter defaultCenter] removeObserver:self];
         
         [self parseDataBufs:importData];
+        
+        //close dialog view
+        if ([dialog isProgressDialogVisible]) {
+            [dialog dismissProgressDialog];
+        }
         
         finishHandler = notification.object;
         if (finishHandler) finishHandler();
