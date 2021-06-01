@@ -41,8 +41,8 @@
     return [[HiFiToyPreset alloc] init];
 }
 
-- (void) initCharacteristicsPointer {
-    _characteristics = [NSArray arrayWithObjects:_filters, _masterVolume, _bassTreble, _loudness, _drc, nil];
+- (NSArray<id<HiFiToyObject>> *) characteristics {
+    return @[_filters, _masterVolume, _bassTreble, _loudness, _drc];
 }
 
 //NSCoding protocol implementation
@@ -70,9 +70,6 @@
         self.bassTreble = [decoder decodeObjectForKey:@"BassTreble"];
         self.loudness = [decoder decodeObjectForKey:@"Loudness"];
         self.drc = [decoder decodeObjectForKey:@"Drc"];
-        
-        [self initCharacteristicsPointer];
-        
     }
     return self;
 }
@@ -92,8 +89,6 @@
     copyPreset.bassTreble = [self.bassTreble copy];
     copyPreset.loudness = [self.loudness copy];
     copyPreset.drc = [self.drc copy];
-    
-    [copyPreset initCharacteristicsPointer];
     
     return copyPreset;
 }
@@ -149,7 +144,6 @@
     [self.drc setEnabled:0.0 forChannel:0];
     [self.drc setEnabled:0.0 forChannel:1];
     
-    [self initCharacteristicsPointer];
     [self updateChecksum];
 }
 
@@ -185,8 +179,6 @@
     //init progress dialog
     [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Send Dsp Parameters...", @"")];
     
-    if (!self.characteristics) [self initCharacteristicsPointer];
-    
     //send all dspCharacteristics to dsp
     for (int i = 0; i < self.characteristics.count; i++){
         [[self.characteristics objectAtIndex:i] sendWithResponse:YES];
@@ -200,8 +192,6 @@
 
 - (NSArray<HiFiToyDataBuf *> *) getDataBufs {
     NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];
-    
-    if (!self.characteristics) [self initCharacteristicsPointer];
     
     //get binary of all dspCharacteristics
     for (int i = 0; i < self.characteristics.count; i++){
@@ -253,12 +243,6 @@
     }
     
     if (paramAddress == 0) {
-        /*HiFiToyPeripheral_t * hiFiToyConfig = (HiFiToyPeripheral_t *)paramData.bytes;
-        length = hiFiToyConfig->dataBytesLength;
-        
-        if (data) free(data);
-        data = malloc(length);*/
-        
         memcpy(&hiFiToyConfig, paramData.bytes, 20);
         paramAddress = 20;
         [[HiFiToyControl sharedInstance] getDspDataWithOffset:paramAddress];
@@ -480,7 +464,7 @@
     
     //parse hiFiToyObjects
     for (int i = 0; i < self.characteristics.count; i++){
-        id <HiFiToyObject> hiFiToyObject = [self.characteristics objectAtIndex:i];
+        id <HiFiToyObject> hiFiToyObject = self.characteristics[i];
         if ([hiFiToyObject address] == addr){
             [hiFiToyObject importFromXml:xmlParser withAttrib:attributeDict];
             count++;

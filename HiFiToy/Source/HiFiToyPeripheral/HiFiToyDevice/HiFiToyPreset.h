@@ -19,18 +19,12 @@
 @property NSString * presetName;
 @property uint16_t checkSum;
 
-
 // HiFiToy CHARACTERISTICS
-//pointer to all characteristics
-@property (nonatomic) NSArray *     characteristics;
-
 @property (nonatomic) Filters *             filters;
 @property (nonatomic) Volume *              masterVolume;
 @property (nonatomic) BassTreble *          bassTreble;
 @property (nonatomic) Loudness *            loudness;
 @property (nonatomic) Drc *                 drc;
-
-- (void) initCharacteristicsPointer;
 
 + (HiFiToyPreset *) getDefault;
 

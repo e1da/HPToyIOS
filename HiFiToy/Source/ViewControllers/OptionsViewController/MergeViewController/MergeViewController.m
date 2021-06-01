@@ -251,7 +251,6 @@ typedef enum {
     mergePreset.loudness = loudnessSource.loudness;
     mergePreset.filters = [filtersSource.filters copy];
     mergePreset.drc = [compressorSource.drc copy];
-    [mergePreset initCharacteristicsPointer];
     [mergePreset updateChecksum];
     
     return mergePreset;
