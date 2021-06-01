@@ -9,8 +9,6 @@
 #import "BiquadParam.h"
 #import "HiFiToyDataBuf.h"
 #import "HiFiToyDevice.h"
-#import "HiFiToyControl.h"
-#import "PeripheralDefines.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,6 +43,7 @@ typedef struct {                            // offset
 
 - (void) exportAll;
 - (void) exportPreset;
+- (void) exportPresetWithDialog:(NSString *)title;
 
 @end
 

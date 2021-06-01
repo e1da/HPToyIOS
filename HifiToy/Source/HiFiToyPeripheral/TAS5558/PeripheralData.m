@@ -7,8 +7,8 @@
 //
 
 #import "PeripheralData.h"
-#import "TAS5558.h"
-#import <assert.h>
+#import "HiFiToyControl.h"
+#import "DialogSystem.h"
 
 #define PERIPHERAL_CONFIG_LENGTH    0x24
 #define BIQUAD_TYPE_OFFSET          0x18
@@ -158,6 +158,13 @@
     [ctrl sendWriteFlag:1];
     [ctrl setInitDsp];
     
+}
+
+- (void) exportPresetWithDialog:(NSString *)title {
+    if (![[HiFiToyControl sharedInstance] isConnected]) return;
+    
+    [[DialogSystem sharedInstance] showProgressDialog:title];
+    [self exportPreset];
 }
 
 @end

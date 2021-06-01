@@ -10,10 +10,10 @@
 #import "HiFiToyPresetList.h"
 #import "HiFiToyControl.h"
 #import "DialogSystem.h"
-#import "TAS5558.h"
+#import "PeripheralData.h"
 
 
-@interface HiFiToyPreset(){
+@interface HiFiToyPreset() {
     XmlParserWrapper * xmlParser;
     int count;
     
@@ -194,8 +194,7 @@
     
 }
 
--(NSString *)getInfo
-{
+-(NSString *)getInfo {
     return self.presetName;
 }
 
@@ -223,55 +222,12 @@
 }
 
 //store and import to/from peripheral
--(void)storeToPeripheral
-{
-    HiFiToyControl * hiFiToyControl = [HiFiToyControl sharedInstance];
-    
-    if (![hiFiToyControl isConnected]) return;
-    
-    //show progress dialog
-    [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Sending Preset", @"")];
-    
-    HiFiToyPeripheral_t hiFiToyConfig;
-    NSData * data = [self getBinary];
-    
-    //fill biquqad types
-    BiquadType_t types[7];
-    [self.filters getBiquadTypes:types]; // get 7 BiquadTypes
-    memcpy(&hiFiToyConfig.biquadTypes, types, 7 * sizeof(BiquadType_t));
-    
-    //fill buf and bytes length
-    hiFiToyConfig.dataBufLength     = [[self getDataBufs] count];
-    hiFiToyConfig.dataBytesLength   = sizeof(HiFiToyPeripheral_t) - sizeof(DataBufHeader_t) + data.length;
-    
-    uint8_t typesLength = sizeof(BiquadType_t) + 1; // 7 biquads + 1 reserved byte
-    uint16_t presetLength = data.length + sizeof(hiFiToyConfig.dataBufLength) + sizeof(hiFiToyConfig.dataBytesLength) + typesLength;
-
-    
-    NSLog(@"Send DSP Config L=%dbytes, B=%dbufs", hiFiToyConfig.dataBytesLength, hiFiToyConfig.dataBufLength);
-    
-    uint8_t * sendData = malloc(presetLength);
-    memcpy(sendData, &hiFiToyConfig.biquadTypes, 12);
-    memcpy(sendData + 12, data.bytes, data.length);
-    
-    /*for (int i = 0; i < length; i+=4) {
-     printf("%2.2x %2.2x %2.2x %2.2x ", sendData[i + 0], sendData[i + 1], sendData[i + 2], sendData[i + 3]);
-     }*/
-    
-    [hiFiToyControl sendWriteFlag:0];
-    
-    //send data (used ATTACH_PAGE)
-    [hiFiToyControl sendBufToDsp:sendData withLength:presetLength withOffset:offsetof(HiFiToyPeripheral_t, biquadTypes)];
-    free(sendData);
-    
-    //set write_flag = 1, i.e write is success
-    [hiFiToyControl sendWriteFlag:1];
-    //
-    [hiFiToyControl setInitDsp];
+-(void)storeToPeripheral {
+    PeripheralData * pd = [[PeripheralData alloc] initWithPreset:self];
+    [pd exportPresetWithDialog:NSLocalizedString(@"Sending Preset", @"")];
 }
 
-- (void) importFromPeripheral
-{
+- (void) importFromPeripheral {
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(getParamData:)
                                                  name: @"GetDataNotification"
@@ -284,8 +240,7 @@
     [[HiFiToyControl sharedInstance] getDspDataWithOffset:paramAddress];
 }
 
-- (void) getParamData:(NSNotification*)notification
-{
+- (void) getParamData:(NSNotification*)notification {
     static uint8_t * data;
     static int length = 0;
     static HiFiToyPeripheral_t hiFiToyConfig;
@@ -388,13 +343,11 @@
     return importResult;
 }
 
-- (void) updateChecksum
-{
+- (void) updateChecksum {
     [self updateChecksumWithParamData:[self getBinary]];
 }
 
-- (void) updateChecksumWithParamData:(NSData *)data
-{
+- (void) updateChecksumWithParamData:(NSData *)data {
     uint8_t * d = (uint8_t *)data.bytes;
     
     uint8_t sum = 0;
@@ -412,7 +365,7 @@
 }
 
 /*---------------------------- XML export/import ----------------------------------*/
--(XmlData *) toXmlData{
+-(XmlData *) toXmlData {
     XmlData * xmlData = [[XmlData alloc] init];
     for (int i = 0; i < self.characteristics.count; i++){
         XmlData * tempXmlData = [[self.characteristics objectAtIndex:i] toXmlData];
