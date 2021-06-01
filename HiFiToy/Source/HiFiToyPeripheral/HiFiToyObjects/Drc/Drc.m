@@ -255,21 +255,18 @@
     return dataBufs;
 }
 
-- (BOOL) importData:(NSData *)data {
-    if ([self.coef17 importData:data] == NO) return NO;
-    if ([self.coef8 importData:data] == NO) return NO;
-    if ([self.timeConst17 importData:data] == NO) return NO;
-    if ([self.timeConst8 importData:data] == NO) return NO;
+- (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs {
+    if ([self.coef17 importFromDataBufs:dataBufs] == NO) return NO;
+    if ([self.coef8 importFromDataBufs:dataBufs] == NO) return NO;
+    if ([self.timeConst17 importFromDataBufs:dataBufs] == NO) return NO;
+    if ([self.timeConst8 importFromDataBufs:dataBufs] == NO) return NO;
     
     int importCount = 0;
     
-    HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
-    DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
-    
-    for (int i = 0; i < HiFiToy->dataBufLength; i++) {
-        if ((dataBufHeader->addr == [self address]) && (dataBufHeader->length == 8)){
+    for (HiFiToyDataBuf * db in dataBufs) {
+        if ((db.addr == [self address]) && (db.length == 8)){
             
-            uint32_t * number = (uint32_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
+            uint32_t * number = (uint32_t *)db.data.bytes;
             uint32_t d = reverseUint32(number[0]);
             
             for (int i = 0; i < 7; i++){
@@ -281,18 +278,17 @@
             importCount++;
             if (importCount >= 9) break;
         }
-        if ((dataBufHeader->addr >= DRC_BYPASS1_REG) && (dataBufHeader->addr < (DRC_BYPASS1_REG + 8)) &&
-            (dataBufHeader->length == 8)){
+        if ((db.addr >= DRC_BYPASS1_REG) && (db.addr < (DRC_BYPASS1_REG + 8)) &&
+            (db.length == 8)){
             
-            uint32_t * number = (uint32_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
+            uint32_t * number = (uint32_t *)db.data.bytes;
             uint32_t val = reverseUint32(number[1]);
             
-            enabledCh[dataBufHeader->addr - DRC_BYPASS1_REG] = _523toFloat(val);
+            enabledCh[db.addr - DRC_BYPASS1_REG] = _523toFloat(val);
     
             importCount++;
             if (importCount >= 9) break;
         }
-        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
     }
     
     if (importCount == 9) {

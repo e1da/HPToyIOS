@@ -313,20 +313,11 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
     return @[dataBuf];
 }
 
-/*@Override
-    public List<HiFiToyDataBuf> getDataBufs() {
-        ByteBuffer b = new DrcParam(point0, point1, point2, point3).getBinary();
-        return new ArrayList<>(Collections.singletonList(new HiFiToyDataBuf(getAddress(), b)));
-    }*/
-
-- (BOOL) importData:(NSData *)data {
-    HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
-    DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
-    
-    for (int i = 0; i < HiFiToy->dataBufLength; i++) {
-        if ((dataBufHeader->addr == [self address]) && (dataBufHeader->length == 28)){
+- (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs {
+    for (HiFiToyDataBuf * db in dataBufs) {
+        if ((db.addr == [self address]) && (db.length == 28)){
             
-            int32_t * number = (int32_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
+            int32_t * number = (int32_t *)db.data.bytes;
             
             //get drc coef
             DrcCoef_t drcCoef;
@@ -352,7 +343,6 @@ DrcPoint_t * getDrcPoints(DrcCoef_t * drcCoef) {
             NSLog(@"import drc coef");
             return YES;
         }
-        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
     }
     
     return NO;

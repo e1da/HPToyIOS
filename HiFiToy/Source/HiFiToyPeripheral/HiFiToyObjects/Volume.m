@@ -183,14 +183,11 @@
     return [NSArray arrayWithObject:dataBuf];
 }
 
-- (BOOL) importData:(NSData *)data {
-    HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
-    DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
-    
-    for (int i = 0; i < HiFiToy->dataBufLength; i++) {
-        if ((dataBufHeader->addr == self.address) && (dataBufHeader->length == 4)){
+- (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs {
+    for (HiFiToyDataBuf * db in dataBufs) {
+        if ((db.addr == self.address) && (db.length == 4)){
             
-            uint8_t * vBuf = (uint8_t *)dataBufHeader + sizeof(DataBufHeader_t);
+            uint8_t * vBuf = (uint8_t *)db.data.bytes;
             uint16_t v = (vBuf[2] << 8) | vBuf[3];
             if (v < 1) v = 1;
             if (v > 0x245) v = 0x245;
@@ -202,7 +199,6 @@
             }
             return YES;
         }
-        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
     }
     
     return NO;

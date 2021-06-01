@@ -22,7 +22,7 @@
 //get binary for store to dsp
 - (NSArray<HiFiToyDataBuf *> *) getDataBufs;
 
-- (BOOL) importData:(NSData *)data;
+- (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs;
 
 -(XmlData *) toXmlData;
 -(void) importFromXml:(XmlParserWrapper *)xmlParser withAttrib:(NSDictionary<NSString *, NSString *> *)attributeDict;

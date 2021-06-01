@@ -268,14 +268,12 @@
     return dataBufs;
 }
 
-- (BOOL) importData:(NSData *)data {
+- (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs {
     BOOL importFlag = NO;
-    HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
-    DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
-    
-    for (int i = 0; i < HiFiToy->dataBufLength; i++) {
-        if ((dataBufHeader->addr == BASS_FILTER_SET_REG) && (dataBufHeader->length == 16)){
-            uint8_t * buf = (uint8_t *)dataBufHeader + sizeof(DataBufHeader_t);
+
+    for (HiFiToyDataBuf * db in dataBufs) {
+        if ((db.addr == BASS_FILTER_SET_REG) && (db.length == 16)){
+            uint8_t * buf = (uint8_t *)db.data.bytes;
             
             _bassTreble8.bassFreq = buf[0];
             _bassTreble56.bassFreq = buf[1];
@@ -300,15 +298,13 @@
             importFlag = YES;
         }
         
-        if ((dataBufHeader->addr >= BASS_TREBLE_REG) && (dataBufHeader->addr < LOUDNESS_LOG2_GAIN_REG) &&
-                                                        (dataBufHeader->length == 8)){
+        if ((db.addr >= BASS_TREBLE_REG) && (db.addr < LOUDNESS_LOG2_GAIN_REG) &&
+                                                        (db.length == 8)){
         
-            int32_t * e = (int32_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
+            int32_t * e = (int32_t *)db.data.bytes;
             
-            enabledCh[dataBufHeader->addr - BASS_TREBLE_REG] = (float)reverseNumber523(e[1]) / 0x800000;
+            enabledCh[db.addr - BASS_TREBLE_REG] = (float)reverseNumber523(e[1]) / 0x800000;
         }
-        
-        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
     }
     
     return importFlag;

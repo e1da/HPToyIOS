@@ -156,18 +156,15 @@
     return dataBufs;
 }
 
-- (BOOL) importData:(NSData *)data {
-    if ([self.biquad importData:data] == NO){
+- (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs {
+    if ([self.biquad importFromDataBufs:dataBufs] == NO){
         return NO;
     }
     
-    HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
-    DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
-    
-    for (int i = 0; i < HiFiToy->dataBufLength; i++) {
-        if ((dataBufHeader->addr == [self address]) && (dataBufHeader->length == 16)){
+    for (HiFiToyDataBuf * db in dataBufs) {
+        if ((db.addr == [self address]) && (db.length == 16)){
             
-            int32_t * number = (int32_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
+            int32_t * number = (int32_t *)db.data.bytes;
             self.LG     = _523toFloat(reverseNumber523(number[0]));
             self.LO     = _923toFloat(reverseNumber923(number[1]));
             self.gain   = _523toFloat(reverseNumber523(number[2]));
@@ -176,7 +173,6 @@
             NSLog(@"import loudness");
             return YES;
         }
-        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
     }
     
     return NO;

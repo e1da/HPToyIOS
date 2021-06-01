@@ -421,14 +421,11 @@
     return @[dataBuf0];
 }
 
-- (BOOL) importData:(NSData *)data {
-    HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
-    DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
-    
-    for (int i = 0; i < HiFiToy->dataBufLength; i++) {
-        if ((dataBufHeader->addr == self.address0) && (dataBufHeader->length == 20)){
+- (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs {
+    for (HiFiToyDataBuf * db in dataBufs) {
+        if ((db.addr == self.address0) && (db.length == 20)){
             
-            Number523_t * number = (Number523_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
+            Number523_t * number = (Number523_t *)db.data.bytes;
             _coef.b0 = _523toFloat(reverseNumber523(number[0]));
             _coef.b1 = _523toFloat(reverseNumber523(number[1]));
             _coef.b2 = _523toFloat(reverseNumber523(number[2]));
@@ -439,7 +436,6 @@
             [self.biquadParam updateWithCoef:_coef withOrder:self.order withType:self.type];
             return YES;
         }
-        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
     }
     
     return NO;

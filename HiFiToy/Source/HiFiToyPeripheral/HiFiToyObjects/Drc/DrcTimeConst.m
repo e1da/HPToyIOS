@@ -205,31 +205,27 @@
     return @[[self getEnergyDataBuf], [self getAttackDecayDataBuf]];
 }
 
-- (BOOL) importData:(NSData *)data {
+- (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs {
     int importCount = 0;
     
-    HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
-    DataBufHeader_t * dataBufHeader = &HiFiToy->firstDataBuf;
-    
-    for (int i = 0; i < HiFiToy->dataBufLength; i++) {
-        if ((dataBufHeader->addr == [self address]) && (dataBufHeader->length == 8)){
+    for (HiFiToyDataBuf * db in dataBufs) {
+        if ((db.addr == [self address]) && (db.length == 8)){
             
-            uint32_t * number = (uint32_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
+            uint32_t * number = (uint32_t *)db.data.bytes;
             self.energyMS = [self uint32ToTimeMS:number[1]];
             
             importCount++;
             if (importCount >= 2) break;
         }
-        if ((dataBufHeader->addr == ([self address] + 4)) && (dataBufHeader->length == 16)){
+        if ((db.addr == ([self address] + 4)) && (db.length == 16)){
             
-            uint32_t * number = (uint32_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t));
+            uint32_t * number = (uint32_t *)db.data.bytes;
             self.attackMS = [self uint32ToTimeMS:number[1]];
             self.decayMS = [self uint32ToTimeMS:number[3]];
             
             importCount++;
             if (importCount >= 2) break;
         }
-        dataBufHeader = (DataBufHeader_t *)((uint8_t *)dataBufHeader + sizeof(DataBufHeader_t) + dataBufHeader->length);
     }
     
     if (importCount == 2) {

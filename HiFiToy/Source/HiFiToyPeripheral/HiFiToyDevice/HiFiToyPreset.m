@@ -292,18 +292,35 @@
     }
 }
 
-- (BOOL)importData:(NSData *)data {
-    BOOL importResult = YES;
-    
-    for (int i = 0; i < self.characteristics.count; i++){
-        if ([[self.characteristics objectAtIndex:i] importData:data] == YES){
+- (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs {
+    for (id<HiFiToyObject> o in self.characteristics){
+        if ([o importFromDataBufs:dataBufs] == YES){
             NSLog(@"import new char");
         } else {
             NSLog(@"import data is not full for this dsp characteristic!");
-            importResult = NO;
-            break;
+            return NO;;
         }
     }
+    
+    return YES;
+}
+
+- (BOOL)importData:(NSData *)data {
+    //convrt NSData to NSArray<HiFiToyDataBuf *> *
+    NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];
+    
+    HiFiToyPeripheral_t * header = (HiFiToyPeripheral_t *) data.bytes;
+    DataBufHeader_t * buf = &header->firstDataBuf;
+    
+    for (int i = 0; i < header->dataBufLength; i++) {
+        NSData * d = [[NSData alloc] initWithBytes:buf length:(buf->length + 2)];
+        buf = (DataBufHeader_t *)((uint8_t *)buf + sizeof(DataBufHeader_t) + buf->length);
+        
+        [dataBufs addObject:[[HiFiToyDataBuf alloc] initWithData:d]];
+    }
+    
+    //import from data bufs
+    BOOL importResult = [self importFromDataBufs:dataBufs];
     
     //import progress dialog close
     [[DialogSystem sharedInstance] dismissProgressDialog];
