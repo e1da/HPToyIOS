@@ -67,7 +67,7 @@
     p.length = 4;
     memcpy(p.data, data, p.length);
     
-    return [NSData dataWithBytes:(const void *)&p length:6];
+    return [NSData dataWithBytes:(const void *)&p length:sizeof(Packet_t)];
 }
 
 - (NSString *) getInfo {
@@ -93,10 +93,7 @@
 }
 
 - (void)sendWithResponse:(BOOL)response {
-    const void * d = [[self getBinary] bytes];
-    
-    NSData * packet20 = [NSData dataWithBytes:d length:sizeof(Packet_t)];
-    [[HiFiToyControl sharedInstance] sendDataToDsp:packet20 withResponse:YES];
+    [[HiFiToyControl sharedInstance] sendDataToDsp:[self getBinary] withResponse:YES];
 }
 
 

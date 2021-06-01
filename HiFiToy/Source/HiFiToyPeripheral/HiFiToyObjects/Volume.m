@@ -159,10 +159,9 @@
     NSData *data = [[self getDataBufs][0] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
-    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
     
     //send data
-    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendPacketToDsp:&packet withResponse:response];
 }
 
 //get binary for save to dsp

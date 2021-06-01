@@ -104,7 +104,7 @@
 }
 
 //this method used attach page
-- (void) sendBufToDsp:(uint8_t*)data withLength:(uint16_t)length withOffset:(uint16_t)offsetInDspData
+- (void) sendBufToDsp:(const uint8_t *)data withLength:(uint16_t)length withOffset:(uint16_t)offsetInDspData
 {    
     //init vars
     uint16_t l = CC2540_PAGE_SIZE - offsetInDspData % CC2540_PAGE_SIZE;
@@ -130,6 +130,11 @@
     } while (offset < length);
 }
 
+- (void) sendBufToDsp:(NSData *)data withOffset:(uint16_t)offsetInDspData
+{
+    [self sendBufToDsp:data.bytes withLength:data.length withOffset:offsetInDspData];
+}
+
 //get 20 bytes from DSP_Data[offset]
 - (void) getDspDataWithOffset:(uint16_t)offset
 {
@@ -145,9 +150,7 @@
     packet.cmd = SET_PAIR_CODE;
     memcpy(&packet.data, &pairing_code, 4);
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [self sendDataToDsp:data withResponse:YES];
-    
+    [self sendCommonPacketToDsp:&packet];
 }
 
 - (void) startPairedProccess:(uint32_t) pairing_code
@@ -157,9 +160,7 @@
     packet.cmd = ESTABLISH_PAIR;
     memcpy(&packet.data, &pairing_code, 4);
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [self sendDataToDsp:data withResponse:YES];
-    
+    [self sendCommonPacketToDsp:&packet];
 }
 
 - (void) sendWriteFlag:(uint8_t) write_flag
@@ -169,54 +170,45 @@
     packet.cmd = SET_WRITE_FLAG;
     packet.data[0] = write_flag;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [self sendDataToDsp:data withResponse:YES];
+    [self sendCommonPacketToDsp:&packet];
 }
 
 - (void) checkFirmareWriteFlag
 {
     CommonPacket_t packet;
-    
     packet.cmd = GET_WRITE_FLAG;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [self sendDataToDsp:data withResponse:YES];
+    [self sendCommonPacketToDsp:&packet];
 }
 
 - (void) getVersion
 {
     CommonPacket_t packet;
-    
     packet.cmd = GET_VERSION;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [self sendDataToDsp:data withResponse:YES];
+    [self sendCommonPacketToDsp:&packet];
 }
 
 - (void) getChecksumParamData
 {
     CommonPacket_t packet;
-    
     packet.cmd = GET_CHECKSUM;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [self sendDataToDsp:data withResponse:YES];
+    [self sendCommonPacketToDsp:&packet];
 }
 
 - (void) setInitDsp
 {
     CommonPacket_t packet;
-    
     packet.cmd = INIT_DSP;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [self sendDataToDsp:data withResponse:YES];
+    [self sendCommonPacketToDsp:&packet];
 }
 
 /*--------------------------------Private Service Function------------------------------------*/
 
 //send 16 bytes to DSP_Data[offset]
-- (void) send16BytesWithOffset:(uint16_t)offset data:(uint8_t*)data{
+- (void) send16BytesWithOffset:(uint16_t)offset data:(const uint8_t *)data{
     uint8_t packet18[18];
 
     memcpy(packet18, &offset, 2);

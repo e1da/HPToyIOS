@@ -131,13 +131,12 @@
 
 //send to dsp
 - (void) sendWithResponse:(BOOL)response {
-    NSData *data = [[self getMainDataBuf] binary];
+    NSData * data = [[self getMainDataBuf] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
-    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
     
     //send data
-    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendPacketToDsp:&packet withResponse:response];
 }
 
 - (HiFiToyDataBuf *) getMainDataBuf {

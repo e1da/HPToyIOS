@@ -109,22 +109,18 @@
 }
 
 - (void) sendAudioSource {
- 
     CommonPacket_t packet;
     packet.cmd = SET_AUDIO_SOURCE;
     packet.data[0] = _audioSource;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
+    [[HiFiToyControl sharedInstance] sendCommonPacketToDsp:&packet];
 }
 
 - (void) updateAudioSource {
     CommonPacket_t packet;
-    
     packet.cmd = GET_AUDIO_SOURCE;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
+    [[HiFiToyControl sharedInstance] sendCommonPacketToDsp:&packet];
 }
 
 - (void) sendEnergyConfig {
@@ -134,31 +130,25 @@
 
 //async request. need GetDataNotification implement
 - (void) updateEnergyConfig {
-    //uint16_t offset = offsetof(HiFiToyPeripheral_t, energy);
-    //[self getDspDataWithOffset:offset];
     CommonPacket_t packet;
     packet.cmd = GET_ENERGY_CONFIG;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
+    [[HiFiToyControl sharedInstance] sendCommonPacketToDsp:&packet];
 }
 
 - (void) sendAdvertiseMode {
-    
     CommonPacket_t packet;
     packet.cmd = SET_ADVERTISE_MODE;
     packet.data[0] = _advertiseMode;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
+    [[HiFiToyControl sharedInstance] sendCommonPacketToDsp:&packet];
 }
 
 - (void) updateAdvertiseMode {
     CommonPacket_t packet;
     packet.cmd = GET_ADVERTISE_MODE;
     
-    NSData *data = [[NSData alloc] initWithBytes:&packet length:sizeof(CommonPacket_t)];
-    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:YES];
+    [[HiFiToyControl sharedInstance] sendCommonPacketToDsp:&packet];
 }
 
 - (void) restoreFactory {

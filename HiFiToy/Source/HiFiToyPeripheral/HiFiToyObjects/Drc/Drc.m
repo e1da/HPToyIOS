@@ -181,20 +181,18 @@
     NSData *data = [[self getEvaluationDataBuf] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
-    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
     
     //send data
-    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendPacketToDsp:&packet withResponse:response];
 }
 
 - (void) sendEnabledForChannel:(uint8_t)channel withResponse:(BOOL)response {
     NSData *data = [[self getEnabledDataBufForChannel:channel] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
-    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
     
     //send data
-    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendPacketToDsp:&packet withResponse:response];
 }
 
 - (void) sendWithResponse:(BOOL)response {

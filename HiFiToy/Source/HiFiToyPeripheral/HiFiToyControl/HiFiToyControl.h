@@ -73,7 +73,8 @@ typedef enum : uint8_t {
 - (void) sendDataToDsp:(NSData *)data withResponse:(BOOL)response;
 - (void) sendPacketToDsp:(Packet_t *)packet withResponse:(BOOL)response;
 - (void) sendCommonPacketToDsp:(CommonPacket_t *)packet;
-- (void) sendBufToDsp:(uint8_t*)data withLength:(uint16_t)length withOffset:(uint16_t)offsetInDspData;
+- (void) sendBufToDsp:(const uint8_t*)data withLength:(uint16_t)length withOffset:(uint16_t)offsetInDspData;
+- (void) sendBufToDsp:(NSData *)data withOffset:(uint16_t)offsetInDspData;
 - (void) getDspDataWithOffset:(uint16_t)offset;
 
 //sys command

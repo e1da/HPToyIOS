@@ -191,20 +191,18 @@
     NSData *data = [[self getFreqDbDataBuf] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
-    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
     
     //send data
-    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendPacketToDsp:&packet withResponse:response];
 }
 
 - (void) sendEnabledWithChannel:(uint8_t)channel withResponse:(BOOL)response {
     NSData *data = [[self getEnabledDataBufWithChannel:channel] binary];
     Packet_t packet;
     memcpy(&packet, data.bytes, data.length);
-    data = [NSData dataWithBytes:&packet length:sizeof(Packet_t)];
     
     //send data
-    [[HiFiToyControl sharedInstance] sendDataToDsp:data withResponse:response];
+    [[HiFiToyControl sharedInstance] sendPacketToDsp:&packet withResponse:response];
 }
 
 -(uint8_t) dbToTAS5558Format:(int) db {
