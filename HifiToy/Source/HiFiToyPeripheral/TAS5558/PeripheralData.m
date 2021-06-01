@@ -115,9 +115,7 @@
 
 - (NSData *) getBinary {
     NSMutableData * data = [[NSMutableData alloc] init];
-    
-    //assert(sizeof(header) == (PERIPHERAL_CONFIG_LENGTH + 2);
-           
+        
     //append first 0x24 bytes
     [data appendBytes:&header length:PERIPHERAL_CONFIG_LENGTH];
     

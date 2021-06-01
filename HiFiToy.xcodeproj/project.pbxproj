@@ -197,6 +197,7 @@
 		D36CF92826614DF900631A57 /* PeripheralData.m in Sources */ = {isa = PBXBuildFile; fileRef = D36CF92726614DF900631A57 /* PeripheralData.m */; };
 		D36CF92926614F7900631A57 /* PeripheralData.h in Sources */ = {isa = PBXBuildFile; fileRef = D36CF92626614DF900631A57 /* PeripheralData.h */; };
 		D36CF92A26614F7900631A57 /* PeripheralData.m in Sources */ = {isa = PBXBuildFile; fileRef = D36CF92726614DF900631A57 /* PeripheralData.m */; };
+		D36CF93126664A9400631A57 /* PeripheralDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D36CF93026664A9400631A57 /* PeripheralDataTests.m */; };
 		D379126620D1153F0089962D /* XOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126520D1153F0089962D /* XOverView.m */; };
 		D379127720D3C2CE0089962D /* DrcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127620D3C2CE0089962D /* DrcViewController.m */; };
 		D379127A20D3C55B0089962D /* DrcView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127920D3C55B0089962D /* DrcView.m */; };
@@ -380,6 +381,7 @@
 		D36CF92626614DF900631A57 /* PeripheralData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeripheralData.h; sourceTree = "<group>"; };
 		D36CF92726614DF900631A57 /* PeripheralData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeripheralData.m; sourceTree = "<group>"; };
 		D36CF92B26615A1B00631A57 /* PeripheralDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeripheralDefines.h; sourceTree = "<group>"; };
+		D36CF93026664A9400631A57 /* PeripheralDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeripheralDataTests.m; sourceTree = "<group>"; };
 		D379126420D1153F0089962D /* XOverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XOverView.h; sourceTree = "<group>"; };
 		D379126520D1153F0089962D /* XOverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XOverView.m; sourceTree = "<group>"; };
 		D379127520D3C2CE0089962D /* DrcViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcViewController.h; sourceTree = "<group>"; };
@@ -706,6 +708,7 @@
 		D35AC3462261000E0034C666 /* HiFiToyPeripheral */ = {
 			isa = PBXGroup;
 			children = (
+				D36CF92F26664A5000631A57 /* TAS5558 */,
 				D3E297C7226389150096012B /* HiFiToyDevice */,
 				D3E297B7226236FA0096012B /* NumberUtility */,
 				D35AC347226100250034C666 /* HiFiToyObjects */,
@@ -724,6 +727,14 @@
 				D3E297BA226248DE0096012B /* FiltersTests.m */,
 			);
 			path = HiFiToyObjects;
+			sourceTree = "<group>";
+		};
+		D36CF92F26664A5000631A57 /* TAS5558 */ = {
+			isa = PBXGroup;
+			children = (
+				D36CF93026664A9400631A57 /* PeripheralDataTests.m */,
+			);
+			path = TAS5558;
 			sourceTree = "<group>";
 		};
 		D379126720D1CC240089962D /* icon */ = {
@@ -1290,6 +1301,7 @@
 				D3E297C222637F890096012B /* DrcTests.m in Sources */,
 				D35492AF2208D39C00063768 /* FloatUtility.h in Sources */,
 				D35AC34D226217C80034C666 /* BiquadTests.m in Sources */,
+				D36CF93126664A9400631A57 /* PeripheralDataTests.m in Sources */,
 				D3E297BE22624AE70096012B /* DrcCoefTests.m in Sources */,
 				D3E297B322622F0E0096012B /* LoudnessTests.m in Sources */,
 				D3E297B9226237140096012B /* FloatUtilityTests.m in Sources */,
