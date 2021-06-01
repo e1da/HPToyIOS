@@ -32,9 +32,9 @@
     
 }
 
-- (void) testGetBinary {
-    NSData * d = [dt0 getBinary];
-    XCTAssertTrue(d.length == 28);
+- (void) testGetDataBufs {
+    NSArray<HiFiToyDataBuf *> * db = [dt0 getDataBufs];
+    XCTAssertTrue(db.count == 2);
 }
 
 /*- (void) testImport {

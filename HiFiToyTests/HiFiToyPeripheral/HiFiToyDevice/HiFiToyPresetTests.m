@@ -53,9 +53,9 @@
     
 }
 
-- (void) testGetBinary {
-    NSData * d = [p0 getBinary];
-    XCTAssertTrue(d.length == (308 + 6 + 98 + 40 + 206));
+- (void) testGetDataBufs {
+    NSArray<HiFiToyDataBuf *> * db = [p0 getDataBufs];
+    //XCTAssertTrue(d.length == (308 + 6 + 98 + 40 + 206));
 }
 
 /*- (void) testImport {

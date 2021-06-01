@@ -40,14 +40,18 @@
     
 }
 
-- (void) testGetBinary {
-    NSData * d = [v0 getBinary];
-    XCTAssertTrue(d.length == 6);
-}
 
-/*- (void) testImport {
- 
- }*/
+- (void) testGetDataBufs {
+    NSArray<HiFiToyDataBuf *> * db = [v0 getDataBufs];
+    XCTAssertTrue(db.count == 1);
+    
+    HiFiToyDataBuf * b = db[0];
+    XCTAssertTrue([b length] == 4);
+    
+    const uint8_t * val = b.data.bytes;
+    XCTAssertTrue(val[3] == 72);
+    
+}
 
 - (void) testXmlExportImport {
     [v0 setDbPercent:0.05];
