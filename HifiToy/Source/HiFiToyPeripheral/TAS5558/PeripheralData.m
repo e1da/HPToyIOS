@@ -9,8 +9,12 @@
 #import "PeripheralData.h"
 #import "TAS5558.h"
 
+#define PERIPHERAL_CONFIG_LENGTH    0x24
+#define BIQUAD_TYPE_OFFSET          0x18
+#define PRESET_DATA_OFFSET          0x20
+
 @implementation PeripheralData {
-    NSMutableArray * dataBufs;
+    NSArray<HiFiToyDataBuf *> * dataBufs;
 }
 
 - (id) init {
@@ -41,7 +45,7 @@
         //List<HiFiToyDataBuf> dataBufs = device.getActivePreset().getDataBufs();
         //appendAmModeDataBuf(dataBufs, device.getAmMode(), device.isNewPDV21Hw());
 
-        //setDataBufs(dataBufs);
+        [self setDataBufs:[dev.preset getDataBufs]];
     }
     return self;
 }
@@ -58,10 +62,8 @@
         HiFiToyDevice * dev = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
         outputMode          = [dev.outputMode isUnbalance] ? 1 : 0;
         
-        
         //appendAmModeDataBuf(dataBufs, dev.getAmMode(), dev.isNewPDV21Hw());
-
-        //setDataBufs(dataBufs);
+        [self setDataBufs:[preset getDataBufs]];
     }
     return self;
 }
@@ -91,5 +93,72 @@
     dataBufs = [[NSMutableArray alloc] init];
 }
 
+- (void) setDataBufs:(NSArray<HiFiToyDataBuf *> *)bufs {
+    dataBufLength = bufs.count;
+    dataBytesLength = [self calcDataBytesLength:dataBufs];
+    
+    dataBufs = bufs;
+}
+
+- (uint16_t) calcDataBytesLength:(NSArray<HiFiToyDataBuf *> *)dataBufs {
+    uint16_t length = 0;
+    
+    for (HiFiToyDataBuf * db in dataBufs) {
+        length += [[db binary] length];
+    }
+    
+    return length + PERIPHERAL_CONFIG_LENGTH;
+
+}
+
+- (NSData *) getBinary {
+    NSMutableData * data = [[NSMutableData alloc] init];
+    
+    //pointer to self, to PeripheralData.this
+    uint8_t * headPointer = (uint8_t *)&self->i2cAddr;
+    
+    //append first 0x24 bytes
+    [data appendBytes:headPointer length:PERIPHERAL_CONFIG_LENGTH];
+    
+    //append data bufs
+    for (HiFiToyDataBuf * db in dataBufs) {
+        [data appendData:[db binary]];
+    }
+    
+    return data;
+}
+
+- (NSData *) getBiquadTypeBinary {
+    return [[self getBinary] subdataWithRange:NSMakeRange(BIQUAD_TYPE_OFFSET, 7)];
+}
+
+- (NSData *) getPresetBinary {
+    NSData * bin = [self getBinary];
+    return [bin subdataWithRange:NSMakeRange(PRESET_DATA_OFFSET, bin.length - PRESET_DATA_OFFSET)];
+}
+
+- (void) export {
+    HiFiToyControl * ctrl = [HiFiToyControl sharedInstance];
+    
+    if (![ctrl isConnected]) return;
+    
+    [ctrl sendBufToDsp:[self getBinary] withOffset:0];
+    [ctrl sendWriteFlag:1];
+    [ctrl setInitDsp];
+    
+}
+
+- (void) exportPreset {
+    HiFiToyControl * ctrl = [HiFiToyControl sharedInstance];
+    
+    if (![ctrl isConnected]) return;
+    
+    [ctrl sendWriteFlag:0];
+    [ctrl sendBufToDsp:[self getBiquadTypeBinary] withOffset:BIQUAD_TYPE_OFFSET];
+    [ctrl sendBufToDsp:[self getPresetBinary] withOffset:PRESET_DATA_OFFSET];
+    [ctrl sendWriteFlag:1];
+    [ctrl setInitDsp];
+    
+}
 
 @end

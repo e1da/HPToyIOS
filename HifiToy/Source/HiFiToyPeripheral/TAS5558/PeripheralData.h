@@ -14,7 +14,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-
 @interface PeripheralData : NSObject {
     uint8_t             i2cAddr;            // 0x00
     uint8_t             successWriteFlag;   // 0x01
@@ -37,6 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (id) initWithPreset:(HiFiToyPreset *)preset;
 
 - (void) clear;
+
+- (void) export;
+- (void) exportPreset;
 
 @end
 
