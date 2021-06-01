@@ -14,7 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PeripheralData : NSObject {
+#pragma pack(1)
+typedef struct {                            // offset
     uint8_t             i2cAddr;            // 0x00
     uint8_t             successWriteFlag;   // 0x01
     uint16_t            version;            // 0x02
@@ -25,10 +26,15 @@ NS_ASSUME_NONNULL_BEGIN
     EnergyConfig_t      energy;             // 0x0C
     BiquadType_t        biquadTypes[7];     // 0x18
     uint8_t             outputMode;         // 0x1F balance/unbalance
-    
+
     uint16_t            dataBufLength;      // 0x20
     uint16_t            dataBytesLength;    // 0x22
     DataBufHeader_t     firstDataBuf;       // 0x24
+} PeripheralHeader_t;                       // size = 38dec
+#pragma options align=reset
+
+@interface PeripheralData : NSObject {
+    PeripheralHeader_t header;
 }
 
 - (id) init;
@@ -37,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) clear;
 
-- (void) export;
+- (void) exportAll;
 - (void) exportPreset;
 
 @end

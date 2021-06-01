@@ -8,6 +8,7 @@
 
 #import "PeripheralData.h"
 #import "TAS5558.h"
+#import <assert.h>
 
 #define PERIPHERAL_CONFIG_LENGTH    0x24
 #define BIQUAD_TYPE_OFFSET          0x18
@@ -30,17 +31,17 @@
     if (self) {
         [self clear];
         
-        pairingCode     = dev.pairingCode;
-        advertiseMode   = dev.advertiseMode;
+        header.pairingCode     = dev.pairingCode;
+        header.advertiseMode   = dev.advertiseMode;
         
-        gainChannel3    = [dev.outputMode getGainCh3];
-        energy          = dev.energyConfig;
+        header.gainChannel3    = [dev.outputMode getGainCh3];
+        header.energy          = dev.energyConfig;
         
         BiquadType_t types[7];
         [dev.preset.filters getBiquadTypes:types]; // get 7 BiquadTypes
-        memcpy(biquadTypes, types, 7 * sizeof(BiquadType_t));
+        memcpy(header.biquadTypes, types, 7 * sizeof(BiquadType_t));
         
-        outputMode      = [dev.outputMode isUnbalance] ? 1 : 0;
+        header.outputMode      = [dev.outputMode isUnbalance] ? 1 : 0;
         
         //List<HiFiToyDataBuf> dataBufs = device.getActivePreset().getDataBufs();
         //appendAmModeDataBuf(dataBufs, device.getAmMode(), device.isNewPDV21Hw());
@@ -57,10 +58,10 @@
         
         BiquadType_t types[7];
         [preset.filters getBiquadTypes:types]; // get 7 BiquadTypes
-        memcpy(biquadTypes, types, 7 * sizeof(BiquadType_t));
+        memcpy(header.biquadTypes, types, 7 * sizeof(BiquadType_t));
         
         HiFiToyDevice * dev = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
-        outputMode          = [dev.outputMode isUnbalance] ? 1 : 0;
+        header.outputMode   = [dev.outputMode isUnbalance] ? 1 : 0;
         
         //appendAmModeDataBuf(dataBufs, dev.getAmMode(), dev.isNewPDV21Hw());
         [self setDataBufs:[preset getDataBufs]];
@@ -69,33 +70,34 @@
 }
 
 - (void) clear {
-    i2cAddr             = I2C_ADDR;
-    successWriteFlag    = 0;
-    version             = PERIPHERAL_VERSION;
-    pairingCode         = 0;
-    initDspDelay        = INIT_DSP_DELAY;
-    advertiseMode       = ADVERTISE_ALWAYS_ENABLED;
+    header.i2cAddr          = I2C_ADDR;
+    header.successWriteFlag = 0;
+    header.version          = PERIPHERAL_VERSION;
+    header.pairingCode      = 0;
+    header.initDspDelay     = INIT_DSP_DELAY;
+    header.advertiseMode    = ADVERTISE_ALWAYS_ENABLED;
 
-    HiFiToyOutputMode * om = [[HiFiToyOutputMode alloc] init];
-    gainChannel3        = [om getGainCh3]; // 0x4000
+    HiFiToyOutputMode * om  = [[HiFiToyOutputMode alloc] init];
+    header.gainChannel3     = [om getGainCh3]; // 0x4000
     
-    energy.highThresholdDb = ENERGY_CORRECT_HIGH_THRES_COEF;    // 0
-    energy.lowThresholdDb  = -55;  // -55
-    energy.auxTimeout120ms = 2500; // 2500 * 120ms = 300s = 5min
-    energy.usbTimeout120ms = 0;    // not used
+    header.energy.highThresholdDb = ENERGY_CORRECT_HIGH_THRES_COEF;    // 0
+    header.energy.lowThresholdDb  = -55;  // -55
+    header.energy.auxTimeout120ms = 2500; // 2500 * 120ms = 300s = 5min
+    header.energy.usbTimeout120ms = 0;    // not used
     
-    memset(biquadTypes, BIQUAD_PARAMETRIC, sizeof(biquadTypes)); // all biquads = PARAMETRIC
-    outputMode = [om isUnbalance] ? 1 : 0;
+    // all biquads = PARAMETRIC
+    memset(header.biquadTypes, BIQUAD_PARAMETRIC, sizeof(header.biquadTypes));
+    header.outputMode = [om isUnbalance] ? 1 : 0;
 
-    dataBufLength   = 0;
-    dataBytesLength = 0;
+    header.dataBufLength   = 0;
+    header.dataBytesLength = 0;
     
     dataBufs = [[NSMutableArray alloc] init];
 }
 
 - (void) setDataBufs:(NSArray<HiFiToyDataBuf *> *)bufs {
-    dataBufLength = bufs.count;
-    dataBytesLength = [self calcDataBytesLength:dataBufs];
+    header.dataBufLength = bufs.count;
+    header.dataBytesLength = [self calcDataBytesLength:dataBufs];
     
     dataBufs = bufs;
 }
@@ -114,11 +116,10 @@
 - (NSData *) getBinary {
     NSMutableData * data = [[NSMutableData alloc] init];
     
-    //pointer to self, to PeripheralData.this
-    uint8_t * headPointer = (uint8_t *)&self->i2cAddr;
-    
+    //assert(sizeof(header) == (PERIPHERAL_CONFIG_LENGTH + 2);
+           
     //append first 0x24 bytes
-    [data appendBytes:headPointer length:PERIPHERAL_CONFIG_LENGTH];
+    [data appendBytes:&header length:PERIPHERAL_CONFIG_LENGTH];
     
     //append data bufs
     for (HiFiToyDataBuf * db in dataBufs) {
@@ -137,7 +138,7 @@
     return [bin subdataWithRange:NSMakeRange(PRESET_DATA_OFFSET, bin.length - PRESET_DATA_OFFSET)];
 }
 
-- (void) export {
+- (void) exportAll {
     HiFiToyControl * ctrl = [HiFiToyControl sharedInstance];
     
     if (![ctrl isConnected]) return;
