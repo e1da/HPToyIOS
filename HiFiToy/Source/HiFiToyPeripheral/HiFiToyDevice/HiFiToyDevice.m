@@ -28,16 +28,12 @@
 - (id)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if (self) {
-        self.uuid = [decoder decodeObjectForKey:@"uuid"];
-        self.name = [decoder decodeObjectForKey:@"name"];
-        self.pairingCode = [decoder decodeIntForKey:@"pairingCode"];
+        [self setDefault];
         
-        _activeKeyPreset = [decoder decodeObjectForKey:@"activeKeyPreset"];
-        _preset = [[HiFiToyPresetList sharedInstance] presetWithName:_activeKeyPreset];
-        
-        self.audioSource = PCM9211_USB_SOURCE;
-        [self setDefaultEnergyConfig];
-        [self setDefaultOutputMode];
+        self.uuid               = [decoder decodeObjectForKey:@"uuid"];
+        self.name               = [decoder decodeObjectForKey:@"name"];
+        self.pairingCode        = [decoder decodeIntForKey:@"pairingCode"];
+        self.activeKeyPreset    = [decoder decodeObjectForKey:@"activeKeyPreset"];
     }
     return self;
 }
@@ -51,15 +47,14 @@
 }
 
 - (void) setDefault {
-    self.uuid = @"demo";
-    self.name = @"Default";
-    self.pairingCode = 0;
-    _activeKeyPreset = @"No processing";
-    _preset = [[HiFiToyPresetList sharedInstance] presetWithName:_activeKeyPreset];
-    self.audioSource = PCM9211_USB_SOURCE;
-    self.advertiseMode = ADVERTISE_ALWAYS_ENABLED;
+    self.uuid               = @"demo";
+    self.name               = @"Default";
+    self.pairingCode        = 0;
+    self.activeKeyPreset    = @"No processing";
+    self.audioSource        = PCM9211_USB_SOURCE;
+    self.advertiseMode      = ADVERTISE_ALWAYS_ENABLED;
     [self setDefaultEnergyConfig];
-    [self setDefaultOutputMode];
+    _outputMode             = [[HiFiToyOutputMode alloc] init];
 }
 
 - (void) setDefaultEnergyConfig {
@@ -67,10 +62,6 @@
     _energyConfig.lowThresholdDb = -55;
     _energyConfig.auxTimeout120ms = 2500; // 2500 * 120ms = 300s = 5min
     _energyConfig.usbTimeout120ms = 0;
-}
-
-- (void) setDefaultOutputMode {
-    _outputMode = [[HiFiToyOutputMode alloc] init];
 }
 
 - (void) setActiveKeyPreset:(NSString *)activeKeyPreset {
@@ -81,13 +72,10 @@
     if (!_preset){
         _activeKeyPreset = @"No processing";
         _preset = [[HiFiToyPresetList sharedInstance] presetWithName:_activeKeyPreset];
+        
+        [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
     }
-    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-}
-
-- (void) changeKeyPreset:(NSString *)key {
-    _activeKeyPreset = key;
-    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+    
 }
 
 - (NSString *) getShortUUIDString {
@@ -154,6 +142,7 @@
 - (void) restoreFactory {
     //set default preset and save to file
     self.activeKeyPreset = @"No processing";
+    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
     
     if (![[HiFiToyControl sharedInstance] isConnected]) return;
     
@@ -173,7 +162,7 @@
     hiFiToyConfig.energy = _energyConfig;
     
     //TODO: fix this stupid code
-    [self setDefaultOutputMode];
+    _outputMode = [[HiFiToyOutputMode alloc] init];
     hiFiToyConfig.outputType = (self.outputMode.value == BALANCE_OUT_MODE) ?
                                                         BALANCE_OUT_MODE : UNBALANCE_OUT_MODE;
     hiFiToyConfig.gainChannel3 = (self.outputMode.value == UNBALANCE_BOOST_OUT_MODE) ? 0x40 : 0;

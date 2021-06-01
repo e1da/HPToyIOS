@@ -285,6 +285,7 @@
     HiFiToyPreset * preset = (HiFiToyPreset *)[notification object];
     //set import preset to active in device and save
     hiFiToyDevice.activeKeyPreset = preset.presetName;
+    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
 
     [self setupOutlets];
 }

@@ -66,7 +66,8 @@
     //becuse he is change in rename: method
     HiFiToyDevice * d = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
     if ([d.activeKeyPreset isEqualToString:tempPresetKey]) {
-        [d changeKeyPreset:self.hiFiToyPreset.presetName];
+        d.activeKeyPreset = self.hiFiToyPreset.presetName;
+        [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
     }
     
 }

@@ -224,12 +224,13 @@
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Yes"
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction * _Nonnull action) {
+            self.hiFiToyDevice.activeKeyPreset = preset.presetName;
+            [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+            
+            [self.hiFiToyDevice.preset storeToPeripheral];
                                                              
-                                                             self.hiFiToyDevice.activeKeyPreset = preset.presetName;
-                                                             [self.hiFiToyDevice.preset storeToPeripheral];
-                                                             
-                                                             [self.tableView reloadData];
-                                                         }];
+            [self.tableView reloadData];
+        }];
         
         [alertController addAction:cancelAction];
         [alertController addAction:okAction];
@@ -266,6 +267,8 @@
     
     //set preset active in device
     self.hiFiToyDevice.activeKeyPreset = name;
+    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+    
     [self.hiFiToyDevice.preset storeToPeripheral];
     
     [self.tableView reloadData];
