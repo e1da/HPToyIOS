@@ -87,16 +87,6 @@
     return _uuid;
 }
 
--(void) checkPresetChecksum:(uint16_t) checksum {
-    NSLog(@"Checksum app preset = %x, Peripheral preset = %x", self.preset.checkSum, checksum);
-    
-    if (self.preset.checkSum != checksum) {
-        [[DialogSystem sharedInstance] showImportPresetDialog];
-    } else {
-        NSLog(@"Import and current presets are equals!");
-    }
-}
-
 - (void) sendAudioSource {
     CommonPacket_t packet;
     packet.cmd = SET_AUDIO_SOURCE;

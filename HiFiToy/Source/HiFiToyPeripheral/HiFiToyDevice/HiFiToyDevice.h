@@ -33,8 +33,6 @@
 - (void) setDefault;
 - (NSString *) getShortUUIDString;
 
-- (void) checkPresetChecksum:(uint16_t) checksum;
-
 - (void) sendAudioSource;
 - (void) updateAudioSource;
 

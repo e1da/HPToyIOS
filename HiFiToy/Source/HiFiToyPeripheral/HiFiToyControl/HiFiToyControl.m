@@ -380,7 +380,15 @@
                 uint16_t checksum = 0;
                 memcpy(&checksum, data + 1, 2);
                 
-                [_activeHiFiToyDevice checkPresetChecksum:checksum];
+                NSLog(@"Checksum app preset = %x, Peripheral preset = %x",
+                      _activeHiFiToyDevice.preset.checkSum, checksum);
+                
+                if (_activeHiFiToyDevice.preset.checkSum != checksum) {
+                    [[DialogSystem sharedInstance] showImportPresetDialog];
+                } else {
+                    NSLog(@"Import and current presets are equals!");
+                }
+                
                 break;
             case GET_AUDIO_SOURCE:
             {
