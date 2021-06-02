@@ -146,4 +146,26 @@
     [pd exportWithDialog:NSLocalizedString(@"Restore factory", @"")];
 }
 
+- (void) importPreset:(void (^ __nullable)(void))finishHandler  {
+    PeripheralData * pd = [[PeripheralData alloc] init];
+    [pd importWithDialog:NSLocalizedString(@"Import Preset...", @"")
+                 handler:^() {
+        HiFiToyPreset * preset = [[HiFiToyPreset alloc] init];
+        preset.presetName = [[NSDate date] descriptionWithLocale:[NSLocale systemLocale]];
+        
+        if ([preset importFromDataBufs:pd.dataBufs]){
+            //add new import preset to list and save
+            [[HiFiToyPresetList sharedInstance] setPreset:preset];
+            //set new active preset and save device
+            self.activeKeyPreset = preset.presetName;
+            [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+            
+        } else {
+            [[DialogSystem sharedInstance] showAlert:@"Import preset is not success!"];
+        }
+        
+        if (finishHandler) finishHandler();
+    }];
+}
+
 @end

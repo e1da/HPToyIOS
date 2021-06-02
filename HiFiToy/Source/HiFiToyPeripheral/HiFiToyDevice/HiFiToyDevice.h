@@ -43,5 +43,6 @@
 - (void) updateAdvertiseMode;
 
 - (void) restoreFactory;
+- (void) importPreset:(void (^ __nullable)(void))finishHandler;
 
 @end
