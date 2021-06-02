@@ -58,25 +58,31 @@
     XCTAssertTrue(b0.biquadParam.freq != b1.biquadParam.freq);
 }
 
-- (void) testEqual {
-    b1.biquadParam.freq = 150;
+- (void) testEqualAndCopy {
+    b0.biquadParam.freq = 2500;
+    b0.biquadParam.dbVolume = 12;
+    
     XCTAssertNotEqualObjects(b0, b1);
     
-    b1.biquadParam.freq = 100;
+    b1 = [b0 copy];
     XCTAssertEqualObjects(b0, b1);
 }
 
 - (void) testGetDataBufs {
+    b0.biquadParam.freq = 2500;
+    b0.biquadParam.dbVolume = 12;
+
     NSArray<HiFiToyDataBuf *> * db = [b0 getDataBufs];
     XCTAssertTrue(db.count == 2);
     
     XCTAssertTrue(db[0].length == 20);
     XCTAssertTrue(db[1].length == 20);
+    
+    [b1 importFromDataBufs:db];
+    XCTAssertEqualObjects(b0, b1);
+    
+    
 }
-
-/*- (void) testImport {
- 
- }*/
 
 - (void) testXmlExportImport {
     b0.biquadParam.freq = 1000;

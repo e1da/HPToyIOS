@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "HiFiToyPreset.h"
+#import "PeripheralData.h"
 
 @interface HiFiToyPresetTests : XCTestCase {
     HiFiToyPreset * p0;
@@ -51,18 +52,42 @@
     XCTAssertTrue(p0.drc.timeConst8     != p1.drc.timeConst8);
 }
 
-- (void) testEqual {
+- (void) testEqualAndCopy {
     p0.masterVolume.db = -0.3f;
     XCTAssertNotEqualObjects(p0, p1);
     
-    p0.masterVolume.db = 0.0f;
+    Biquad * b = [p0.filters getBiquadAtIndex:2];
+    b.biquadParam.freq = 2500;
+    b.biquadParam.dbVolume = 12;
+    
+    p1 = [p0 copy];
     XCTAssertEqualObjects(p0, p1);
     
 }
 
 - (void) testGetDataBufs {
-    NSArray<HiFiToyDataBuf *> * db = [p0 getDataBufs];
-    //XCTAssertTrue(d.length == (308 + 6 + 98 + 40 + 206));
+    Biquad * b = [p0.filters getBiquadAtIndex:2];
+    b.biquadParam.freq = 2500;
+    b.biquadParam.dbVolume = 12;
+    
+    PeripheralData * pd = [[PeripheralData alloc] initWithPreset:p0];
+    [p1 importFromDataBufs:pd.dataBufs];
+    
+    Biquad * b1 = [p0.filters getBiquadAtIndex:2];
+    Biquad * b2 = [p1.filters getBiquadAtIndex:2];
+    
+    XCTAssertEqualObjects(b1, b2);
+    XCTAssertEqualObjects(p0.filters, p1.filters);
+    XCTAssertEqualObjects(p0.masterVolume, p1.masterVolume);
+    XCTAssertEqualObjects(p0.bassTreble, p1.bassTreble);
+    XCTAssertEqualObjects(p0.loudness, p1.loudness);
+    XCTAssertEqualObjects(p0.drc, p1.drc);
+    
+    [p0.filters upOrderFor:BIQUAD_LOWPASS];
+    
+    pd = [[PeripheralData alloc] initWithPreset:p0];
+    [p1 importFromDataBufs:pd.dataBufs];
+    //XCTAssertEqualObjects(p0, p1);
 }
 
 /*- (void) testImport {

@@ -8,6 +8,8 @@
 
 #import <XCTest/XCTest.h>
 #import "PeripheralData.h"
+#import "HiFiToyPreset.h"
+#import "Checksummer.h"
 
 @interface PeripheralDataTests : XCTestCase
 
@@ -32,6 +34,22 @@
 - (void)testSize {
     PeripheralHeader_t * h = [pd getHeader];
     XCTAssertTrue(sizeof(*h) == 0x26, "Peripheral header size is not correct!");
+}
+
+- (void)testDataBufs {
+    HiFiToyPreset * p = [[HiFiToyPreset alloc] init];
+    
+    Biquad * b = [p.filters getBiquadAtIndex:2];
+    b.biquadParam.freq = 2500;
+    b.biquadParam.dbVolume = 12;
+    
+    [p.filters upOrderFor:BIQUAD_LOWPASS];
+    
+    [p updateChecksum];
+    
+    pd = [[PeripheralData alloc] initWithPreset:p];
+    XCTAssertTrue( [Checksummer calcDataBufs:pd.dataBufs] == p.checkSum );
+    
 }
 
 
