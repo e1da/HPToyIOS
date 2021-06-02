@@ -100,7 +100,7 @@
 
 - (void) setDataBufs:(NSArray<HiFiToyDataBuf *> *)bufs {
     header.dataBufLength = bufs.count;
-    header.dataBytesLength = [self calcDataBytesLength:dataBufs];
+    header.dataBytesLength = [self calcDataBytesLength:bufs];
     
     dataBufs = bufs;
 }
