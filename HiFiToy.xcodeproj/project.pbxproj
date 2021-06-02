@@ -200,6 +200,8 @@
 		D36CF93126664A9400631A57 /* PeripheralDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D36CF93026664A9400631A57 /* PeripheralDataTests.m */; };
 		D36CF9342667B74F00631A57 /* BinaryOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D36CF9332667B74F00631A57 /* BinaryOperation.m */; };
 		D36CF9352667B74F00631A57 /* BinaryOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D36CF9332667B74F00631A57 /* BinaryOperation.m */; };
+		D36CF9382667B80200631A57 /* Checksummer.m in Sources */ = {isa = PBXBuildFile; fileRef = D36CF9372667B80200631A57 /* Checksummer.m */; };
+		D36CF9392667B80200631A57 /* Checksummer.m in Sources */ = {isa = PBXBuildFile; fileRef = D36CF9372667B80200631A57 /* Checksummer.m */; };
 		D379126620D1153F0089962D /* XOverView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379126520D1153F0089962D /* XOverView.m */; };
 		D379127720D3C2CE0089962D /* DrcViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127620D3C2CE0089962D /* DrcViewController.m */; };
 		D379127A20D3C55B0089962D /* DrcView.m in Sources */ = {isa = PBXBuildFile; fileRef = D379127920D3C55B0089962D /* DrcView.m */; };
@@ -386,6 +388,8 @@
 		D36CF93026664A9400631A57 /* PeripheralDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeripheralDataTests.m; sourceTree = "<group>"; };
 		D36CF9322667B74F00631A57 /* BinaryOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BinaryOperation.h; sourceTree = "<group>"; };
 		D36CF9332667B74F00631A57 /* BinaryOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BinaryOperation.m; sourceTree = "<group>"; };
+		D36CF9362667B80200631A57 /* Checksummer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Checksummer.h; sourceTree = "<group>"; };
+		D36CF9372667B80200631A57 /* Checksummer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Checksummer.m; sourceTree = "<group>"; };
 		D379126420D1153F0089962D /* XOverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XOverView.h; sourceTree = "<group>"; };
 		D379126520D1153F0089962D /* XOverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XOverView.m; sourceTree = "<group>"; };
 		D379127520D3C2CE0089962D /* DrcViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrcViewController.h; sourceTree = "<group>"; };
@@ -935,6 +939,8 @@
 				D3E297C4226381620096012B /* IntegerUtility.c */,
 				D36CF9322667B74F00631A57 /* BinaryOperation.h */,
 				D36CF9332667B74F00631A57 /* BinaryOperation.m */,
+				D36CF9362667B80200631A57 /* Checksummer.h */,
+				D36CF9372667B80200631A57 /* Checksummer.m */,
 			);
 			path = NumberUtility;
 			sourceTree = "<group>";
@@ -1296,6 +1302,7 @@
 				D30FF8712163AB4D007FA50D /* NumKeyboardController.m in Sources */,
 				D3B969A92339682B002D90BC /* BackFR.m in Sources */,
 				D3571E34218F335500A99CB8 /* KeyboardView.m in Sources */,
+				D36CF9382667B80200631A57 /* Checksummer.m in Sources */,
 				D33A257120C943F5008A94EF /* DialogSystem.m in Sources */,
 				D30FF88C216FA8E8007FA50D /* PassFilter.m in Sources */,
 			);
@@ -1440,6 +1447,7 @@
 				D3549247220869C200063768 /* PresetCell.h in Sources */,
 				D3549248220869C200063768 /* PresetCell.m in Sources */,
 				D3549249220869C200063768 /* PresetViewController.h in Sources */,
+				D36CF9392667B80200631A57 /* Checksummer.m in Sources */,
 				D354924A220869C200063768 /* PresetViewController.m in Sources */,
 				D354924B220869C200063768 /* PresetDetailViewController.h in Sources */,
 				D354924C220869C200063768 /* PresetDetailViewController.m in Sources */,
