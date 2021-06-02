@@ -14,11 +14,7 @@
 #define BIQUAD_TYPE_OFFSET          0x18
 #define PRESET_DATA_OFFSET          0x20
 
-@implementation PeripheralData {
-    NSMutableData * importData;
-    
-    void (^finishHandler)(void);
-}
+@implementation PeripheralData
 
 - (id) init {
     self = [super init];
@@ -184,9 +180,9 @@
 }
 
 - (void) importHeader:(void (^ __nullable)(void))finishHandler {
-    HiFiToyControl * ctrl = [HiFiToyControl sharedInstance];
+    if (![[HiFiToyControl sharedInstance] isConnected]) return;
     
-    if (![ctrl isConnected]) return;
+    NSMutableData * importData = [[NSMutableData alloc] init];
     
     __block __weak id observer;
     observer = [[NSNotificationCenter defaultCenter] addObserverForName:@"GetDataNotification"
@@ -195,12 +191,12 @@
                                                              usingBlock:^(NSNotification * note) {
         //get 20 byte portion and append
         NSData * data = (NSData *)[note object];
-        [self->importData appendData:data];
+        [importData appendData:data];
         
-        if (self->importData.length == 40) {
+        if (importData.length == 40) {
             [[NSNotificationCenter defaultCenter] removeObserver:observer];
             
-            if (![self parseHeader:self->importData]) {
+            if (![self parseHeader:importData]) {
                 self->header.dataBytesLength = 0;
             }
             
@@ -211,8 +207,7 @@
         }
     }];
     
-    importData = [[NSMutableData alloc] init];
-    [ctrl getDspDataWithOffset:0];
+    [[HiFiToyControl sharedInstance] getDspDataWithOffset:0];
 }
 
 - (BOOL) parseHeader:(NSData *)data {
@@ -231,20 +226,42 @@
             return;
         }
         
+        NSMutableData * importData = [[NSMutableData alloc] init];
+        
         __block __weak id observer;
         observer = [[NSNotificationCenter defaultCenter] addObserverForName:@"GetDataNotification"
                                                                      object:nil
                                                                       queue:nil
                                                                  usingBlock:^(NSNotification * note) {
+            // get 20bytes and append
+            [importData appendData:(NSData *)[note object]];
             
-            if ([self didGetData:(NSData *)[note object]]) { // if finished
+            //update dialog view
+            DialogSystem * dialog = [DialogSystem sharedInstance];
+            if ([dialog isProgressDialogVisible]) {
+                float progress = (float)importData.length / (self->header.dataBytesLength - PERIPHERAL_CONFIG_LENGTH) * 100;
+                if (progress > 100) progress = 100;
+                
+                dialog.progressController.message = [NSString stringWithFormat:@"Progress %d%%", (int)progress];
+            }
+            
+            //check is all data imported
+            if (importData.length >= self->header.dataBytesLength) { // if finished
                 [[NSNotificationCenter defaultCenter] removeObserver:observer];
+                [self parseDataBufs:importData];
+                
+                //close dialog view
+                if ([dialog isProgressDialogVisible]) {
+                    [dialog dismissProgressDialog];
+                }
                 
                 if (finishHandler) finishHandler();
+                
+            } else {
+                [[HiFiToyControl sharedInstance] getDspDataWithOffset:PERIPHERAL_CONFIG_LENGTH + importData.length];
             }
         }];
         
-        self->importData = [[NSMutableData alloc] init];
         [[HiFiToyControl sharedInstance] getDspDataWithOffset:PERIPHERAL_CONFIG_LENGTH];
     }];
 }
@@ -254,35 +271,6 @@
     
     [[DialogSystem sharedInstance] showProgressDialog:title];
     [self import:finishHandler];
-}
-
-- (BOOL) didGetData:(NSData *)data {
-    //append 20 bytes
-    [importData appendData:data];
-    
-    //update dialog view
-    DialogSystem * dialog = [DialogSystem sharedInstance];
-    if ([dialog isProgressDialogVisible]) {
-        float progress = (float)importData.length / (header.dataBytesLength - PERIPHERAL_CONFIG_LENGTH) * 100;
-        if (progress > 100) progress = 100;
-        
-        dialog.progressController.message = [NSString stringWithFormat:@"Progress %d%%", (int)progress];
-    }
-    
-    if (importData.length >= header.dataBytesLength) {
-        
-        [self parseDataBufs:importData];
-        
-        //close dialog view
-        if ([dialog isProgressDialogVisible]) {
-            [dialog dismissProgressDialog];
-        }
-        
-        return YES;
-    }
-        
-    [[HiFiToyControl sharedInstance] getDspDataWithOffset:PERIPHERAL_CONFIG_LENGTH + importData.length];
-    return NO;
 }
 
 - (void) parseDataBufs:(NSData *)data {
