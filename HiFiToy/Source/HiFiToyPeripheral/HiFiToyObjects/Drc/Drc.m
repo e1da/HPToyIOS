@@ -230,7 +230,7 @@
     
     uint32_t val = reverseNumber523(0x800000 * enabledCh[channel]);
     uint32_t ival = reverseNumber523(0x800000 - 0x800000 * enabledCh[channel]);
-    uint32_t data[2] = {val, ival};
+    uint32_t data[2] = {ival, val};
     
     return [HiFiToyDataBuf dataBufWithAddr:(DRC_BYPASS1_REG + channel)
                                 withLength:8

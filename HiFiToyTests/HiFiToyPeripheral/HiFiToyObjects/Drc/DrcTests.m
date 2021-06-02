@@ -42,13 +42,20 @@
 }
 
 - (void) testGetDataBufs {
+    [drc0 setEnabled:1.0f forChannel:0];
+    
     NSArray<HiFiToyDataBuf *> * db = [drc0 getDataBufs];
     XCTAssertTrue(db.count == 15);
+    
+    [drc1 importFromDataBufs:db];
+    XCTAssertEqualObjects(drc0.coef17, drc1.coef17);
+    XCTAssertEqualObjects(drc0.coef8, drc1.coef8);
+    XCTAssertEqualObjects(drc0.timeConst17, drc1.timeConst17);
+    XCTAssertEqualObjects(drc0.timeConst8, drc1.timeConst8);
+    
+    XCTAssertEqualObjects(drc0, drc1);
 }
 
-/*- (void) testImport {
- 
- }*/
 
 - (void) testXmlExportImport {
     [drc0 setEnabled:1.0f forChannel:0];
