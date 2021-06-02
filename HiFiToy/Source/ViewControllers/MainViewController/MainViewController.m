@@ -47,14 +47,9 @@
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didGetPresetImportNotification:)
-                                                 name:@"PresetImportNotification"
+                                             selector:@selector(setupOutlets)
+                                                 name:@"SetupOutletsNotification"
                                                object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(didUpdateAudioSource)
-                                                 name: @"UpdateAudioSourceNotification"
-                                               object: nil];
     
     hiFiToyControl = [HiFiToyControl sharedInstance];
 }
@@ -72,11 +67,7 @@
     [self setupOutlets];
 }
 
-- (void) didUpdateAudioSource {
-    _audioSourceSegment_outl.selectedSegmentIndex = hiFiToyDevice.audioSource;
-}
-
-- (void) setupOutlets{
+- (void) setupOutlets {
     HiFiToyPreset * p = hiFiToyDevice.preset;
     
     _audioSourceSegment_outl.selectedSegmentIndex = hiFiToyDevice.audioSource;
@@ -273,21 +264,6 @@
         return freq / 10 * 10;
     }
     return freq;
-}
-
-/*-----------------------------------------------------------------------------------------
-    PresetImportNotification
- -----------------------------------------------------------------------------------------*/
--(void) didGetPresetImportNotification:(NSNotification*)notification
-{
-    NSLog(@"Preset import notification! [MainViewController]");
-    
-    HiFiToyPreset * preset = (HiFiToyPreset *)[notification object];
-    //set import preset to active in device and save
-    hiFiToyDevice.activeKeyPreset = preset.presetName;
-    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-
-    [self setupOutlets];
 }
 
 @end

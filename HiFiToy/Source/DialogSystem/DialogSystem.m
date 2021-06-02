@@ -237,22 +237,20 @@
                                                            message:msg
                                                     preferredStyle:UIAlertControllerStyleAlert];
     
-    HiFiToyPreset * preset = [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] preset];
-    HiFiToyPreset * tempPreset = [preset copy];
+    HiFiToyDevice * dev = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
                                                            style:UIAlertActionStyleDestructive
                                                          handler:^(UIAlertAction * _Nonnull action) {
-                                                             [preset storeToPeripheral];
+                                                             [dev.preset storeToPeripheral];
                                                          }];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok"
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * _Nonnull action) {
-                                                         
-                                                         
-                                                         [tempPreset importFromPeripheral];
-                                
-                                                     }];
+        [dev importPreset:^() {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
+        }];
+    }];
     
     [_alertController addAction:cancelAction];
     [_alertController addAction:okAction];

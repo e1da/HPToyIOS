@@ -31,7 +31,6 @@
 - (BOOL)rename:(NSString *)newName;
 
 - (void) storeToPeripheral;
-- (void) importFromPeripheral;
 
 - (void) updateChecksum;
 
