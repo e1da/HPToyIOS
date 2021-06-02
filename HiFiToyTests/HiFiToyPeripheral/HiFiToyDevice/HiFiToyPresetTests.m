@@ -86,13 +86,10 @@
     [p0.filters upOrderFor:BIQUAD_LOWPASS];
     
     pd = [[PeripheralData alloc] initWithPreset:p0];
-    [p1 importFromDataBufs:pd.dataBufs];
-    //XCTAssertEqualObjects(p0, p1);
+    [p1 importFromDataBufs:pd.dataBufs biquadsType:[pd getBiquadTypeBinary]];
+    
+    XCTAssertEqualObjects(p0, p1);
 }
-
-/*- (void) testImport {
- 
- }*/
 
 - (void) testXmlExportImport {
     p0.masterVolume.db = -0.3f;

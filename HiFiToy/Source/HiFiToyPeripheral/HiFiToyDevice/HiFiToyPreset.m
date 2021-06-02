@@ -227,6 +227,13 @@
     return YES;
 }
 
+- (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs biquadsType:(NSData *) biquadType {
+    if ([self.filters setBiquadTypes:biquadType]) {
+        return [self importFromDataBufs:dataBufs];
+    }
+    return NO;
+}
+
 - (void) updateChecksum {
     [self updateChecksumWithBufs:[self getDataBufs]];
 }

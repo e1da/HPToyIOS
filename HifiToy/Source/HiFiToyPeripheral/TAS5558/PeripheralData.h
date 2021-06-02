@@ -48,6 +48,7 @@ typedef struct {                            // offset
 
 /* ----------------- utility methods ---------------- */
 - (NSData *) getDataBufBinary;
+- (NSData *) getBiquadTypeBinary;
 
 /* -------------- export/import methods ------------- */
 - (void) exportAll;

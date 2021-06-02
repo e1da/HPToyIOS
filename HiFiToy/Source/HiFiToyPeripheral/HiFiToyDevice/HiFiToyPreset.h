@@ -11,7 +11,6 @@
 #import "BassTreble.h"
 #import "Loudness.h"
 #import "Drc.h"
-
 #import "Filters.h"
 
 @interface HiFiToyPreset : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
@@ -31,6 +30,8 @@
 - (BOOL)rename:(NSString *)newName;
 
 - (void) storeToPeripheral;
+
+- (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs biquadsType:(NSData *) biquadType;
 
 - (void) updateChecksum;
 

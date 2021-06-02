@@ -188,6 +188,19 @@
     }
 }
 
+- (BOOL) setBiquadTypes:(NSData *)biquadTypes {
+    if (biquadTypes.length != 7) {
+        return NO;
+    }
+    BiquadType_t * type = (BiquadType_t *)biquadTypes.bytes;
+    
+    for (int i = 0; i < 7; i++) {
+        Biquad * b = [self getBiquadAtIndex:i];
+        b.type = type[i];
+    }
+    return YES;
+}
+
 - (void) incActiveBiquadIndex {
     if (++_activeBiquadIndex > 6) _activeBiquadIndex = 0;
     _activeNullHP = NO;

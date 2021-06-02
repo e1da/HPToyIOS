@@ -153,7 +153,9 @@
         HiFiToyPreset * preset = [[HiFiToyPreset alloc] init];
         preset.presetName = [[NSDate date] descriptionWithLocale:[NSLocale systemLocale]];
         
-        if ([preset importFromDataBufs:pd.dataBufs]){
+        if ([preset importFromDataBufs:pd.dataBufs
+                           biquadsType:[pd getBiquadTypeBinary]]) {
+            
             //add new import preset to list and save
             [[HiFiToyPresetList sharedInstance] setPreset:preset];
             //set new active preset and save device
