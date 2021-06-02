@@ -35,12 +35,21 @@ typedef struct {                            // offset
     PeripheralHeader_t header;
 }
 
+/* ------------------- properties ------------------- */
+@property (nonatomic, readonly) NSArray<HiFiToyDataBuf *> * dataBufs;
+
+
+/* --------------- init state methods --------------- */
 - (id) init;
 - (id) initWithDevice:(HiFiToyDevice *)dev;
 - (id) initWithPreset:(HiFiToyPreset *)preset;
 
 - (void) clear;
 
+/* ----------------- utility methods ---------------- */
+- (NSData *) getDataBufBinary;
+
+/* -------------- export/import methods ------------- */
 - (void) exportAll;
 - (void) exportWithDialog:(NSString *)title;
 - (void) exportPreset;

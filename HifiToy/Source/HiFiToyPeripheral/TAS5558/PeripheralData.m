@@ -15,7 +15,6 @@
 #define PRESET_DATA_OFFSET          0x20
 
 @implementation PeripheralData {
-    NSArray<HiFiToyDataBuf *> * dataBufs;
     NSMutableData * importData;
     
     void (^finishHandler)(void);
@@ -95,14 +94,14 @@
     header.dataBufLength   = 0;
     header.dataBytesLength = 0;
     
-    dataBufs = [[NSMutableArray alloc] init];
+    _dataBufs = [[NSMutableArray alloc] init];
 }
 
 - (void) setDataBufs:(NSArray<HiFiToyDataBuf *> *)bufs {
     header.dataBufLength = bufs.count;
     header.dataBytesLength = [self calcDataBytesLength:bufs];
     
-    dataBufs = bufs;
+    _dataBufs = bufs;
 }
 
 - (uint16_t) calcDataBytesLength:(NSArray<HiFiToyDataBuf *> *)dataBufs {
@@ -116,16 +115,23 @@
 
 }
 
+- (NSData *) getDataBufBinary {
+    NSMutableData * data = [[NSMutableData alloc] init];
+    
+    //append data bufs
+    for (HiFiToyDataBuf * db in self.dataBufs) {
+        [data appendData:[db binary]];
+    }
+    return data;
+}
+
 - (NSData *) getBinary {
     NSMutableData * data = [[NSMutableData alloc] init];
         
     //append first 0x24 bytes
     [data appendBytes:&header length:PERIPHERAL_CONFIG_LENGTH];
-    
     //append data bufs
-    for (HiFiToyDataBuf * db in dataBufs) {
-        [data appendData:[db binary]];
-    }
+    [data appendData:[self getDataBufBinary]];
     
     return data;
 }
