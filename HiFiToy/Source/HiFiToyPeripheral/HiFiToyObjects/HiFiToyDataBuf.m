@@ -69,4 +69,16 @@
     return full;
 }
 
+- (NSString *) description {
+    NSMutableString * str = [[NSMutableString alloc] init];
+    [str appendFormat:@"Addr %d: ", self.addr];
+    
+    uint8_t * val = (uint8_t *)self.data.bytes;
+    
+    for (int i = 0; i < self.data.length; i++) {
+        [str appendFormat:@"%x ", val[i]];
+    }
+    return str;
+}
+
 @end
