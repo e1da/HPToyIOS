@@ -33,8 +33,8 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(didUpdateAdvertiseMode:)
-                                                 name: @"UpdateAdvertiseModeNotification"
+                                             selector: @selector(setupOutlets)
+                                                 name: @"SetupOutletsNotification"
                                                object: nil];
 }
 
@@ -50,11 +50,7 @@
     [device updateAdvertiseMode];
 }
 
-- (void) didUpdateAdvertiseMode:(NSNotification*)notification {
-    [self setupOutlets];
-}
-
-- (void) setupOutlets{
+- (void) setupOutlets {
     if (device) {
         self.advertiseModeSwitch_outl.on = (device.advertiseMode == ADVERTISE_ALWAYS_ENABLED) ? NO : YES;
     } else {

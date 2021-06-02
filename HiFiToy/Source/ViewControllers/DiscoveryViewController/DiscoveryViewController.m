@@ -59,8 +59,8 @@
                                                  name: UIApplicationWillEnterForegroundNotification
                                                object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(keyfobDidFound)
-                                                 name: @"KeyfobDidFoundNotification"
+                                             selector: @selector(setupOutlets)
+                                                 name: @"SetupOutletsNotification"
                                                object: nil];
     
     
@@ -71,7 +71,7 @@
 - (void) handleEnteredForeground
 {
     [hiFiToyControl startDiscovery];
-    [self.tableView reloadData];
+    [self setupOutlets];
 }
 
 - (void)dealloc {
@@ -94,6 +94,10 @@
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:addButton];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     
+}
+
+- (void) setupOutlets {
+    [self.tableView reloadData];
 }
 
 /*-------------------------------- UITableViewDataSource protocol -----------------------------------*/
@@ -179,14 +183,6 @@
     NSString * msgString = [NSString stringWithFormat:@"This window shows all available online %@ devices, which you may choose to control. Also you can rename UUID number for any simple name in the Options/Name menu.", bundleName];
 
     [[DialogSystem sharedInstance] showAlert:msgString];
-}
-
-
-
-- (void) keyfobDidFound
-{
-    NSLog(@"keyfobDidFound");
-    [self.tableView reloadData];
 }
 
 @end

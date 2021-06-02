@@ -37,7 +37,7 @@
     [_outputSegmentedOutlet setTitle:@"Unbalance\nboost" forSegmentAtIndex:2];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleNotification:)
+                                             selector: @selector(setupOutlets)
                                                  name: @"SetupOutletsNotification"
                                                object: nil];
 }
@@ -52,10 +52,6 @@
     HiFiToyDevice * dev = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
     [dev.outputMode readFromDsp];
     
-    [self setupOutlets];
-}
-
-- (void) handleNotification:(NSNotification*)notification {
     [self setupOutlets];
 }
 

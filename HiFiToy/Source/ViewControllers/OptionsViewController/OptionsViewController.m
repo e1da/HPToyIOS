@@ -35,7 +35,7 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleNotification:)
+                                             selector: @selector(setupOutlets)
                                                  name: @"SetupOutletsNotification"
                                                object: nil];
     
@@ -47,10 +47,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self setupOutlets];
-}
-
-- (void) handleNotification:(NSNotification*)notification {
     [self setupOutlets];
 }
 

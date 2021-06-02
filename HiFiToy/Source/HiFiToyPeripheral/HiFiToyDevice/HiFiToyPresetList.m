@@ -214,7 +214,7 @@
             
         } else {
             msg = [NSString stringWithFormat:@"'%@' preset was successfully added.", presetName];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"PresetImportXmlNotification" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
         }
         [[DialogSystem sharedInstance] showAlert:msg];
     }];
@@ -248,7 +248,7 @@
             msg = [NSString stringWithFormat:@"Import preset is not success. %@ error", error ];
         } else {
             msg = [NSString stringWithFormat:@"'%@' preset was successfully added.", presetName];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"PresetImportXmlNotification" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
                     
         }
         [[DialogSystem sharedInstance] showAlert:msg];

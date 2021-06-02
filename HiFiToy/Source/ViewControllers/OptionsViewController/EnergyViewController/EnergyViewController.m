@@ -37,8 +37,8 @@
     [super viewDidLoad];
 
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(didUpdateEnergyConfig:)
-                                                 name: @"UpdateEnergyConfigNotification"
+                                             selector: @selector(setupOutlets)
+                                                 name: @"SetupOutletsNotification"
                                                object: nil];
 }
 

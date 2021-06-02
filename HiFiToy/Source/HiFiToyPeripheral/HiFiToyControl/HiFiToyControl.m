@@ -52,7 +52,7 @@
 
     if ([bleDriver isConnected]) {
         [_foundHiFiToyDevices addObject:_activeHiFiToyDevice];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"KeyfobDidFoundNotification" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
     }
     
     NSString *targetName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"TargetName"];
@@ -242,7 +242,7 @@
     
     [_foundHiFiToyDevices addObject:device];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"KeyfobDidFoundNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
 }
 
 -(void) keyfobDidConnected
@@ -312,7 +312,7 @@
             
             EnergyConfig_t * energy = (EnergyConfig_t *)&data[1];
             _activeHiFiToyDevice.energyConfig = *energy;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateEnergyConfigNotification" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
         }
     }
     
@@ -394,7 +394,7 @@
             {
                 _activeHiFiToyDevice.audioSource = data[1];
                 NSLog(@"GET_AUDIO_SOURCE %d", _activeHiFiToyDevice.audioSource);
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateAudioSourceNotification" object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
                 
                 [self getChecksumParamData];
                 break;
@@ -403,7 +403,7 @@
             {
                 _activeHiFiToyDevice.advertiseMode = data[1];
                 NSLog(@"GET_ADVERTISE_MODE %d", _activeHiFiToyDevice.advertiseMode);
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateAdvertiseModeNotification" object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
                 break;
             }
             case GET_OUTPUT_MODE: //WARNING: not uses. bug on HW side
@@ -450,8 +450,6 @@
     } else {
         if ([dialog isProgressDialogVisible]) {
             [dialog dismissProgressDialog];
-         
-            //[[NSNotificationCenter defaultCenter] postNotificationName:@"CompleteDataSendNotification" object:nil];
         }
     }
 }
