@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "DrcTimeConst.h"
+#import "FloatUtility.h"
 
 @interface DrcTimeConstTests : XCTestCase {
     DrcTimeConst * dt0;
@@ -35,11 +36,10 @@
 - (void) testGetDataBufs {
     NSArray<HiFiToyDataBuf *> * db = [dt0 getDataBufs];
     XCTAssertTrue(db.count == 2);
+    
+    [dt1 importFromDataBufs:db];
+    XCTAssertEqualObjects(dt0, dt1);
 }
-
-/*- (void) testImport {
- 
- }*/
 
 - (void) testXmlExportImport {
     dt0.energyMS = 1.5f;

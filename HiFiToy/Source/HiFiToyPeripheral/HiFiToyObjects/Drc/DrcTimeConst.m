@@ -95,14 +95,19 @@
 - (BOOL) isEqual: (id) object {
     if ( (object) && ([object class] == [self class]) ) {
         DrcTimeConst * temp = object;
-        if ((self.channel == temp.channel) &&
-            (fabs(self.energyMS - temp.energyMS) < 0.02f) &&
-            (fabs(self.attackMS - temp.attackMS) < 0.02f) &&
-            (fabs(self.decayMS - temp.decayMS) < 0.02f)){
-            
-            return YES;
-        }
         
+        uint32_t energy     = [self timeToUint32:self.energyMS];
+        uint32_t attack     = [self timeToUint32:self.attackMS];
+        uint32_t decay      = [self timeToUint32:self.decayMS];
+        
+        uint32_t energy1    = [self timeToUint32:temp.energyMS];
+        uint32_t attack1    = [self timeToUint32:temp.attackMS];
+        uint32_t decay1     = [self timeToUint32:temp.decayMS];
+        
+        return ((self.channel == temp.channel) &&
+                (energy == energy1) &&
+                (attack == attack1) &&
+                (decay == decay1) );
     }
     
     return NO;
@@ -212,7 +217,7 @@
         if ((db.addr == [self address]) && (db.length == 8)){
             
             uint32_t * number = (uint32_t *)db.data.bytes;
-            self.energyMS = [self uint32ToTimeMS:number[1]];
+            _energyMS = [self uint32ToTimeMS:number[1]];
             
             importCount++;
             if (importCount >= 2) break;
