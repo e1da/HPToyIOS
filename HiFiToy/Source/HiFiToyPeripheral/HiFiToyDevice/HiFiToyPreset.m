@@ -11,6 +11,7 @@
 #import "HiFiToyControl.h"
 #import "DialogSystem.h"
 #import "PeripheralData.h"
+#import "Checksummer.h"
 
 
 @interface HiFiToyPreset() {
@@ -219,8 +220,6 @@
                  handler:^() {
         
         if ([self importFromDataBufs:pd.dataBufs]){
-            //update checksum preset
-            [self updateChecksumWithParamData:[pd getDataBufBinary]];
             
             //add new import preset to list and save
             [[HiFiToyPresetList sharedInstance] setPreset:self];
@@ -244,28 +243,16 @@
         }
     }
     
+    [self updateChecksumWithBufs:dataBufs];
     return YES;
 }
 
 - (void) updateChecksum {
-    [self updateChecksumWithParamData:[self getBinary]];
+    [self updateChecksumWithBufs:[self getDataBufs]];
 }
 
-- (void) updateChecksumWithParamData:(NSData *)data {
-    uint8_t * d = (uint8_t *)data.bytes;
-    
-    uint8_t sum = 0;
-    uint8_t fibonacci = 0;
-    
-    for (int i = 0; i < data.length; i++) {
-        sum += d[i];
-        fibonacci += sum;
-        
-        //printf("%d %x %x\n", i, sum, fibonacci);
-    }
-    
-    _checkSum = sum & 0xFF;
-    _checkSum |= ((uint16_t)fibonacci << 8) & 0xFF00;    
+- (void) updateChecksumWithBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs {
+    _checkSum = [Checksummer calcDataBufs:dataBufs];
 }
 
 /*---------------------------- XML export/import ----------------------------------*/

@@ -34,7 +34,6 @@
 - (void) importFromPeripheral;
 
 - (void) updateChecksum;
-- (void) updateChecksumWithParamData:(NSData *)data;
 
 - (BOOL) importFromXml:(NSURL *)url checkName:(BOOL)checkName
          resultHandler:(void (^)(HiFiToyPreset *, NSString *))resultHandler;
