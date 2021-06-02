@@ -188,33 +188,31 @@
     
     if (![ctrl isConnected]) return;
     
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(didGetHeaderData:)
-                                                 name: @"GetDataNotification"
-                                               object: finishHandler];
+    __block __weak id observer;
+    observer = [[NSNotificationCenter defaultCenter] addObserverForName:@"GetDataNotification"
+                                                                 object:nil
+                                                                  queue:nil
+                                                             usingBlock:^(NSNotification * note) {
+        //get 20 byte portion and append
+        NSData * data = (NSData *)[note object];
+        [self->importData appendData:data];
+        
+        if (self->importData.length == 40) {
+            [[NSNotificationCenter defaultCenter] removeObserver:observer];
+            
+            if (![self parseHeader:self->importData]) {
+                self->header.dataBytesLength = 0;
+            }
+            
+            if (finishHandler) finishHandler();
+            
+        } else {
+            [[HiFiToyControl sharedInstance] getDspDataWithOffset:20];
+        }
+    }];
+    
     importData = [[NSMutableData alloc] init];
     [ctrl getDspDataWithOffset:0];
-}
-
-
-- (void) didGetHeaderData:(NSNotification*)notification {
-    //get 20 byte portion and append
-    NSData * data = (NSData *)[notification object];
-    [importData appendData:data];
-    
-    if (importData.length == 40) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-        
-        if (![self parseHeader:importData]) {
-            header.dataBytesLength = 0;
-        }
-        
-        finishHandler = notification.object;
-        if (finishHandler) finishHandler();
-        
-    } else {
-        [[HiFiToyControl sharedInstance] getDspDataWithOffset:20];
-    }
 }
 
 - (BOOL) parseHeader:(NSData *)data {
@@ -233,10 +231,18 @@
             return;
         }
         
-        [[NSNotificationCenter defaultCenter] addObserver: self
-                                                 selector: @selector(didGetData:)
-                                                     name: @"GetDataNotification"
-                                                   object: finishHandler];
+        __block __weak id observer;
+        observer = [[NSNotificationCenter defaultCenter] addObserverForName:@"GetDataNotification"
+                                                                     object:nil
+                                                                      queue:nil
+                                                                 usingBlock:^(NSNotification * note) {
+            
+            if ([self didGetData:(NSData *)[note object]]) { // if finished
+                [[NSNotificationCenter defaultCenter] removeObserver:observer];
+                
+                if (finishHandler) finishHandler();
+            }
+        }];
         
         self->importData = [[NSMutableData alloc] init];
         [[HiFiToyControl sharedInstance] getDspDataWithOffset:PERIPHERAL_CONFIG_LENGTH];
@@ -250,20 +256,20 @@
     [self import:finishHandler];
 }
 
-- (void) didGetData:(NSNotification*)notification {
-    //get 20 byte portion and append
-    NSData * data = (NSData *)[notification object];
+- (BOOL) didGetData:(NSData *)data {
+    //append 20 bytes
     [importData appendData:data];
     
     //update dialog view
     DialogSystem * dialog = [DialogSystem sharedInstance];
     if ([dialog isProgressDialogVisible]) {
-        float progress = (float)importData.length / (header.dataBufLength - PERIPHERAL_CONFIG_LENGTH) * 100;
+        float progress = (float)importData.length / (header.dataBytesLength - PERIPHERAL_CONFIG_LENGTH) * 100;
+        if (progress > 100) progress = 100;
+        
         dialog.progressController.message = [NSString stringWithFormat:@"Progress %d%%", (int)progress];
     }
     
-    if (importData.length >= header.dataBufLength) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (importData.length >= header.dataBytesLength) {
         
         [self parseDataBufs:importData];
         
@@ -272,12 +278,11 @@
             [dialog dismissProgressDialog];
         }
         
-        finishHandler = notification.object;
-        if (finishHandler) finishHandler();
-        
-    } else {
-        [[HiFiToyControl sharedInstance] getDspDataWithOffset:PERIPHERAL_CONFIG_LENGTH + importData.length];
+        return YES;
     }
+        
+    [[HiFiToyControl sharedInstance] getDspDataWithOffset:PERIPHERAL_CONFIG_LENGTH + importData.length];
+    return NO;
 }
 
 - (void) parseDataBufs:(NSData *)data {

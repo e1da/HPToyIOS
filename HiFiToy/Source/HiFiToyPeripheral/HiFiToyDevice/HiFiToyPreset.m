@@ -214,7 +214,7 @@
 }
 
 - (void) importFromPeripheral {
-    PeripheralData * pd = [[PeripheralData alloc] initWithPreset:self];
+    PeripheralData * pd = [[PeripheralData alloc] init];
     [pd importWithDialog:NSLocalizedString(@"Import Preset...", @"")
                  handler:^() {
         
