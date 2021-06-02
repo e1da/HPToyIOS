@@ -9,6 +9,7 @@
 #import "PeripheralData.h"
 #import "HiFiToyControl.h"
 #import "DialogSystem.h"
+#import "BinaryOperation.h"
 
 #define PERIPHERAL_CONFIG_LENGTH    0x24
 #define BIQUAD_TYPE_OFFSET          0x18
@@ -112,13 +113,7 @@
 }
 
 - (NSData *) getDataBufBinary {
-    NSMutableData * data = [[NSMutableData alloc] init];
-    
-    //append data bufs
-    for (HiFiToyDataBuf * db in self.dataBufs) {
-        [data appendData:[db binary]];
-    }
-    return data;
+    return [BinaryOperation getDataBufBinary:self.dataBufs];
 }
 
 - (NSData *) getBinary {
