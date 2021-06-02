@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "BassTreble.h"
+#import "PeripheralData.h"
 
 
 @interface BassTrebleTests : XCTestCase {
@@ -55,29 +56,14 @@
 }
 
 - (void) testGetDataBufs {
+    [bt0 setEnabledChannel:0 Enabled:0.75];
+    
     NSArray<HiFiToyDataBuf *> * db = [bt0 getDataBufs];
     XCTAssertTrue(db.count == 9);
+    
+    [bt1 importFromDataBufs:db];
+    XCTAssertEqualObjects(bt0, bt1);
 }
-
-/*- (void) testImport {
-    bt0.bassTreble127.bassDb = 1;
-    NSData * d = [bt0 getBinary];
-    
-    if (![bt1 importData:d]) {
-        XCTFail(@"Import is not success.");
-    }
-    
-    XCTAssertEqualObjects(bt0, bt1);
-    
-    [bt0 setEnabledChannel:0 Enabled:0.5];
-    d = [bt0 getBinary];
-    
-    if (![bt1 importData:d]) {
-        XCTFail(@"Import is not success.");
-    }
-    
-    XCTAssertEqualObjects(bt0, bt1);
-}*/
 
 - (void) testXmlExportImport {
     bt0.bassTreble127.bassDb = 1;

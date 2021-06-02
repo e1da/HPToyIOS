@@ -249,8 +249,8 @@
     uint32_t ival = reverseNumber523(0x800000 - 0x800000 * enabledCh[channel]);
     
     uint8_t data[8];
-    memcpy(data + 0, &val, 4);
-    memcpy(data + 4, &ival, 4);
+    memcpy(data + 0, &ival, 4);
+    memcpy(data + 4, &val, 4);
     
     return [HiFiToyDataBuf dataBufWithAddr:(BASS_TREBLE_REG + channel)
                                 withLength:8 withData:data];
