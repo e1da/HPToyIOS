@@ -17,13 +17,9 @@
     XmlParserWrapper * xmlParser;
     int count;
     
-    int paramAddress;
-    
     void (^xmlImportResultHandler)(HiFiToyPreset * preset, NSString * error);
     
 }
-
-- (void) getParamData:(NSNotification*)notification;
 
 @end
 
@@ -212,84 +208,30 @@
 }
 
 //store and import to/from peripheral
--(void)storeToPeripheral {
+- (void) storeToPeripheral {
     PeripheralData * pd = [[PeripheralData alloc] initWithPreset:self];
     [pd exportPresetWithDialog:NSLocalizedString(@"Sending Preset", @"")];
 }
 
 - (void) importFromPeripheral {
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(getParamData:)
-                                                 name: @"GetDataNotification"
-                                               object: nil];
-    
-    //show import dialog
-    [[DialogSystem sharedInstance] showProgressDialog:NSLocalizedString(@"Import Preset...", @"")];
-    
-    paramAddress = 0;
-    [[HiFiToyControl sharedInstance] getDspDataWithOffset:paramAddress];
-}
-
-- (void) getParamData:(NSNotification*)notification {
-    static uint8_t * data;
-    static int length = 0;
-    static HiFiToyPeripheral_t hiFiToyConfig;
-    
-    NSData * paramData = (NSData *)[notification object];
-    
-    if (paramData.length != 20) {
-        [[DialogSystem sharedInstance] showAlert:@"Import preset is not success."];
-        return;
-    }
-    
-    if (paramAddress == 0) {
-        memcpy(&hiFiToyConfig, paramData.bytes, 20);
-        paramAddress = 20;
-        [[HiFiToyControl sharedInstance] getDspDataWithOffset:paramAddress];
+    PeripheralData * pd = [[PeripheralData alloc] initWithPreset:self];
+    [pd importWithDialog:NSLocalizedString(@"Import Preset...", @"")
+                 handler:^() {
         
-    } else {
-        
-        if (paramAddress == 20) {
-            memcpy((uint8_t *)&hiFiToyConfig + 20, paramData.bytes, sizeof(HiFiToyPeripheral_t) - 20);
+        if ([self importFromDataBufs:pd.dataBufs]){
+            //update checksum preset
+            [self updateChecksumWithParamData:[pd getDataBufBinary]];
             
-            length = hiFiToyConfig.dataBytesLength;
-        
-            if (data) free(data);
-            data = malloc(length);
+            //add new import preset to list and save
+            [[HiFiToyPresetList sharedInstance] setPreset:self];
             
-            length -= 20;
-            memcpy(data, &hiFiToyConfig, 20);
-        }
-    
-            
-        DialogSystem * dialog = [DialogSystem sharedInstance];
-            
-        if (length > 20) {
-            length -= 20;
-            memcpy(&data[paramAddress], paramData.bytes, 20);
-            paramAddress += 20;
-            
-            if ([dialog isProgressDialogVisible]) {
-                dialog.progressController.message = [NSString stringWithFormat:@"Left %d packets.", length / 20];
-            }
-            
-            [[HiFiToyControl sharedInstance] getDspDataWithOffset:paramAddress];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"PresetImportNotification" object:self];
             
         } else {
-            memcpy(&data[paramAddress], paramData.bytes, length);
-            paramAddress += length;
-            
-            [[NSNotificationCenter defaultCenter] removeObserver:self];
-            
-            if ([dialog isProgressDialogVisible]) {
-                [dialog dismissProgressDialog];
-            }
-            
-            NSData * d = [NSData dataWithBytes:data length:paramAddress];
-            [self importData:d];
-            free(data);
+            [[DialogSystem sharedInstance] showAlert:@"Import preset is not success!"];
         }
-    }
+        
+    }];
 }
 
 - (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs {
@@ -303,45 +245,6 @@
     }
     
     return YES;
-}
-
-- (BOOL)importData:(NSData *)data {
-    //convrt NSData to NSArray<HiFiToyDataBuf *> *
-    NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];
-    
-    HiFiToyPeripheral_t * header = (HiFiToyPeripheral_t *) data.bytes;
-    DataBufHeader_t * buf = &header->firstDataBuf;
-    
-    for (int i = 0; i < header->dataBufLength; i++) {
-        NSData * d = [[NSData alloc] initWithBytes:buf length:(buf->length + 2)];
-        buf = (DataBufHeader_t *)((uint8_t *)buf + sizeof(DataBufHeader_t) + buf->length);
-        
-        [dataBufs addObject:[[HiFiToyDataBuf alloc] initWithData:d]];
-    }
-    
-    //import from data bufs
-    BOOL importResult = [self importFromDataBufs:dataBufs];
-    
-    //import progress dialog close
-    [[DialogSystem sharedInstance] dismissProgressDialog];
-    
-    if (importResult){
-        //get data without HiFiToyPeripheral header
-        uint8_t * params = (uint8_t *)data.bytes + offsetof(HiFiToyPeripheral_t, firstDataBuf);
-        NSData * paramData = [NSData dataWithBytes:params length:(data.length - offsetof(HiFiToyPeripheral_t, firstDataBuf))];
-        //update checksum preset
-        [self updateChecksumWithParamData:paramData];
-        
-        //add new import preset to list and save
-        [[HiFiToyPresetList sharedInstance] setPreset:self];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"PresetImportNotification" object:self];
-        
-    } else {
-        [[DialogSystem sharedInstance] showAlert:@"Import preset is not success!"];
-    }
-    
-    return importResult;
 }
 
 - (void) updateChecksum {
