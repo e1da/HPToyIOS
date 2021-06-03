@@ -410,7 +410,13 @@
                 NSLog(@"GET_AUDIO_SOURCE %d", _activeHiFiToyDevice.audioSource);
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
                 
-                [self getChecksumParamData];
+                [_activeHiFiToyDevice.amMode importFromPeripheral:^() {
+                    NSLog(@"GET_AM_MODE: %@ %@",
+                          [self->_activeHiFiToyDevice.amMode isEnabled] ? @"Enabled" : @"Disabled",
+                          [self->_activeHiFiToyDevice.amMode getInfo]);
+                    
+                    [self getChecksumParamData];
+                }];
                 break;
             }
             case GET_ADVERTISE_MODE:
