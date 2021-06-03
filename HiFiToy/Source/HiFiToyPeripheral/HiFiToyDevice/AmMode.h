@@ -11,22 +11,23 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#define FIRST_DATA_BUF_OFFSET 0x24
-
-@interface AmMode : NSObject
-
+@interface AmMode : NSObject <HiFiToyObject>
 
 @property (readonly, getter=isSuccessImport) BOOL successImport;
 
+/* -------------------- init state methods -------------------- */
 - (void) reset;
+
+/* ------------------ setter getter methods ------------------ */
 - (uint8_t) getData:(int)index;
 - (void) setData:(uint8_t)d toIndex:(int)index;
 
 - (BOOL) isEnabled;
 - (void) setEnabled:(BOOL)enabled;
 
+/* ------------------- export import methods ------------------- */
 - (void) storeToPeripheral;
-- (void) importFromPeripheral;
+- (void) importFromPeripheral:(void (^ __nullable)(void))finishHandler;
 
 @end
 

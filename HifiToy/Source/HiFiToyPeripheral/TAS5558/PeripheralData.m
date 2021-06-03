@@ -11,7 +11,7 @@
 #import "DialogSystem.h"
 #import "BinaryOperation.h"
 
-#define PERIPHERAL_CONFIG_LENGTH    0x24
+
 #define BIQUAD_TYPE_OFFSET          0x18
 #define PRESET_DATA_OFFSET          0x20
 

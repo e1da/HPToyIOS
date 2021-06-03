@@ -584,11 +584,7 @@
 }
 
 - (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs {
-    //TODO: WARNING: probably biquad type is not imported.
-    /*HiFiToyPeripheral_t * HiFiToy = (HiFiToyPeripheral_t *) data.bytes;
-    for (int i = 0; i < 7; i++) {
-        biquads[i].type = HiFiToy->biquadTypes[i];
-    }*/
+    //WARNING: biquad types imported above -setBiquadTypes
     
     for (int i = 0; i < 7; i++) {
         if (![biquads[i] importFromDataBufs:dataBufs]) {

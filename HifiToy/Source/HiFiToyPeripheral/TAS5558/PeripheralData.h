@@ -12,6 +12,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define FIRST_DATA_BUF_OFFSET       0x24
+#define PERIPHERAL_CONFIG_LENGTH    FIRST_DATA_BUF_OFFSET
+
 #pragma pack(1)
 typedef struct {                            // offset
     uint8_t             i2cAddr;            // 0x00
