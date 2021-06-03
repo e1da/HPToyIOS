@@ -42,10 +42,12 @@
         
         header.outputMode      = [dev.outputMode isUnbalance] ? 1 : 0;
         
-        //List<HiFiToyDataBuf> dataBufs = device.getActivePreset().getDataBufs();
-        //appendAmModeDataBuf(dataBufs, device.getAmMode(), device.isNewPDV21Hw());
+        //append AMMode reg for fix whistles bug in PDV2.1
+        NSArray<HiFiToyDataBuf *> * updBufs = [self appendAmModeDataBuf:[dev.preset getDataBufs]
+                                                                 amMode:dev.amMode
+                                                                  newHW:dev.isPDV21Hw];
 
-        [self setDataBufs:[dev.preset getDataBufs]];
+        [self setDataBufs:updBufs];
     }
     return self;
 }
@@ -62,8 +64,11 @@
         HiFiToyDevice * dev = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
         header.outputMode   = [dev.outputMode isUnbalance] ? 1 : 0;
         
-        //appendAmModeDataBuf(dataBufs, dev.getAmMode(), dev.isNewPDV21Hw());
-        [self setDataBufs:[preset getDataBufs]];
+        //append AMMode reg for fix whistles bug in PDV2.1
+        NSArray<HiFiToyDataBuf *> * updBufs = [self appendAmModeDataBuf:[preset getDataBufs]
+                                                                 amMode:dev.amMode
+                                                                  newHW:dev.isPDV21Hw];
+        [self setDataBufs:updBufs];
     }
     return self;
 }
@@ -94,6 +99,7 @@
     _dataBufs = [[NSMutableArray alloc] init];
 }
 
+/* ----------------- utility methods ---------------- */
 - (void) setDataBufs:(NSArray<HiFiToyDataBuf *> *)bufs {
     header.dataBufLength = bufs.count;
     header.dataBytesLength = [self calcDataBytesLength:bufs];
@@ -136,6 +142,53 @@
     return [bin subdataWithRange:NSMakeRange(PRESET_DATA_OFFSET, bin.length - PRESET_DATA_OFFSET)];
 }
 
+- (HiFiToyDataBuf *) findDataBufWithAddr:(uint8_t)addr
+                              inDataBufs:(NSArray<HiFiToyDataBuf *> *)bufs {
+    for (HiFiToyDataBuf * b in bufs) {
+        if (b.addr == addr) {
+            return b;
+        }
+    }
+    return nil;
+}
+
+- (void) restrictBassFilterGain:(NSArray<HiFiToyDataBuf *> *)bufs {
+    HiFiToyDataBuf * bassFilterBuf = [self findDataBufWithAddr:BASS_FILTER_SET_REG inDataBufs:bufs];
+    
+    if (bassFilterBuf) {
+        uint8_t * bassFilterData = (uint8_t *)bassFilterBuf.data.bytes;
+        uint8_t * bassFilterGain = &bassFilterData[7];
+        
+        if (*bassFilterGain < 0x12) {
+            *bassFilterGain = 0x12;
+            NSData * updBassFilterData = [NSData dataWithBytes:bassFilterData
+                                                        length:bassFilterBuf.data.length];
+            
+            bassFilterBuf.data = updBassFilterData;
+        }
+    }
+}
+
+- (NSArray<HiFiToyDataBuf *> *) appendAmModeDataBuf:(NSArray<HiFiToyDataBuf *> *)bufs
+                      amMode:(AmMode *)amMode
+                       newHW:(BOOL)newHW {
+    //set AMMode reg for fix whistles bug in PDV2.1
+    if ([amMode isEnabled]) {
+        NSMutableArray<HiFiToyDataBuf *> * updBufs = [NSMutableArray arrayWithArray:bufs];
+        [updBufs insertObject:[amMode getDataBufs][0] atIndex:0];
+        
+        //and delete bass filter buf for fix bug incorrect launch hw for old hw
+        if (!newHW) {
+            [self restrictBassFilterGain:updBufs];
+        }
+        
+        return updBufs;
+    }
+    
+    return bufs;
+}
+
+/* -------------- export/import methods ------------- */
 - (void) exportAll {
     HiFiToyControl * ctrl = [HiFiToyControl sharedInstance];
     
