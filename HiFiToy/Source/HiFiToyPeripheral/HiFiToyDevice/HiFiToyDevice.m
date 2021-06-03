@@ -56,6 +56,7 @@
     self.advertiseMode      = ADVERTISE_ALWAYS_ENABLED;
     [self setDefaultEnergyConfig];
     _outputMode             = [[HiFiToyOutputMode alloc] init];
+    _amMode                 = [[AmMode alloc] init];
     self.newPDV21Hw         = NO;
 }
 
@@ -139,6 +140,7 @@
     self.advertiseMode      = ADVERTISE_ALWAYS_ENABLED;
     [self setDefaultEnergyConfig];
     _outputMode             = [[HiFiToyOutputMode alloc] init];
+    _amMode                 = [[AmMode alloc] init];
     
     [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
     

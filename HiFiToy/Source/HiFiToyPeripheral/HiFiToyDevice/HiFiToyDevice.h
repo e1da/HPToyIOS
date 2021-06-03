@@ -10,6 +10,7 @@
 #import "HiFiToyPreset.h"
 #import "HiFiToyOutputMode.h"
 #import "PeripheralDefines.h"
+#import "AmMode.h"
 
 @interface HiFiToyDevice : NSObject <NSCoding>
 
@@ -23,6 +24,7 @@
 @property (nonatomic) EnergyConfig_t                            energyConfig;
 @property (nonatomic) AdvertiseMode_t                           advertiseMode;
 @property (nonatomic, readonly) HiFiToyOutputMode * _Nonnull    outputMode;
+@property (nonatomic, readonly) AmMode * _Nonnull               amMode;
 
 //preset property
 @property (nonatomic) NSString * _Nonnull                   activeKeyPreset;
