@@ -122,6 +122,10 @@
     return [BinaryOperation getDataBufBinary:self.dataBufs];
 }
 
+- (uint16_t) bufBytesLength {
+    return header.dataBytesLength - PERIPHERAL_CONFIG_LENGTH;
+}
+
 - (NSData *) getBinary {
     NSMutableData * data = [[NSMutableData alloc] init];
         

@@ -51,6 +51,8 @@ typedef struct {                            // offset
 
 /* ----------------- utility methods ---------------- */
 - (NSData *) getDataBufBinary;
+- (uint16_t) bufBytesLength;
+
 - (NSData *) getBiquadTypeBinary;
 
 /* -------------- export/import methods ------------- */

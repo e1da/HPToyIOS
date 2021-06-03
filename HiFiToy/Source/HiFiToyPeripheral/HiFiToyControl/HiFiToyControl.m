@@ -10,6 +10,8 @@
 #import "TAS5558.h"
 #import "HiFiToyDeviceList.h"
 #import "DialogSystem.h"
+#import "PeripheralData.h"
+#import "Checksummer.h"
 
 
 @implementation HiFiToyControl {
@@ -390,20 +392,41 @@
                 break;
             }
             case GET_CHECKSUM:
+            {
                 NSLog(@"GET_CHECKSUM");
-                uint16_t checksum = 0;
+                __block uint16_t checksum;
                 memcpy(&checksum, data + 1, 2);
                 
-                NSLog(@"Checksum app preset = %x, Peripheral preset = %x",
-                      _activeHiFiToyDevice.preset.checkSum, checksum);
-                
-                if (_activeHiFiToyDevice.preset.checkSum != checksum) {
-                    [[DialogSystem sharedInstance] showImportPresetDialog];
-                } else {
-                    NSLog(@"Import and current presets are equals!");
-                }
-                
+                //need update checksum if AmMode reg exists
+                //first we need get data bytes length
+                PeripheralData * pd = [[PeripheralData alloc] init];
+                [pd importHeader:^() {
+                    NSLog(@"Data buf length = %d", [pd bufBytesLength]);
+                    
+                    HiFiToyDevice * dev = self->_activeHiFiToyDevice;
+                    
+                    //update checksum. subtract amMode data
+                    if ([dev.amMode isEnabled]) {
+                        HiFiToyDataBuf * amModeDataBuf = [dev.amMode getDataBufs][0];
+                        checksum = [Checksummer subtractDataFrom:checksum
+                                                  originalLength:[pd bufBytesLength]
+                                                            data:amModeDataBuf.data];
+                        
+                    }
+                    
+                    //next compare updated checksum with current preset checksum
+                    NSLog(@"Checksum app preset = %x, Peripheral preset = %x",
+                          dev.preset.checkSum, checksum);
+                    
+                    if (dev.preset.checkSum != checksum) {
+                        [[DialogSystem sharedInstance] showImportPresetDialog];
+                    } else {
+                        NSLog(@"Import and current presets are equals!");
+                    }
+                    
+                }];
                 break;
+            }
             case GET_AUDIO_SOURCE:
             {
                 _activeHiFiToyDevice.audioSource = data[1];
