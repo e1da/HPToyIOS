@@ -55,12 +55,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
     }
     
-    NSString *targetName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"TargetName"];
-    if ([targetName isEqualToString:@"HPToy"]) {
-        [bleDriver findBLEPeripheralsWithName:@"HPToyPeripheral"];
-    } else {
-        [bleDriver findBLEPeripheralsWithName:@"HiFiToyPeripheral"];
-    }
+    [bleDriver findBLEPeripherals];
 }
 
 - (void) stopDiscovery
@@ -229,9 +224,27 @@
     [self sendDataToDsp:data withResponse:YES];
 }
 
+/*------------------------------- Peripheral filter methods -----------------------------------*/
+- (BOOL) isPeripheralSupported:(NSString *)peripheralName {
+    NSArray<NSString *> * ps = @[@"HiFiToyPeripheral", @"HPToyPeripheral", @"PDV21Peripheral"];
+    for (NSString * s in ps) {
+        if ([peripheralName isEqualToString:s]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL) isNewPDV2Peripheral:(NSString *)peripheralName {
+    return ([peripheralName isEqualToString:@"PDV21Peripheral"]);
+}
+
 /*------------------------------- BleCommunication delegate -----------------------------------*/
--(void) keyfobDidFound:(NSString *)peripheralUUID
-{
+-(void) keyfobDidFound:(NSString * _Nonnull)peripheralUUID name:(NSString * _Nonnull)peripheralName {
+    if ( ![self isPeripheralSupported:peripheralName] ) {
+        return;
+    }
+    
     HiFiToyDevice *device = [[HiFiToyDeviceList sharedInstance] getDeviceWithUUID:peripheralUUID];
     if (!device){
         device = [[HiFiToyDevice alloc] init];
@@ -239,6 +252,7 @@
         device.name = [device getShortUUIDString];
         [[HiFiToyDeviceList sharedInstance] setDevice:device withUUID:device.uuid];
     }
+    device.newPDV21Hw = [self isNewPDV2Peripheral:peripheralName];
     
     [_foundHiFiToyDevices addObject:device];
     
@@ -455,3 +469,4 @@
 }
 
 @end
+    

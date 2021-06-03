@@ -14,24 +14,26 @@
 @interface HiFiToyDevice : NSObject <NSCoding>
 
 //main property
-@property NSString *    uuid;
-@property NSString *    name;
-@property uint32_t      pairingCode;
+@property NSString * _Nonnull   uuid;
+@property NSString * _Nonnull   name;
+@property uint32_t              pairingCode;
 
 //audio source
-@property (nonatomic) PCM9211Source_t               audioSource;
-@property (nonatomic) EnergyConfig_t                energyConfig;
-@property (nonatomic) AdvertiseMode_t               advertiseMode;
-@property (nonatomic, readonly) HiFiToyOutputMode * outputMode;
-
+@property (nonatomic) PCM9211Source_t                           audioSource;
+@property (nonatomic) EnergyConfig_t                            energyConfig;
+@property (nonatomic) AdvertiseMode_t                           advertiseMode;
+@property (nonatomic, readonly) HiFiToyOutputMode * _Nonnull    outputMode;
 
 //preset property
-@property (nonatomic)               NSString        * activeKeyPreset;
-@property (nonatomic, readonly)     HiFiToyPreset   * preset;
+@property (nonatomic) NSString * _Nonnull                   activeKeyPreset;
+@property (nonatomic, readonly) HiFiToyPreset * _Nonnull    preset;
+
+//check old or new hw
+@property (getter=isPDV21Hw) BOOL                           newPDV21Hw;
 
 //methods
 - (void) setDefault;
-- (NSString *) getShortUUIDString;
+- (NSString * _Nonnull) getShortUUIDString;
 
 - (void) sendAudioSource;
 - (void) updateAudioSource;

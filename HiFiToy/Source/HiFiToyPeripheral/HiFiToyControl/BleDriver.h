@@ -13,7 +13,8 @@
 /*--------------------------- TIBleCommunicationDelegate Protocol ----------------------------------------*/
 @protocol BleCommunicationDelegate
 
--(void) keyfobDidFound:(NSString *)peripheralUUID;
+-(void) keyfobDidFound:(NSString * _Nonnull)peripheralUUID
+                  name:(NSString * _Nonnull)peripheralName;
 
 -(void) keyfobDidConnected;
 -(void) keyfobDidFailConnect;
@@ -36,7 +37,7 @@
 -(void) readValue: (int)serviceUUID characteristicUUID:(int)characteristicUUID;
 -(void) notification:(int)serviceUUID characteristicUUID:(int)characteristicUUID on:(BOOL)on;
 
--(int)  findBLEPeripheralsWithName:(NSString*)name;
+-(int)  findBLEPeripherals;
 -(void) stopFindBLEPeripherals;
 
 -(void) disconnect;

@@ -53,6 +53,16 @@
 - (void) setupOutlets {
     if (!self.hiFiToyDevice) return;
     
+    if (self.hiFiToyDevice.isPDV21Hw) {
+        [self.nameLabel_outl setTextColor:UIColor.orangeColor];
+    } else {
+        if (@available(iOS 13.0, *)) {
+            [self.nameLabel_outl setTextColor:UIColor.labelColor];
+        } else {
+            [self.nameLabel_outl setTextColor:UIColor.blackColor];
+        }
+    }
+    
     _nameLabel_outl.text = self.hiFiToyDevice.name;
     
     if (self.hiFiToyDevice.outputMode.hwSupported) {

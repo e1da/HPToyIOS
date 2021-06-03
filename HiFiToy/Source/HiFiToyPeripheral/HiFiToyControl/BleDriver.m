@@ -14,7 +14,6 @@
     CBPeripheral * activePeripheral;
     
     BlePacketQueue * blePacketQueue;
-    NSString * nameFindingBle;
     
     BOOL needStartDiscovery;
 }
@@ -31,7 +30,6 @@
         blePacketQueue = [[BlePacketQueue alloc] init];
         peripherals = [[NSMutableArray alloc] init];
         activePeripheral = nil;
-        nameFindingBle = @"";
         
         needStartDiscovery = NO;
     }
@@ -80,9 +78,8 @@
     [activePeripheral setNotifyValue:on forCharacteristic:characteristic];
 }
 
--(int) findBLEPeripheralsWithName:(NSString*)name {
+-(int) findBLEPeripherals {
     needStartDiscovery = NO;
-    nameFindingBle = name;
     
     [peripherals removeAllObjects];
     
@@ -245,32 +242,30 @@
           [self centralManagerStateToString:central.state]);
     
     if ((needStartDiscovery) && (central.state == CBManagerStatePoweredOn)) {
-        [self findBLEPeripheralsWithName:nameFindingBle];
+        [self findBLEPeripherals];
     }
 }
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
     
-    NSString *peripheralAdvertName = [advertisementData valueForKey:@"kCBAdvDataLocalName"];
-    if (!peripheralAdvertName) return;
+    NSString * peripheralName = [advertisementData valueForKey:@"kCBAdvDataLocalName"];
+    if (!peripheralName) return;
     
-    NSLog(@"didDiscoverPeripheral %@", peripheralAdvertName);
+    NSLog(@"didDiscoverPeripheral %@", peripheralName);
     
-    //check DSP Name
-    if (([peripheralAdvertName isEqualToString:nameFindingBle]) ||
-        ([nameFindingBle isEqualToString:@"ALL_PERIPHERAL"])){
+    //check duplicate peripheral
+    if ([self findPeripheralWithUUID:peripheral.identifier.UUIDString]) {
+        NSLog(@"Skip duplicate peripheral.");
+        return;
+    }
         
-        //check duplicate peripheral
-        if ([self findPeripheralWithUUID:peripheral.identifier.UUIDString]) {
-            NSLog(@"Skip duplicate peripheral.");
-            return;
-        }
+    peripheral.delegate = self;
+    [peripherals addObject:peripheral];
+    NSLog(@"Add new CBPeripheral");
         
-        peripheral.delegate = self;
-        [peripherals addObject:peripheral];
-        NSLog(@"Add new CBPeripheral");
-        
-        if (_communicationDelegate) [_communicationDelegate keyfobDidFound:peripheral.identifier.UUIDString];
+    if (_communicationDelegate) {
+        [_communicationDelegate keyfobDidFound:peripheral.identifier.UUIDString
+                                          name:peripheralName];
     }
     
 }

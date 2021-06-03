@@ -56,6 +56,7 @@
     self.advertiseMode      = ADVERTISE_ALWAYS_ENABLED;
     [self setDefaultEnergyConfig];
     _outputMode             = [[HiFiToyOutputMode alloc] init];
+    self.newPDV21Hw         = NO;
 }
 
 - (void) setDefaultEnergyConfig {
