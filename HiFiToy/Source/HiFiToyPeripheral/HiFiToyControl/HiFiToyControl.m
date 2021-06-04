@@ -410,7 +410,7 @@
                         HiFiToyDataBuf * amModeDataBuf = [dev.amMode getDataBufs][0];
                         checksum = [Checksummer subtractDataFrom:checksum
                                                   originalLength:[pd bufBytesLength]
-                                                            data:amModeDataBuf.data];
+                                                            data:[amModeDataBuf binary]];
                         
                     }
                     
