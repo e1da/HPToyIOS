@@ -491,9 +491,7 @@
             dialog.progressController.message = [NSString stringWithFormat:@"Left %d packets.", remainPacketLength];
         }
     } else {
-        if ([dialog isProgressDialogVisible]) {
-            [dialog dismissProgressDialog];
-        }
+        [dialog dismissProgressDialog];
     }
 }
 

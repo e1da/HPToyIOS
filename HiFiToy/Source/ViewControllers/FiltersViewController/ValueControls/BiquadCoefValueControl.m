@@ -150,8 +150,19 @@
 }
 
 - (void) pressSync {
-    NSLog(@"press sync");
-    [[DialogSystem sharedInstance] showBiquadCoefSyncDialog:[_filters getActiveBiquad]];
+    DialogSystem * dialog = [DialogSystem sharedInstance];
+    
+    [dialog showDialog:@"Info"
+                 msg:NSLocalizedString(@"Are you sure want to sync biquad coefficients?", @"")
+               okBtn:@"Sync"
+           cancelBtn:@"Cancel"
+        okBtnHandler:^(UIAlertAction * action) {
+        
+        [[self->_filters getActiveBiquad] sendWithResponse:YES];
+        [dialog showAlert:@"Biquad coefficients are syncronized."];
+        
+    }
+    cancelBtnHandler:nil];
 }
 
 /* --------------------------------------------- Change filters method --------------------------------------------------- */

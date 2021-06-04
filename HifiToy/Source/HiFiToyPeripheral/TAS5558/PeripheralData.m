@@ -303,9 +303,7 @@
                 [self parseDataBufs:importData];
                 
                 //close dialog view
-                if ([dialog isProgressDialogVisible]) {
-                    [dialog dismissProgressDialog];
-                }
+                [dialog dismissProgressDialog];
                 
                 if (finishHandler) finishHandler();
                 

@@ -23,6 +23,12 @@
     return sharedInstance;
 }
 
+- (UIViewController *) lastViewController {
+    UINavigationController * navi = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+    
+    return navi.viewControllers.lastObject;
+}
+
 - (BOOL) isAlertVisible
 {
     UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
@@ -39,26 +45,42 @@
     }
 }
 
-- (void) showAlert:(NSString *)msg
-{
-    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+- (void) showDialog:(NSString *)title
+                msg:(NSString *)msg
+              okBtn:(NSString *)okBtn
+          cancelBtn:(NSString *)cancelBtn
+       okBtnHandler:(void (^ __nullable)(UIAlertAction *action))okHandler
+   cancelBtnHandler:(void (^ __nullable)(UIAlertAction *action))cancelHandler {
     
-    if (_alertController) {
-        
-        [self dismissAlert];
-        _alertController = nil;
-    }
-
-    _alertController = [UIAlertController alertControllerWithTitle:@""
+    [self dismissAlert];
+    
+    _alertController = [UIAlertController alertControllerWithTitle:title
                                                            message:msg
                                                     preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *closeAction = [UIAlertAction actionWithTitle:@"Close"
-                                                          style:UIAlertActionStyleDestructive
-                                                        handler:nil];
-    [_alertController addAction:closeAction];
     
-    [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
+    UIAlertAction * cancelAction = nil;
+    if (cancelBtn) {
+        cancelAction = [UIAlertAction actionWithTitle:cancelBtn
+                                                style:UIAlertActionStyleDestructive
+                                              handler:cancelHandler];
+        [_alertController addAction:cancelAction];
+    }
+    
+    UIAlertAction * okAction = nil;
+    if (okBtn) {
+        okAction = [UIAlertAction actionWithTitle:okBtn
+                                                style:UIAlertActionStyleDefault
+                                              handler:okHandler];
+        [_alertController addAction:okAction];
+    }
+    
+    [[self lastViewController]  presentViewController:_alertController animated:YES completion:nil];
 }
+
+- (void) showAlert:(NSString *)msg {
+    [self showDialog:@"" msg:msg okBtn:nil cancelBtn:@"Close" okBtnHandler:nil cancelBtnHandler:nil];
+}
+
 
 - (BOOL) isProgressDialogVisible
 {
@@ -89,19 +111,14 @@
 
 - (void) showProgressDialog:(NSString *)title
 {
-    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
     
-    if ([self isProgressDialogVisible]){
-        //_progressController.title = title;
-        //[self dismissProgressDialog];
-        //_progressController = nil;
-    } else {
-    
+    if (![self isProgressDialogVisible]) {
+        
         _progressController = [UIAlertController alertControllerWithTitle:title
                                                                   message:@"Left ??? packets"
                                                            preferredStyle:UIAlertControllerStyleAlert];
     
-        [navigation.viewControllers.lastObject presentViewController:_progressController animated:YES completion:nil];
+        [[self lastViewController] presentViewController:_progressController animated:YES completion:nil];
     }
 }
 
@@ -176,13 +193,7 @@
 
 - (void) showPairCodeInput
 {
-    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
-    
-    if (_alertController) {
-        
-        [self dismissAlert];
-        _alertController = nil;
-    }
+    [self dismissAlert];
     
     _alertController = [UIAlertController alertControllerWithTitle:@"Pair code fail"
                                                            message:NSLocalizedString(@"Please input valid pair code!", @"")
@@ -200,123 +211,49 @@
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok"
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * _Nonnull action) {
-                                                         UITextField *pairCode = self.alertController.textFields.lastObject;
-                                                         
-                                                         if (![pairCode.text isEqualToString:@""]) {
-                                                             HiFiToyDevice * device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
-                                                             device.pairingCode = [pairCode.text intValue];
-                                                             [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-                                                             
-                                                             //send pairing code
-                                                             [[HiFiToyControl sharedInstance] startPairedProccess:device.pairingCode];
-                                                         } else {
-                                                             [navigation.viewControllers.lastObject presentViewController:self.alertController animated:YES completion:nil];
-                                                         }
-                                                     }];
-    
-    [_alertController addAction:cancelAction];
-    [_alertController addAction:okAction];
-    
-    [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
-}
-
-- (void) showImportPresetDialog
-{
-    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
-    
-    if (_alertController) {
         
-        [self dismissAlert];
-        _alertController = nil;
-    }
-    
-    NSString * bundleName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
-    NSString * msg = [NSString stringWithFormat:@"Import preset from %@?", bundleName];
-    
-    _alertController = [UIAlertController alertControllerWithTitle:@"Preset info"
-                                                           message:msg
-                                                    preferredStyle:UIAlertControllerStyleAlert];
-    
-    HiFiToyDevice * dev = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                           style:UIAlertActionStyleDestructive
-                                                         handler:^(UIAlertAction * _Nonnull action) {
-                                                             [dev.preset storeToPeripheral];
-                                                         }];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok"
-                                                       style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction * _Nonnull action) {
-        [dev importPreset:^() {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
-        }];
+        UITextField *pairCode = self.alertController.textFields.lastObject;
+        if (![pairCode.text isEqualToString:@""]) {
+            HiFiToyDevice * device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
+            device.pairingCode = [pairCode.text intValue];
+            [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+                                                             
+            //send pairing code
+            [[HiFiToyControl sharedInstance] startPairedProccess:device.pairingCode];
+                                                         
+        } else {
+            [[self lastViewController] presentViewController:self.alertController animated:YES completion:nil];
+        }
     }];
     
     [_alertController addAction:cancelAction];
     [_alertController addAction:okAction];
     
-    [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
+    [[self lastViewController] presentViewController:_alertController animated:YES completion:nil];
 }
 
-- (void) showEnergySyncDialog
-{
-    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+- (void) showImportPresetDialog {
+    NSString * bundleName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+    NSString * msg = [NSString stringWithFormat:@"Import preset from %@?", bundleName];
     
-    if (_alertController) {
+    __block HiFiToyDevice * dev = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
+    
+    [self showDialog:@"Preset info"
+                 msg:msg
+               okBtn:@"Ok"
+           cancelBtn:@"Cancel"
+        okBtnHandler:^(UIAlertAction * action) { // import preset
         
-        [self dismissAlert];
-        _alertController = nil;
-    }
-    
-    _alertController = [UIAlertController alertControllerWithTitle:@"Info"
-                                                           message:NSLocalizedString(@"Are you sure want to sync energy manager?", @"")
-                                                    preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                           style:UIAlertActionStyleDestructive
-                                                         handler:nil];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Sync"
-                                                       style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction * _Nonnull action) {
-                                                         
-                                                         [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] sendEnergyConfig];
-                                                         [self showAlert:@"Energy manager is syncronized."];
-                                                     }];
-    
-    [_alertController addAction:cancelAction];
-    [_alertController addAction:okAction];
-    
-    [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
-}
-
-- (void) showBiquadCoefSyncDialog:(Biquad *)biquad {
-    UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
-    
-    if (_alertController) {
+        [dev importPreset:^() {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
+        }];
         
-        [self dismissAlert];
-        _alertController = nil;
     }
+    cancelBtnHandler:^(UIAlertAction * action) { // store preset
+        [dev.preset storeToPeripheral];
     
-    _alertController = [UIAlertController alertControllerWithTitle:@"Info"
-                                                           message:NSLocalizedString(@"Are you sure want to sync biquad coefficients?", @"")
-                                                    preferredStyle:UIAlertControllerStyleAlert];
+    }];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                           style:UIAlertActionStyleDestructive
-                                                         handler:nil];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Sync"
-                                                       style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction * _Nonnull action) {
-                                                         
-                                                         [biquad sendWithResponse:YES];
-                                                         [self showAlert:@"Biquad coefficients are syncronized."];
-                                                     }];
-    
-    [_alertController addAction:cancelAction];
-    [_alertController addAction:okAction];
-    
-    [navigation.viewControllers.lastObject presentViewController:_alertController animated:YES completion:nil];
 }
 
 @end

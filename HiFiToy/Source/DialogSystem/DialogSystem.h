@@ -12,27 +12,32 @@
 
 @interface DialogSystem : NSObject
 
-@property (nonatomic) UIAlertController * alertController;
-@property (nonatomic) UIAlertController * progressController;
+@property (nonatomic, readonly) UIAlertController * _Nullable alertController;
+@property (nonatomic, readonly) UIAlertController * _Nullable progressController;
 
 
-+ (DialogSystem *) sharedInstance;
++ (DialogSystem * _Nonnull) sharedInstance;
 
 - (BOOL) isAlertVisible;
 - (void) dismissAlert;
-- (void) showAlert:(NSString *)msg;
+
+- (void) showDialog:(NSString * _Nonnull)title
+                msg:(NSString * _Nonnull)msg
+              okBtn:(NSString * _Nullable)okBtn
+          cancelBtn:(NSString * _Nullable)cancelBtn
+       okBtnHandler:(void (^ __nullable)(UIAlertAction * _Nonnull action))okHandler
+   cancelBtnHandler:(void (^ __nullable)(UIAlertAction * _Nonnull action))cancelHandler;
+
+- (void) showAlert:(NSString * _Nonnull)msg;
 
 - (BOOL) isProgressDialogVisible;
 - (void) dismissProgressDialog;
 - (void) dismissProgressDialog:(void (^ __nullable)(void))completion;
-- (void) showProgressDialog:(NSString *)title;
+- (void) showProgressDialog:(NSString * _Nonnull)title;
 
 - (void) showNewPairCodeInput;
 - (void) showPairCodeInput;
 
 - (void) showImportPresetDialog;
-
-- (void) showEnergySyncDialog;
-- (void) showBiquadCoefSyncDialog:(Biquad *)biquad;
 
 @end

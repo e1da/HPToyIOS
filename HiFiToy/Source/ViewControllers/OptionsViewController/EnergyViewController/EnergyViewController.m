@@ -94,7 +94,19 @@
 }
 
 - (IBAction)syncEnergyConfig:(id)sender {
-    [[DialogSystem sharedInstance] showEnergySyncDialog];
+    DialogSystem * dialog = [DialogSystem sharedInstance];
+    
+    [dialog showDialog:@"Info"
+                 msg:NSLocalizedString(@"Are you sure want to sync energy manager?", @"")
+               okBtn:@"Sync"
+           cancelBtn:@"Cancel"
+        okBtnHandler:^(UIAlertAction * action) {
+        
+        [[[HiFiToyControl sharedInstance] activeHiFiToyDevice] sendEnergyConfig];
+        [dialog showAlert:@"Energy manager is syncronized."];
+        
+    }
+    cancelBtnHandler:nil];
     
 }
 
