@@ -55,17 +55,14 @@
     uint8_t * valP = (uint8_t *)bin.bytes;
     
     self.addr = valP[0];
-    uint8_t l = valP[1];
+    uint8_t length = valP[1];
     
-    NSRange range;
-    range.location = 2;
-    range.length = bin.length - range.location;
-    
-    if (range.length < l) {
+    if (bin.length < length + 2) {
         full = NO;
+        length = bin.length - 2;
     }
     
-    _data = [bin subdataWithRange:range];
+    _data = [bin subdataWithRange:NSMakeRange(2, length)];
     return full;
 }
 
