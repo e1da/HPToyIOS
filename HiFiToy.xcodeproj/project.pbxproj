@@ -70,6 +70,8 @@
 		D33A25A120CA9A2C008A94EF /* PresetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */; };
 		D33A25A420CABC9C008A94EF /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */; };
 		D33A25A820CABF19008A94EF /* DeviceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33A25A620CABF19008A94EF /* DeviceList.plist */; };
+		D33DE1AE266A6830009C24D9 /* AmModeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33DE1AD266A6830009C24D9 /* AmModeViewController.m */; };
+		D33DE1AF266A6830009C24D9 /* AmModeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D33DE1AD266A6830009C24D9 /* AmModeViewController.m */; };
 		D33DF344263D52EB001A87BB /* HiFiToyOutputMode.m in Sources */ = {isa = PBXBuildFile; fileRef = D33DF343263D52EB001A87BB /* HiFiToyOutputMode.m */; };
 		D33DF348264569FB001A87BB /* HiFiToyOutputMode.m in Sources */ = {isa = PBXBuildFile; fileRef = D33DF343263D52EB001A87BB /* HiFiToyOutputMode.m */; };
 		D33DF34C264569FF001A87BB /* HiFiToyOutputMode.h in Sources */ = {isa = PBXBuildFile; fileRef = D33DF342263D52EB001A87BB /* HiFiToyOutputMode.h */; };
@@ -373,6 +375,8 @@
 		D33A25A020CA9A2C008A94EF /* PresetDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetDetailViewController.m; sourceTree = "<group>"; };
 		D33A25A320CABC9C008A94EF /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		D33A25A620CABF19008A94EF /* DeviceList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceList.plist; sourceTree = "<group>"; };
+		D33DE1AC266A6830009C24D9 /* AmModeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmModeViewController.h; sourceTree = "<group>"; };
+		D33DE1AD266A6830009C24D9 /* AmModeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AmModeViewController.m; sourceTree = "<group>"; };
 		D33DF342263D52EB001A87BB /* HiFiToyOutputMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HiFiToyOutputMode.h; sourceTree = "<group>"; };
 		D33DF343263D52EB001A87BB /* HiFiToyOutputMode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HiFiToyOutputMode.m; sourceTree = "<group>"; };
 		D33DF3542645A0EC001A87BB /* OutputModeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OutputModeViewController.h; sourceTree = "<group>"; };
@@ -628,6 +632,7 @@
 		D33A258420CA89E6008A94EF /* OptionsViewController */ = {
 			isa = PBXGroup;
 			children = (
+				D33DE1AB266A6808009C24D9 /* AmModeViewController */,
 				D33DF3502645A0AC001A87BB /* OutputModeViewController */,
 				D30257B522AE6F8A008CF0C9 /* PresetUrlImportViewController */,
 				D30257B022AE6B99008CF0C9 /* PresetTextImportViewController */,
@@ -702,6 +707,15 @@
 				D33A25A620CABF19008A94EF /* DeviceList.plist */,
 			);
 			path = Res;
+			sourceTree = "<group>";
+		};
+		D33DE1AB266A6808009C24D9 /* AmModeViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D33DE1AC266A6830009C24D9 /* AmModeViewController.h */,
+				D33DE1AD266A6830009C24D9 /* AmModeViewController.m */,
+			);
+			path = AmModeViewController;
 			sourceTree = "<group>";
 		};
 		D33DF3502645A0AC001A87BB /* OutputModeViewController */ = {
@@ -1281,6 +1295,7 @@
 				D33A255220C5728E008A94EF /* DrcTimeConst.m in Sources */,
 				D39C3CC920BEB6FB00BDC1A0 /* Volume.m in Sources */,
 				D30FF87A21650820007FA50D /* FilterLabel.m in Sources */,
+				D33DE1AE266A6830009C24D9 /* AmModeViewController.m in Sources */,
 				D33A255520C5D4B3008A94EF /* HiFiToyPreset.m in Sources */,
 				D3B969AA2339682B002D90BC /* AdjustBackFRViewController.m in Sources */,
 				D33A259220CA8FF4008A94EF /* DeviceNameViewController.m in Sources */,
@@ -1387,6 +1402,7 @@
 				D307EB1322147D6200ACE7A3 /* BaseCell.m in Sources */,
 				D354926D220869DB00063768 /* FoundCell.h in Sources */,
 				D354926E220869DB00063768 /* FoundCell.m in Sources */,
+				D33DE1AF266A6830009C24D9 /* AmModeViewController.m in Sources */,
 				D354926F220869DB00063768 /* DiscoveryViewController.h in Sources */,
 				D3549270220869DB00063768 /* DiscoveryViewController.m in Sources */,
 				D3549271220869DB00063768 /* MainViewController.h in Sources */,
