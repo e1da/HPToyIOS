@@ -205,7 +205,11 @@
                   checkName:(BOOL)checkName resultHandler:(void (^)(NSString * presetName, NSString * error))handler {
     didImportHandler = handler;
     
-    void (^h)(HiFiToyPreset *, NSString *) = ^(HiFiToyPreset * p, NSString * error) {
+    HiFiToyPreset * preset = [HiFiToyPreset getDefault];
+    [preset importFromXmlWithData:data
+                         withName:name
+                    resultHandler:^(HiFiToyPreset * _Nonnull p, NSString * _Nullable error) {
+        
         if (error){
             NSLog(@"Add %@ official preset is not success.", name);
                             
@@ -215,10 +219,8 @@
         }
         
         if (self->didImportHandler) self->didImportHandler(p.presetName, error);
-    };
+    }];
     
-    HiFiToyPreset * preset = [HiFiToyPreset getDefault];
-    [preset importFromXmlWithData:data withName:name checkName:checkName resultHandler:h];
  
 }
 
@@ -234,6 +236,7 @@
         }
         [[DialogSystem sharedInstance] showAlert:msg];
     }];
+ 
 }
 
 -(void) description{

@@ -38,9 +38,8 @@
 - (BOOL) importFromXml:(NSURL * _Nullable)url
          resultHandler:(void (^ __nullable)(HiFiToyPreset * _Nonnull p, NSString * _Nullable error))resultHandler;
 
-- (BOOL) importFromXmlWithData:(NSData *)data
-                      withName:(NSString *)name
-                     checkName:(BOOL)checkName
-                 resultHandler:(void (^)(HiFiToyPreset *, NSString *))resultHandler;
+- (BOOL) importFromXmlWithData:(NSData * _Nonnull)data
+                      withName:(NSString * _Nonnull)name
+                 resultHandler:(void (^ __nullable)(HiFiToyPreset * _Nonnull p, NSString * _Nullable error))resultHandler;
 
 @end

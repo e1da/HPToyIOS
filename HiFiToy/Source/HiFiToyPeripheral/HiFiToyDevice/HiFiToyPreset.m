@@ -286,28 +286,6 @@
     [xmlParser pushDelegate:self];*/
 }
 
-- (NSString *) checkPresetName:(NSString *)name {
-    if ([[[[HiFiToyControl sharedInstance] activeHiFiToyDevice] activeKeyPreset] isEqualToString:name]) {
-        NSString * msg = [NSString stringWithFormat:@"Preset %@ is exist and active. Import is not success.", name];
-        [[DialogSystem sharedInstance] showAlert:msg];
-        return nil;
-    }
-    
-    if ([[HiFiToyPresetList sharedInstance] presetWithName:name]) {
-        int index = 1;
-        NSString * modifyName;
-        do {
-            modifyName = [name stringByAppendingString:[NSString stringWithFormat:@"_%d", index++]];
-        } while ([[HiFiToyPresetList sharedInstance] presetWithName:modifyName]);
-        
-        
-        /*NSString * msg = [NSString stringWithFormat:@"Preset %@ is exist and active. And we saved it with %@ name", name, modifyName];
-        [[DialogSystem sharedInstance] showAlert:msg];*/
-        return modifyName;
-    }
-    return name;
-}
-
 -(BOOL) importFromXml:(NSURL *)url
         resultHandler:(void (^)(HiFiToyPreset * p , NSString * error))resultHandler {
     
@@ -327,15 +305,10 @@
     return YES;
 }
 
--(BOOL) importFromXmlWithData:(NSData *)data
-                     withName:(NSString *)name
-                    checkName:(BOOL)checkName
-                resultHandler:(void (^)(HiFiToyPreset *, NSString *))resultHandler {
-    if ((!name) || (!data)) return NO;
-    if (checkName) {
-        name = [self checkPresetName:name];
-        if (!name) return NO;
-    }
+-(BOOL) importFromXmlWithData:(NSData * _Nonnull)data
+                     withName:(NSString * _Nonnull)name
+                resultHandler:(void (^)(HiFiToyPreset * p, NSString * error))resultHandler {
+    
     self.presetName = name;
     xmlImportResultHandler = resultHandler;
     
