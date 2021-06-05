@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HiFiToyObject.h"
+#import "HiFiToyPreset.h"
 #import "Biquad.h"
 
 @interface DialogSystem : NSObject
@@ -53,7 +54,8 @@
 - (void) showNewPairCodeInput;
 - (void) showPairCodeInput;
 
-- (void) showSavePresetDialog:(void (^ __nullable)(UIAlertAction * _Nullable action))okHandler;
+- (void) showSavePresetDialog:(HiFiToyPreset * _Nonnull)preset
+                    okHandler:(void (^ __nullable)(void))okHandler;
 - (void) showImportPresetDialog;
 
 @end

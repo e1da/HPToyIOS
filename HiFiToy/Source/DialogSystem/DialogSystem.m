@@ -264,12 +264,39 @@
     } cancelBtnHandler:nil];
 }
 
-- (void) showSavePresetDialog:(void (^ __nullable)(UIAlertAction *action))okHandler {
+- (void) showSavePresetDialog:(HiFiToyPreset *)preset okHandler:(void (^ __nullable)(void))okHandler {
     [self showTextDialog:@""
                      msg:NSLocalizedString(@"Please input preset name:", @"")
                    okBtn:@"Ok"
                cancelBtn:@"Cancel"
-            okBtnHandler:okHandler
+            okBtnHandler:^(UIAlertAction *action) {
+        
+        UITextField *name = [self.alertController textFields][0];
+        preset.presetName = (![name.text isEqualToString:@""]) ? name.text : @" ";
+        
+        if ([[HiFiToyPresetList sharedInstance] isPresetExist:preset.presetName] == NO) {
+            [[HiFiToyPresetList sharedInstance] setPreset:preset];
+        
+            if (okHandler) okHandler();
+            
+        } else {
+            
+            NSString * msg = [NSString stringWithFormat:@"Preset with name \"%@\" already exists. Do you want to replace it?", preset.presetName ];
+            
+            [[DialogSystem sharedInstance] showDialog:@"Warning"
+                                                  msg:msg
+                                                okBtn:@"Replace"
+                                            cancelBtn:@"Cancel"
+                                         okBtnHandler:^(UIAlertAction * _Nonnull action) {
+                [[HiFiToyPresetList sharedInstance] setPreset:preset];
+                if (okHandler) okHandler();
+                
+            } cancelBtnHandler:nil];
+            
+        }
+    
+    }
+    
         cancelBtnHandler:nil];
 }
 

@@ -226,7 +226,11 @@ typedef enum {
             HiFiToyPreset * mergePreset = [self merge];
             if (mergePreset) {
                 mergePreset.presetName = [[NSDate date] descriptionWithLocale:[NSLocale systemLocale]];
-                [self showSavePresetDialog:mergePreset];
+                
+                [[DialogSystem sharedInstance] showSavePresetDialog:mergePreset okHandler:^{
+                    [self.navigationController popViewControllerAnimated:YES];
+                }];
+                
             } else {
                 [self resetMergeTool];
             }
@@ -299,33 +303,6 @@ typedef enum {
             return @"err";
     }
     return @"err";
-}
-
-- (void) showSavePresetDialog:(HiFiToyPreset *)preset {
-    [[DialogSystem sharedInstance] showSavePresetDialog:^(UIAlertAction *action) {
-        
-        UITextField *name = [[[DialogSystem sharedInstance] alertController] textFields][0];
-        preset.presetName = (![name.text isEqualToString:@""]) ? name.text : @" ";
-        
-        if ([[HiFiToyPresetList sharedInstance] isPresetExist:preset.presetName] == NO) {
-            [[HiFiToyPresetList sharedInstance] setPreset:preset];
-        
-            [self.navigationController popViewControllerAnimated:YES];
-            
-        } else {
-            
-            NSString * msg = [NSString stringWithFormat:@"Preset with name \"%@\" already exists. Do you want to replace it?", preset.presetName ];
-            
-            [[DialogSystem sharedInstance] showDialog:@"Warning"
-                                                  msg:msg
-                                                okBtn:@"Replace"
-                                            cancelBtn:@"Cancel"
-                                         okBtnHandler:^(UIAlertAction * _Nonnull action) {
-                [[HiFiToyPresetList sharedInstance] setPreset:preset];
-            } cancelBtnHandler:nil];
-            
-        }
-    }];
 }
 
 
