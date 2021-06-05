@@ -412,7 +412,7 @@
     memcpy(data, coefs, 20);
     
     HiFiToyDataBuf * dataBuf0 = [HiFiToyDataBuf dataBufWithAddr:self.address0 withLength:20 withData:data];
-    HiFiToyDataBuf * dataBuf1 = [HiFiToyDataBuf dataBufWithAddr:self.address0 withLength:20 withData:data];
+    HiFiToyDataBuf * dataBuf1 = [HiFiToyDataBuf dataBufWithAddr:self.address1 withLength:20 withData:data];
     
     if (self.address1 != 0) {
         return @[dataBuf0, dataBuf1];
