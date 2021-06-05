@@ -20,5 +20,6 @@
 //outlets
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel_outl;
 @property (weak, nonatomic) IBOutlet UITableViewCell *outputModeCell_outl;
+@property (weak, nonatomic) IBOutlet UITableViewCell *amModeCell_outl;
 
 @end

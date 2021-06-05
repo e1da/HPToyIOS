@@ -1112,6 +1112,7 @@
                         <barButtonItem key="backBarButtonItem" title="Back" id="75q-tX-hNN"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="amModeCell_outl" destination="ecj-3y-ppB" id="G0v-Ai-YYc"/>
                         <outlet property="nameLabel_outl" destination="1yK-jZ-GpR" id="S5D-Sh-xOi"/>
                         <outlet property="outputModeCell_outl" destination="jFp-cm-33W" id="ymg-dn-PWu"/>
                     </connections>

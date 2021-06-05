@@ -67,8 +67,10 @@
     
     if (self.hiFiToyDevice.outputMode.hwSupported) {
         _outputModeCell_outl.hidden = NO;
+        _amModeCell_outl.hidden = NO;
     } else {
         _outputModeCell_outl.hidden = YES;
+        _amModeCell_outl.hidden = YES;
     }
     
 }
