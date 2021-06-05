@@ -110,24 +110,15 @@
         
         if (indexPath.row == 1){//restore factory settings
             
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"", @"")
-                                                                                     message:NSLocalizedString(@"Are you sure you want to reset to factory defaults?", @"")
-                                                                              preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                                   style:UIAlertActionStyleCancel
-                                                                 handler:nil];
+            [[DialogSystem sharedInstance] showDialog:@""
+                                                  msg:NSLocalizedString(@"Are you sure you want to reset to factory defaults?", @"")
+                                                okBtn:@"Yes"
+                                            cancelBtn:@"Cancel"
+                                         okBtnHandler:^(UIAlertAction * _Nonnull action) {
+                
+                [self.hiFiToyDevice restoreFactory];
+            } cancelBtnHandler:nil];
             
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Yes"
-                                                               style:UIAlertActionStyleDefault
-                                                             handler:^(UIAlertAction * _Nonnull action) {
-                                                                 
-                                                                 [self.hiFiToyDevice restoreFactory];
-                                                            }];
-            
-            [alertController addAction:cancelAction];
-            [alertController addAction:okAction];
-            
-            [self presentViewController:alertController animated:YES completion:nil];
         }
         if (indexPath.row == 2){//change pairing code
             

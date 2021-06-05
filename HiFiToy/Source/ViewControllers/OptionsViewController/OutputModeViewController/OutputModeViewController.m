@@ -8,6 +8,7 @@
 
 #import "OutputModeViewController.h"
 #import "HiFiToyControl.h"
+#import "DialogSystem.h"
 
 @interface OutputModeViewController ()
 
@@ -65,28 +66,21 @@
     HiFiToyDevice * dev = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
     
     if (_outputSegmentedOutlet.selectedSegmentIndex == BALANCE_OUT_MODE) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@""
-                                                               message:@"Please be careful. Using unbalance headphone with PDV2.1 in balance mode is dangerous. Are you sure want to set balance output mode?"
-                                                        preferredStyle:UIAlertControllerStyleAlert];
+        NSString * msg = @"Please be careful. Using unbalance headphone with PDV2.1 in balance mode is dangerous. Are you sure want to set balance output mode?";
         
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                               style:UIAlertActionStyleDestructive
-                                                             handler:^(UIAlertAction * _Nonnull action) {
+        [[DialogSystem sharedInstance] showDialog:@""
+                                              msg:msg
+                                            okBtn:@"Set"
+                                        cancelBtn:@"Cancel"
+                                     okBtnHandler:^(UIAlertAction * _Nonnull action) {
+            
+            dev.outputMode.value = self.outputSegmentedOutlet.selectedSegmentIndex;
+            [dev.outputMode sendToDsp];
+        }
+                                 cancelBtnHandler:^(UIAlertAction * _Nonnull action) {
             [self setupOutlets];
         }];
         
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Set"
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:^(UIAlertAction * _Nonnull action) {
-            dev.outputMode.value = self.outputSegmentedOutlet.selectedSegmentIndex;
-            [dev.outputMode sendToDsp];
-            
-        }];
-        
-        [alertController addAction:cancelAction];
-        [alertController addAction:okAction];
-        
-        [self presentViewController:alertController animated:YES completion:nil];
     } else {
     
         dev.outputMode.value = _outputSegmentedOutlet.selectedSegmentIndex;

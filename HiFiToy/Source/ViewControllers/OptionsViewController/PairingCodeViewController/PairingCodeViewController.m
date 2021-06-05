@@ -7,6 +7,7 @@
 //
 
 #import "PairingCodeViewController.h"
+#import "DialogSystem.h"
 
 @implementation PairingCodeViewController
 
@@ -56,29 +57,20 @@
     if (indexPath.section == 0){
         if (indexPath.row == 1){//change pairing code
             
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", @"")
-                                                                                     message:NSLocalizedString(@"Are You sure want to change Pairing Code?", @"")
-                                                                              preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                                   style:UIAlertActionStyleCancel
-                                                                 handler:nil];
-            
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Yes"
-                                                               style:UIAlertActionStyleDefault
-                                                             handler:^(UIAlertAction * _Nonnull action) {
-                                                                 
-                                                                 if (!self.hiFiToyDevice) return;
-                                                                 self.hiFiToyDevice.pairingCode = [self.pairingCodeTextField_outl.text intValue];
+            [[DialogSystem sharedInstance] showDialog:NSLocalizedString(@"Warning", @"")
+                                                  msg:NSLocalizedString(@"Are You sure want to change Pairing Code?", @"")
+                                                okBtn:@"Yes"
+                                            cancelBtn:@"Cancel"
+                                         okBtnHandler:^(UIAlertAction * _Nonnull action) {
+                
+                if (!self.hiFiToyDevice) return;
+                self.hiFiToyDevice.pairingCode = [self.pairingCodeTextField_outl.text intValue];
 
-                                                                 [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-                                                                 
-                                                                 [[HiFiToyControl sharedInstance] sendNewPairingCode:self.hiFiToyDevice.pairingCode];
-                                                             }];
-            
-            [alertController addAction:cancelAction];
-            [alertController addAction:okAction];
-            
-            [self presentViewController:alertController animated:YES completion:nil];
+                [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+                
+                [[HiFiToyControl sharedInstance] sendNewPairingCode:self.hiFiToyDevice.pairingCode];
+                
+            } cancelBtnHandler:nil];
             
         }
     }

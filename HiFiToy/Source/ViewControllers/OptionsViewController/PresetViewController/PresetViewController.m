@@ -11,6 +11,7 @@
 #import "HiFiToyControl.h"
 #import "PresetCell.h"
 #import "MergeToolCell.h"
+#import "DialogSystem.h"
 
 @implementation PresetViewController
 
@@ -199,21 +200,18 @@
             return;
         }
   
-        
         //show dialog
-        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to load '%@' preset?", @""),
+        DialogSystem * dialog = [DialogSystem sharedInstance];
+        
+        NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to load '%@' preset?", @""),
                              NSLocalizedString(preset.presetName, @"")];
         
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", @"")
-                                                                                 message:message
-                                                                          preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                               style:UIAlertActionStyleCancel
-                                                             handler:nil];
-        
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Yes"
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:^(UIAlertAction * _Nonnull action) {
+        [dialog showDialog:NSLocalizedString(@"Warning", @"")
+                       msg:msg
+                     okBtn:@"Yes"
+                 cancelBtn:@"Cancel"
+              okBtnHandler:^(UIAlertAction * _Nonnull action) {
+            
             self.hiFiToyDevice.activeKeyPreset = preset.presetName;
             [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
             
@@ -224,12 +222,10 @@
             [self.hiFiToyDevice.preset storeToPeripheral];
                                                              
             [self.tableView reloadData];
-        }];
+            
+        } cancelBtnHandler:nil];
         
-        [alertController addAction:cancelAction];
-        [alertController addAction:okAction];
         
-        [self presentViewController:alertController animated:YES completion:nil];
     } else { // open merge tool
         
     }
