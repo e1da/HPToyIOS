@@ -20,6 +20,8 @@
 - (id) init {
     self = [super init];
     if (self) {
+        list = [[NSMutableArray alloc] init];
+        
         [self openPresetListFromFile];
     }
     return self;
@@ -39,18 +41,13 @@
                                                               NSUserDomainMask, YES) objectAtIndex:0];
     NSString * plistPath = [rootPath stringByAppendingPathComponent:@"PresetList.plist"];
     
-    list = [[NSMutableArray alloc] init];
-    
     if ([[NSFileManager defaultManager] fileExistsAtPath:plistPath]){
         NSData * data = [NSData dataWithContentsOfFile:plistPath];
         list = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     }
     
     if ([self isPresetExist:@"No processing"] == NO) {
-        NSMutableArray * tempList = [list copy];
-        
-        [list addObject:[HiFiToyPreset getDefault]];
-        [list addObjectsFromArray:[tempList copy]];
+        [list insertObject:[HiFiToyPreset getDefault] atIndex:0];
     }
     
     if ([self isFirstLaunchAfterUpdate]) {
