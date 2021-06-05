@@ -57,7 +57,8 @@ typedef struct {                            // offset
 
 /* -------------- export/import methods ------------- */
 - (void) exportAll;
-- (void) exportWithDialog:(NSString *)title;
+- (void) exportWithDialog:(NSString *)title
+            finishHandler:(void (^ __nullable)(void))finishHandler;
 - (void) exportPreset;
 - (void) exportPresetWithDialog:(NSString *)title;
 

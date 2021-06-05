@@ -46,7 +46,7 @@
 - (void) sendAdvertiseMode;
 - (void) updateAdvertiseMode;
 
-- (void) restoreFactory;
+- (void) restoreFactory:(void (^ __nullable)(void))finishHandler;
 - (void) importPreset:(void (^ __nullable)(void))finishHandler;
 
 @end

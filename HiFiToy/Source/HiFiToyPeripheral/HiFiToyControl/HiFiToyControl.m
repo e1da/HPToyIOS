@@ -372,9 +372,9 @@
                 } else {
                     NSLog(@"CHECK_FIRMWARE_FAIL");
                     
-                    /*[[DialogSystem sharedInstance] showAlert:NSLocalizedString(@"Dsp Firmware is corrupted! Press 'Restore Factory Settings' for solving problem!", @"")];*/
-                    [_activeHiFiToyDevice restoreFactory];
-                    
+                    [_activeHiFiToyDevice restoreFactory:^{
+                        [self checkFirmareWriteFlag];
+                    }];
                 }
                 break;
             case GET_VERSION:
@@ -387,7 +387,9 @@
                     [_activeHiFiToyDevice updateAudioSource];
                 } else {
                     NSLog(@"GET_VERSION_FAIL");
-                    [_activeHiFiToyDevice restoreFactory];
+                    [_activeHiFiToyDevice restoreFactory:^{
+                        [self getVersion];
+                    }];
                 }
                 break;
             }
@@ -483,16 +485,8 @@
 
 -(void) keyfobUpdatePacketLength:(uint)remainPacketLength
 {
-    DialogSystem * dialog = [DialogSystem sharedInstance];
-    
-    if (remainPacketLength != 0){// if queue isn`t empty
-        if (([dialog isProgressDialogVisible]) &&
-            (![dialog.progressController.title isEqualToString:NSLocalizedString(@"Import Preset...", @"")])) {
-            dialog.progressController.message = [NSString stringWithFormat:@"Left %d packets.", remainPacketLength];
-        }
-    } else {
-        [dialog dismissProgressDialog];
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateBlePacketLengthNotification"
+                                                        object:@(remainPacketLength)];
 }
 
 @end

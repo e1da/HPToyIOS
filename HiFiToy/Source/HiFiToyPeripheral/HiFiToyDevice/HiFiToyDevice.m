@@ -132,7 +132,7 @@
     [[HiFiToyControl sharedInstance] sendCommonPacketToDsp:&packet];
 }
 
-- (void) restoreFactory {
+- (void) restoreFactory:(void (^ __nullable)(void))finishHandler {
     //set default preset and save to file
     self.pairingCode        = 0;
     self.activeKeyPreset    = @"No processing";
@@ -146,7 +146,8 @@
     
     //store to peripheral
     PeripheralData * pd = [[PeripheralData alloc] initWithDevice:self];
-    [pd exportWithDialog:NSLocalizedString(@"Restore factory", @"")];
+    [pd exportWithDialog:NSLocalizedString(@"Restore factory", @"")
+           finishHandler:finishHandler];
 }
 
 - (void) importPreset:(void (^ __nullable)(void))finishHandler  {

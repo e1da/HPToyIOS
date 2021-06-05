@@ -116,7 +116,7 @@
                                             cancelBtn:@"Cancel"
                                          okBtnHandler:^(UIAlertAction * _Nonnull action) {
                 
-                [self.hiFiToyDevice restoreFactory];
+                [self.hiFiToyDevice restoreFactory:nil];
             } cancelBtnHandler:nil];
             
         }

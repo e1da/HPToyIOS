@@ -20,8 +20,8 @@
 -(void) keyfobDidFailConnect;
 -(void) keyfobDidDisconnected;
 
--(void) keyfobDidWrite:(BlePacket *)p error:(NSError *)error;
--(void) keyfobDidUpdateValue:(NSData *)value;
+-(void) keyfobDidWrite:(BlePacket * _Nonnull)p error:(NSError * _Nullable)error;
+-(void) keyfobDidUpdateValue:(NSData * _Nullable)value;
 
 -(void) keyfobUpdatePacketLength:(uint)remainPacketLength;
 

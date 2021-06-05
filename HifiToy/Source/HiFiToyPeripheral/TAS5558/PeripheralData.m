@@ -204,8 +204,31 @@
     
 }
 
-- (void) exportWithDialog:(NSString *)title {
+- (void) exportWithDialog:(NSString *)title
+            finishHandler:(void (^ __nullable)(void))finishHandler {
+    
     if (![[HiFiToyControl sharedInstance] isConnected]) return;
+    
+    __block __weak id observer;
+    observer = [[NSNotificationCenter defaultCenter] addObserverForName:@"UpdateBlePacketLengthNotification"
+                                                                 object:nil
+                                                                  queue:nil
+                                                             usingBlock:^(NSNotification * note) {
+        int remainPacketLength = [[note object] intValue];
+        
+        DialogSystem * dialog = [DialogSystem sharedInstance];
+        
+        if (remainPacketLength != 0){// if queue isn`t empty
+            if ([dialog isProgressDialogVisible]) {
+                dialog.progressController.message = [NSString stringWithFormat:@"Left %d packets.", remainPacketLength];
+            }
+        } else {
+            [[NSNotificationCenter defaultCenter] removeObserver:observer];
+            [dialog dismissProgressDialog:^{
+                if (finishHandler) finishHandler();
+            }];
+        }
+    }];
     
     [[DialogSystem sharedInstance] showProgressDialog:title];
     [self exportAll];
@@ -226,6 +249,25 @@
 
 - (void) exportPresetWithDialog:(NSString *)title {
     if (![[HiFiToyControl sharedInstance] isConnected]) return;
+    
+    __block __weak id observer;
+    observer = [[NSNotificationCenter defaultCenter] addObserverForName:@"UpdateBlePacketLengthNotification"
+                                                                 object:nil
+                                                                  queue:nil
+                                                             usingBlock:^(NSNotification * note) {
+        int remainPacketLength = [[note object] intValue];
+        
+        DialogSystem * dialog = [DialogSystem sharedInstance];
+        
+        if (remainPacketLength != 0){// if queue isn`t empty
+            if ([dialog isProgressDialogVisible]) {
+                dialog.progressController.message = [NSString stringWithFormat:@"Left %d packets.", remainPacketLength];
+            }
+        } else {
+            [[NSNotificationCenter defaultCenter] removeObserver:observer];
+            [dialog dismissProgressDialog];
+        }
+    }];
     
     [[DialogSystem sharedInstance] showProgressDialog:title];
     [self exportPreset];
@@ -294,7 +336,7 @@
                 float progress = (float)importData.length / (self->header.dataBytesLength - PERIPHERAL_CONFIG_LENGTH) * 100;
                 if (progress > 100) progress = 100;
                 
-                dialog.progressController.message = [NSString stringWithFormat:@"Progress %d%%", (int)progress];
+                dialog.progressController.message = [NSString stringWithFormat:@"%d%%", (int)progress];
             }
             
             //check is all data imported
