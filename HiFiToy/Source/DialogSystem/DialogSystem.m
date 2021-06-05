@@ -8,6 +8,7 @@
 
 #import "DialogSystem.h"
 #import "HiFiToyDeviceList.h"
+#import "HiFiToyPresetList.h"
 #import "HiFiToyControl.h"
 
 @implementation DialogSystem
@@ -250,6 +251,10 @@
         
     }
     cancelBtnHandler:^(UIAlertAction * action) { // store preset
+        //update checksum and save
+        [dev.preset updateChecksum];
+        [[HiFiToyPresetList sharedInstance] setPreset:dev.preset];
+        
         [dev.preset storeToPeripheral];
     
     }];

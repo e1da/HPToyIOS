@@ -217,6 +217,10 @@
             self.hiFiToyDevice.activeKeyPreset = preset.presetName;
             [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
             
+            //update checksum and save
+            [self.hiFiToyDevice.preset updateChecksum];
+            [self->hiFiToyPresetList setPreset:self.hiFiToyDevice.preset];
+            
             [self.hiFiToyDevice.preset storeToPeripheral];
                                                              
             [self.tableView reloadData];
