@@ -181,40 +181,24 @@
     return nil;
 }
 
-- (void) importPresetFromUrl:(NSURL *)url checkName:(BOOL)checkName
-               resultHandler:(void (^)(NSString * presetName, NSString * error))handler {
-    didImportHandler = handler;
-    
-    void (^h)(HiFiToyPreset *, NSString *) = ^(HiFiToyPreset * p, NSString * error) {
-        if (error){
-            NSLog(@"Add %@ official preset is not success.", p.presetName);
-                            
-        } else {
-            [self setPreset:p];
-            NSLog(@"Added %@ official preset.", p.presetName);
-        }
-        
-        if (self->didImportHandler) self->didImportHandler(p.presetName, error);
-    };
+- (void) importPresetFromUrl:(NSURL *)url {
     
     HiFiToyPreset * preset = [HiFiToyPreset getDefault];
-    [preset importFromXml:url checkName:checkName resultHandler:h];
-
-}
-
-- (void) importPresetFromUrl:(NSURL *)url checkName:(BOOL)checkName {
-    [self importPresetFromUrl:url checkName:checkName resultHandler:^(NSString *presetName, NSString *error) {
+    [preset importFromXml:url resultHandler:^(HiFiToyPreset * _Nonnull p, NSString * _Nullable error) {
         NSString * msg;
         
         if (error){
             msg = [NSString stringWithFormat:@"Import preset is not success. %@ error", error ];
-            
+                            
         } else {
-            msg = [NSString stringWithFormat:@"'%@' preset was successfully added.", presetName];
+            [self setPreset:p]; // TODO : If preset is exists, what is?!
+            msg = [NSString stringWithFormat:@"'%@' preset was successfully added.", p.presetName];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
         }
+        
         [[DialogSystem sharedInstance] showAlert:msg];
     }];
+
 }
 
 - (void) importPresetFromData:(NSData *)data withName:(NSString *)name

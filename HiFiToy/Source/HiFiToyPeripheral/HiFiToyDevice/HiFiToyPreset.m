@@ -308,17 +308,14 @@
     return name;
 }
 
--(BOOL) importFromXml:(NSURL *)url checkName:(BOOL)checkName
-        resultHandler:(void (^)(HiFiToyPreset *, NSString *))resultHandler {
+-(BOOL) importFromXml:(NSURL *)url
+        resultHandler:(void (^)(HiFiToyPreset * p , NSString * error))resultHandler {
     
     ///get name for preset
     NSArray * fileNameArray = [url.lastPathComponent componentsSeparatedByString:@"."];
     NSString * fileName = [fileNameArray objectAtIndex:0];
-    
-    if (checkName) {
-        fileName = [self checkPresetName:fileName];
-    }
     if (!fileName) return NO;
+    
     self.presetName = fileName;
     xmlImportResultHandler = resultHandler;
     

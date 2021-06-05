@@ -15,7 +15,7 @@
 
 @interface HiFiToyPreset : NSObject <HiFiToyObject, NSCoding, NSCopying, XmlParserDelegate>
 
-@property NSString * presetName;
+@property NSString * _Nonnull presetName;
 @property uint16_t checkSum;
 
 // HiFiToy CHARACTERISTICS
@@ -35,8 +35,8 @@
 
 - (void) updateChecksum;
 
-- (BOOL) importFromXml:(NSURL *)url checkName:(BOOL)checkName
-         resultHandler:(void (^)(HiFiToyPreset *, NSString *))resultHandler;
+- (BOOL) importFromXml:(NSURL * _Nullable)url
+         resultHandler:(void (^ __nullable)(HiFiToyPreset * _Nonnull p, NSString * _Nullable error))resultHandler;
 
 - (BOOL) importFromXmlWithData:(NSData *)data
                       withName:(NSString *)name

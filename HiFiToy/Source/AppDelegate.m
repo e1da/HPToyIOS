@@ -44,7 +44,7 @@
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
     if (url) {        
-        [[HiFiToyPresetList sharedInstance] importPresetFromUrl:url checkName:YES];
+        [[HiFiToyPresetList sharedInstance] importPresetFromUrl:url]; // checkName:YES
 
         return YES;
     }
