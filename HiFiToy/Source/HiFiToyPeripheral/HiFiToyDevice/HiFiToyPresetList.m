@@ -11,7 +11,6 @@
 
 @interface HiFiToyPresetList() {
     NSMutableArray * list;
-    void (^didImportHandler)(NSString * presetName, NSString * error);
 }
 @end
 
@@ -106,7 +105,7 @@
                 
             if ([[NSFileManager defaultManager] fileExistsAtPath:path]){
                 NSData * data = [NSData dataWithContentsOfFile:path];
-                [self importPresetFromData:data withName:presetName checkName:NO resultHandler:nil];
+                [self importPresetFromData:data withName:presetName];
                     
             } else {
                 NSLog(@"%@ file not found", path);
@@ -201,9 +200,8 @@
 
 }
 
-- (void) importPresetFromData:(NSData *)data withName:(NSString *)name
-                  checkName:(BOOL)checkName resultHandler:(void (^)(NSString * presetName, NSString * error))handler {
-    didImportHandler = handler;
+- (void) importPresetFromData:(NSData *)data
+                     withName:(NSString *)name {
     
     HiFiToyPreset * preset = [HiFiToyPreset getDefault];
     [preset importFromXmlWithData:data
@@ -217,24 +215,6 @@
             [self setPreset:p];
             NSLog(@"Added %@ official preset.", name);
         }
-        
-        if (self->didImportHandler) self->didImportHandler(p.presetName, error);
-    }];
-    
- 
-}
-
-- (void) importPresetFromData:(NSData *)data withName:(NSString *)name checkName:(BOOL)checkName {
-    [self importPresetFromData:data withName:name checkName:checkName resultHandler:^(NSString *presetName, NSString *error) {
-        NSString * msg;
-        if (error){
-            msg = [NSString stringWithFormat:@"Import preset is not success. %@ error", error ];
-        } else {
-            msg = [NSString stringWithFormat:@"'%@' preset was successfully added.", presetName];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupOutletsNotification" object:nil];
-                    
-        }
-        [[DialogSystem sharedInstance] showAlert:msg];
     }];
  
 }

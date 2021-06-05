@@ -25,9 +25,6 @@
 - (HiFiToyPreset *) presetWithIndex:(NSInteger)index;
 - (HiFiToyPreset *) presetWithName:(NSString *)presetName;
 
-- (void) importPresetFromData:(NSData *)data withName:(NSString *)name
-                  checkName:(BOOL)checkName resultHandler:(void (^)(NSString * presetName, NSString * error))handler;
-- (void) importPresetFromData:(NSData *)data withName:(NSString *)name checkName:(BOOL)checkName;
 - (void) importPresetFromUrl:(NSURL *)url;
 
 - (void) description;

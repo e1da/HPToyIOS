@@ -25,45 +25,25 @@
     self.presetTextView_outl.inputView = dummyView; // Hide keyboard, but show blinking cursor
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (IBAction)importPreset:(id)sender {
-    NSData * d = [self.presetTextView_outl.text dataUsingEncoding:NSUTF8StringEncoding];
+    NSData * data = [self.presetTextView_outl.text dataUsingEncoding:NSUTF8StringEncoding];
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Preset name"
-                                                                             message:NSLocalizedString(@"Please input preset name!", @"")
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.text = @"";
+    HiFiToyPreset * p = [HiFiToyPreset getDefault];
+    [p importFromXmlWithData:data
+                    withName:[[NSDate date] descriptionWithLocale:[NSLocale systemLocale]]
+               resultHandler:^(HiFiToyPreset * _Nonnull p, NSString * _Nullable error) {
+          
+        if (error) {
+            [[DialogSystem sharedInstance] showAlert:error];
+            
+        } else {
+            [[DialogSystem sharedInstance] showSavePresetDialog:p okHandler:^{
+                [self.navigationController popViewControllerAnimated:YES];
+            }];
+            
+        }
     }];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                           style:UIAlertActionStyleDestructive
-                                                         handler:nil];
-    
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction * _Nonnull action) {
-                                                         UITextField *name = alertController.textFields.firstObject;
-                                                         if (![name.text isEqualToString:@""]) {
-                                                             
-                                                             [[HiFiToyPresetList sharedInstance] importPresetFromData:d
-                                                                  withName:name.text
-                                                                 checkName:YES];
-                
-                                                         }
-                                                     }];
-    
-    [alertController addAction:cancelAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
 }
+
 @end

@@ -48,33 +48,22 @@
     [downloadTask resume];
 }
 
-- (void) import:(NSData *)d {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Preset name"
-                                                                             message:NSLocalizedString(@"Please input preset name!", @"")
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.text = @"";
+- (void) import:(NSData *)data {    
+    HiFiToyPreset * p = [HiFiToyPreset getDefault];
+    [p importFromXmlWithData:data
+                    withName:[[NSDate date] descriptionWithLocale:[NSLocale systemLocale]]
+               resultHandler:^(HiFiToyPreset * _Nonnull p, NSString * _Nullable error) {
+          
+        if (error) {
+            [[DialogSystem sharedInstance] showAlert:error];
+            
+        } else {
+            [[DialogSystem sharedInstance] showSavePresetDialog:p okHandler:^{
+                [self.navigationController popViewControllerAnimated:YES];
+            }];
+            
+        }
     }];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                           style:UIAlertActionStyleDestructive
-                                                         handler:nil];
-    
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction * _Nonnull action) {
-        
-                                                         UITextField *name = alertController.textFields.firstObject;
-                                                         if (![name.text isEqualToString:@""]) {
- 
-                                                             [[HiFiToyPresetList sharedInstance] importPresetFromData:d
-                                                                                                           withName:name.text
-                                                                                                          checkName:YES];
-                                                         }
-                                                     }];
-    
-    [alertController addAction:cancelAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
 }
+
 @end
