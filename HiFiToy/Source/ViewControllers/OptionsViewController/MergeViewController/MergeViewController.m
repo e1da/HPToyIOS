@@ -10,6 +10,7 @@
 #import "HiFiToyPresetList.h"
 #import "BaseCell.h"
 #import "MergeNavigationViewCell.h"
+#import "DialogSystem.h"
 
 typedef enum {
     VOLUME_STATE, BASS_TREBLE_STATE, LOUDNESS_STATE, FILTERS_STATE, COMPRESSOR_STATE
@@ -225,7 +226,7 @@ typedef enum {
             HiFiToyPreset * mergePreset = [self merge];
             if (mergePreset) {
                 mergePreset.presetName = [[NSDate date] descriptionWithLocale:[NSLocale systemLocale]];
-                [self showInputNameDialog:mergePreset renameFlag:NO];
+                [self showSavePresetDialog:mergePreset];
             } else {
                 [self resetMergeTool];
             }
@@ -300,43 +301,31 @@ typedef enum {
     return @"err";
 }
 
-- (void) showInputNameDialog:(HiFiToyPreset *) mergePreset renameFlag:(BOOL)renameFlag {
-    NSString * s;
-    
-    if (renameFlag) {
-        s = [NSString stringWithFormat:@"Preset with name \"%@\" already exists. Please input another name.", mergePreset.presetName ];
-    } else {
-        s = @"Please input name for merge preset.";
-    }
-    
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@""
-                                                                             message:s
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.text = mergePreset.presetName;
+- (void) showSavePresetDialog:(HiFiToyPreset *)preset {
+    [[DialogSystem sharedInstance] showSavePresetDialog:^(UIAlertAction *action) {
+        
+        UITextField *name = [[[DialogSystem sharedInstance] alertController] textFields][0];
+        preset.presetName = (![name.text isEqualToString:@""]) ? name.text : @" ";
+        
+        if ([[HiFiToyPresetList sharedInstance] isPresetExist:preset.presetName] == NO) {
+            [[HiFiToyPresetList sharedInstance] setPreset:preset];
+        
+            [self.navigationController popViewControllerAnimated:YES];
+            
+        } else {
+            
+            NSString * msg = [NSString stringWithFormat:@"Preset with name \"%@\" already exists. Do you want to replace it?", preset.presetName ];
+            
+            [[DialogSystem sharedInstance] showDialog:@"Warning"
+                                                  msg:msg
+                                                okBtn:@"Replace"
+                                            cancelBtn:@"Cancel"
+                                         okBtnHandler:^(UIAlertAction * _Nonnull action) {
+                [[HiFiToyPresetList sharedInstance] setPreset:preset];
+            } cancelBtnHandler:nil];
+            
+        }
     }];
-
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                           style:UIAlertActionStyleDestructive
-                                                         handler:nil];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction * _Nonnull action) {
-                                                         UITextField *name = alertController.textFields.firstObject;
-                                                         mergePreset.presetName = (![name.text isEqualToString:@""]) ? name.text : @" ";
-                                                         
-                                                         if ([[HiFiToyPresetList sharedInstance] isPresetExist:name.text] == NO) {
-                                                             [[HiFiToyPresetList sharedInstance] setPreset:mergePreset];
-                                                             
-                                                             [self.navigationController popViewControllerAnimated:YES];
-                                                         } else {
-                                                             [self showInputNameDialog:mergePreset renameFlag:YES];
-                                                         }
-                                                     }];
-
-    [alertController addAction:cancelAction];
-    [alertController addAction:okAction];
-
-    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 
