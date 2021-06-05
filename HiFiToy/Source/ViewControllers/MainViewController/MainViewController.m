@@ -266,4 +266,18 @@
     return freq;
 }
 
+- (IBAction)savePreset:(id)sender {
+    //update checksum
+    [hiFiToyDevice.preset updateChecksum];
+    
+    //get preset name from user and save to preset list
+    [[DialogSystem sharedInstance] showSavePresetDialog:hiFiToyDevice.preset okHandler:^{
+        //preset with new name saved to list and next
+        //set key ref to new preset name
+        self->hiFiToyDevice.activeKeyPreset = self->hiFiToyDevice.preset.presetName;
+        [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+        
+        [self->hiFiToyDevice.preset storeToPeripheral];
+    }];
+}
 @end

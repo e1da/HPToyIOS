@@ -30,9 +30,12 @@
 @property (weak, nonatomic) IBOutlet UISlider *loudnessGainSlider_outl;
 @property (weak, nonatomic) IBOutlet UILabel *loudnessLabel_outl;
 @property (weak, nonatomic) IBOutlet UISlider *loudnessSlider_outl;
-- (IBAction)changeAudioSource:(id)sender;
+
+- (IBAction)savePreset:(id)sender;
 
 //actions
+- (IBAction)changeAudioSource:(id)sender;
+
 - (IBAction)setGainSlider:(id)sender;
 - (IBAction)setBassSlider:(id)sender;
 - (IBAction)setTrebleSlider:(id)sender;

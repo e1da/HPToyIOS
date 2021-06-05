@@ -88,7 +88,7 @@
     
     [self dismissAlert];
     
-    _alertController = [UIAlertController alertControllerWithTitle:@""
+    _alertController = [UIAlertController alertControllerWithTitle:title
                                                            message:msg
                                                     preferredStyle:UIAlertControllerStyleAlert];
     
@@ -266,7 +266,7 @@
 
 - (void) showSavePresetDialog:(HiFiToyPreset *)preset okHandler:(void (^ __nullable)(void))okHandler {
     [self showTextDialog:@""
-                     msg:NSLocalizedString(@"Please input preset name:", @"")
+                     msg:NSLocalizedString(@"Please input name for new preset:", @"")
                    okBtn:@"Ok"
                cancelBtn:@"Cancel"
             okBtnHandler:^(UIAlertAction *action) {
