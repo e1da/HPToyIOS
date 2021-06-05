@@ -150,8 +150,8 @@
 
 - (NSArray<HiFiToyDataBuf *> *) getDataBufs {
     NSMutableArray<HiFiToyDataBuf *> * dataBufs = [[NSMutableArray alloc] init];
-    [dataBufs addObject:[self getMainDataBuf]];
     [dataBufs addObjectsFromArray:[self.biquad getDataBufs]];
+    [dataBufs addObject:[self getMainDataBuf]];
     
     return dataBufs;
 }
