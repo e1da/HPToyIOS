@@ -213,6 +213,15 @@
     [pd exportPresetWithDialog:NSLocalizedString(@"Sending Preset", @"")];
 }
 
+- (NSArray<NSNumber *> *) getDataBufsAddrArray:(NSArray<HiFiToyDataBuf *> *)dataBufs {
+    NSMutableArray<NSNumber *> * addrs = [[NSMutableArray alloc] init];
+    
+    for (HiFiToyDataBuf * db in dataBufs) {
+        [addrs addObject:@(db.addr)];
+    }
+    return addrs;
+}
+
 - (BOOL) importFromDataBufs:(NSArray<HiFiToyDataBuf *> *)dataBufs {
     for (id<HiFiToyObject> o in self.characteristics){
         if ([o importFromDataBufs:dataBufs] == YES){
@@ -223,7 +232,19 @@
         }
     }
     
-    [self updateChecksumWithBufs:dataBufs];
+    /*get only preset buf from dataBufs. need for correct calc checksum */
+    //get preset bufs addrs
+    NSArray<NSNumber *> * addrs = [self getDataBufsAddrArray:[self getDataBufs]];
+    NSMutableArray<HiFiToyDataBuf *> * updDataBufs = [[NSMutableArray alloc] init];
+    
+    //updDataBufs = dataBufs - 'non-preset data buf'
+    for (HiFiToyDataBuf * db in dataBufs) {
+        if ([addrs containsObject:@(db.addr)]) {
+            [updDataBufs addObject:db];
+        }
+    }
+    
+    [self updateChecksumWithBufs:updDataBufs];
     return YES;
 }
 
