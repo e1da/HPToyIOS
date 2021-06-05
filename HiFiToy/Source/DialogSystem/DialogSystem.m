@@ -78,6 +78,53 @@
     [[self lastViewController]  presentViewController:_alertController animated:YES completion:nil];
 }
 
+- (void) showTextDialog:(NSString *)title
+                    msg:(NSString *)msg
+                  okBtn:(NSString *)okBtn
+              cancelBtn:(NSString *)cancelBtn
+      textConfigHandler:(void (^ __nullable)(UITextField *textField))textConfigHandler
+           okBtnHandler:(void (^ __nullable)(UIAlertAction *action))okHandler
+       cancelBtnHandler:(void (^ __nullable)(UIAlertAction *action))cancelHandler {
+    
+    [self dismissAlert];
+    
+    _alertController = [UIAlertController alertControllerWithTitle:@""
+                                                           message:msg
+                                                    preferredStyle:UIAlertControllerStyleAlert];
+    
+    [_alertController addTextFieldWithConfigurationHandler:textConfigHandler];
+    
+    UIAlertAction * cancelAction = nil;
+    if (cancelBtn) {
+        cancelAction = [UIAlertAction actionWithTitle:cancelBtn
+                                                style:UIAlertActionStyleDestructive
+                                              handler:cancelHandler];
+        [_alertController addAction:cancelAction];
+    }
+    
+    UIAlertAction * okAction = nil;
+    if (okBtn) {
+        okAction = [UIAlertAction actionWithTitle:okBtn
+                                                style:UIAlertActionStyleDefault
+                                              handler:okHandler];
+        [_alertController addAction:okAction];
+    }
+    
+    [[self lastViewController]  presentViewController:_alertController animated:YES completion:nil];
+}
+
+- (void) showTextDialog:(NSString *)title
+                    msg:(NSString *)msg
+                  okBtn:(NSString *)okBtn
+              cancelBtn:(NSString *)cancelBtn
+           okBtnHandler:(void (^ __nullable)(UIAlertAction *action))okHandler
+       cancelBtnHandler:(void (^ __nullable)(UIAlertAction *action))cancelHandler {
+    [self showTextDialog:title msg:msg okBtn:okBtn cancelBtn:cancelBtn textConfigHandler:^(UITextField * _Nullable textField) {
+        textField.text = @"";
+    } okBtnHandler:okHandler cancelBtnHandler:cancelHandler];
+}
+
+
 - (void) showAlert:(NSString *)msg {
     [self showDialog:@"" msg:msg okBtn:nil cancelBtn:@"Close" okBtnHandler:nil cancelBtnHandler:nil];
 }
@@ -127,11 +174,7 @@
 {
     UINavigationController * navigation = (UINavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
     
-    if (_alertController) {
-        
-        [self dismissAlert];
-        _alertController = nil;
-    }
+    [self dismissAlert];
     
     _alertController = [UIAlertController alertControllerWithTitle:@"New pair code"
                                                            message:NSLocalizedString(@"Please input new pair code!", @"")
@@ -194,43 +237,40 @@
 
 - (void) showPairCodeInput
 {
-    [self dismissAlert];
-    
-    _alertController = [UIAlertController alertControllerWithTitle:@"Pair code fail"
-                                                           message:NSLocalizedString(@"Please input valid pair code!", @"")
-                                                    preferredStyle:UIAlertControllerStyleAlert];
-    [_alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = @"Pair code";
-        textField.borderStyle = UITextBorderStyleRoundedRect;
-        textField.keyboardType = UIKeyboardTypeNumberPad;
-    }];
-
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                           style:UIAlertActionStyleDestructive
-                                                         handler:nil];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok"
-                                                       style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction * _Nonnull action) {
+    [self showTextDialog:@"Pair code fail"
+                     msg:NSLocalizedString(@"Please input valid pair code!", @"")
+                   okBtn:@"Ok"
+               cancelBtn:@"Cancel"
+       textConfigHandler:^(UITextField * _Nullable textField) {
+            textField.placeholder = @"Pair code";
+            textField.borderStyle = UITextBorderStyleRoundedRect;
+            textField.keyboardType = UIKeyboardTypeNumberPad;
         
-        UITextField *pairCode = self.alertController.textFields.lastObject;
-        if (![pairCode.text isEqualToString:@""]) {
-            HiFiToyDevice * device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
-            device.pairingCode = [pairCode.text intValue];
-            [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-                                                             
-            //send pairing code
-            [[HiFiToyControl sharedInstance] startPairedProccess:device.pairingCode];
-                                                         
-        } else {
-            [[self lastViewController] presentViewController:self.alertController animated:YES completion:nil];
+    }
+            okBtnHandler:^(UIAlertAction * _Nullable action) {
+        
+        NSString * textField = self.alertController.textFields[0].text;
+        if ([textField isEqualToString:@""]) {
+            textField = @"0";
         }
-    }];
-    
-    [_alertController addAction:cancelAction];
-    [_alertController addAction:okAction];
-    
-    [[self lastViewController] presentViewController:_alertController animated:YES completion:nil];
+        
+        HiFiToyDevice * device = [[HiFiToyControl sharedInstance] activeHiFiToyDevice];
+        device.pairingCode = [textField intValue];
+        [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
+                                                             
+        //send pairing code
+        [[HiFiToyControl sharedInstance] startPairedProccess:device.pairingCode];
+                                                         
+    } cancelBtnHandler:nil];
+}
+
+- (void) showSavePresetDialog:(void (^ __nullable)(UIAlertAction *action))okHandler {
+    [self showTextDialog:@""
+                     msg:NSLocalizedString(@"Please input preset name:", @"")
+                   okBtn:@"Ok"
+               cancelBtn:@"Cancel"
+            okBtnHandler:okHandler
+        cancelBtnHandler:nil];
 }
 
 - (void) showImportPresetDialog {

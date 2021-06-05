@@ -25,8 +25,23 @@
                 msg:(NSString * _Nonnull)msg
               okBtn:(NSString * _Nullable)okBtn
           cancelBtn:(NSString * _Nullable)cancelBtn
-       okBtnHandler:(void (^ __nullable)(UIAlertAction * _Nonnull action))okHandler
-   cancelBtnHandler:(void (^ __nullable)(UIAlertAction * _Nonnull action))cancelHandler;
+       okBtnHandler:(void (^ __nullable)(UIAlertAction * _Nullable action))okHandler
+   cancelBtnHandler:(void (^ __nullable)(UIAlertAction * _Nullable action))cancelHandler;
+
+- (void) showTextDialog:(NSString * _Nonnull)title
+                    msg:(NSString * _Nonnull)msg
+                  okBtn:(NSString * _Nullable)okBtn
+              cancelBtn:(NSString * _Nullable)cancelBtn
+      textConfigHandler:(void (^ __nullable)(UITextField * _Nullable textField))textConfigHandler
+           okBtnHandler:(void (^ __nullable)(UIAlertAction * _Nullable action))okHandler
+       cancelBtnHandler:(void (^ __nullable)(UIAlertAction * _Nullable action))cancelHandler;
+
+- (void) showTextDialog:(NSString * _Nonnull)title
+                    msg:(NSString * _Nonnull)msg
+                  okBtn:(NSString * _Nullable)okBtn
+              cancelBtn:(NSString * _Nullable)cancelBtn
+           okBtnHandler:(void (^ __nullable)(UIAlertAction * _Nullable action))okHandler
+       cancelBtnHandler:(void (^ __nullable)(UIAlertAction * _Nullable action))cancelHandler;
 
 - (void) showAlert:(NSString * _Nonnull)msg;
 
@@ -38,6 +53,7 @@
 - (void) showNewPairCodeInput;
 - (void) showPairCodeInput;
 
+- (void) showSavePresetDialog:(void (^ __nullable)(UIAlertAction * _Nullable action))okHandler;
 - (void) showImportPresetDialog;
 
 @end
