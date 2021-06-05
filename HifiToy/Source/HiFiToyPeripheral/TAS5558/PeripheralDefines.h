@@ -13,7 +13,7 @@
 #import "BiquadParam.h"
 #import "TAS5558.h"
 
-#define PERIPHERAL_VERSION      11
+#define PERIPHERAL_VERSION      12
 #define INIT_DSP_DELAY          32; // 32 << 3 = 256ms
 
 typedef enum : uint8_t {
