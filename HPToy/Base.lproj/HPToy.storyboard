@@ -375,7 +375,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="349.5" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Options" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3cq-pp-gVM">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Settings" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3cq-pp-gVM">
                                                     <rect key="frame" x="20" y="19.5" width="232" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
@@ -960,7 +960,7 @@
             </objects>
             <point key="canvasLocation" x="2056.8000000000002" y="261.31934032983509"/>
         </scene>
-        <!--Options-->
+        <!--Settings-->
         <scene sceneID="oro-YB-31D">
             <objects>
                 <tableViewController id="Sm8-0F-sj5" customClass="OptionsViewController" sceneMemberID="viewController">
@@ -1120,7 +1120,7 @@
                             <outlet property="delegate" destination="Sm8-0F-sj5" id="6gC-oO-SJu"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Options" id="b08-sF-pbG">
+                    <navigationItem key="navigationItem" title="Settings" id="b08-sF-pbG">
                         <barButtonItem key="backBarButtonItem" title="Back" id="75q-tX-hNN"/>
                     </navigationItem>
                     <connections>
