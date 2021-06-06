@@ -119,6 +119,7 @@
             buttonVisibleFlag = YES;
             break;
         case 6:
+            tittleSection = @"PRESET CONTROL";
             break;
     }
     
@@ -146,6 +147,13 @@
     
     return headerView;
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([tableView cellForRowAtIndexPath:indexPath] == self.savePresetBtn) {
+        [self savePreset:self.savePresetBtn];
+    }
+    
+ }
 
 - (void) infoButtonClick:(UIButton *)button
 {
@@ -201,6 +209,12 @@
     if ([[segue identifier] isEqualToString:@"showNewFilters"]) {
         FiltersViewController *dest = (FiltersViewController * )segue.destinationViewController;
         dest.filters = hiFiToyDevice.preset.filters;
+    }
+    
+    if ([[segue identifier] isEqualToString:@"showPresetManager"]) {
+        PresetViewController *destination = (PresetViewController * )segue.destinationViewController;
+        destination.hiFiToyDevice = hiFiToyDevice;
+        
     }
 }
 

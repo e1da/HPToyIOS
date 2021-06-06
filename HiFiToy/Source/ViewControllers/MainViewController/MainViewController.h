@@ -30,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *loudnessGainSlider_outl;
 @property (weak, nonatomic) IBOutlet UILabel *loudnessLabel_outl;
 @property (weak, nonatomic) IBOutlet UISlider *loudnessSlider_outl;
+@property (weak, nonatomic) IBOutlet UITableViewCell *savePresetBtn;
 
 - (IBAction)savePreset:(id)sender;
 

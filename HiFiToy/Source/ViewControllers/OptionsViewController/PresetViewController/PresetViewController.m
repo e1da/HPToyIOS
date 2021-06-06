@@ -245,23 +245,4 @@
     
 }
 
-- (IBAction)addNewPreset:(id)sender {
-    NSString * name = [[NSDate date] descriptionWithLocale:[NSLocale systemLocale]];
-    
-    //add new preset to presetList
-    self.hiFiToyDevice.preset.presetName = name;
-    [self.hiFiToyDevice.preset updateChecksum];
-    
-    [hiFiToyPresetList setPreset:self.hiFiToyDevice.preset];
-    
-    
-    //set preset active in device
-    self.hiFiToyDevice.activeKeyPreset = name;
-    [[HiFiToyDeviceList sharedInstance] saveDeviceListToFile];
-    
-    [self.hiFiToyDevice.preset storeToPeripheral];
-    
-    [self.tableView reloadData];
-}
-
 @end

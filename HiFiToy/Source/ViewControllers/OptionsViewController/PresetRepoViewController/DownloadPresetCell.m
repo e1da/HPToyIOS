@@ -37,8 +37,7 @@
             if (error) {
                 [[DialogSystem sharedInstance] showAlert:[error localizedDescription]];
             } else {
-                [[HiFiToyPresetList sharedInstance] importPresetFromData:data withName:self.downloadPresetName_outl.text
-                                                             checkName:YES];
+                //[[HiFiToyPresetList sharedInstance] importPresetFromData:data withName:self.downloadPresetName_outl.text];
             }
         }];
     }];

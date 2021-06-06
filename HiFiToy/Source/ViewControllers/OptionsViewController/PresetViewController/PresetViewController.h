@@ -17,6 +17,4 @@
 
 @property HiFiToyDevice *hiFiToyDevice;
 
-- (IBAction)addNewPreset:(id)sender;
-
 @end

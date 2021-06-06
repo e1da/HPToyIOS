@@ -142,12 +142,6 @@
         
     }
     
-    if ([[segue identifier] isEqualToString:@"showPresetManager"]) {
-        PresetViewController *destination = (PresetViewController * )segue.destinationViewController;
-        destination.hiFiToyDevice = self.hiFiToyDevice;
-        
-    }
-    
     
 }
 
